@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>This is AGI | Sequoia AI Ascent 2026 Keynote</title>
+<style>
+  :root {
+    --bg: #060810;
+    --surface: #0c0f1c;
+    --surface2: #111526;
+    --border: #1a1f35;
+    --accent: #e05a5a;
+    --accent2: #ff8080;
+    --accent3: #c93a3a;
+    --blue: #4a82ff;
+    --blue2: #7aaeff;
+    --teal: #3ecfb8;
+    --gold: #e8b84b;
+    --purple: #a78bfa;
+    --text: #e4e8f0;
+    --text2: #8b95a8;
+    --text3: #4a5270;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.7; }
+
+  /* NAV */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav span { color: var(--text3); font-size: 12px; }
+  nav a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav a.active { color: var(--accent); border-color: var(--accent); background: rgba(224,90,90,0.08); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #08091a 0%, #0d1128 50%, #070916 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 72px 24px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(224,90,90,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(224,90,90,0.1);
+    border: 1px solid rgba(224,90,90,0.3);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 28px;
+    letter-spacing: 0.04em;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 .word-this { color: var(--text3); }
+  .hero h1 .word-is { color: var(--text2); }
+  .hero h1 .word-agi {
+    background: linear-gradient(135deg, #e05a5a, #ff8080, #c93a3a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-tagline {
+    font-size: 18px;
+    color: var(--text2);
+    max-width: 600px;
+    margin: 0 auto 36px;
+    line-height: 1.6;
+  }
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    color: var(--text3);
+    font-size: 13px;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* STAT STRIP */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-item {
+    padding: 30px 24px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num { font-size: 38px; font-weight: 800; display: block; line-height: 1; margin-bottom: 8px; }
+  .stat-num.red { color: var(--accent); }
+  .stat-num.blue { color: var(--blue); }
+  .stat-num.teal { color: var(--teal); }
+  .stat-num.gold { color: var(--gold); }
+  .stat-num.purple { color: var(--purple); }
+  .stat-label { color: var(--text2); font-size: 12px; line-height: 1.4; }
+
+  /* MAIN */
+  main { max-width: 1100px; margin: 0 auto; padding: 56px 24px; }
+
+  .section { margin-bottom: 64px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .si-red { background: rgba(224,90,90,0.15); }
+  .si-blue { background: rgba(74,130,255,0.15); }
+  .si-teal { background: rgba(62,207,184,0.15); }
+  .si-gold { background: rgba(232,184,75,0.15); }
+  .si-purple { background: rgba(167,139,250,0.15); }
+  .section-header h2 { font-size: 22px; font-weight: 700; }
+
+  /* QUOTE BLOCK */
+  .quote-block {
+    background: linear-gradient(135deg, rgba(224,90,90,0.07), rgba(224,90,90,0.02));
+    border: 1px solid rgba(224,90,90,0.22);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 30px 34px;
+    margin-bottom: 28px;
+  }
+  .quote-block blockquote {
+    font-size: 21px;
+    font-style: italic;
+    color: var(--accent2);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .quote-block cite { color: var(--text3); font-size: 13px; font-style: normal; }
+
+  /* 3-INGREDIENT TIMELINE */
+  .timeline {
+    display: flex;
+    gap: 0;
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 48px;
+    left: 80px;
+    right: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--text3), var(--accent));
+    z-index: 0;
+  }
+  .tl-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .tl-dot {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    margin: 38px auto 16px;
+    position: relative;
+  }
+  .tl-dot.done { background: var(--teal); box-shadow: 0 0 12px rgba(62,207,184,0.5); }
+  .tl-dot.agi { background: var(--accent); box-shadow: 0 0 16px rgba(224,90,90,0.7); animation: pulse-dot 2s ease-in-out infinite; }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 16px rgba(224,90,90,0.7); }
+    50% { box-shadow: 0 0 28px rgba(224,90,90,1); transform: scale(1.2); }
+  }
+  .tl-year { font-size: 12px; font-weight: 700; color: var(--text3); margin-bottom: 6px; }
+  .tl-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .tl-step:nth-child(1) .tl-title { color: var(--teal); }
+  .tl-step:nth-child(2) .tl-title { color: var(--blue2); }
+  .tl-step:nth-child(3) .tl-title { color: var(--accent); }
+  .tl-desc { font-size: 12px; color: var(--text2); padding: 0 8px; line-height: 1.5; }
+  .tl-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+    letter-spacing: 0.06em;
+  }
+  .badge-done { background: rgba(62,207,184,0.15); color: var(--teal); border: 1px solid rgba(62,207,184,0.3); }
+  .badge-agi { background: rgba(224,90,90,0.15); color: var(--accent); border: 1px solid rgba(224,90,90,0.4); animation: badge-blink 2s ease-in-out infinite; }
+  @keyframes badge-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* COMPARISON TABLE */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .compare-table th {
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 13px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .compare-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.015); }
+  .td-old { color: var(--text3); }
+  .td-new { color: var(--teal); font-weight: 500; }
+  .td-year { color: var(--accent); font-weight: 700; font-size: 13px; }
+
+  /* AGENT DEMO */
+  .demo-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .demo-header {
+    background: var(--surface);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .demo-title { font-size: 13px; color: var(--text2); font-family: monospace; }
+  .demo-timer { margin-left: auto; font-size: 12px; color: var(--teal); font-family: monospace; }
+  .demo-body { padding: 20px 24px; }
+  .demo-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+  .demo-step:last-child { margin-bottom: 0; }
+  .ds-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .ds-text { color: var(--text2); line-height: 1.5; }
+  .ds-text strong { color: var(--text); }
+  .ds-result { color: var(--teal); font-size: 12px; margin-top: 3px; }
+
+  /* METR CHART */
+  .metr-chart {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .metr-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .metr-row:last-child { margin-bottom: 0; }
+  .metr-year { font-size: 13px; font-weight: 700; width: 50px; flex-shrink: 0; }
+  .metr-bar-wrap { flex: 1; background: var(--surface2); border-radius: 4px; height: 28px; overflow: hidden; position: relative; }
+  .metr-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 12px; font-size: 12px; font-weight: 600; min-width: 80px; transition: width 1.2s ease; }
+  .metr-label { font-size: 12px; color: var(--text2); width: 120px; flex-shrink: 0; text-align: right; }
+  .mb-26 { background: linear-gradient(90deg, var(--accent3), var(--accent)); color: #fff; width: 5%; }
+  .mb-28 { background: linear-gradient(90deg, #c93a3a, #e05a5a, #ff6b6b); color: #fff; width: 20%; }
+  .mb-34 { background: linear-gradient(90deg, #e05a5a, #ff8080, #4a82ff); color: #fff; width: 55%; }
+  .mb-37 { background: linear-gradient(90deg, #4a82ff, #7aaeff, #3ecfb8); color: #222; width: 90%; }
+
+  /* HIREABLE GRID */
+  .hire-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .hire-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .hire-card:hover { border-color: var(--accent); }
+  .hire-card .hc-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .hire-card .hc-domain { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .hire-card .hc-service { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .hire-card .hc-role { font-size: 12px; color: var(--accent2); }
+
+  /* TAM VISUAL */
+  .tam-boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .tam-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  .tam-box.old { border-top: 3px solid var(--text3); }
+  .tam-box.new { border-top: 3px solid var(--accent); }
+  .tam-box .tb-label { font-size: 12px; color: var(--text3); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .tam-box .tb-num { font-size: 40px; font-weight: 900; line-height: 1; margin-bottom: 8px; }
+  .tam-box.old .tb-num { color: var(--text3); }
+  .tam-box.new .tb-num { color: var(--accent); }
+  .tam-box .tb-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .tam-arrow { display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--accent); }
+
+  /* DIFFUSION GAP */
+  .gap-visual {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .gap-title { font-size: 13px; font-weight: 600; color: var(--text3); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .gap-line-wrap { margin-bottom: 12px; }
+  .gap-line-label { font-size: 12px; color: var(--text2); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .gap-track { background: var(--surface2); border-radius: 4px; height: 18px; overflow: hidden; }
+  .gap-fill { height: 100%; border-radius: 4px; transition: width 1.5s ease; }
+  .gf-model { background: linear-gradient(90deg, var(--accent3), var(--accent), var(--accent2)); width: 0; }
+  .gf-adopt { background: linear-gradient(90deg, #1a3a6a, var(--blue)); width: 0; }
+  .gap-annotation {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(224,90,90,0.07);
+    border: 1px solid rgba(224,90,90,0.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--accent2);
+  }
+
+  /* MAD FRAMEWORK */
+  .mad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .mad-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 26px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .mad-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .mad-card:nth-child(1)::before { background: var(--accent); }
+  .mad-card:nth-child(2)::before { background: var(--blue); }
+  .mad-card:nth-child(3)::before { background: var(--teal); }
+  .mad-letter { font-size: 52px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+  .mad-card:nth-child(1) .mad-letter { color: rgba(224,90,90,0.15); }
+  .mad-card:nth-child(2) .mad-letter { color: rgba(74,130,255,0.15); }
+  .mad-card:nth-child(3) .mad-letter { color: rgba(62,207,184,0.15); }
+  .mad-word { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .mad-card:nth-child(1) .mad-word { color: var(--accent2); }
+  .mad-card:nth-child(2) .mad-word { color: var(--blue2); }
+  .mad-card:nth-child(3) .mad-word { color: var(--teal); }
+  .mad-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* TALKERS → DOERS */
+  .td-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .td-col { padding: 26px; }
+  .td-col.talker { background: var(--surface); border-right: 1px solid var(--border); }
+  .td-col.doer { background: rgba(62,207,184,0.04); }
+  .td-col .col-era { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .td-col.talker .col-era { color: var(--text3); }
+  .td-col.doer .col-era { color: var(--teal); }
+  .td-col h4 { font-size: 18px; font-weight: 800; margin-bottom: 14px; }
+  .td-col.talker h4 { color: var(--text3); }
+  .td-col.doer h4 { color: var(--teal); }
+  .td-row { display: flex; gap: 8px; margin-bottom: 10px; font-size: 13px; color: var(--text2); align-items: flex-start; }
+  .td-row .r-icon { flex-shrink: 0; margin-top: 1px; }
+  .td-cta { background: rgba(62,207,184,0.1); border: 1px solid rgba(62,207,184,0.25); border-radius: 8px; padding: 12px 16px; margin-top: 16px; font-size: 13px; color: var(--teal); }
+
+  /* ACTION CARDS */
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .action-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .action-card .ac-num { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .action-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .action-card p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* COMMENT */
+  .comment-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 40px;
+  }
+  .comment-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
+  .comment-section textarea {
+    width: 100%;
+    min-height: 140px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 16px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .comment-section textarea:focus { border-color: var(--accent); }
+  .comment-section textarea::placeholder { color: var(--text3); }
+
+  /* SOURCES */
+  .sources { border-top: 1px solid var(--border); padding-top: 24px; margin-bottom: 40px; }
+  .sources h4 { font-size: 12px; font-weight: 600; color: var(--text3); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .sources a { color: var(--blue); font-size: 13px; text-decoration: none; display: block; margin-bottom: 6px; }
+  .sources a:hover { color: var(--blue2); text-decoration: underline; }
+
+  /* CALLOUT */
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .callout.blue { background: rgba(74,130,255,0.07); border: 1px solid rgba(74,130,255,0.22); color: var(--blue2); }
+  .callout.teal { background: rgba(62,207,184,0.07); border: 1px solid rgba(62,207,184,0.22); color: var(--teal); }
+  .callout.red { background: rgba(224,90,90,0.07); border: 1px solid rgba(224,90,90,0.22); color: var(--accent2); }
+  .callout-icon { flex-shrink: 0; font-size: 18px; }
+
+  @media (max-width: 768px) {
+    .mad-grid, .td-grid, .tam-boxes { grid-template-columns: 1fr; }
+    .action-grid { grid-template-columns: 1fr; }
+    .timeline { flex-direction: column; }
+    .timeline::before { display: none; }
+    .hire-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span>Sequoia AI Ascent 2026 ›</span>
+  <a href="2026-05_Sequoia_This_is_AGI.html" class="active">Sequoia 오프닝</a>
+  <a href="2026-05_Demis_Hassabis_AGI_75percent.html">Hassabis</a>
+  <a href="2026-05_Brockman_Human_Attention_Bottleneck.html">Brockman</a>
+  <a href="2026-05_Karpathy_VibeCoding_to_AgenticEngineering.html">Karpathy</a>
+  <a href="2026-05_Jim_Fan_Robotics_EndGame.html">Jim Fan</a>
+  <a href="2026-05_Dolgov_Waymo_Full_Autonomy.html">Waymo</a>
+  <a href="2026-05_Boris_Cherny_Coding_Solved.html">Boris Cherny</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">🚀 Sequoia AI Ascent 2026 — 오프닝 키노트</div>
+  <h1>
+    <span class="word-this">This</span>
+    <span class="word-is"> is </span>
+    <span class="word-agi">AGI</span>
+  </h1>
+  <p class="hero-tagline">Long-Horizon Agent가 "스스로 알아내는 능력"을 갖춘 순간,<br>실용적 의미의 AGI가 완성됐다</p>
+  <div class="hero-meta">
+    <span>👤 Pat Grady · Sonya Huang · Konstantine Buhler</span>
+    <span>🏢 Sequoia Capital</span>
+    <span>📅 2026년 4월</span>
+    <span>🎯 $10조 서비스 시장 개방</span>
+  </div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-item">
+    <span class="stat-num red">3</span>
+    <div class="stat-label">AGI 재료<br>(2026년에 완성)</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num blue">$10조</span>
+    <div class="stat-label">새로운 TAM<br>(서비스 시장)</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num teal">31분</span>
+    <div class="stat-label">채용 에이전트<br>실증 시간</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num gold">7개월</span>
+    <div class="stat-label">Agent 역량<br>2배 속도</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num purple">10~40x</span>
+    <div class="stat-label">효율성 향상<br>(Doers 시대)</div>
+  </div>
+</div>
+
+<main>
+
+  <!-- SECTION 1: 핵심 정의 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-red">🧠</div>
+      <h2>AGI의 기능적 정의 — Sequoia 버전</h2>
+    </div>
+    <div class="quote-block">
+      <blockquote>"AGI is the ability to figure things out. That's it."</blockquote>
+      <cite>— Pat Grady, Sequoia Capital Partner</cite>
+    </div>
+    <div class="callout blue">
+      <span class="callout-icon">💡</span>
+      <div>Sequoia는 학문적·기술적 정의 대신 <strong>비즈니스 관점의 기능적 정의</strong>를 제시한다. "스스로 알아내는 능력(figure things out)"을 갖춘 시스템 = 실용적 AGI. 이 기준에서 2026년 AGI는 이미 도달했다.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 3단계 타임라인 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-teal">📅</div>
+      <h2>변곡점 3단계 완성 — AGI의 3가지 재료</h2>
+    </div>
+    <div class="timeline" id="timeline">
+      <div class="tl-step">
+        <div class="tl-year">2022</div>
+        <div class="tl-dot done"></div>
+        <div class="tl-title">① 사전학습 (Pre-training)</div>
+        <div class="tl-desc">지식 축적<br>ChatGPT 등장</div>
+        <div><span class="tl-badge badge-done">✓ 완료</span></div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-year">2024</div>
+        <div class="tl-dot done"></div>
+        <div class="tl-title">② 추론 시간 컴퓨트</div>
+        <div class="tl-desc">지식 위의 추론<br>OpenAI o1 등장</div>
+        <div><span class="tl-badge badge-done">✓ 완료</span></div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-year">2026</div>
+        <div class="tl-dot agi"></div>
+        <div class="tl-title">③ Long-Horizon Agent</div>
+        <div class="tl-desc">반복하며 답을 찾는 능력<br>Claude Code 등 등장</div>
+        <div><span class="tl-badge badge-agi">● AGI 완성</span></div>
+      </div>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>재료</th>
+          <th>역할</th>
+          <th>해당 모델</th>
+          <th>도달 시점</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>사전학습 (Pre-training)</td>
+          <td>기초 지식 축적</td>
+          <td>ChatGPT, GPT-4 등</td>
+          <td class="td-year">2022</td>
+        </tr>
+        <tr>
+          <td>추론 시간 컴퓨트 (Inference-time compute)</td>
+          <td>지식 위의 단계적 추론</td>
+          <td>OpenAI o1, o3</td>
+          <td class="td-year">2024</td>
+        </tr>
+        <tr>
+          <td style="color: var(--accent); font-weight: 600;">Long-Horizon Agent 🔴</td>
+          <td>반복·자기수정하며 완주</td>
+          <td>Claude Code, Harvey 등</td>
+          <td class="td-year" style="color: var(--accent);">2026 ← 지금</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 3: Long-Horizon Agent -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-blue">🤖</div>
+      <h2>Long-Horizon Agent — 기존 AI와의 결정적 차이</h2>
+    </div>
+    <div class="td-grid" style="margin-bottom: 24px;">
+      <div style="background: var(--surface); border-right: 1px solid var(--border); padding: 24px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 10px;">기존 AI</div>
+        <div style="font-size: 16px; font-weight: 800; color: var(--text3); margin-bottom: 16px;">Single Forward Pass</div>
+        <div class="td-row"><span class="r-icon">❌</span><span>질문에 답한다</span></div>
+        <div class="td-row"><span class="r-icon">❌</span><span>한 번의 응답으로 끝</span></div>
+        <div class="td-row"><span class="r-icon">❌</span><span>지시대로만 실행</span></div>
+        <div class="td-row"><span class="r-icon">❌</span><span>실패 시 멈춤</span></div>
+        <div class="td-row"><span class="r-icon">❌</span><span>모호함 속에서 작동 불가</span></div>
+      </div>
+      <div style="background: rgba(62,207,184,0.03); padding: 24px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); margin-bottom: 10px;">Long-Horizon Agent</div>
+        <div style="font-size: 16px; font-weight: 800; color: var(--teal); margin-bottom: 16px;">자율 수행 시스템</div>
+        <div class="td-row"><span class="r-icon">✅</span><span>일을 수행한다</span></div>
+        <div class="td-row"><span class="r-icon">✅</span><span>수십 분~수 시간 자율 작동</span></div>
+        <div class="td-row"><span class="r-icon">✅</span><span>모호함 속에서 가설 수립·검증</span></div>
+        <div class="td-row"><span class="r-icon">✅</span><span>실패 시 방향 전환 후 재시도</span></div>
+        <div class="td-row"><span class="r-icon">✅</span><span>완료까지 자기수정 반복</span></div>
+      </div>
+    </div>
+
+    <!-- Demo -->
+    <div style="font-size: 14px; color: var(--text2); margin-bottom: 14px; font-weight: 500;">키노트 실증 데모: 채용 에이전트</div>
+    <div class="demo-box">
+      <div class="demo-header">
+        <div class="demo-dot" style="background: #ff5f57;"></div>
+        <div class="demo-dot" style="background: #febc2e;"></div>
+        <div class="demo-dot" style="background: #28c840;"></div>
+        <span class="demo-title">recruiting_agent.py</span>
+        <span class="demo-timer">⏱ 31분 자율 실행</span>
+      </div>
+      <div class="demo-body">
+        <div class="demo-step">
+          <span class="ds-icon">💬</span>
+          <div><div class="ds-text"><strong>사람:</strong> "DevRel 리드 찾아줘"</div></div>
+        </div>
+        <div class="demo-step">
+          <span class="ds-icon">🔍</span>
+          <div><div class="ds-text">LinkedIn 검색 — 키워드 기반 후보군 탐색</div><div class="ds-result">→ 1,240명 초기 후보</div></div>
+        </div>
+        <div class="demo-step">
+          <span class="ds-icon">🎬</span>
+          <div><div class="ds-text">YouTube 컨퍼런스 발표자 필터링 — 실제 발표 이력 확인</div><div class="ds-result">→ 143명으로 압축</div></div>
+        </div>
+        <div class="demo-step">
+          <span class="ds-icon">🐦</span>
+          <div><div class="ds-text">Twitter 활동도 분석 — 커뮤니티 영향력 측정</div><div class="ds-result">→ 상위 32명 선발</div></div>
+        </div>
+        <div class="demo-step">
+          <span class="ds-icon">📡</span>
+          <div><div class="ds-text">최근 이직 신호 감지 — 오픈 투 워크 여부 파악</div><div class="ds-result">→ 핵심 8명 식별</div></div>
+        </div>
+        <div class="demo-step">
+          <span class="ds-icon">✉️</span>
+          <div><div class="ds-text">각 후보 맞춤형 이메일 초안 생성</div><div class="ds-result" style="color: var(--accent);">→ <strong style="color: var(--accent);">완료</strong> — 인간 채용 담당자 수일 작업을 31분에 처리</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: METR 성장 곡선 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-purple">📊</div>
+      <h2>METR 성능 성장 곡선 — 7개월마다 2배</h2>
+    </div>
+    <div class="metr-chart" id="metr-chart">
+      <div style="font-size: 13px; color: var(--text2); margin-bottom: 20px;">Long-Horizon Agent 작업 수행 가능 시간 (자율 실행 지속 기간)</div>
+      <div class="metr-row">
+        <div class="metr-year" style="color: var(--text3);">2026</div>
+        <div class="metr-bar-wrap"><div class="metr-bar mb-26" data-width="5">~30분</div></div>
+        <div class="metr-label" style="color: var(--text3);">현재</div>
+      </div>
+      <div class="metr-row">
+        <div class="metr-year" style="color: var(--accent);">2028</div>
+        <div class="metr-bar-wrap"><div class="metr-bar mb-28" data-width="20">하루치</div></div>
+        <div class="metr-label" style="color: var(--accent);">2년 후</div>
+      </div>
+      <div class="metr-row">
+        <div class="metr-year" style="color: var(--blue2);">2034</div>
+        <div class="metr-bar-wrap"><div class="metr-bar mb-34" data-width="55">1년치</div></div>
+        <div class="metr-label" style="color: var(--blue2);">8년 후</div>
+      </div>
+      <div class="metr-row">
+        <div class="metr-year" style="color: var(--teal);">2037</div>
+        <div class="metr-bar-wrap"><div class="metr-bar mb-37" data-width="90">100년치</div></div>
+        <div class="metr-label" style="color: var(--teal);">11년 후</div>
+      </div>
+    </div>
+    <div class="callout red">
+      <span class="callout-icon">⚡</span>
+      <div><strong>성장 속도:</strong> 약 7개월마다 2배. 2037년엔 에이전트 한 인스턴스가 인간 100년치 작업을 자율 수행하는 수준에 도달.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 이미 고용 가능한 AI -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-teal">💼</div>
+      <h2>"Can you hire it?" — 이미 고용 가능한 AI</h2>
+    </div>
+    <div class="callout blue" style="margin-bottom: 24px;">
+      <span class="callout-icon">🎯</span>
+      <div>Sarah Guo의 AGI 판단 기준: <strong>"Can you hire it?"</strong> — 에이전트를 동료처럼 채용해서 일을 맡길 수 있다면, 그것이 기능적 AGI다.</div>
+    </div>
+    <div class="hire-grid">
+      <div class="hire-card">
+        <span class="hc-icon">🏥</span>
+        <div class="hc-domain">의료</div>
+        <div class="hc-service">OpenEvidence<br>Deep Consult</div>
+        <div class="hc-role">전문의 역할</div>
+      </div>
+      <div class="hire-card">
+        <span class="hc-icon">⚖️</span>
+        <div class="hc-domain">법률</div>
+        <div class="hc-service">Harvey</div>
+        <div class="hc-role">어소시에이트 역할</div>
+      </div>
+      <div class="hire-card">
+        <span class="hc-icon">🔐</span>
+        <div class="hc-domain">보안</div>
+        <div class="hc-service">XBOW</div>
+        <div class="hc-role">펜테스터 역할</div>
+      </div>
+      <div class="hire-card">
+        <span class="hc-icon">🖥️</span>
+        <div class="hc-domain">DevOps</div>
+        <div class="hc-service">Traversal</div>
+        <div class="hc-role">SRE 역할</div>
+      </div>
+      <div class="hire-card">
+        <span class="hc-icon">📈</span>
+        <div class="hc-domain">세일즈</div>
+        <div class="hc-service">Day AI</div>
+        <div class="hc-role">BDR/SE 역할</div>
+      </div>
+      <div class="hire-card">
+        <span class="hc-icon">🎯</span>
+        <div class="hc-domain">채용</div>
+        <div class="hc-service">Juicebox</div>
+        <div class="hc-role">리크루터 역할</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: Talkers → Doers -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-teal">🔄</div>
+      <h2>Talkers → Doers — AI 패러다임 전환</h2>
+    </div>
+    <div class="td-grid">
+      <div class="td-col talker">
+        <div class="col-era">2023~2024</div>
+        <h4>💬 Talkers</h4>
+        <div class="td-row"><span class="r-icon">—</span><span>대화를 잘 하는 AI</span></div>
+        <div class="td-row"><span class="r-icon">—</span><span>하루 몇 번 사용</span></div>
+        <div class="td-row"><span class="r-icon">—</span><span>질문 → 답변 → 인간이 실행</span></div>
+        <div class="td-row"><span class="r-icon">—</span><span>도구(Tool)로서의 AI</span></div>
+        <div class="td-row"><span class="r-icon">—</span><span>소프트웨어 TAM (~수천억 달러)</span></div>
+      </div>
+      <div class="td-col doer">
+        <div class="col-era">2026~2027</div>
+        <h4>⚡ Doers</h4>
+        <div class="td-row"><span class="r-icon">✅</span><span>동료처럼 일을 하는 AI</span></div>
+        <div class="td-row"><span class="r-icon">✅</span><span>하루 종일 여러 인스턴스 병렬 실행</span></div>
+        <div class="td-row"><span class="r-icon">✅</span><span>일을 받아 → 완료까지 자율 처리</span></div>
+        <div class="td-row"><span class="r-icon">✅</span><span>동료(Colleague)로서의 AI</span></div>
+        <div class="td-row"><span class="r-icon">✅</span><span>서비스 TAM ($10조)</span></div>
+        <div class="td-cta">🚀 IC로 일하다가 → 에이전트 팀을 관리하는 역할로 인간이 이동</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: TAM 확장 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-red">💰</div>
+      <h2>새로운 TAM — $10조 서비스 시장 개방</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; margin-bottom: 24px;">
+      <div class="tam-box old">
+        <div class="tb-label">기존 소프트웨어 TAM</div>
+        <div class="tb-num">~$4천억</div>
+        <div class="tb-desc">도구를 판다<br>인간이 도구로 일함</div>
+      </div>
+      <div class="tam-arrow">→</div>
+      <div class="tam-box new">
+        <div class="tb-label">Agent 시대 TAM</div>
+        <div class="tb-num">$10조</div>
+        <div class="tb-desc">일 자체를 판다<br>결과물 기반 과금</div>
+      </div>
+    </div>
+    <div class="callout teal">
+      <span class="callout-icon">📌</span>
+      <div>미국 법률 서비스 시장만 $4천억 = 전체 소프트웨어 산업 규모. AI가 "결과물"을 직접 제공하기 시작하면, 전문 서비스 시장 전체가 새로운 TAM이 된다.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: Diffusion Gap -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-blue">📉</div>
+      <h2>Diffusion Gap — 창업자·투자자의 기회</h2>
+    </div>
+    <div class="gap-visual" id="gap-visual">
+      <div class="gap-title">모델 역량 vs 기업 도입 속도</div>
+      <div class="gap-line-wrap">
+        <div class="gap-line-label">
+          <span style="color: var(--accent2);">🔴 모델 진보 속도</span>
+          <span style="color: var(--accent2); font-size: 12px;">매일 빨라짐</span>
+        </div>
+        <div class="gap-track"><div class="gap-fill gf-model" data-width="90"></div></div>
+      </div>
+      <div class="gap-line-wrap" style="margin-top: 12px;">
+        <div class="gap-line-label">
+          <span style="color: var(--blue2);">🔵 Fortune 500 도입 속도</span>
+          <span style="color: var(--blue2); font-size: 12px;">격차가 날마다 커짐</span>
+        </div>
+        <div class="gap-track"><div class="gap-fill gf-adopt" data-width="30"></div></div>
+      </div>
+      <div class="gap-annotation">
+        <span>🎯</span>
+        <div><strong>이 격차 = 애플리케이션 레이어 창업자의 기회.</strong> 최신 모델 능력을 기업이 아직 도입하지 못한 영역을 선점하는 스타트업이 이긴다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: MAD Framework -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-gold">🗺️</div>
+      <h2>MAD 프레임워크 — 창업자·투자자 전략</h2>
+    </div>
+    <div class="mad-grid">
+      <div class="mad-card">
+        <div class="mad-letter">M</div>
+        <div class="mad-word">Moats from the customer back</div>
+        <div class="mad-desc">기술이 아닌 <strong>고객 워크플로우</strong>에서 해자를 구축하라. 모델이 바뀌어도 고객의 프로세스에 깊이 뿌리내린 해자는 유지된다.</div>
+      </div>
+      <div class="mad-card">
+        <div class="mad-letter">A</div>
+        <div class="mad-word">Design for Affordance</div>
+        <div class="mad-desc">에이전트의 새로운 능력을 활용하는 <strong>UI/UX를 설계</strong>하라. 기존 소프트웨어 패러다임의 인터페이스를 그대로 쓰지 마라.</div>
+      </div>
+      <div class="mad-card">
+        <div class="mad-letter">D</div>
+        <div class="mad-word">Exploit the Diffusion Gap</div>
+        <div class="mad-desc">대기업이 아직 도입하지 못한 영역을 <strong>선점</strong>하라. Diffusion Gap은 매일 커지고 있다 — 지금이 가장 좋은 타이밍.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 10: Action Items -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-red">⚡</div>
+      <h2>C-레벨 액션 아이템</h2>
+    </div>
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="ac-num">🔴 즉시 (1개월 내)</div>
+        <h4>"에이전트화 가능" 업무 목록 작성</h4>
+        <p>우리 사업에서 반복적이고 정보 수집 후 판단이 필요한 작업 목록화. 채용 에이전트처럼 "31분 내 완료 가능"한 작업이 무엇인지 파악하라.</p>
+      </div>
+      <div class="action-card">
+        <div class="ac-num">🔴 즉시 (1개월 내)</div>
+        <h4>Diffusion Gap 포지션 파악</h4>
+        <p>경쟁사 대비 AI 도입 속도 비교. 우리가 앞서 있는 영역 vs 뒤처진 영역 파악 → 앞서 있는 영역에서 격차를 더 벌려라.</p>
+      </div>
+      <div class="action-card">
+        <div class="ac-num">🟡 단기 (3개월 내)</div>
+        <h4>"도구"에서 "일" 판매로 전환 검토</h4>
+        <p>현재 도구(Tool)를 파는지, 결과물(Outcome)을 파는지 점검. Agent 시대에는 Outcome-based pricing 전략이 더 큰 TAM을 공략한다.</p>
+      </div>
+      <div class="action-card">
+        <div class="ac-num">🟡 단기 (3개월 내)</div>
+        <h4>MAD 전략으로 제품 로드맵 재검토</h4>
+        <p>M: 고객 워크플로우 깊이 파고들기. A: 에이전트 능력에 맞는 새로운 UX 설계. D: 아직 경쟁자가 없는 Diffusion Gap 영역 탐색.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMENT -->
+  <div class="comment-section">
+    <h3>✍️ 나의 코멘트 & 시사점</h3>
+    <textarea placeholder="Sequoia 'This is AGI' 키노트가 우리 사업·투자 전략에 주는 시사점을 여기에 기록하세요.
+
+예: 우리 제품/서비스에서 Diffusion Gap 기회는 어디인가? 우리는 지금 Talkers AI를 쓰고 있나, Doers AI로 전환했나? 31분짜리 에이전트로 대체 가능한 우리 업무는?"></textarea>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="sources">
+    <h4>참고 자료</h4>
+    <a href="https://www.youtube.com/watch?v=LRo33rnv6rQ" target="_blank">▶ YouTube: Sequoia AI Ascent 2026 — This is AGI Keynote</a>
+    <a href="https://sequoiacap.com/article/ai-ascent-2026/" target="_blank">🌐 Sequoia Capital: AI Ascent 2026 공식 페이지</a>
+    <a href="https://www.odaily.news/en/post/5210633" target="_blank">📰 Odaily: AGI is Already Here — 13 Most Hardcore AI Conversations from Sequoia 2026</a>
+  </div>
+
+</main>
+
+<script>
+  window.addEventListener('load', () => {
+    // METR bars animation
+    setTimeout(() => {
+      document.querySelectorAll('.metr-bar').forEach(bar => {
+        const w = bar.dataset.width;
+        if (w) bar.style.width = w + '%';
+      });
+    }, 400);
+
+    // Gap visual animation
+    setTimeout(() => {
+      const model = document.querySelector('.gf-model');
+      const adopt = document.querySelector('.gf-adopt');
+      if (model) model.style.width = '90%';
+      if (adopt) adopt.style.width = '30%';
+    }, 600);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dmitri Dolgov: 20 Million Rides & Full Autonomy | Sequoia AI Ascent 2026</title>
+<style>
+  :root {
+    --bg: #050a0f;
+    --surface: #090f18;
+    --surface2: #0d1520;
+    --border: #132030;
+    --accent: #00c8ff;
+    --accent2: #60dfff;
+    --accent3: #0085aa;
+    --green: #00e676;
+    --green2: #69f0ae;
+    --orange: #ff9100;
+    --red: #ff5252;
+    --purple: #a78bfa;
+    --text: #e0eaf5;
+    --text2: #7a9ab8;
+    --text3: #3a5570;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.7; }
+
+  /* NAV */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    position: sticky; top: 0; z-index: 100;
+  }
+  nav span { color: var(--text3); font-size: 12px; }
+  nav a { color: var(--text2); text-decoration: none; font-size: 12px; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border); transition: all 0.2s; }
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav a.active { color: var(--accent); border-color: var(--accent); background: rgba(0,200,255,0.08); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, #04080f 0%, #071220 40%, #050e1a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(0,200,255,0.05) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  /* LiDAR scan lines */
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: scan-line 3s ease-in-out infinite;
+  }
+  @keyframes scan-line {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.3);
+    border-radius: 20px; padding: 6px 18px; font-size: 13px; color: var(--accent);
+    margin-bottom: 24px; letter-spacing: 0.04em;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900; line-height: 1.15; margin-bottom: 18px; letter-spacing: -0.02em;
+  }
+  .h1-num {
+    background: linear-gradient(135deg, #00c8ff, #60dfff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .h1-sub { color: var(--text2); }
+  .hero-tagline { font-size: 16px; color: var(--text2); max-width: 580px; margin: 0 auto 32px; }
+  .hero-meta { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; color: var(--text3); font-size: 13px; }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* STAT STRIP */
+  .stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); border-bottom: 1px solid var(--border); }
+  .stat-item { padding: 26px 20px; text-align: center; border-right: 1px solid var(--border); }
+  .stat-item:last-child { border-right: none; }
+  .stat-num { font-size: 34px; font-weight: 800; display: block; line-height: 1; margin-bottom: 6px; }
+  .sn-cyan { color: var(--accent); }
+  .sn-green { color: var(--green); }
+  .sn-orange { color: var(--orange); }
+  .stat-label { color: var(--text2); font-size: 11px; line-height: 1.4; }
+
+  /* MAIN */
+  main { max-width: 1100px; margin: 0 auto; padding: 52px 24px; }
+  .section { margin-bottom: 60px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .si { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .si-cyan { background: rgba(0,200,255,0.12); }
+  .si-green { background: rgba(0,230,118,0.12); }
+  .si-orange { background: rgba(255,145,0,0.12); }
+  .si-purple { background: rgba(167,139,250,0.12); }
+  .section-header h2 { font-size: 22px; font-weight: 700; }
+
+  /* QUOTE */
+  .quote-block {
+    background: linear-gradient(135deg, rgba(0,200,255,0.06), rgba(0,200,255,0.02));
+    border: 1px solid rgba(0,200,255,0.2); border-left: 4px solid var(--accent);
+    border-radius: 12px; padding: 28px 32px; margin-bottom: 24px;
+  }
+  .quote-block blockquote { font-size: 18px; font-style: italic; color: var(--accent2); line-height: 1.6; margin-bottom: 12px; }
+  .quote-block cite { color: var(--text3); font-size: 13px; font-style: normal; }
+
+  /* ARCHITECTURE */
+  .arch-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 24px; }
+  .arch-foundation {
+    background: linear-gradient(135deg, rgba(0,200,255,0.1), rgba(0,133,170,0.1));
+    border: 1px solid rgba(0,200,255,0.3); border-radius: 10px; padding: 18px 24px;
+    text-align: center; margin-bottom: 20px;
+  }
+  .arch-foundation .af-label { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .arch-foundation .af-title { font-size: 18px; font-weight: 800; color: var(--accent2); }
+  .arch-arrow { text-align: center; color: var(--text3); font-size: 20px; margin: 8px 0; }
+  .arch-teachers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+  .teacher-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+  .teacher-card .tc-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+  .teacher-card .tc-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .teacher-card .tc-role { font-size: 11px; color: var(--text2); line-height: 1.4; }
+  .teacher-card .tc-where { font-size: 10px; margin-top: 6px; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+  .tw-car { color: var(--accent); background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.2); }
+  .tw-cloud { color: var(--green); background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.2); }
+  .tw-eval { color: var(--orange); background: rgba(255,145,0,0.1); border: 1px solid rgba(255,145,0,0.2); }
+
+  /* SENSOR TABLE */
+  .sensor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .sensor-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 18px; }
+  .sensor-card:nth-child(1) { border-top: 3px solid var(--accent); }
+  .sensor-card:nth-child(2) { border-top: 3px solid var(--green); }
+  .sensor-card:nth-child(3) { border-top: 3px solid var(--orange); }
+  .sc-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+  .sc-name { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+  .sensor-card:nth-child(1) .sc-name { color: var(--accent); }
+  .sensor-card:nth-child(2) .sc-name { color: var(--green); }
+  .sensor-card:nth-child(3) .sc-name { color: var(--orange); }
+  .sc-principle { font-size: 12px; color: var(--text3); margin-bottom: 10px; }
+  .sc-pro { font-size: 12px; color: var(--green2); margin-bottom: 4px; }
+  .sc-con { font-size: 12px; color: var(--text2); }
+
+  /* BUS STORY */
+  .bus-story { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .bs-header { background: rgba(0,200,255,0.07); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+  .bs-badge { background: rgba(0,200,255,0.15); color: var(--accent); border: 1px solid rgba(0,200,255,0.3); border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; }
+  .bs-title { font-size: 14px; font-weight: 600; }
+  .bs-body { padding: 22px 24px; }
+  .bs-sequence { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+  .bs-step { display: flex; align-items: flex-start; gap: 14px; font-size: 13px; }
+  .bs-step .step-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .bs-step .step-txt { color: var(--text2); line-height: 1.5; }
+  .bs-step .step-txt strong { color: var(--text); }
+  .bs-result { background: rgba(0,200,255,0.07); border: 1px solid rgba(0,200,255,0.2); border-radius: 8px; padding: 14px 18px; font-size: 13px; color: var(--accent2); }
+
+  /* GENERATION TABLE */
+  .gen-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 24px; }
+  .gen-table th { background: var(--surface); color: var(--text2); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 16px; text-align: left; border-bottom: 2px solid var(--border); }
+  .gen-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .gen-table tr:last-child td { border-bottom: none; }
+  .gen-table tr:hover td { background: rgba(255,255,255,0.015); }
+  .td-gen { font-weight: 700; font-size: 15px; }
+  .td-g4 { color: var(--text3); }
+  .td-g5 { color: var(--accent); }
+  .td-g6 { color: var(--green); }
+  .tag-highlight { background: rgba(0,200,255,0.1); color: var(--accent); border: 1px solid rgba(0,200,255,0.25); border-radius: 4px; padding: 2px 6px; font-size: 11px; font-weight: 700; }
+
+  /* STATS DASHBOARD */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
+  .stat-card .sc-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .stat-card .sc-val { font-size: 32px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+  .stat-card .sc-desc { font-size: 12px; color: var(--text2); }
+  .scv-cyan { color: var(--accent); }
+  .scv-green { color: var(--green); }
+  .scv-orange { color: var(--orange); }
+
+  /* SAFETY BAR */
+  .safety-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 24px; }
+  .safety-row { margin-bottom: 18px; }
+  .safety-row:last-child { margin-bottom: 0; }
+  .sr-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
+  .sr-label span:first-child { color: var(--text2); }
+  .sr-label span:last-child { font-weight: 700; color: var(--green); }
+  .sr-track { background: var(--surface2); border-radius: 4px; height: 20px; overflow: hidden; }
+  .sr-fill { height: 100%; border-radius: 4px; transition: width 1.4s ease; display: flex; align-items: center; padding-left: 12px; font-size: 11px; font-weight: 600; color: var(--bg); min-width: 60px; }
+  .sf-1 { background: linear-gradient(90deg, var(--accent3), var(--accent)); width: 0; }
+  .sf-2 { background: linear-gradient(90deg, #008844, var(--green)); width: 0; }
+  .sf-3 { background: linear-gradient(90deg, #007733, var(--green2)); width: 0; }
+
+  /* E2E COMPARISON */
+  .e2e-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .e2e-col { padding: 24px; }
+  .e2e-col:first-child { background: var(--surface); border-right: 1px solid var(--border); }
+  .e2e-col:last-child { background: rgba(0,200,255,0.03); }
+  .e2e-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .e2e-col:first-child .e2e-tag { color: var(--text3); }
+  .e2e-col:last-child .e2e-tag { color: var(--accent); }
+  .e2e-col h4 { font-size: 16px; font-weight: 800; margin-bottom: 14px; }
+  .e2e-col:first-child h4 { color: var(--text3); }
+  .e2e-col:last-child h4 { color: var(--accent2); }
+  .e2e-row { display: flex; gap: 8px; margin-bottom: 10px; font-size: 13px; color: var(--text2); align-items: flex-start; }
+  .e2e-cta { background: rgba(0,200,255,0.07); border: 1px solid rgba(0,200,255,0.2); border-radius: 8px; padding: 12px 16px; margin-top: 14px; font-size: 13px; color: var(--accent2); }
+
+  /* CALLOUT */
+  .callout { border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; font-size: 14px; display: flex; gap: 12px; align-items: flex-start; }
+  .callout.cyan { background: rgba(0,200,255,0.06); border: 1px solid rgba(0,200,255,0.2); color: var(--accent2); }
+  .callout.green { background: rgba(0,230,118,0.06); border: 1px solid rgba(0,230,118,0.2); color: var(--green2); }
+  .callout.orange { background: rgba(255,145,0,0.06); border: 1px solid rgba(255,145,0,0.2); color: var(--orange); }
+  .ci { flex-shrink: 0; font-size: 18px; }
+
+  /* CITY EXPANSION */
+  .city-timeline { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; margin-bottom: 24px; }
+  .city-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; text-align: center; }
+  .city-box.old { border-top: 3px solid var(--text3); }
+  .city-box.new { border-top: 3px solid var(--green); }
+  .city-box .cb-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .city-box .cb-val { font-size: 36px; font-weight: 900; line-height: 1; margin-bottom: 8px; }
+  .city-box.old .cb-val { color: var(--text3); }
+  .city-box.new .cb-val { color: var(--green); }
+  .city-box .cb-desc { font-size: 12px; color: var(--text2); }
+  .city-arrow { font-size: 36px; color: var(--green); text-align: center; }
+
+  /* 2ND ORDER */
+  .second-order { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .so-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 18px; }
+  .so-card:nth-child(1) { border-left: 3px solid var(--accent); }
+  .so-card:nth-child(2) { border-left: 3px solid var(--green); }
+  .so-card:nth-child(3) { border-left: 3px solid var(--orange); }
+  .so-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .so-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .so-card:nth-child(1) .so-title { color: var(--accent2); }
+  .so-card:nth-child(2) .so-title { color: var(--green2); }
+  .so-card:nth-child(3) .so-title { color: var(--orange); }
+  .so-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* SPEAKER TABLE */
+  .speaker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .sp-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 16px; }
+  .sp-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .sp-org { font-size: 11px; color: var(--text3); margin-bottom: 12px; }
+  .sp-theme-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .sp-body { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .spc-1 .sp-theme-label { color: var(--accent); }
+  .spc-2 .sp-theme-label { color: var(--green); }
+  .spc-3 .sp-theme-label { color: var(--orange); }
+
+  /* ACTION CARDS */
+  .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px; }
+  .action-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 10px; padding: 20px; }
+  .action-card .ac-p { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .action-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .action-card p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* COMMENT */
+  .comment-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 40px; }
+  .comment-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
+  .comment-section textarea { width: 100%; min-height: 140px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 14px; line-height: 1.7; padding: 16px; resize: vertical; outline: none; transition: border-color 0.2s; }
+  .comment-section textarea:focus { border-color: var(--accent); }
+  .comment-section textarea::placeholder { color: var(--text3); }
+
+  /* SOURCES */
+  .sources { border-top: 1px solid var(--border); padding-top: 24px; margin-bottom: 40px; }
+  .sources h4 { font-size: 12px; font-weight: 600; color: var(--text3); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .sources a { color: var(--accent3); font-size: 13px; text-decoration: none; display: block; margin-bottom: 6px; }
+  .sources a:hover { color: var(--accent); text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .sensor-grid, .second-order, .arch-teachers { grid-template-columns: 1fr; }
+    .e2e-grid, .city-timeline { grid-template-columns: 1fr; }
+    .city-arrow { transform: rotate(90deg); }
+    .action-grid, .speaker-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span>Sequoia AI Ascent 2026 ›</span>
+  <a href="2026-05_Sequoia_This_is_AGI.html">Sequoia 오프닝</a>
+  <a href="2026-05_Demis_Hassabis_AGI_75percent.html">Hassabis</a>
+  <a href="2026-05_Brockman_Human_Attention_Bottleneck.html">Brockman</a>
+  <a href="2026-05_Karpathy_VibeCoding_to_AgenticEngineering.html">Karpathy</a>
+  <a href="2026-05_Dolgov_Waymo_Full_Autonomy.html" class="active">Dolgov</a>
+  <a href="2026-05_Jim_Fan_Robotics_EndGame.html">Jim Fan</a>
+  <a href="2026-05_Boris_Cherny_Coding_Solved.html">Boris Cherny</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🚗 Sequoia AI Ascent 2026 — Physical AI in Action</div>
+  <h1>
+    <span class="h1-num">2천만 라이드</span><br>
+    <span class="h1-sub">그리고 완전 자율주행의 길</span>
+  </h1>
+  <p class="hero-tagline">20년의 여정 — DARPA 챌린지에서 주 50만 라이드 로보택시까지. Waymo가 증명한 Physical AI의 현실</p>
+  <div class="hero-meta">
+    <span>👤 Dmitri Dolgov</span>
+    <span>🏢 Waymo Co-CEO</span>
+    <span>📅 2026년 4월</span>
+    <span>🎯 인간 대비 13배 안전</span>
+  </div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-item"><span class="stat-num sn-cyan">2천만</span><div class="stat-label">누적 자율 라이드</div></div>
+  <div class="stat-item"><span class="stat-num sn-green">13배</span><div class="stat-label">인간 대비 안전 (심각부상)</div></div>
+  <div class="stat-item"><span class="stat-num sn-cyan">50만</span><div class="stat-label">주간 라이드</div></div>
+  <div class="stat-item"><span class="stat-num sn-orange">11</span><div class="stat-label">미국 운영 도시</div></div>
+  <div class="stat-item"><span class="stat-num sn-cyan">$1,260억</span><div class="stat-label">기업가치 (2026.02)</div></div>
+  <div class="stat-item"><span class="stat-num sn-green">3</span><div class="stat-label">파운데이션 Teacher 모델</div></div>
+</div>
+
+<main>
+
+  <!-- SECTION 1: 핵심 명언 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-cyan">💬</div>
+      <h2>Dolgov의 핵심 선언</h2>
+    </div>
+    <div class="quote-block">
+      <blockquote>"We've clearly moved past the stage of scientific research and deep core technology development to this new phase of accelerated global scaling and deployment."</blockquote>
+      <cite>— Dmitri Dolgov, Waymo Co-CEO | Sequoia AI Ascent 2026</cite>
+    </div>
+    <div class="callout cyan">
+      <span class="ci">🎯</span>
+      <div>Waymo는 더 이상 R&D 단계가 아니다. <strong>가속화된 글로벌 스케일링 단계</strong>에 진입했다. 미국 11개 도시에서 운영 중이며 런던·도쿄 2026년 진출 예정. 4개 도시 런칭에 8년이 걸렸다면, 지금은 <strong>하루에 4개 도시를 동시 런칭</strong>한다.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 파운데이션 모델 아키텍처 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-cyan">🏗️</div>
+      <h2>Waymo 파운데이션 모델 — 3 Teacher 시스템</h2>
+    </div>
+    <div class="arch-box">
+      <div class="arch-foundation">
+        <div class="af-label">오프보드 대형 모델</div>
+        <div class="af-title">🧠 Waymo Foundation Model</div>
+        <div style="font-size: 13px; color: var(--text2); margin-top: 6px;">물리 세계 이해 · 사회적 주행 패턴 · 좋은 드라이버의 정의</div>
+      </div>
+      <div class="arch-arrow">↓ 전문화(Specialization) & 파인튜닝</div>
+      <div class="arch-teachers">
+        <div class="teacher-card">
+          <span class="tc-icon">🚗</span>
+          <div class="tc-name">Waymo Driver</div>
+          <div class="tc-role">실시간 자율주행 의사결정<br>센서 → 궤적 생성</div>
+          <span class="tc-where tw-car">차량 온보드</span>
+        </div>
+        <div class="teacher-card">
+          <span class="tc-icon">🌐</span>
+          <div class="tc-name">Simulator</div>
+          <div class="tc-role">현실적 합성 주행 환경<br>RL 훈련 & 엣지케이스 생성</div>
+          <span class="tc-where tw-cloud">클라우드 실행</span>
+        </div>
+        <div class="teacher-card">
+          <span class="tc-icon">⚖️</span>
+          <div class="tc-name">Critic</div>
+          <div class="tc-role">좋은/나쁜 행동 판별<br>보상 함수 & 평가</div>
+          <span class="tc-where tw-eval">오프보드 평가</span>
+        </div>
+      </div>
+      <div class="callout cyan" style="margin-bottom: 0;">
+        <span class="ci">💡</span>
+        <div>세 Teacher는 <strong>동일한 파운데이션에서 파생</strong>된다. 파운데이션 모델에 투자하면 Driver·Simulator·Critic 세 방향 모두에 복리 효과가 발생한다. LLM 플레이북의 물리 세계 버전.</div>
+      </div>
+    </div>
+
+    <!-- LLM vs Waymo 대응표 -->
+    <table class="gen-table">
+      <thead>
+        <tr><th>LLM 패러다임</th><th>Waymo 물리 세계 대응</th><th>의미</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>텍스트 사전학습</td><td>수억 마일 주행 데이터 학습</td><td>세계 이해의 기반</td></tr>
+        <tr><td>RLHF (인간 피드백)</td><td><strong>RLFT</strong> (강화학습 기반 파인튜닝)</td><td>닫힌 루프 안전 학습</td></tr>
+        <tr><td>Chain-of-Thought</td><td>중간 표현 (Intermediate Representations)</td><td>시뮬레이터 효율화</td></tr>
+        <tr><td>VLM 일반 지식</td><td>VLM에서 세계 지식 상속 (Zero-shot 전이)</td><td>도시 간 일반화</td></tr>
+        <tr><td>다음 토큰 예측</td><td>미래 물리 상태 예측 (궤적 생성)</td><td>예측적 안전 판단</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 3: 센서 삼각편대 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-cyan">📡</div>
+      <h2>센서 삼각편대 — 왜 LiDAR를 포기할 수 없나</h2>
+    </div>
+    <div class="sensor-grid">
+      <div class="sensor-card">
+        <span class="sc-icon">📷</span>
+        <div class="sc-name">Camera</div>
+        <div class="sc-principle">빛 반사 · 360° 커버리지</div>
+        <div class="sc-pro">✅ 고해상도 · 색상 · 텍스트 · 표지판</div>
+        <div class="sc-con">⚠️ 야간·역광·짙은 안개에서 성능 저하</div>
+      </div>
+      <div class="sensor-card">
+        <span class="sc-icon">🔭</span>
+        <div class="sc-name">LiDAR</div>
+        <div class="sc-principle">레이저 펄스 · 초당 수백만 회</div>
+        <div class="sc-pro">✅ 정밀 3D 공간 구조 · 야간 완전 무관</div>
+        <div class="sc-con">⚠️ 짙은 안개·폭설에서 일부 약화</div>
+      </div>
+      <div class="sensor-card">
+        <span class="sc-icon">📻</span>
+        <div class="sc-name">Radar</div>
+        <div class="sc-principle">전파 반사 · 저해상도</div>
+        <div class="sc-pro">✅ 안개·눈·비 완전 관통 · 악천후 최강</div>
+        <div class="sc-con">⚠️ 해상도 낮음 · 세밀한 구조 인식 제한</div>
+      </div>
+    </div>
+    <div class="callout cyan">
+      <span class="ci">🔗</span>
+      <div>"스위치가 아닌 조합이다. 각 센서의 노이즈 특성이 다른 환경에서 다르게 나타난다. 맑은 날은 카메라, 야간은 LiDAR, 짙은 안개는 레이더가 주도하지만, 항상 세 가지가 동시에 작동한다." — Dolgov</div>
+    </div>
+
+    <!-- 버스 뒤 보행자 -->
+    <div class="bus-story">
+      <div class="bs-header">
+        <span class="bs-badge">🌟 창발 행동</span>
+        <span class="bs-title">버스 뒤 보행자 감지 — Dolgov가 "믿을 수 없었다"는 사례</span>
+      </div>
+      <div class="bs-body">
+        <div class="bs-sequence">
+          <div class="bs-step"><span class="step-icon">🚦</span><div class="step-txt">신호 대기 중. 횡단 방향 버스가 차선 절반을 막고 정차.</div></div>
+          <div class="bs-step"><span class="step-icon">✅</span><div class="step-txt">초록불 → Waymo가 버스 옆으로 회피 기동 시작.</div></div>
+          <div class="bs-step"><span class="step-icon">⚡</span><div class="step-txt"><strong>갑자기 감속 + 우측으로 더 넓게 회피.</strong> 카메라로는 버스 너머를 볼 수 없는 상황.</div></div>
+          <div class="bs-step"><span class="step-icon">🦶</span><div class="step-txt"><strong>주변 LiDAR가 버스 하단 틈새로 반사파 탐지</strong> → 보행자 발의 움직임에서 나온 매우 노이즈 많은 반사파.</div></div>
+          <div class="bs-step"><span class="step-icon">🧠</span><div class="step-txt">AI 모델이 노이즈 데이터에서 "보행자 있을 가능성 높음" 판단 → 미래 동선까지 예측.</div></div>
+          <div class="bs-step"><span class="step-icon">🚶</span><div class="step-txt">실제 보행자가 버스 뒤에서 등장. Waymo는 이미 회피 완료.</div></div>
+        </div>
+        <div class="bs-result">
+          💡 <strong>핵심:</strong> 순수 엔드투엔드(픽셀→궤적) 시스템으로는 사실상 달성 불가능. <strong>중간 표현 + 다중 센서 융합</strong>이 이 수준의 안전 성능을 만든다. "처음 로그를 봤을 때 내 눈을 믿을 수 없었다." — Dolgov
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: E2E vs 모듈형 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-purple">⚖️</div>
+      <h2>End-to-End vs 구조화된 접근 — Dolgov의 결론</h2>
+    </div>
+    <div class="e2e-grid">
+      <div class="e2e-col">
+        <div class="e2e-tag">순수 E2E (EMMA 논문)</div>
+        <h4>픽셀 → 궤적</h4>
+        <div class="e2e-row"><span>→</span><span>VLM 파인튜닝: 일반 상황에서 놀라울 정도로 잘 작동</span></div>
+        <div class="e2e-row"><span>→</span><span>시작하기 쉽다 — "말하는 말처럼 인상적"</span></div>
+        <div class="e2e-row"><span>❌</span><span>완전 자율화 필요 수준에서 수 오더 오브 매그니튜드 부족</span></div>
+        <div class="e2e-row"><span>❌</span><span>시뮬레이터 운영이 비효율적 (고차원 픽셀 공간)</span></div>
+        <div class="e2e-row"><span>❌</span><span>Critic 보상 함수 설계 어려움</span></div>
+      </div>
+      <div class="e2e-col">
+        <div class="e2e-tag">Waymo 방식</div>
+        <h4>E2E + 중간 표현 보강</h4>
+        <div class="e2e-row"><span>✅</span><span>E2E 아키텍처 기반 — 그래디언트 전체 역전파</span></div>
+        <div class="e2e-row"><span>✅</span><span>구조화된 중간 표현 추가 (도로·물체·표지판)</span></div>
+        <div class="e2e-row"><span>✅</span><span>시뮬레이터를 중간 표현 공간에서 효율적 실행</span></div>
+        <div class="e2e-row"><span>✅</span><span>실시간 안전 검증 레이어 가능</span></div>
+        <div class="e2e-row"><span>✅</span><span>Critic의 보상 함수 정밀화</span></div>
+        <div class="e2e-cta">🎯 "완전히 E2E인가? 그렇다. 하지만 완전 자율화 규모에서는 구조화된 중간 표현으로 보강해야 한다." — Dolgov</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 세대별 진화 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-cyan">🔄</div>
+      <h2>Waymo Driver 세대별 진화 — 불연속적 도약</h2>
+    </div>
+    <table class="gen-table">
+      <thead>
+        <tr><th>세대</th><th>핵심 특징</th><th>전략적 의의</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="td-gen td-g4">4세대 (2020)</span></td>
+          <td>Pacifica 미니밴 · 작은 AI 모델 다수 · 애리조나 Chandler 상업 런칭</td>
+          <td>최초 완전 자율 유료 서비스 — 엔드투엔드 운영 사이클 학습</td>
+        </tr>
+        <tr>
+          <td><span class="td-gen td-g5">5세대 (현재)</span></td>
+          <td><span class="tag-highlight">불연속 도약</span> AI를 핵심 백본으로 대도박 · 전국 데이터 수집 · SF·피닉스 최난도 진출</td>
+          <td>"이게 가능했던 이유" — 이 세대의 도약 이후 현재의 글로벌 확장이 가능해짐</td>
+        </tr>
+        <tr>
+          <td><span class="td-gen td-g6">6세대 (2026 예정)</span></td>
+          <td>Ojai 맞춤 차량 · 새 센서 스택 · 비용 "5세대의 극히 일부" · 소프트웨어는 5세대와 동일</td>
+          <td>승객 중심 설계 혁신 · ADAS 수준 비용 목표 · 현대 아이오닉 등 타 플랫폼 확장</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout green">
+      <span class="ci">🏠</span>
+      <div>Ojai (6세대 차량): 슬라이딩 도어 · 플랫 플로어 · "리빙룸 같은 공간감". 외부 크기는 I-PACE와 유사하나 내부 공간 대폭 확대. "운전자 중심 설계 → 승객 중심 설계"의 전환.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: 안전 지표 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-green">🛡️</div>
+      <h2>안전 지표 — 인간 운전 대비</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="sc-label">심각 부상/사망 사고율</div>
+        <div class="sc-val scv-green">13배↓</div>
+        <div class="sc-desc">인간 운전자 대비</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">부상 유발 충돌</div>
+        <div class="sc-val scv-green">82%↓</div>
+        <div class="sc-desc">인간 대비 감소</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">보행자 부상 충돌</div>
+        <div class="sc-val scv-green">92%↓</div>
+        <div class="sc-desc">인간 대비 감소</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">누적 자율주행 마일</div>
+        <div class="sc-val scv-cyan">2억+</div>
+        <div class="sc-desc">완전 자율 모드</div>
+      </div>
+    </div>
+    <div class="safety-box" id="safety-box">
+      <div style="font-size: 13px; color: var(--text2); margin-bottom: 20px;">안전 개선률 시각화 (인간 운전 = 기준)</div>
+      <div class="safety-row">
+        <div class="sr-label"><span>심각 부상/사망 사고율 개선</span><span>인간 대비 13배 안전</span></div>
+        <div class="sr-track"><div class="sr-fill sf-1" data-w="92">13x 안전</div></div>
+      </div>
+      <div class="safety-row">
+        <div class="sr-label"><span>부상 유발 충돌 감소</span><span>82% 감소</span></div>
+        <div class="sr-track"><div class="sr-fill sf-2" data-w="82">82%↓</div></div>
+      </div>
+      <div class="safety-row">
+        <div class="sr-label"><span>보행자 부상 충돌 감소</span><span>92% 감소</span></div>
+        <div class="sr-track"><div class="sr-fill sf-3" data-w="92">92%↓</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: 확장 속도 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-green">📈</div>
+      <h2>확장 속도의 비약 — 8년 → 하루</h2>
+    </div>
+    <div class="city-timeline">
+      <div class="city-box old">
+        <div class="cb-label">과거</div>
+        <div class="cb-val">8년</div>
+        <div class="cb-desc">최초 자율 라이더 운영부터<br>4개 도시 동시 런칭까지</div>
+      </div>
+      <div class="city-arrow">→</div>
+      <div class="city-box new">
+        <div class="cb-label">현재</div>
+        <div class="cb-val">1일</div>
+        <div class="cb-desc">4개 도시 동시 런칭<br>(2026년 달성)</div>
+      </div>
+    </div>
+    <div class="callout green">
+      <span class="ci">🌍</span>
+      <div><strong>2026년 글로벌 진출:</strong> 런던·도쿄 운영 예정. 핵심 기술은 일반화됐으나, 현지 데이터 수집·전문화·검증 단계가 여전히 필요. 좌측통행은 "컴퓨터에게 그리 어렵지 않다".</div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: 2차 효과 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-orange">🌆</div>
+      <h2>자율주행이 도시를 바꾸는 2차 효과</h2>
+    </div>
+    <div class="second-order">
+      <div class="so-card">
+        <span class="so-icon">🚦</span>
+        <div class="so-title">교통 정체 해소</div>
+        <div class="so-desc">"Slow is smooth and smooth is fast" (Navy SEALs). 급가속·급제동이 없어지면 정체 전파파(Standing Wave)의 시정 속도가 달라진다. 동일한 차량 수로도 도로 효율 향상.</div>
+      </div>
+      <div class="so-card">
+        <span class="so-icon">🅿️</span>
+        <div class="so-title">주차 공간의 해방</div>
+        <div class="so-desc">현재 차량은 90% 이상 주차 상태. 자율 차량은 항상 이동 가능. 도심 주차장·주차 빌딩 → 공원·주거·상업 공간으로 전환. 도시 최고 가치 토지 재활용.</div>
+      </div>
+      <div class="so-card">
+        <span class="so-icon">☕</span>
+        <div class="so-title">도시 설계 재편</div>
+        <div class="so-desc">주차 의무 규정(Parking Minimum) 폐지. 카페 야외 좌석, 광장 확대, 공원 조성 가능. "당신이 좋아하는 도시에서 주차에 쓰던 공간을 상상해보라." — Dolgov</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: Sequoia 스피커 비교 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-purple">🎤</div>
+      <h2>Sequoia AI Ascent 2026 — Physical AI 관점 비교</h2>
+    </div>
+    <div class="speaker-grid">
+      <div class="sp-card spc-1">
+        <div class="sp-name">Dmitri Dolgov</div>
+        <div class="sp-org">Waymo Co-CEO</div>
+        <div class="sp-theme-label">Physical AI 현재</div>
+        <div class="sp-body">2천만 라이드 운영 실증. Driver·Simulator·Critic 3 Teacher 아키텍처. 13배 안전. 글로벌 가속 확장 단계 진입.</div>
+      </div>
+      <div class="sp-card spc-2">
+        <div class="sp-name">Jim Fan</div>
+        <div class="sp-org">NVIDIA Senior Scientist</div>
+        <div class="sp-theme-label">Physical AI 미래</div>
+        <div class="sp-body">WAM(World Action Model) 패러다임. DreamDojo 신경망 시뮬레이터. Physical Turing Test 2028~29. Physical API 2030년대.</div>
+      </div>
+      <div class="sp-card spc-3">
+        <div class="sp-name">Greg Brockman</div>
+        <div class="sp-org">OpenAI Co-founder</div>
+        <div class="sp-theme-label">디지털 AI 현재</div>
+        <div class="sp-body">코드 80% AI 작성. 지능 상품화. 인간 주의력이 새 병목. 컨텍스트 누적이 해자. 기능적 AGI 80% 완료.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 10: 액션 카드 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="si si-cyan">⚡</div>
+      <h2>C-레벨 액션 아이템</h2>
+    </div>
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="ac-p">🔴 즉시 (1개월 내)</div>
+        <h4>물류·모빌리티 전략 재검토</h4>
+        <p>Waymo가 2026년 글로벌 확장 중. 우리 사업에서 물류·이동·배달 관련 영역에 로보택시·자율배송이 미칠 영향 시나리오 작성. 파트너십 기회 탐색.</p>
+      </div>
+      <div class="action-card">
+        <div class="ac-p">🔴 즉시 (1개월 내)</div>
+        <h4>3 Teacher 아키텍처 적용 탐색</h4>
+        <p>Driver·Simulator·Critic 구조는 자율주행만이 아닌 AI 에이전트 시스템 설계의 범용 패턴. 우리의 AI 에이전트 개발에 Critic(품질 판단) 모델을 추가하는 것 검토.</p>
+      </div>
+      <div class="action-card">
+        <div class="ac-p">🟡 단기 (3개월 내)</div>
+        <h4>2차 효과 기반 사업 기회 발굴</h4>
+        <p>자율주행 확산 시 주차장·주유소·렌터카·운전기사 시장 변화 분석. 이 공간이 재편될 때 생기는 새로운 기회(도심 공간 재개발, 유휴 부동산 활용 등) 탐색.</p>
+      </div>
+      <div class="action-card">
+        <div class="ac-p">🟡 단기 (3개월 내)</div>
+        <h4>안전 데이터 축적 전략 수립</h4>
+        <p>Waymo의 핵심 해자는 2억 마일 안전 데이터. 우리 AI 시스템에서도 "실증 데이터에서 나오는 안전 신뢰"를 어떻게 구축할지 전략 수립. 운영 데이터가 곧 해자.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMENT -->
+  <div class="comment-section">
+    <h3>✍️ 나의 코멘트 & 시사점</h3>
+    <textarea placeholder="Waymo의 사례가 우리 사업·투자 전략에 주는 시사점을 여기에 기록하세요.
+
+예: 20년간 '2년 후면 완성'이라는 말을 들으면서도 버텨낸 Waymo처럼, 우리 사업에서 인내심이 필요한 곳은 어디인가? Physical AI의 확산이 우리 사업 모델에 언제, 어떻게 영향을 미칠까?"></textarea>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="sources">
+    <h4>참고 자료</h4>
+    <a href="https://www.youtube.com/watch?v=I_0Kuf6Aa2c" target="_blank">▶ YouTube: Waymo's Dmitri Dolgov — 20 Million Rides and the Road to Full Autonomy</a>
+    <a href="https://cheekypint.substack.com/p/the-20-year-journey-to-fully-autonomous" target="_blank">📰 Cheeky Pint: The 20-year journey to fully autonomous cars with Dmitri Dolgov</a>
+    <a href="https://waymo.com/blog/2026/02/the-waymo-world-model-a-new-frontier-for-autonomous-driving-simulation/" target="_blank">🌐 Waymo Blog: The Waymo World Model — A New Frontier for Autonomous Driving Simulation</a>
+    <a href="https://waymo.com/research/emma/" target="_blank">🔬 Waymo Research: EMMA — End-to-End Multimodal Model for Autonomous Driving</a>
+    <a href="https://sequoiacap.com/article/ai-ascent-2026/" target="_blank">🌐 Sequoia Capital: AI Ascent 2026 공식 페이지</a>
+  </div>
+
+</main>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.sr-fill').forEach(el => {
+        const w = el.dataset.w;
+        if (w) el.style.width = w + '%';
+      });
+    }, 500);
+  });
+</script>
+
+</body>
+</html>

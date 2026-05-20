@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demis Hassabis: AGI까지 75% — LLMwiki</title>
+  <style>
+    :root {
+      --blue:    #1a56db;
+      --blue-lt: #e8f0fe;
+      --teal:    #0d9488;
+      --teal-lt: #ccfbf1;
+      --amber:   #d97706;
+      --amber-lt:#fef3c7;
+      --red:     #dc2626;
+      --red-lt:  #fee2e2;
+      --gray-50: #f9fafb;
+      --gray-100:#f3f4f6;
+      --gray-200:#e5e7eb;
+      --gray-400:#9ca3af;
+      --gray-600:#4b5563;
+      --gray-800:#1f2937;
+      --gray-900:#111827;
+      --radius:  10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.7;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #0d4f6e 100%);
+      color: #fff;
+      padding: 52px 32px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(99,179,237,.15) 0%, transparent 70%);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 20px;
+      padding: 4px 14px; font-size: 12px; font-weight: 600;
+      letter-spacing: .5px; margin-bottom: 18px;
+    }
+    .hero-badge .dot { width:8px; height:8px; border-radius:50%; background:#f87171; animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    .hero h1 { font-size: clamp(22px, 4vw, 34px); font-weight: 800; line-height: 1.25; margin-bottom: 12px; }
+    .hero h1 span { color: #7dd3fc; }
+    .hero-sub { font-size: 15px; color: rgba(255,255,255,.7); margin-bottom: 24px; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: rgba(255,255,255,.6); }
+    .hero-meta span { display: flex; align-items: center; gap: 5px; }
+
+    /* ── STAT CARDS ── */
+    .stats-band {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1px; background: var(--gray-200);
+    }
+    .stat-card {
+      background: #fff; padding: 22px 20px; text-align: center;
+    }
+    .stat-num { font-size: 30px; font-weight: 800; color: var(--blue); line-height: 1; }
+    .stat-label { font-size: 12px; color: var(--gray-600); margin-top: 4px; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 860px; margin: 0 auto; padding: 36px 20px 60px; }
+
+    /* ── SECTION TITLES ── */
+    .section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+      color: var(--gray-400); text-transform: uppercase;
+      margin: 40px 0 16px;
+    }
+
+    /* ── SUMMARY BOX ── */
+    .summary-box {
+      background: var(--blue-lt); border-left: 4px solid var(--blue);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 18px 20px; margin-bottom: 10px;
+    }
+    .summary-box p { font-size: 14.5px; color: #1e3a5f; }
+    .summary-box p + p { margin-top: 8px; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-section { background: #fff; border-radius: var(--radius); padding: 24px 24px 20px; border: 1px solid var(--gray-200); margin-bottom: 10px; }
+    .progress-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .progress-label .name { font-weight: 700; font-size: 15px; }
+    .progress-label .pct { font-size: 22px; font-weight: 800; color: var(--blue); }
+    .progress-track { background: var(--gray-200); border-radius: 999px; height: 14px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue), #3b82f6); position: relative; }
+    .progress-fill::after { content: '●'; position: absolute; right: -6px; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--blue); }
+    .progress-ticks { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--gray-400); }
+
+    /* ── THREE INGREDIENTS ── */
+    .ingredients { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    @media(max-width:560px){ .ingredients { grid-template-columns: 1fr; } }
+    .ingredient {
+      background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius);
+      padding: 18px 16px; position: relative; overflow: hidden;
+    }
+    .ingredient.done { border-color: var(--teal); }
+    .ingredient.done::before { content: '✓ 달성'; position: absolute; top: 10px; right: 10px; font-size: 10px; font-weight: 700; color: var(--teal); background: var(--teal-lt); padding: 2px 8px; border-radius: 20px; }
+    .ingredient .year { font-size: 11px; color: var(--gray-400); margin-bottom: 4px; }
+    .ingredient .ingr-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+    .ingredient .ingr-desc { font-size: 13px; color: var(--gray-600); }
+    .ingredient .ingr-icon { font-size: 26px; margin-bottom: 10px; }
+
+    /* ── QUOTE ── */
+    .quote-block {
+      background: var(--gray-900); color: #e5e7eb;
+      border-radius: var(--radius); padding: 24px 26px; margin: 10px 0;
+      position: relative;
+    }
+    .quote-block::before { content: '\201C'; font-size: 60px; color: rgba(255,255,255,.1); position: absolute; top: 4px; left: 16px; line-height: 1; }
+    .quote-block p { font-size: 16px; font-style: italic; padding-left: 24px; line-height: 1.6; }
+    .quote-block .attribution { font-size: 12px; color: var(--gray-400); margin-top: 10px; padding-left: 24px; }
+
+    /* ── TIMELINE ── */
+    .timeline { position: relative; padding-left: 24px; }
+    .timeline::before { content: ''; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--gray-200); }
+    .tl-item { position: relative; margin-bottom: 20px; }
+    .tl-dot {
+      position: absolute; left: -24px; top: 4px;
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid var(--blue); background: #fff;
+    }
+    .tl-dot.now { background: var(--blue); border-color: var(--blue); }
+    .tl-year { font-weight: 800; font-size: 13px; color: var(--blue); }
+    .tl-content { font-size: 14px; color: var(--gray-700); }
+    .tl-sub { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+    /* ── GAP TABLE ── */
+    .gap-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+    .gap-table th { background: var(--gray-100); color: var(--gray-600); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 10px 14px; text-align: left; }
+    .gap-table td { padding: 12px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
+    .gap-table tr:last-child td { border-bottom: none; }
+    .badge {
+      display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+    }
+    .badge-red { background: var(--red-lt); color: var(--red); }
+    .badge-amber { background: var(--amber-lt); color: var(--amber); }
+    .badge-teal { background: var(--teal-lt); color: var(--teal); }
+
+    /* ── ACTION CARD ── */
+    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width:560px){ .action-grid { grid-template-columns: 1fr; } }
+    .action-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 18px; }
+    .action-card.urgent { border-color: var(--red); border-left-width: 4px; }
+    .action-card.watch { border-color: var(--amber); border-left-width: 4px; }
+    .action-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .action-card ul { list-style: none; font-size: 13px; color: var(--gray-600); }
+    .action-card ul li { padding: 4px 0; padding-left: 14px; position: relative; }
+    .action-card ul li::before { content: '→'; position: absolute; left: 0; color: var(--gray-400); }
+
+    /* ── SOURCES ── */
+    .sources { background: var(--gray-100); border-radius: var(--radius); padding: 20px 22px; font-size: 13px; }
+    .sources h4 { font-weight: 700; margin-bottom: 10px; font-size: 13px; }
+    .sources a { color: var(--blue); text-decoration: none; display: block; padding: 4px 0; }
+    .sources a:hover { text-decoration: underline; }
+
+    /* ── MY COMMENT ── */
+    .my-comment {
+      border: 2px dashed var(--amber);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      background: #fffbeb;
+    }
+    .my-comment h4 { font-weight: 700; font-size: 13px; color: var(--amber); margin-bottom: 10px; }
+    .my-comment textarea {
+      width: 100%; min-height: 80px; border: 1px solid var(--amber-lt);
+      border-radius: 6px; padding: 10px; font-size: 14px; font-family: inherit;
+      background: #fff; resize: vertical; color: var(--gray-800);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--gray-200);
+      padding: 16px 20px; font-size: 12px; color: var(--gray-400);
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+
+    /* ── CARD WRAPPER ── */
+    .card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 22px; margin-bottom: 10px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Sequoia AI Ascent 2026 — LLMwiki
+  </div>
+  <h1>Demis Hassabis:<br><span>"We're Three Quarters of the Way to AGI"</span></h1>
+  <p class="hero-sub">Google DeepMind CEO · 2024 노벨 화학상 수상자 · AlphaFold 창시자</p>
+  <div class="hero-meta">
+    <span>📅 2026년 4월 20일, 샌프란시스코</span>
+    <span>🎤 인터뷰어: Konstantine Buhler (Sequoia)</span>
+    <span>🔴 중요도: 즉각 검토 필요</span>
+    <span>▶ <a href="https://www.youtube.com/watch?v=AFpeWo1GTeg" style="color:#7dd3fc" target="_blank">YouTube 원본 영상</a></span>
+  </div>
+</header>
+
+<!-- ── STAT BAND ── -->
+<div class="stats-band">
+  <div class="stat-card">
+    <div class="stat-num">75%</div>
+    <div class="stat-label">AGI 달성 현재 진행도</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">2030</div>
+    <div class="stat-label">Hassabis의 AGI 예상 도달 연도</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">10×</div>
+    <div class="stat-label">산업혁명 대비 예상 임팩트</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">3M+</div>
+    <div class="stat-label">AlphaFold 이용 연구자 수</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">$3B</div>
+    <div class="stat-label">Isomorphic Labs 제약사 딜 규모</div>
+  </div>
+</div>
+
+<!-- ── MAIN CONTENT ── -->
+<main class="container">
+
+  <!-- 3줄 요약 -->
+  <div class="section-title">핵심 요약</div>
+  <div class="summary-box">
+    <p>① AGI는 2030년경 도달한다. Hassabis는 "우리는 AGI까지 75% 왔다"고 단언하며, 현재 모델은 지식·추론 능력은 탁월하지만 <strong>메타인지(Metacognition)가 빠진 것이 핵심 갭</strong>이라고 지목했다.</p>
+    <p>② AI의 가장 중요한 응용은 <strong>과학적 발견</strong>이다. AlphaFold → 신약 개발 → AI 자율 실험실로 이어지는 로드맵을 통해, 인류가 수백 년 걸릴 발견을 수십 년 안에 달성할 수 있다.</p>
+    <p>③ AI는 산업혁명보다 <strong>10배 임팩트, 10배 속도</strong>로 전개된다. 그러나 경제적 파급 효과 대비 정부·경제학자의 준비가 심각하게 부족하다는 우려도 함께 제기했다.</p>
+  </div>
+
+  <!-- AGI 진행 바 -->
+  <div class="section-title">AGI 달성 진행도 (Hassabis 기준)</div>
+  <div class="progress-section">
+    <div class="progress-label">
+      <span class="name">현재 AI → AGI</span>
+      <span class="pct">75%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width:75%"></div>
+    </div>
+    <div class="progress-ticks">
+      <span>0%<br>Pre-ChatGPT</span>
+      <span>25%<br>2022</span>
+      <span>50%<br>2024</span>
+      <span style="font-weight:700;color:var(--blue)">75% ← 지금<br>2026</span>
+      <span>100%<br>AGI (≈2030)</span>
+    </div>
+    <p style="font-size:13px;color:var(--gray-600);margin-top:14px;">
+      <strong>남은 25%</strong>: 메타인지 격차 해소 + 지속적 학습 능력 + 강인한 장기 추론 + Physical AI(로보틱스)
+    </p>
+  </div>
+
+  <!-- 3가지 재료 -->
+  <div class="section-title">AGI의 3가지 재료 — 현재 상태</div>
+  <div class="ingredients">
+    <div class="ingredient done">
+      <div class="ingr-icon">📚</div>
+      <div class="year">2022년 달성</div>
+      <div class="ingr-title">지식 (Knowledge)</div>
+      <div class="ingr-desc">방대한 사전학습으로 인류 지식 흡수. ChatGPT 모멘트로 증명.</div>
+    </div>
+    <div class="ingredient done">
+      <div class="ingr-icon">🧠</div>
+      <div class="year">2024년 달성</div>
+      <div class="ingr-title">추론 (Reasoning)</div>
+      <div class="ingr-desc">o1, Gemini Thinking 등 추론 시간 확대. 복잡한 수학·논리 문제 해결.</div>
+    </div>
+    <div class="ingredient" style="border-color:var(--amber)">
+      <div class="ingr-icon">🔄</div>
+      <div class="year" style="color:var(--amber)">진행 중 (2026~)</div>
+      <div class="ingr-title">메타인지 + 자율 실행</div>
+      <div class="ingr-desc">스스로 오류를 인식하고 수정하는 능력. 이것이 AGI 완성의 마지막 관문.</div>
+    </div>
+  </div>
+
+  <!-- 핵심 발언 -->
+  <div class="section-title">핵심 발언</div>
+  <div class="quote-block">
+    <p>If I were to quantify what's coming down the line with the advent of AGI, it's going to be something like ten times the impact of the Industrial Revolution, but happening at ten times the speed — probably unfolding in a decade rather than a century.</p>
+    <div class="attribution">— Demis Hassabis, Sequoia AI Ascent 2026</div>
+  </div>
+
+  <!-- 메타인지 갭 -->
+  <div class="section-title">현재 AI의 핵심 한계 — 메타인지 갭</div>
+  <div class="card">
+    <p style="font-size:14px;margin-bottom:14px;">Hassabis가 꼽은 현재 AI의 가장 큰 취약점: <strong style="color:var(--red)">메타인지(Metacognition) 부재</strong></p>
+    <table class="gap-table">
+      <thead>
+        <tr>
+          <th>능력</th>
+          <th>현재 AI 수준</th>
+          <th>갭 성격</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>수학 올림피아드(IMO) 금메달 수준 문제 풀기</td>
+          <td><span class="badge badge-teal">가능</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>초등학생도 안 틀리는 산수 오류</td>
+          <td><span class="badge badge-red">여전히 발생</span></td>
+          <td>지식 부족이 아닌 <strong>자기 평가 실패</strong></td>
+        </tr>
+        <tr>
+          <td>자신의 오류를 스스로 인식·수정</td>
+          <td><span class="badge badge-amber">불완전</span></td>
+          <td>메타인지 갭의 핵심</td>
+        </tr>
+        <tr>
+          <td>지속적 학습 (새 경험에서 즉시 배우기)</td>
+          <td><span class="badge badge-amber">제한적</span></td>
+          <td>재학습 없이 지식 업데이트 불가</td>
+        </tr>
+        <tr>
+          <td>Physical AI (현실 세계 로봇 작업)</td>
+          <td><span class="badge badge-amber">초기 단계</span></td>
+          <td>18~24개월 내 돌파구 예상</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 과학 발견 로드맵 -->
+  <div class="section-title">Hassabis의 AI × 과학 발견 로드맵</div>
+  <div class="card">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot now"></div>
+        <div class="tl-year">2020~2024</div>
+        <div class="tl-content"><strong>AlphaFold</strong> — 단백질 구조 예측 문제 해결 (50년 난제). 190개국 300만+ 연구자 활용 중.</div>
+        <div class="tl-sub">2024 노벨 화학상 수상</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot now"></div>
+        <div class="tl-year">2026년 말 (예정)</div>
+        <div class="tl-content"><strong>Isomorphic Labs</strong> — AlphaFold 기반 신약 후보 물질 최초 임상시험(First-in-human). Eli Lilly·Novartis와 최대 $3B 딜.</div>
+        <div class="tl-sub">17개 파이프라인 (종양학·면역학·심혈관)</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2026년 (진행 중)</div>
+        <div class="tl-content"><strong>자동화 실험실</strong> — 영국에 AI 자율 운영 실험실 구축. 소재과학 연구 자동화.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2027~2028</div>
+        <div class="tl-content"><strong>Physical AI 돌파구</strong> — 복잡한 현실 작업을 신뢰할 수 있게 수행하는 로봇 등장 예상.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2030년경</div>
+        <div class="tl-content"><strong>AGI 도달</strong> — 완전한 인간 수준 인지 능력. 과학 분야 자율 가설-실험-발표 사이클 가능.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2035~2040</div>
+        <div class="tl-content"><strong>"Radical Abundance" 시대</strong> — AI가 과학적 방법론 자체를 자동화. 신르네상스 시대 개막.</div>
+        <div class="tl-sub">100년치 임상시험 교차분석, 전 세계 세금 코드 재설계 등</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hassabis vs Sequoia 비교 -->
+  <div class="section-title">Hassabis vs Sequoia — AGI 관점 비교</div>
+  <div class="card">
+    <table class="gap-table">
+      <thead>
+        <tr>
+          <th>관점</th>
+          <th>Demis Hassabis (DeepMind)</th>
+          <th>Pat Grady / Sonya Huang (Sequoia)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AGI 정의</strong></td>
+          <td>모든 인간 인지 능력을 갖춘 시스템 (기술적 정의)</td>
+          <td>"스스로 알아내는 능력" (비즈니스 기능적 정의)</td>
+        </tr>
+        <tr>
+          <td><strong>AGI 도달 시점</strong></td>
+          <td>2030년경 (4년 후)</td>
+          <td><strong>지금 이미 도달</strong> (Long-horizon agent 기준)</td>
+        </tr>
+        <tr>
+          <td><strong>가장 중요한 응용</strong></td>
+          <td>과학적 발견 (신약·소재·기후)</td>
+          <td>모든 서비스 산업의 에이전트화</td>
+        </tr>
+        <tr>
+          <td><strong>우려사항</strong></td>
+          <td>경제 불평등, 일의 의미 상실, 지정학 리스크</td>
+          <td>기업 도입 속도 격차 (Diffusion Gap)</td>
+        </tr>
+        <tr>
+          <td><strong>핵심 메시지</strong></td>
+          <td>"75%왔다. 남은 25%가 가장 어렵다"</td>
+          <td>"이미 AGI다. 지금 당장 올라타라"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- C-level 의사결정 포인트 -->
+  <div class="section-title">C-level 의사결정 포인트</div>
+  <div class="action-grid">
+    <div class="action-card urgent">
+      <h4>🔴 즉시 검토 필요</h4>
+      <ul>
+        <li>우리 산업의 AI 기반 과학·데이터 처리 기회 점검</li>
+        <li>직원 역할 변화 대비 — "에이전트 관리자" 역량 육성</li>
+        <li>AI 거버넌스·윤리 정책 수립 (Hassabis의 핵심 우려)</li>
+        <li>경쟁사의 AI 도입 속도 모니터링 즉시 시작</li>
+      </ul>
+    </div>
+    <div class="action-card urgent">
+      <h4>🔴 전략 재점검</h4>
+      <ul>
+        <li>2030년 AGI 도달을 전제한 5년 로드맵 작성</li>
+        <li>바이오·소재·기후 등 "검증 가능한" 도메인 투자 기회</li>
+        <li>Outcome-based pricing 모델로의 전환 검토</li>
+        <li>중국 AI 격차가 "수개월"임을 감안한 글로벌 전략</li>
+      </ul>
+    </div>
+    <div class="action-card watch">
+      <h4>🟡 주시 사항 (3~6개월)</h4>
+      <ul>
+        <li>Isomorphic Labs 첫 임상시험 결과 (2026년 말)</li>
+        <li>Physical AI / 로봇 돌파구 (18~24개월 예상)</li>
+        <li>AI 자동화 실험실 성과 발표</li>
+      </ul>
+    </div>
+    <div class="action-card watch">
+      <h4>🟡 리스크 관리</h4>
+      <ul>
+        <li>AI가 대체하는 직군에 대한 내부 커뮤니케이션 준비</li>
+        <li>"일의 의미" 재정의 — Hassabis가 가장 우려한 사회 문제</li>
+        <li>규제 변화 트래킹 (정부 인식 부족 → 급작스러운 규제 가능성)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 나의 코멘트 -->
+  <div class="section-title">나의 코멘트</div>
+  <div class="my-comment">
+    <h4>✍️ 이 영상을 보고 든 나만의 인사이트</h4>
+    <textarea placeholder="예: Sequoia는 &quot;이미 AGI&quot;라고 하고 Hassabis는 &quot;75%&quot;라고 한다. 이 관점 차이가 흥미롭다. Sequoia는 투자자 관점에서 &quot;지금 움직여야 한다&quot;는 메시지가 필요하고, Hassabis는 연구자 관점에서 &quot;아직 해결할 것이 많다&quot;는 시각을 유지한다. 실질적으로 우리 회사에 중요한 것은..."></textarea>
+  </div>
+
+  <!-- 출처 -->
+  <div class="section-title">출처</div>
+  <div class="sources">
+    <h4>참고 자료</h4>
+    <a href="https://www.youtube.com/watch?v=AFpeWo1GTeg" target="_blank">▶ YouTube: Demis Hassabis — We're Three Quarters of the Way to AGI (Sequoia AI Ascent 2026)</a>
+    <a href="https://sequoiacap.com/article/ai-ascent-2026/" target="_blank">📄 Sequoia Capital: AI Ascent 2026 공식 페이지</a>
+    <a href="https://www.semafor.com/article/01/21/2026/google-deepminds-demis-hassabis-and-the-paradox-of-ai-progress" target="_blank">📰 Semafor: The Paradox of AI Progress (2026-01-21)</a>
+    <a href="https://fortune.com/2026/02/11/demis-hassabis-nobel-google-deepmind-predicts-ai-renaissance-radical-abundance/" target="_blank">📰 Fortune: Demis Hassabis on Radical Abundance (2026-02-11)</a>
+    <a href="https://www.cnbc.com/2026/01/16/google-deepmind-china-ai-demis-hassabis.html" target="_blank">📰 CNBC: China 'months' behind US AI models (2026-01-16)</a>
+    <a href="https://www.nobelprize.org/prizes/chemistry/2024/press-release/" target="_blank">🏆 노벨상 화학상 2024 공식 발표</a>
+  </div>
+
+</main>
+
+<footer>
+  <span>LLMwiki · 분석일: 2026-05-19 · 카테고리: 트렌드 인텔리전스 / 2026</span>
+  <span>관련 문서: <a href="2026-05_Sequoia_This_is_AGI.html">Sequoia AGI 키노트</a> · <a href="2026-05_Karpathy_VibeCoding_to_AgenticEngineering.html">Karpathy</a> · <a href="2026-05_Brockman_Human_Attention_Bottleneck.html">Brockman</a> · <a href="2026-05_Jim_Fan_Robotics_EndGame.html">Jim Fan</a> · <a href="2026-05_Dolgov_Waymo_Full_Autonomy.html">Waymo</a> · <a href="2026-05_Boris_Cherny_Coding_Solved.html">Boris Cherny</a></span>
+</footer>
+
+</body>
+</html>

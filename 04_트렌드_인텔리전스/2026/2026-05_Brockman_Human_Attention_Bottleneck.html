@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greg Brockman: Human Attention is the New Bottleneck | Sequoia AI Ascent 2026</title>
+<style>
+  :root {
+    --bg: #08090d;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: #1e2330;
+    --accent: #e8b84b;
+    --accent2: #f0d080;
+    --accent3: #c97b2a;
+    --blue: #4a9eff;
+    --blue2: #7bb8ff;
+    --red: #ff5f6b;
+    --green: #3ecf8e;
+    --purple: #a78bfa;
+    --text: #e4e8f0;
+    --text2: #8b95a8;
+    --text3: #5a6478;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.7; }
+
+  /* NAV */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav span { color: var(--text3); font-size: 12px; }
+  nav a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav a.active { color: var(--accent); border-color: var(--accent); background: rgba(232,184,75,0.08); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0e14 0%, #111620 50%, #0e1218 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(232,184,75,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232,184,75,0.1);
+    border: 1px solid rgba(232,184,75,0.3);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(26px, 5vw, 46px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, #e8b84b, #f0d080, #c97b2a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    color: var(--text2);
+    font-size: 16px;
+    max-width: 640px;
+    margin: 0 auto 32px;
+  }
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    color: var(--text3);
+    font-size: 13px;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* STAT STRIP */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-item {
+    padding: 28px 24px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label { color: var(--text2); font-size: 12px; }
+
+  /* MAIN */
+  main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+
+  /* SECTION */
+  .section { margin-bottom: 56px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-icon.gold { background: rgba(232,184,75,0.15); }
+  .section-icon.blue { background: rgba(74,158,255,0.15); }
+  .section-icon.red { background: rgba(255,95,107,0.15); }
+  .section-icon.green { background: rgba(62,207,142,0.15); }
+  .section-icon.purple { background: rgba(167,139,250,0.15); }
+
+  .section-header h2 { font-size: 22px; font-weight: 700; }
+
+  /* QUOTE HERO */
+  .quote-hero {
+    background: linear-gradient(135deg, rgba(232,184,75,0.06), rgba(232,184,75,0.02));
+    border: 1px solid rgba(232,184,75,0.25);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-bottom: 32px;
+  }
+  .quote-hero blockquote {
+    font-size: 20px;
+    font-style: italic;
+    color: var(--accent2);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .quote-hero cite { color: var(--text3); font-size: 13px; font-style: normal; }
+
+  /* ALUMINUM MOMENT */
+  .aluminum-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .aluminum-col { padding: 24px; }
+  .aluminum-col:first-child {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+  }
+  .aluminum-col:last-child { background: rgba(232,184,75,0.04); }
+  .aluminum-col h4 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .aluminum-col:first-child h4 { color: var(--text3); }
+  .aluminum-col:last-child h4 { color: var(--accent); }
+  .aluminum-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+  .aluminum-row .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .dot-gray { background: var(--text3); }
+  .dot-gold { background: var(--accent); }
+
+  /* BUSINESS MODEL FLOW */
+  .flow-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .flow-chain {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .flow-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 140px;
+  }
+  .flow-step .step-label { font-size: 12px; color: var(--text3); margin-bottom: 4px; }
+  .flow-step .step-val { font-size: 14px; font-weight: 600; color: var(--text); }
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 20px;
+    margin: 0 8px;
+    font-weight: 300;
+  }
+  .flow-insight {
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(74,158,255,0.06);
+    border: 1px solid rgba(74,158,255,0.2);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--blue2);
+  }
+
+  /* PROGRESS BAR */
+  .agi-progress {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .progress-header h4 { font-size: 15px; font-weight: 600; }
+  .progress-pct { font-size: 36px; font-weight: 800; color: var(--accent); }
+  .progress-bar-wrap {
+    background: var(--surface2);
+    border-radius: 8px;
+    height: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--accent3), var(--accent), var(--accent2));
+    width: 0%;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .progress-bar-label {
+    position: absolute;
+    right: 22%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg);
+  }
+  .progress-note { font-size: 13px; color: var(--text2); }
+
+  /* CODE EXECUTION CASE */
+  .case-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .case-box .step-line { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 4px; }
+  .case-box .step-num { color: var(--accent3); font-weight: 700; flex-shrink: 0; }
+  .case-box .step-action { color: var(--text); }
+  .case-box .step-result { color: var(--green); padding-left: 28px; font-size: 12px; }
+
+  /* CONTEXT PARADIGM */
+  .paradigm-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .paradigm-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+  }
+  .paradigm-card.old { border-top: 3px solid var(--red); }
+  .paradigm-card.new { border-top: 3px solid var(--green); }
+  .paradigm-card .card-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .paradigm-card.old .card-tag { color: var(--red); }
+  .paradigm-card.new .card-tag { color: var(--green); }
+  .paradigm-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .paradigm-card p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* CODE SHIFT */
+  .code-shift {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .shift-timeline {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .shift-point {
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+  }
+  .shift-point .sp-date { font-size: 12px; color: var(--text3); margin-bottom: 6px; }
+  .shift-point .sp-pct { font-size: 42px; font-weight: 800; line-height: 1; }
+  .shift-point .sp-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+  .sp-pct.low { color: var(--text3); }
+  .sp-pct.high { color: var(--accent); }
+  .shift-arrow-big { font-size: 32px; color: var(--accent); flex-shrink: 0; }
+  .shift-warn {
+    background: rgba(255,95,107,0.08);
+    border: 1px solid rgba(255,95,107,0.25);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--red);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .warn-icon { flex-shrink: 0; font-size: 16px; }
+
+  /* HUMAN SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+  .skill-card:nth-child(1)::before { background: var(--blue); }
+  .skill-card:nth-child(2)::before { background: var(--accent); }
+  .skill-card:nth-child(3)::before { background: var(--purple); }
+  .skill-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+  .skill-emoji { font-size: 32px; margin-bottom: 12px; display: block; }
+  .skill-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .skill-card p { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .skill-quote { font-style: italic; font-size: 12px; color: var(--text3); margin-top: 10px; }
+
+  /* TABLE */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .compare-table th {
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .compare-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .td-old { color: var(--text3); }
+  .td-new { color: var(--accent2); font-weight: 500; }
+  .td-q { color: var(--blue2); font-style: italic; font-size: 13px; }
+
+  /* SPEAKER COMPARISON */
+  .speaker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .speaker-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 16px;
+  }
+  .speaker-card .sp-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .speaker-card .sp-org { font-size: 11px; color: var(--text3); margin-bottom: 14px; }
+  .speaker-card .sp-theme {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .speaker-card .sp-body { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .sc-gold .sp-theme { color: var(--accent); }
+  .sc-blue .sp-theme { color: var(--blue); }
+  .sc-purple .sp-theme { color: var(--purple); }
+  .sc-green .sp-theme { color: var(--green); }
+
+  /* ACTION CARDS */
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .action-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+    border-left: 3px solid var(--accent);
+  }
+  .action-card .ac-priority {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .action-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .action-card p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* COMMENT BOX */
+  .comment-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 40px;
+  }
+  .comment-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
+  .comment-section textarea {
+    width: 100%;
+    min-height: 140px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 16px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .comment-section textarea:focus { border-color: var(--accent); }
+  .comment-section textarea::placeholder { color: var(--text3); }
+
+  /* SOURCES */
+  .sources {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    margin-bottom: 40px;
+  }
+  .sources h4 { font-size: 13px; font-weight: 600; color: var(--text3); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .sources a { color: var(--blue); font-size: 13px; text-decoration: none; display: block; margin-bottom: 6px; }
+  .sources a:hover { color: var(--blue2); text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .aluminum-grid, .paradigm-grid, .skills-grid { grid-template-columns: 1fr; }
+    .speaker-grid { grid-template-columns: repeat(2, 1fr); }
+    .action-grid { grid-template-columns: 1fr; }
+    .shift-timeline { flex-direction: column; align-items: flex-start; }
+    .flow-chain { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span>Sequoia AI Ascent 2026 ›</span>
+  <a href="2026-05_Sequoia_This_is_AGI.html">Sequoia 오프닝</a>
+  <a href="2026-05_Demis_Hassabis_AGI_75percent.html">Hassabis</a>
+  <a href="2026-05_Brockman_Human_Attention_Bottleneck.html" class="active">Brockman</a>
+  <a href="2026-05_Karpathy_VibeCoding_to_AgenticEngineering.html">Karpathy</a>
+  <a href="2026-05_Jim_Fan_Robotics_EndGame.html">Jim Fan</a>
+  <a href="2026-05_Dolgov_Waymo_Full_Autonomy.html">Waymo</a>
+  <a href="2026-05_Boris_Cherny_Coding_Solved.html">Boris Cherny</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🧠 Sequoia AI Ascent 2026 — April 2026</div>
+  <h1>
+    <span class="highlight">Human Attention</span><br>
+    is the New Bottleneck
+  </h1>
+  <p class="hero-sub">지능이 상품화될 때, 인간의 주의력(Attention)이 전체 경제에서 가장 희귀한 자원이 된다</p>
+  <div class="hero-meta">
+    <span>👤 Greg Brockman</span>
+    <span>🏢 OpenAI Co-founder & President</span>
+    <span>📅 2026년 4월</span>
+    <span>🎯 "What do you want?" = 최후의 인간 역량</span>
+  </div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-item">
+    <span class="stat-num">80%</span>
+    <div class="stat-label">OpenAI 코드 중 AI 작성 비율</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">80%</span>
+    <div class="stat-label">기능적 AGI 완성도 (Brockman 추산)</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">∞</span>
+    <div class="stat-label">문제 해결 수요 → GPU 공급 ≈ 0</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">1940s</span>
+    <div class="stat-label">신경망 기원 → 스케일링으로 부활</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">3</span>
+    <div class="stat-label">인간에게 남은 핵심 역량</div>
+  </div>
+</div>
+
+<main>
+
+  <!-- SECTION 1: 핵심 명언 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon gold">💬</div>
+      <h2>컨퍼런스 전체에서 가장 많이 인용된 문장</h2>
+    </div>
+    <div class="quote-hero">
+      <blockquote>"When agents can work autonomously, human attention will become the scarcest resource in the entire economy."</blockquote>
+      <cite>— Greg Brockman, OpenAI Co-founder | Sequoia AI Ascent 2026</cite>
+    </div>
+    <div class="quote-hero" style="margin-top: 16px;">
+      <blockquote>"The problem is no longer whether the machine can do it, but whether humans can set the right goals, judge if the results are reliable, and decide what is worth accomplishing."</blockquote>
+      <cite>— Greg Brockman</cite>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 알루미늄 모멘트 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon gold">⚗️</div>
+      <h2>지능의 '알루미늄 모멘트' — 희소성의 붕괴</h2>
+    </div>
+    <p style="color: var(--text2); margin-bottom: 24px; font-size: 14px;">Sequoia가 명명한 유추: 나폴레옹 시대 금보다 비쌌던 알루미늄이 전해법 보급으로 산업용 소재가 됐듯, AI가 박사급 지식의 가격을 붕괴시킨다.</p>
+    <div class="aluminum-grid">
+      <div class="aluminum-col">
+        <h4>🏺 알루미늄 (과거)</h4>
+        <div class="aluminum-row"><span class="dot dot-gray"></span><span>나폴레옹이 귀빈에게만 알루미늄 식기 제공</span></div>
+        <div class="aluminum-row"><span class="dot dot-gray"></span><span>금·은보다 비싼 최고 희귀 금속</span></div>
+        <div class="aluminum-row"><span class="dot dot-gray"></span><span>전해법 보급 이후 수십 년 내 산업 소재로 전락</span></div>
+        <div class="aluminum-row"><span class="dot dot-gray"></span><span>현재: 알루미늄 캔·포일 = 일회용 소비재</span></div>
+      </div>
+      <div class="aluminum-col">
+        <h4>🧠 지식/지능 (현재)</h4>
+        <div class="aluminum-row"><span class="dot dot-gold"></span><span>박사급 전문 지식 = 중산층 경쟁력의 핵심</span></div>
+        <div class="aluminum-row"><span class="dot dot-gold"></span><span>수년간 교육으로 쌓은 지식 장벽</span></div>
+        <div class="aluminum-row"><span class="dot dot-gold"></span><span>AI 대량 생산으로 지식 장벽 즉각 붕괴 중</span></div>
+        <div class="aluminum-row"><span class="dot dot-gold"></span><span>고급 지능 → 저비용 산업용 소재로 전환</span></div>
+      </div>
+    </div>
+    <div class="flow-insight">⚠️ <strong>함의:</strong> 수년간 쌓아온 전문 지식 장벽이 순식간에 붕괴될 수 있다. 지능 자체의 희소성 프리미엄이 사라지면, 진짜 경쟁 우위는 어디서 오는가?</div>
+  </div>
+
+  <!-- SECTION 3: OpenAI 비즈니스 모델 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue">🏭</div>
+      <h2>지능 리파이너리 — OpenAI 비즈니스 모델</h2>
+    </div>
+    <div class="flow-box">
+      <div style="margin-bottom: 20px; font-size: 14px; color: var(--text2);">지능이 상품화되면서 OpenAI의 비즈니스는 <strong style="color: var(--text);">자원 기반 상품 사업</strong>으로 진화했다.</div>
+      <div class="flow-chain">
+        <div class="flow-step">
+          <div class="step-label">INPUT</div>
+          <div class="step-val">⚡ 컴퓨팅 파워<br><span style="font-size:11px; color:var(--text3)">구매 / 임대</span></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-label">TRANSFORM</div>
+          <div class="step-val">🧠 모델 변환<br><span style="font-size:11px; color:var(--text3)">컴퓨팅 → 지능</span></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-label">OUTPUT</div>
+          <div class="step-val">💰 프리미엄 판매<br><span style="font-size:11px; color:var(--text3)">지능 as a Service</span></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color: var(--accent);">
+          <div class="step-label" style="color: var(--accent);">RESULT</div>
+          <div class="step-val" style="color: var(--accent);">∞ 수요 폭증<br><span style="font-size:11px;">GPU 공급 ≈ 0</span></div>
+        </div>
+      </div>
+      <div class="flow-insight" style="margin-top: 20px;">💡 문제 해결 수요는 무한 → 2026년 GPU 공급 투영치 near zero. 컴퓨팅 파워의 <strong>물리적 공급</strong>이 문명 지능의 상한선을 결정.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: 스케일링 법칙 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">📈</div>
+      <h2>스케일링 법칙 — "우주적 경험 법칙"</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px;">
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px;">
+        <div style="font-size: 12px; color: var(--text3); margin-bottom: 8px;">ORIGIN</div>
+        <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">1940년대 기원</div>
+        <div style="font-size: 13px; color: var(--text2);">신경망 기본 개념은 수십 년 전 등장. 스케일링만으로 이토록 강력해질 줄 아무도 몰랐다.</div>
+      </div>
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px;">
+        <div style="font-size: 12px; color: var(--text3); margin-bottom: 8px;">LAW</div>
+        <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">컴퓨팅 ∝ 역량</div>
+        <div style="font-size: 13px; color: var(--text2);">컴퓨팅을 투입할수록 모델 역량이 <strong style="color: var(--accent);">결정론적</strong>으로 증가. 아직 한계(Wall) 없음.</div>
+      </div>
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px;">
+        <div style="font-size: 12px; color: var(--text3); margin-bottom: 8px;">IMPLICATION</div>
+        <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">단기 정체 없음</div>
+        <div style="font-size: 13px; color: var(--text2);">자본과 전기를 계속 투입하면 더 강력한 지능 획득. 빅테크 공격적 투자의 근본 논리.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 기능적 AGI 80% -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon gold">🎯</div>
+      <h2>기능적 AGI 80% 완료 — "진행 중인 과정"</h2>
+    </div>
+    <div class="agi-progress">
+      <div class="progress-header">
+        <h4>AGI 여정 완성도 (Brockman 추산)</h4>
+        <span class="progress-pct" id="pct-num">0%</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-bar">
+          <span class="progress-bar-label">80% 완료</span>
+        </div>
+      </div>
+      <div class="progress-note">기준: 독립적으로 태스크를 실행하고 자기수정 후 완료하는 폐쇄 루프 능력 보유</div>
+    </div>
+    <div style="margin-bottom: 16px; font-size: 14px; color: var(--text2);">실제 OpenAI 내부 사례:</div>
+    <div class="case-box">
+      <div class="step-line"><span class="step-num">01</span><span class="step-action">엔지니어가 복잡한 최적화 과제를 모델에 전달</span></div>
+      <div class="step-line"><span class="step-num">02</span><span class="step-action">모델이 코드 작성</span></div>
+      <div class="step-line"><span class="step-num">03</span><span class="step-action">모델이 <span style="color:var(--accent)">Profiler를 자율 실행</span></span></div>
+      <div class="step-line"><span class="step-num">04</span><span class="step-action">피드백 기반 다중 라운드 최적화 반복</span></div>
+      <div class="step-result">→ 인간 개입 없이 태스크 완전 완료</div>
+    </div>
+    <div class="flow-insight">AGI는 미래의 한 순간이 아닌 <strong>진행 중인 과정</strong>. "코드 작성 보조자" → "문제를 해결하는 동료"로 이미 진화 완료.</div>
+  </div>
+
+  <!-- SECTION 6: 컨텍스트 vs 알고리즘 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue">🗂️</div>
+      <h2>Context = 새로운 핵심 경쟁 프런티어</h2>
+    </div>
+    <p style="color: var(--text2); margin-bottom: 20px; font-size: 14px;">알고리즘 우위가 아닌 <strong style="color: var(--text);">누적된 컨텍스트</strong>가 차세대 해자(Moat)가 된다.</p>
+    <div class="paradigm-grid">
+      <div class="paradigm-card old">
+        <div class="card-tag">❌ 구 패러다임</div>
+        <h4>모델 알고리즘 우위</h4>
+        <p>일회성 모델 학습 → 기술적 차별화. 사용자가 매번 컨텍스트를 다시 설명해야 함. 반복적인 맥락 전달 비용 발생.</p>
+      </div>
+      <div class="paradigm-card new">
+        <div class="card-tag">✅ 신 패러다임</div>
+        <h4>컨텍스트 누적 우위</h4>
+        <p>지속적 기억 누적 → 복리 효과. AI가 사용자의 모든 행동·선호·히스토리를 기억. 반복 설명 비용 제로.</p>
+      </div>
+    </div>
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; margin-bottom: 16px;">
+      <div style="display: flex; align-items: flex-start; gap: 16px;">
+        <div style="background: rgba(74,158,255,0.15); border-radius: 8px; padding: 12px; font-size: 24px; flex-shrink: 0;">📜</div>
+        <div>
+          <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">Chronicle — 컨텍스트 기억 도구</div>
+          <div style="font-size: 13px; color: var(--text2); line-height: 1.6;">사용자의 컴퓨터 행동을 실시간 기록 → AI에게 지속적 "기억" 부여 → 컨텍스트 반복 설명 시간 제거. <strong style="color: var(--blue2);">창업자에게: 누적된 컨텍스트 데이터가 새로운 해자다.</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: 코드 작성 비율 변곡점 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green">💻</div>
+      <h2>코드 작성 변곡점 — 한 달 만의 4배 급등</h2>
+    </div>
+    <div class="code-shift">
+      <div class="shift-timeline">
+        <div class="shift-point">
+          <div class="sp-date">2025년 초</div>
+          <div class="sp-pct low">20%</div>
+          <div class="sp-label">AI 코드 작성 비율</div>
+        </div>
+        <div class="shift-arrow-big">→</div>
+        <div class="shift-point">
+          <div class="sp-date">2025년 12월</div>
+          <div class="sp-pct high">80%</div>
+          <div class="sp-label">AI 코드 작성 비율</div>
+        </div>
+        <div style="flex: 1; min-width: 200px; background: rgba(232,184,75,0.06); border: 1px solid rgba(232,184,75,0.2); border-radius: 8px; padding: 16px; text-align: center;">
+          <div style="font-size: 12px; color: var(--text3); margin-bottom: 4px;">변화폭</div>
+          <div style="font-size: 24px; font-weight: 800; color: var(--accent);">+4배</div>
+          <div style="font-size: 12px; color: var(--text2);">한 달 내 달성</div>
+        </div>
+      </div>
+      <div class="shift-warn">
+        <span class="warn-icon">⚠️</span>
+        <div><strong>Brockman의 경고:</strong> AI 생성 코드 병합 전 반드시 인간이 최종 승인해야 한다. 블라인드 채택 금지. 속도와 안전의 균형이 핵심.</div>
+      </div>
+    </div>
+    <div class="flow-insight" style="border-color: rgba(62,207,142,0.3); background: rgba(62,207,142,0.05); color: var(--green);">Karpathy와 동일한 결론: 2025년 12월은 에이전틱 엔지니어링의 실질적 변곡점.</div>
+  </div>
+
+  <!-- SECTION 8: 인간에게 남은 3가지 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon red">👤</div>
+      <h2>에이전트 시대에 인간에게 남은 3가지 핵심 역량</h2>
+    </div>
+    <p style="color: var(--text2); margin-bottom: 24px; font-size: 14px;">지능이 더 이상 희소하지 않을 때, 오직 이것들만이 희소해진다.</p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-num">01</div>
+        <span class="skill-emoji">🎯</span>
+        <h4>올바른 목표 설정</h4>
+        <p>무엇을 달성할 가치가 있는지 결정하는 능력. 기계는 실행하지만, 목표는 인간만이 정의할 수 있다.</p>
+        <div class="skill-quote">"What is worth accomplishing?"</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-num">02</div>
+        <span class="skill-emoji">🔍</span>
+        <h4>결과 신뢰성 판단</h4>
+        <p>AI 아웃풋이 신뢰할 수 있는지 검증하는 능력. 기계가 맞게 하고 있는지 판단할 수 있어야 한다.</p>
+        <div class="skill-quote">"Can I trust this output?"</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-num">03</div>
+        <span class="skill-emoji">💡</span>
+        <h4>의도 정의 능력</h4>
+        <p>자신이 진정으로 원하는 것을 명확히 아는 능력. 기계에게 "무엇을 원하는지" 전달할 수 있어야 한다.</p>
+        <div class="skill-quote">"What do you want?"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: 리더십 프레임워크 변화 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon gold">🏆</div>
+      <h2>C-레벨 리더십 프레임워크 변화</h2>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>질문</th>
+          <th>과거 답변</th>
+          <th>현재 (Brockman 프레임)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-q">경쟁 우위의 원천은?</td>
+          <td class="td-old">전문 지식·기술력</td>
+          <td class="td-new">올바른 목표 설정 + 컨텍스트 누적</td>
+        </tr>
+        <tr>
+          <td class="td-q">리더의 핵심 역할은?</td>
+          <td class="td-old">문제 직접 해결</td>
+          <td class="td-new">무엇이 문제인지 정의하는 능력</td>
+        </tr>
+        <tr>
+          <td class="td-q">채용의 핵심 기준은?</td>
+          <td class="td-old">실행 속도·코딩 능력</td>
+          <td class="td-new">판단력 + 맥락 이해 + 에이전트 감독</td>
+        </tr>
+        <tr>
+          <td class="td-q">회사의 해자는 무엇인가?</td>
+          <td class="td-old">기술 스택·모델 알고리즘</td>
+          <td class="td-new">고객 신뢰 + 누적된 컨텍스트 데이터</td>
+        </tr>
+        <tr>
+          <td class="td-q">교육 투자 우선순위는?</td>
+          <td class="td-old">도구 스킬·언어 숙련도</td>
+          <td class="td-new">이해력(Understanding) + 취향(Taste)</td>
+        </tr>
+        <tr>
+          <td class="td-q">가장 희소한 자원은?</td>
+          <td class="td-old">전문가 지식·AI 모델 접근권</td>
+          <td class="td-new">인간의 주의력(Attention)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 10: Sequoia 2026 스피커 비교 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">🎤</div>
+      <h2>Sequoia AI Ascent 2026 — 스피커 관점 비교</h2>
+    </div>
+    <div class="speaker-grid">
+      <div class="speaker-card sc-blue">
+        <div class="sp-name">Sequoia (Huang/Grady)</div>
+        <div class="sp-org">Sequoia Capital Partners</div>
+        <div class="sp-theme">핵심 테마</div>
+        <div class="sp-body">Long-Horizon Agent = 실용적 AGI. $10T 서비스 시장 개방. MAD 전략으로 고객 밀착형 해자 구축.</div>
+      </div>
+      <div class="speaker-card sc-gold">
+        <div class="sp-name">Greg Brockman</div>
+        <div class="sp-org">OpenAI Co-founder</div>
+        <div class="sp-theme">핵심 테마</div>
+        <div class="sp-body">지능 상품화 → 인간 주의력이 새 병목. 스케일링 법칙 건재. 컨텍스트가 새 경쟁 프런티어. 80% AGI 완료.</div>
+      </div>
+      <div class="speaker-card sc-purple">
+        <div class="sp-name">Andrej Karpathy</div>
+        <div class="sp-org">OpenAI Founding Member</div>
+        <div class="sp-theme">핵심 테마</div>
+        <div class="sp-body">Software 3.0: LLM = 인터프리터, 컨텍스트 = 프로그램. 검증가능성이 AI 역량 결정. 이해(Understanding)는 위임 불가.</div>
+      </div>
+      <div class="speaker-card sc-green">
+        <div class="sp-name">Jim Fan</div>
+        <div class="sp-org">NVIDIA Senior Scientist</div>
+        <div class="sp-theme">핵심 테마</div>
+        <div class="sp-body">Physical AI가 LLM 플레이북 재현 중. WAM 패러다임 전환. 2028~29 Physical Turing Test, 2040 Physical Auto-Research.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 11: 액션 카드 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon gold">⚡</div>
+      <h2>C-레벨 액션 아이템</h2>
+    </div>
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="ac-priority">🔴 즉시 (1개월 내)</div>
+        <h4>인간 주의력 감사(Audit)</h4>
+        <p>조직 내 C-레벨·핵심 인재의 주의력이 어디에 쓰이는지 매핑. AI가 대신할 수 있는 작업 vs 인간 판단이 필수인 작업을 분리하라.</p>
+      </div>
+      <div class="action-card">
+        <div class="ac-priority">🔴 즉시 (1개월 내)</div>
+        <h4>컨텍스트 데이터 전략 수립</h4>
+        <p>우리 회사만의 고객·업무 컨텍스트를 AI에게 어떻게 누적·전달할지 설계. Chronicle 같은 컨텍스트 캡처 메커니즘 도입 검토.</p>
+      </div>
+      <div class="action-card">
+        <div class="ac-priority">🟡 단기 (3개월 내)</div>
+        <h4>AI 코드 비율 목표 설정</h4>
+        <p>OpenAI가 80% 달성했다면 우리 개발팀은? 현재 AI 작성 코드 비율 측정 → 목표치 설정 → 인간 리뷰 프로세스 설계. 속도와 안전의 균형점 결정.</p>
+      </div>
+      <div class="action-card">
+        <div class="ac-priority">🟡 단기 (3개월 내)</div>
+        <h4>리더십 역량 재정의</h4>
+        <p>채용·평가 기준에서 "실행 능력"의 비중 축소, "목표 설정 능력·AI 아웃풋 판단력·의도 명확화"의 비중 확대. 면접 질문 재설계.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMENT -->
+  <div class="comment-section">
+    <h3>✍️ 나의 코멘트 & 시사점</h3>
+    <textarea placeholder="Brockman의 '인간 주의력 병목' 프레임이 우리 조직·사업 전략에 주는 시사점을 여기에 기록하세요.
+
+예: 우리 팀에서 가장 희소한 '주의력'은 어디에 쓰이고 있나? 그 주의력이 진짜 '목표 설정·판단'에 집중되고 있나, 아니면 AI가 대신할 수 있는 실행에 낭비되고 있나?"></textarea>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="sources">
+    <h4>참고 자료</h4>
+    <a href="https://www.youtube.com/watch?v=bBS93A0BeNI" target="_blank">▶ YouTube: Greg Brockman — Why Human Attention Is the New Bottleneck (Sequoia AI Ascent 2026)</a>
+    <a href="https://www.odaily.news/en/post/5210633" target="_blank">📰 Odaily: AGI is Already Here — 13 Most Hardcore AI Conversations from Sequoia 2026</a>
+    <a href="https://sequoiacap.com/article/ai-ascent-2026/" target="_blank">🌐 Sequoia Capital: AI Ascent 2026 공식 페이지</a>
+    <a href="https://thenextweb.com/news/openai-brockman-80-percent-code-ai-productivity-claim" target="_blank">📰 The Next Web: Greg Brockman says 80% of OpenAI's code is now written by AI</a>
+  </div>
+
+</main>
+
+<script>
+  // Progress bar animation
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const bar = document.getElementById('progress-bar');
+      const num = document.getElementById('pct-num');
+      if (bar) bar.style.width = '80%';
+      if (num) {
+        let count = 0;
+        const interval = setInterval(() => {
+          count += 2;
+          if (count >= 80) { count = 80; clearInterval(interval); }
+          num.textContent = count + '%';
+        }, 30);
+      }
+    }, 300);
+  });
+</script>
+
+</body>
+</html>

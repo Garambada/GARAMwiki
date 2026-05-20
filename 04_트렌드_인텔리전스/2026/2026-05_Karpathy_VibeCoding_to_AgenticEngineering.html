@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karpathy: Vibe Coding → Agentic Engineering — LLMwiki</title>
+<style>
+:root {
+  --bg:       #0f1117;
+  --bg2:      #161b27;
+  --bg3:      #1e2536;
+  --border:   #2a3448;
+  --text:     #e2e8f0;
+  --muted:    #8896b0;
+  --accent:   #7c3aed;
+  --accent2:  #a78bfa;
+  --green:    #10b981;
+  --green-lt: rgba(16,185,129,.12);
+  --amber:    #f59e0b;
+  --amber-lt: rgba(245,158,11,.12);
+  --red:      #f43f5e;
+  --red-lt:   rgba(244,63,94,.12);
+  --blue:     #38bdf8;
+  --blue-lt:  rgba(56,189,248,.12);
+  --radius:   12px;
+  --mono:     'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.7;font-size:15px}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:99;
+  background:rgba(15,17,23,.85);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+  padding:10px 24px;font-size:12px;overflow-x:auto;white-space:nowrap;
+}
+nav a{color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:6px;transition:.15s}
+nav a:hover{background:var(--bg3);color:var(--text)}
+nav .sep{color:var(--border)}
+nav .wiki-name{color:var(--accent2);font-weight:700;margin-right:8px}
+
+/* ── HERO ── */
+.hero{
+  padding:56px 24px 48px;
+  background:linear-gradient(160deg,#1a0a2e 0%,#0f1117 50%,#071a2e 100%);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 50%,rgba(124,58,237,.18) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 40% at 85% 20%,rgba(56,189,248,.1) 0%,transparent 60%);
+}
+.hero-inner{max-width:860px;margin:0 auto;position:relative}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);
+  border-radius:999px;padding:4px 14px;
+  font-size:11px;font-weight:700;letter-spacing:.6px;color:var(--accent2);
+  margin-bottom:20px;text-transform:uppercase;
+}
+.hero h1{font-size:clamp(24px,4.5vw,42px);font-weight:900;line-height:1.15;margin-bottom:14px;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;color:var(--accent2)}
+.hero h1 span{color:var(--blue)}
+.hero-desc{font-size:15px;color:var(--muted);max-width:600px;margin-bottom:28px}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:999px;padding:5px 13px;font-size:12px;color:var(--muted);
+}
+.pill a{color:var(--blue);text-decoration:none}
+.pill a:hover{text-decoration:underline}
+
+/* ── STAT ROW ── */
+.stat-row{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  border-bottom:1px solid var(--border);
+}
+.stat-cell{
+  padding:20px 16px;text-align:center;
+  border-right:1px solid var(--border);
+}
+.stat-cell:last-child{border-right:none}
+.stat-num{font-size:28px;font-weight:900;line-height:1}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ── LAYOUT ── */
+.page{max-width:860px;margin:0 auto;padding:40px 20px 80px}
+.section-label{
+  font-size:10px;font-weight:800;letter-spacing:1.5px;
+  color:var(--accent);text-transform:uppercase;
+  margin:44px 0 14px;display:flex;align-items:center;gap:8px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:10px}
+.card-title{font-weight:700;font-size:14px;margin-bottom:12px;color:var(--text)}
+
+/* ── SOFTWARE EVOLUTION ── */
+.sw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:540px){.sw-grid{grid-template-columns:1fr}}
+.sw-card{
+  border-radius:var(--radius);padding:20px 16px;border:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.sw-card.s1{background:linear-gradient(135deg,rgba(56,189,248,.06),rgba(56,189,248,.02))}
+.sw-card.s2{background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(124,58,237,.02))}
+.sw-card.s3{background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.02));border-color:rgba(16,185,129,.3)}
+.sw-card.s3::before{content:'NOW';position:absolute;top:10px;right:10px;font-size:9px;font-weight:800;letter-spacing:1px;color:var(--green);background:var(--green-lt);padding:2px 8px;border-radius:999px}
+.sw-num{font-size:36px;font-weight:900;opacity:.15;line-height:1;margin-bottom:6px}
+.sw-card.s1 .sw-num{color:var(--blue)}
+.sw-card.s2 .sw-num{color:var(--accent2)}
+.sw-card.s3 .sw-num{color:var(--green)}
+.sw-era{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px}
+.sw-card.s1 .sw-era{color:var(--blue)}
+.sw-card.s2 .sw-era{color:var(--accent2)}
+.sw-card.s3 .sw-era{color:var(--green)}
+.sw-title{font-size:14px;font-weight:800;margin-bottom:8px}
+.sw-lever{font-size:11px;color:var(--muted);margin-bottom:10px}
+.sw-lever strong{color:var(--text)}
+.sw-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── QUOTE ── */
+.quote{
+  background:var(--bg2);border-left:3px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;
+  padding:20px 22px;margin:10px 0;
+}
+.quote p{font-size:16px;line-height:1.65;color:var(--text);font-style:italic}
+.quote .attr{font-size:12px;color:var(--muted);margin-top:10px;font-style:normal}
+
+/* ── COMPARE TABLE ── */
+.compare{width:100%;border-collapse:collapse;font-size:13.5px}
+.compare th{
+  background:var(--bg3);color:var(--muted);
+  font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);
+}
+.compare td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.compare tr:last-child td{border-bottom:none}
+.compare tr:hover td{background:rgba(255,255,255,.02)}
+.tag{
+  display:inline-block;padding:2px 9px;border-radius:999px;
+  font-size:11px;font-weight:700;
+}
+.tag-green{background:var(--green-lt);color:var(--green)}
+.tag-amber{background:var(--amber-lt);color:var(--amber)}
+.tag-red  {background:var(--red-lt);color:var(--red)}
+.tag-blue {background:var(--blue-lt);color:var(--blue)}
+.tag-purple{background:rgba(124,58,237,.15);color:var(--accent2)}
+
+/* ── FORMULA ── */
+.formula-box{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px 22px;
+  font-family:var(--mono);font-size:13px;
+  color:var(--blue);margin:10px 0;line-height:1.8;
+}
+.formula-box .comment{color:var(--muted);font-family:inherit}
+
+/* ── JAGGED VISUAL ── */
+.jagged-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.jagged-grid{grid-template-columns:1fr}}
+.jagged-card{border-radius:10px;padding:16px}
+.jagged-card.can{background:var(--green-lt);border:1px solid rgba(16,185,129,.25)}
+.jagged-card.cant{background:var(--red-lt);border:1px solid rgba(244,63,94,.25)}
+.jagged-card h4{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px}
+.jagged-card.can h4{color:var(--green)}
+.jagged-card.cant h4{color:var(--red)}
+.jagged-card ul{list-style:none}
+.jagged-card ul li{font-size:13px;color:var(--text);padding:4px 0;padding-left:16px;position:relative}
+.jagged-card ul li::before{position:absolute;left:0}
+.jagged-card.can ul li::before{content:'✓';color:var(--green)}
+.jagged-card.cant ul li::before{content:'✗';color:var(--red)}
+
+/* ── MENUGEN ── */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:12px 0}
+.flow-box{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:8px 14px;font-size:13px;
+}
+.flow-box.kill{text-decoration:line-through;opacity:.4}
+.flow-box.star{border-color:var(--green);color:var(--green);background:var(--green-lt)}
+.flow-arrow{color:var(--muted);font-size:16px}
+.flow-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.flow-label.old{color:var(--red)}
+.flow-label.new{color:var(--green)}
+
+/* ── WIKI PATTERN ── */
+.wiki-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:12px 0}
+.wiki-step{
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:14px 12px;text-align:center;
+}
+.wiki-step .icon{font-size:22px;margin-bottom:6px}
+.wiki-step .name{font-size:12px;font-weight:700;color:var(--text)}
+.wiki-step .sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* ── HUMAN VALUE ── */
+.human-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.human-grid{grid-template-columns:1fr}}
+.human-card{
+  border-radius:10px;padding:16px;
+  background:var(--bg3);border:1px solid var(--border);
+}
+.human-card .icon{font-size:20px;margin-bottom:8px}
+.human-card .h-title{font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:4px}
+.human-card .h-desc{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* ── ACTION ── */
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.action-grid{grid-template-columns:1fr}}
+.action-card{border-radius:var(--radius);padding:18px;border:1px solid}
+.action-card.now{border-color:var(--green);background:var(--green-lt)}
+.action-card.now h4{color:var(--green)}
+.action-card.think{border-color:var(--amber);background:var(--amber-lt)}
+.action-card.think h4{color:var(--amber)}
+.action-card h4{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.action-card ul{list-style:none;font-size:13px;color:var(--text)}
+.action-card ul li{padding:5px 0;padding-left:14px;position:relative;border-bottom:1px solid rgba(255,255,255,.05)}
+.action-card ul li:last-child{border-bottom:none}
+.action-card ul li::before{content:'→';position:absolute;left:0;color:var(--muted)}
+
+/* ── MY COMMENT ── */
+.comment-box{
+  border:1px dashed rgba(124,58,237,.4);
+  border-radius:var(--radius);padding:20px;
+  background:rgba(124,58,237,.05);
+}
+.comment-box h4{font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:10px;letter-spacing:.5px}
+.comment-box textarea{
+  width:100%;min-height:90px;
+  background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;
+  padding:12px;font-size:14px;font-family:inherit;color:var(--text);resize:vertical;
+}
+.comment-box textarea::placeholder{color:var(--muted)}
+
+/* ── SOURCES ── */
+.sources{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.sources h4{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:12px;letter-spacing:.5px;text-transform:uppercase}
+.sources a{
+  display:flex;align-items:center;gap:8px;
+  color:var(--blue);text-decoration:none;font-size:13px;
+  padding:7px 0;border-bottom:1px solid var(--border);
+}
+.sources a:last-child{border-bottom:none}
+.sources a:hover{color:var(--accent2)}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:16px 24px;font-size:12px;color:var(--muted);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+footer a{color:var(--accent2);text-decoration:none}
+
+/* ── RELATED BADGE ── */
+.related-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.rel-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:999px;padding:5px 13px;font-size:12px;color:var(--muted);
+  text-decoration:none;
+}
+.rel-badge:hover{border-color:var(--accent);color:var(--accent2)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="wiki-name">📖 LLMwiki</span>
+  <span class="sep">›</span><a href="../../_레이더_차트.md">트렌드 레이더</a>
+  <span class="sep">›</span><span style="color:var(--accent2)">Karpathy 2026</span>
+  <span style="margin-left:auto;display:flex;gap:8px">
+    <a href="2026-05_Sequoia_This_is_AGI.html">Sequoia AGI</a>
+    <a href="2026-05_Demis_Hassabis_AGI_75percent.html">Hassabis</a>
+    <a href="2026-05_Brockman_Human_Attention_Bottleneck.html">Brockman</a>
+    <a href="2026-05_Jim_Fan_Robotics_EndGame.html">Jim Fan</a>
+    <a href="2026-05_Dolgov_Waymo_Full_Autonomy.html">Waymo</a>
+    <a href="2026-05_Boris_Cherny_Coding_Solved.html">Boris Cherny</a>
+  </span>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">🎙 Sequoia AI Ascent 2026 · Index 6</div>
+    <h1>Andrej Karpathy:<br><em>Vibe Coding</em> →<br><span>Agentic Engineering</span></h1>
+    <p class="hero-desc">OpenAI 공동창업자 · Tesla AI 前 총괄 · Eureka Labs 창업자<br>코드를 "쓰는" 시대는 끝났다. 에이전트를 "지휘하는" 시대가 왔다.</p>
+    <div class="hero-pills">
+      <span class="pill">📅 2026년 4월 20일, 샌프란시스코</span>
+      <span class="pill">🎤 Stephanie Zhan (Sequoia)</span>
+      <span class="pill">▶ <a href="https://www.youtube.com/watch?v=96jN2OCOfLs" target="_blank">YouTube 원본</a></span>
+      <span class="pill">📝 <a href="https://karpathy.bearblog.dev/sequoia-ascent-2026/" target="_blank">Karpathy 블로그 요약</a></span>
+    </div>
+  </div>
+</header>
+
+<!-- STAT ROW -->
+<div class="stat-row">
+  <div class="stat-cell">
+    <div class="stat-num" style="color:var(--accent2)">2025.12</div>
+    <div class="stat-lbl">에이전틱 변곡점 시점</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num" style="color:var(--green)">3.0</div>
+    <div class="stat-lbl">소프트웨어 새 세대</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num" style="color:var(--blue)">10×+</div>
+    <div class="stat-lbl">에이전틱 엔지니어 생산성 배수</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num" style="color:var(--amber)">31분</div>
+    <div class="stat-lbl">에이전트의 DevRel 채용 리서치</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num" style="color:var(--red)">0개</div>
+    <div class="stat-lbl">Karpathy가 마지막으로 코드 수정한 횟수</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="page">
+
+  <!-- 핵심 요약 -->
+  <div class="section-label">핵심 요약</div>
+  <div class="quote">
+    <p>"저는 제 인생에서 프로그래머로서 이렇게 뒤처진다는 느낌을 받아본 적이 없습니다. 12월부터 에이전트가 생성한 코드 덩어리들이 그냥 맞게 나왔습니다. 마지막으로 수정한 게 언제인지도 기억이 안 납니다."</p>
+    <div class="attr">— Andrej Karpathy, Sequoia AI Ascent 2026</div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <p style="font-size:14px;line-height:1.8">
+      ① <strong>2025년 12월이 변곡점</strong>이었다 — 에이전틱 코딩 도구가 "유용하지만 불안정"에서 "믿고 맡길 수 있는" 수준으로 단계 전환이 일어났다.<br>
+      ② <strong>Software 3.0</strong> — 코드 작성(1.0) → 데이터셋 설계(2.0) → <em>프롬프트로 LLM 프로그래밍(3.0)</em>. 컨텍스트 윈도우가 새 프로그램이다.<br>
+      ③ <strong>Vibe Coding ≠ Agentic Engineering</strong> — 전자는 바닥을 높이고, 후자는 천장을 높인다. 전문가의 새 핵심 역량은 에이전트 지휘다.
+    </p>
+  </div>
+
+  <!-- Software 3세대 -->
+  <div class="section-label">소프트웨어 3세대 진화</div>
+  <div class="sw-grid">
+    <div class="sw-card s1">
+      <div class="sw-num">1.0</div>
+      <div class="sw-era">Software 1.0</div>
+      <div class="sw-title">명시적 코드</div>
+      <div class="sw-lever">핵심 레버: <strong>코드 파일</strong></div>
+      <div class="sw-desc">인간이 모든 로직을 직접 코드로 작성. if-else, for-loop, 함수 하나하나 명시.</div>
+    </div>
+    <div class="sw-card s2">
+      <div class="sw-num">2.0</div>
+      <div class="sw-era">Software 2.0</div>
+      <div class="sw-title">학습된 가중치</div>
+      <div class="sw-lever">핵심 레버: <strong>데이터셋 + 목적함수</strong></div>
+      <div class="sw-desc">데이터와 목표를 설계하면 신경망이 프로그램을 학습. 이미지 인식, 추천 시스템.</div>
+    </div>
+    <div class="sw-card s3">
+      <div class="sw-num">3.0</div>
+      <div class="sw-era">Software 3.0 ← 지금</div>
+      <div class="sw-title">컨텍스트 윈도우</div>
+      <div class="sw-lever">핵심 레버: <strong>프롬프트 + 컨텍스트</strong></div>
+      <div class="sw-desc">LLM이 인터프리터. 컨텍스트 윈도우가 프로그램. 자연어 지시로 디지털 세계를 프로그래밍.</div>
+    </div>
+  </div>
+
+  <!-- Vibe vs Agentic -->
+  <div class="section-label">Vibe Coding vs Agentic Engineering</div>
+  <div class="card" style="overflow-x:auto">
+    <table class="compare" style="min-width:540px">
+      <thead>
+        <tr>
+          <th>관점</th>
+          <th>🎵 Vibe Coding</th>
+          <th>⚙️ Agentic Engineering</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>목표</strong></td>
+          <td>바닥을 높인다 <span class="tag tag-blue">Floor ↑</span></td>
+          <td>천장을 높인다 <span class="tag tag-purple">Ceiling ↑↑</span></td>
+        </tr>
+        <tr>
+          <td><strong>대상</strong></td>
+          <td>누구나 소프트웨어 제작 가능</td>
+          <td>전문가가 품질 유지하며 10배+ 빠르게</td>
+        </tr>
+        <tr>
+          <td><strong>결과물</strong></td>
+          <td>프로토타입 · 개인 도구</td>
+          <td>프로덕션 시스템 · 보안된 서비스</td>
+        </tr>
+        <tr>
+          <td><strong>인간의 역할</strong></td>
+          <td>방향 제시, 결과 확인</td>
+          <td>스펙 설계, diff 검토, 보안 경계, 시스템 판단</td>
+        </tr>
+        <tr>
+          <td><strong>위험</strong></td>
+          <td>보안 구멍, 기술 부채</td>
+          <td>에이전트의 "그럴듯한 오류" 간과</td>
+        </tr>
+        <tr>
+          <td><strong>10x 효과</strong></td>
+          <td>제한적</td>
+          <td><span class="tag tag-green">훨씬 초과 가능</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 12월 변곡점 -->
+  <div class="section-label">2025년 12월 — 변곡점의 실체</div>
+  <div class="card">
+    <p style="font-size:14px;margin-bottom:16px">Karpathy가 <em>"한 번도 프로그래머로서 이렇게 뒤처진다고 느낀 적 없다"</em>고 말한 이유:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:var(--red-lt);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:14px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--red);margin-bottom:8px">2025년 11월 이전</div>
+        <ul style="list-style:none;font-size:13px;color:var(--text)">
+          <li style="padding:4px 0">✗ 자주 수정 개입 필요</li>
+          <li style="padding:4px 0">✗ 큰 덩어리 코드는 믿기 어려움</li>
+          <li style="padding:4px 0">✗ 내가 코드의 80% 직접 작성</li>
+          <li style="padding:4px 0">✗ 도구라기보다 "고급 자동완성"</li>
+        </ul>
+      </div>
+      <div style="background:var(--green-lt);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:14px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--green);margin-bottom:8px">2025년 12월 이후</div>
+        <ul style="list-style:none;font-size:13px;color:var(--text)">
+          <li style="padding:4px 0">✓ 덩어리가 그냥 맞게 나옴</li>
+          <li style="padding:4px 0">✓ 마지막 수정이 언제인지 기억 안 남</li>
+          <li style="padding:4px 0">✓ 에이전트가 80% 이상 담당</li>
+          <li style="padding:4px 0">✓ 진정한 "위임"이 가능해짐</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:14px">→ 작업 단위가 "코드 한 줄 타이핑"에서 <strong style="color:var(--text)">"기능 구현", "서브시스템 리팩토링", "라이브러리 리서치", "테스트 작성+실행+수정"</strong> 등 매크로 액션으로 이동.</p>
+  </div>
+
+  <!-- Verifiability -->
+  <div class="section-label">Verifiability 프레임워크 — AI가 빠른 이유</div>
+  <div class="card">
+    <p style="font-size:14px;margin-bottom:14px">
+      <strong>전통 소프트웨어</strong>는 명세(specify)할 수 있는 것을 자동화한다.<br>
+      <strong>LLM</strong>은 검증(verify)할 수 있는 것을 자동화한다.
+    </p>
+    <div class="formula-box">
+      능력 향상 속도 ≈ <span style="color:var(--accent2)">검증가능성</span> × <span style="color:var(--green)">학습 집중도</span> × <span style="color:var(--blue)">데이터 커버리지</span> × <span style="color:var(--amber)">경제적 가치</span>
+      <br><br>
+      <span class="comment">// 이 4가지가 모두 높은 영역 = 코딩, 수학, 게임</span><br>
+      <span class="comment">// 보상 신호가 없는 영역 = 미학, 시스템 설계, 창의적 판단</span>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:12px">Labs가 RL 환경을 집중 구축한 영역에서 모델이 비약적으로 발전한다. 반대로 경제적 가치가 낮거나 검증이 어려운 도메인은 여전히 정체. <strong style="color:var(--text)">창업 기회 = 가치 있고 검증 가능하지만 Labs가 아직 주목하지 않은 영역.</strong></p>
+  </div>
+
+  <!-- Jagged Intelligence -->
+  <div class="section-label">Jagged Intelligence — 들쭉날쭉한 지능</div>
+  <div class="jagged-grid">
+    <div class="jagged-card can">
+      <h4>✅ 현재 AI가 잘하는 것</h4>
+      <ul>
+        <li>10만 줄 코드베이스 리팩토링</li>
+        <li>제로데이 취약점 발견</li>
+        <li>수학 올림피아드(IMO) 수준 풀이</li>
+        <li>수십만 줄 코드 한 번에 파악</li>
+        <li>여러 언어 동시 번역·작성</li>
+        <li>PyTorch dim/axis/keepdim 디테일 기억</li>
+      </ul>
+    </div>
+    <div class="jagged-card cant">
+      <h4>❌ 아직도 실수하는 것</h4>
+      <ul>
+        <li>"50m 거리 세차장, 운전해야 하나?" 오답</li>
+        <li>미학·취향 판단 (코드가 "예쁜지")</li>
+        <li>시스템 경계 설계 (이메일 vs 유저 ID 혼용)</li>
+        <li>제품 방향성 판단</li>
+        <li>보안 경계 직관적 이해</li>
+        <li>코드 극도 단순화 (microGPT 스타일)</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:13px;color:var(--muted);margin-top:10px;padding:0 4px">→ 모델이 어느 "RL 회로"에 있는지 파악하는 것이 AI 활용의 핵심. 내 작업이 그 회로 안이면 날고, 밖이면 기대 이하.</p>
+
+  <!-- MenuGen -->
+  <div class="section-label">MenuGen — "이 앱은 존재해선 안 된다"</div>
+  <div class="card">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">음식 메뉴 사진을 찍으면 각 음식의 이미지를 보여주는 앱. Software 3.0이 어떻게 앱 자체를 없애는지 보여주는 사례.</p>
+    <div class="flow-label old">❌ 기존 접근 (Software 1.0/2.0)</div>
+    <div class="flow">
+      <div class="flow-box">📸 사진 촬영</div><div class="flow-arrow">→</div>
+      <div class="flow-box kill">OCR 처리</div><div class="flow-arrow">→</div>
+      <div class="flow-box kill">이미지 생성 API</div><div class="flow-arrow">→</div>
+      <div class="flow-box kill">UI 렌더링</div><div class="flow-arrow">→</div>
+      <div class="flow-box kill">Vercel 배포</div><div class="flow-arrow">→</div>
+      <div class="flow-box kill">Auth/결제</div>
+    </div>
+    <div class="flow-label new" style="margin-top:16px">✅ Software 3.0 접근</div>
+    <div class="flow">
+      <div class="flow-box">📸 사진 촬영</div><div class="flow-arrow">→</div>
+      <div class="flow-box star">멀티모달 모델에게 전달</div><div class="flow-arrow">→</div>
+      <div class="flow-box star">🖼 메뉴 위에 직접 렌더링</div>
+    </div>
+    <div style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:14px;margin-top:16px;font-size:13px">
+      <strong style="color:var(--accent2)">창업자·기획자에게:</strong> <span style="color:var(--text)">기존 앱을 더 빠르게 만드는 것만 생각하지 마라. <strong>아예 앱이 없어야 하는 경우</strong>를 먼저 찾아라. 신경망이 중간 스택 전체를 대체하는 경우가 급증한다.</span>
+    </div>
+  </div>
+
+  <!-- LLM Wiki Pattern -->
+  <div class="section-label">LLM Knowledge Base — 이 LLMwiki의 이론적 근거</div>
+  <div class="card">
+    <p style="font-size:14px;margin-bottom:16px">Karpathy가 직접 언급한 "<strong>이전엔 불가능했던</strong>" 새로운 정보 처리 카테고리:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <div style="background:var(--red-lt);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:14px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--red);margin-bottom:8px">기존 RAG 방식</div>
+        <div style="font-size:13px;color:var(--muted)">원문 → 매번 검색 → 답변<br>(원문이 구조화되지 않음)</div>
+      </div>
+      <div style="background:var(--green-lt);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:14px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--green);margin-bottom:8px">LLM Wiki 방식 ← 지금 이것</div>
+        <div style="font-size:13px;color:var(--muted)">원문들 → AI가 지속 컴파일<br>→ 구조화된 지식 베이스 누적</div>
+      </div>
+    </div>
+    <div class="wiki-flow">
+      <div class="wiki-step"><div class="icon">📰</div><div class="name">원문 수집</div><div class="sub">뉴스·논문·메모</div></div>
+      <div class="wiki-step"><div class="icon">🤖</div><div class="name">AI 처리</div><div class="sub">요약·분류·태깅</div></div>
+      <div class="wiki-step"><div class="icon">🔗</div><div class="name">교차 연결</div><div class="sub">개념 간 링크</div></div>
+      <div class="wiki-step"><div class="icon">📚</div><div class="name">위키 누적</div><div class="sub">복리로 성장</div></div>
+      <div class="wiki-step"><div class="icon">💡</div><div class="name">인사이트 합성</div><div class="sub">새로운 이해</div></div>
+    </div>
+    <div class="quote" style="margin-top:12px">
+      <p>"고전적 프로그램은 이런 지식 베이스를 만들 수 없었다. 하지만 LLM은 가능하다."</p>
+      <div class="attr">— Andrej Karpathy</div>
+    </div>
+  </div>
+
+  <!-- 인간이 더 희소해지는 역량 -->
+  <div class="section-label">에이전트 시대 — 인간이 더 가치 있어지는 것들</div>
+  <div class="human-grid">
+    <div class="human-card">
+      <div class="icon">🧠</div>
+      <div class="h-title">이해 (Understanding)</div>
+      <div class="h-desc">"생각은 위임할 수 있어도, 이해는 위임할 수 없다." 방향 설정과 무엇을 만들 가치가 있는지 판단.</div>
+    </div>
+    <div class="human-card">
+      <div class="icon">🎨</div>
+      <div class="h-title">취향 (Taste)</div>
+      <div class="h-desc">코드·시스템의 미학적 품질 판단. RL 보상에 포함되지 않아 여전히 인간 영역. (에이전트 코드는 종종 "지저분하다")</div>
+    </div>
+    <div class="human-card">
+      <div class="icon">🔒</div>
+      <div class="h-title">보안 경계 설계</div>
+      <div class="h-desc">에이전트는 Stripe 이메일 ≠ Google 로그인 이메일을 혼동했다. 시스템 경계 직관은 여전히 인간이 담당.</div>
+    </div>
+    <div class="human-card">
+      <div class="icon">🗺</div>
+      <div class="h-title">방향 설정 (Direction)</div>
+      <div class="h-desc">"무엇을 만들 가치가 있나", "어떤 결과가 수상한가", "어떤 트레이드오프가 수용 가능한가" — 에이전트가 대신할 수 없다.</div>
+    </div>
+  </div>
+
+  <!-- 채용 변화 -->
+  <div class="section-label">채용·팀 구성의 변화</div>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--red);margin-bottom:10px">❌ 구식 채용 방식</div>
+        <ul style="list-style:none;font-size:13px;color:var(--muted)">
+          <li style="padding:4px 0">• 작은 코딩 퍼즐 풀기</li>
+          <li style="padding:4px 0">• API 암기 여부 확인</li>
+          <li style="padding:4px 0">• 알고리즘 화이트보드</li>
+          <li style="padding:4px 0">• "10x 엔지니어" 기준</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--green);margin-bottom:10px">✅ 에이전틱 시대 채용</div>
+        <ul style="list-style:none;font-size:13px;color:var(--muted)">
+          <li style="padding:4px 0">• 대규모 프로젝트를 에이전트로 구현</li>
+          <li style="padding:4px 0">• 배포 후 공격 에이전트로 침투 시도</li>
+          <li style="padding:4px 0">• 스펙 작성 및 diff 리뷰 능력</li>
+          <li style="padding:4px 0">• 100x+ 엔지니어 시대</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:var(--blue-lt);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:12px;margin-top:14px;font-size:13px">
+      <strong style="color:var(--blue)">Karpathy 제안 면접:</strong> <span style="color:var(--text)">"대규모 프로젝트를 에이전트로 구현 → 배포 → 10개의 공격 에이전트가 당신의 시스템을 뚫으려 한다. 막아라." 이것이 진짜 에이전틱 엔지니어링 역량을 본다.</span>
+    </div>
+  </div>
+
+  <!-- Agent-native 인프라 -->
+  <div class="section-label">Agent-Native 인프라 — 다음 기회</div>
+  <div class="card">
+    <p style="font-size:14px;margin-bottom:14px">지금 대부분의 소프트웨어는 아직 인간을 위해 설계되어 있다. 에이전트가 직접 쓸 수 있도록 재설계되어야 한다.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="background:var(--red-lt);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:14px">
+        <div style="font-size:10px;font-weight:800;color:var(--red);margin-bottom:8px">❌ 아직도 이렇게 생긴 것들</div>
+        <ul style="list-style:none;font-size:13px;color:var(--muted)">
+          <li style="padding:3px 0">"이 URL로 이동하세요"</li>
+          <li style="padding:3px 0">"이 버튼을 클릭하세요"</li>
+          <li style="padding:3px 0">"설정 패널을 여세요"</li>
+          <li style="padding:3px 0">GUI 전용 설치 과정</li>
+        </ul>
+      </div>
+      <div style="background:var(--green-lt);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:14px">
+        <div style="font-size:10px;font-weight:800;color:var(--green);margin-bottom:8px">✅ Agent-native 인프라</div>
+        <ul style="list-style:none;font-size:13px;color:var(--muted)">
+          <li style="padding:3px 0">Markdown 문서</li>
+          <li style="padding:3px 0">CLI · API · MCP 서버</li>
+          <li style="padding:3px 0">구조화된 로그 · 스키마</li>
+          <li style="padding:3px 0">복사-붙여넣기 에이전트 지시문</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:12px">Karpathy의 테스트: <em>"build MenuGen이라고 말했을 때 에이전트가 Vercel 배포, Auth, 결제, DNS까지 자동으로 완료한다"</em> — 그 날이 인프라가 agent-native가 된 날.</p>
+  </div>
+
+  <!-- C-level 액션 -->
+  <div class="section-label">C-level 의사결정 포인트</div>
+  <div class="action-grid">
+    <div class="action-card now">
+      <h4>🟢 즉시 실행</h4>
+      <ul>
+        <li>개발팀 Claude Code · Codex 등 에이전틱 도구 도입 및 실험 시작</li>
+        <li>"10x" → "100x" 가능성으로 채용 기준·팀 규모 전략 재검토</li>
+        <li>우리 제품 중 "앱이 없어야 하는 것"은 무엇인지 파악</li>
+        <li>우리 서비스의 Agent-native 전환 로드맵 수립</li>
+      </ul>
+    </div>
+    <div class="action-card think">
+      <h4>🟡 전략적 검토</h4>
+      <ul>
+        <li>가치 있고 검증 가능하지만 Labs가 미집중한 도메인 탐색 (창업·투자 기회)</li>
+        <li>채용 프로세스 재설계 — 에이전틱 엔지니어링 역량 테스트</li>
+        <li>"이해는 위임 불가" 관점에서 교육·온보딩 재설계</li>
+        <li>우리 팀의 "AI 회로" 파악 — 어디서 날고, 어디서 추락하나</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 관련 문서 -->
+  <div class="section-label">관련 LLMwiki 문서</div>
+  <div class="related-row">
+    <a class="rel-badge" href="2026-05_Sequoia_This_is_AGI.html">🔥 Sequoia "This is AGI"</a>
+    <a class="rel-badge" href="2026-05_Demis_Hassabis_AGI_75percent.html">🧠 Hassabis "AGI 75%"</a>
+    <a class="rel-badge" href="../../01_개념사전/시스템_패턴/Software_3.0_에이전틱엔지니어링.md">📚 개념: Software 3.0</a>
+    <a class="rel-badge" href="../../01_개념사전/시스템_패턴/Long-Horizon_에이전트.md">🤖 개념: Long-Horizon Agent</a>
+    <a class="rel-badge" href="../../03_비즈니스_인텔리전스/ROI_프레임워크.md">💰 ROI 프레임워크</a>
+  </div>
+
+  <!-- 나의 코멘트 -->
+  <div class="section-label">나의 코멘트</div>
+  <div class="comment-box">
+    <h4>✍️ 이 영상을 보고 든 나만의 인사이트</h4>
+    <textarea placeholder="예: Karpathy가 LLM Wiki를 직접 언급했다는 것이 인상적이다. 지금 내가 만들고 있는 이 위키 시스템이 그가 말하는 '이전에 불가능했던 새로운 정보 처리'와 정확히 일치한다. Software 3.0 관점에서 우리 팀의 개발 프로세스를 재검토해보면..."></textarea>
+  </div>
+
+  <!-- 출처 -->
+  <div class="section-label">출처</div>
+  <div class="sources">
+    <h4>참고 자료</h4>
+    <a href="https://www.youtube.com/watch?v=96jN2OCOfLs" target="_blank">▶ YouTube: Andrej Karpathy — From Vibe Coding to Agentic Engineering (Sequoia AI Ascent 2026)</a>
+    <a href="https://karpathy.bearblog.dev/sequoia-ascent-2026/" target="_blank">📝 Karpathy 블로그: Sequoia Ascent 2026 요약 + 정리된 트랜스크립트</a>
+    <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank">💾 Karpathy의 LLM Wiki 원본 Gist</a>
+    <a href="https://sequoiacap.com/article/ai-ascent-2026/" target="_blank">🏢 Sequoia Capital: AI Ascent 2026 공식 페이지</a>
+    <a href="https://karpathy.bearblog.dev/verifiability/" target="_blank">📄 Karpathy: Verifiability (검증가능성 프레임워크)</a>
+    <a href="https://karpathy.bearblog.dev/animals-vs-ghosts/" target="_blank">👻 Karpathy: Animals vs Ghosts (LLM의 본질)</a>
+  </div>
+
+</main>
+
+<footer>
+  <span>LLMwiki · 분석일: 2026-05-19 · 카테고리: 트렌드 인텔리전스 / 2026</span>
+  <span>Sequoia AI Ascent 2026 시리즈: <a href="2026-05_Sequoia_This_is_AGI.html">AGI 키노트</a> · <a href="2026-05_Demis_Hassabis_AGI_75percent.html">Hassabis</a> · Karpathy</span>
+</footer>
+
+</body>
+</html>

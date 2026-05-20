@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>월드모델, 파운데이션 모델 그리고 AI | 나의 인사이트</title>
+<style>
+  :root {
+    --bg: #0c1118;
+    --bg2: #131d2a;
+    --bg3: #1a2637;
+    --border: #263347;
+    --teal: #2dd4bf;
+    --teal-dim: #0d9488;
+    --gold: #f0c040;
+    --amber: #fb923c;
+    --rose: #f87171;
+    --purple: #a78bfa;
+    --text: #e2e8f0;
+    --text-dim: #7b90a8;
+    --card-bg: #131d2a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Georgia', 'Nanum Myeongjo', serif;
+    line-height: 1.85;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 0.82rem;
+    font-family: -apple-system, sans-serif;
+  }
+  nav a { color: var(--text-dim); text-decoration: none; padding: 4px 10px; border-radius: 4px; transition: all 0.2s; }
+  nav a:hover { background: var(--bg3); color: var(--teal); }
+  .nav-sep { color: var(--border); }
+  .nav-badge {
+    background: rgba(45,212,191,0.12);
+    color: var(--teal);
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, #0c1118 0%, #0f1e2e 40%, #0c1118 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 72px 32px 56px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(45,212,191,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    opacity: 0.85;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 0.82rem;
+    font-family: -apple-system, sans-serif;
+  }
+  .hero-tag {
+    background: rgba(45,212,191,0.12);
+    border: 1px solid rgba(45,212,191,0.25);
+    color: var(--teal);
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+  .hero-date, .hero-author { color: var(--text-dim); }
+  .hero h1 {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em { color: var(--teal); font-style: normal; }
+  .hero-sub {
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    max-width: 640px;
+    margin: 0 auto 40px;
+    font-style: italic;
+  }
+
+  /* HERO QUOTES */
+  .hero-quotes {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .hero-quote-chip {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    font-style: italic;
+    max-width: 260px;
+    text-align: left;
+  }
+  .hero-quote-chip strong { color: var(--teal); font-style: normal; display: block; margin-bottom: 4px; font-size: 0.78rem; letter-spacing: 0.04em; font-family: -apple-system, sans-serif; }
+
+  /* LAYOUT */
+  main { max-width: 900px; margin: 0 auto; padding: 56px 32px 100px; }
+  section { margin-bottom: 64px; }
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: -apple-system, sans-serif;
+  }
+  h2 .icon { font-size: 1.1rem; }
+  h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; font-family: -apple-system, sans-serif; }
+
+  /* PROSE */
+  .prose p { margin-bottom: 1.2em; color: var(--text); font-size: 0.97rem; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  /* EQUATION BLOCK */
+  .equation-row {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .eq-card {
+    flex: 1;
+    min-width: 220px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+  }
+  .eq-era {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    font-family: -apple-system, sans-serif;
+  }
+  .eq-formula {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .eq-formula.newton { color: var(--text-dim); }
+  .eq-formula.einstein { color: var(--teal); }
+  .eq-desc {
+    font-size: 0.83rem;
+    color: var(--text-dim);
+    font-family: -apple-system, sans-serif;
+  }
+  .eq-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--border);
+    font-size: 1.5rem;
+    padding: 0 4px;
+  }
+  .eq-insight {
+    background: rgba(45,212,191,0.05);
+    border: 1px solid rgba(45,212,191,0.15);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-family: -apple-system, sans-serif;
+  }
+  .eq-insight strong { color: var(--teal); }
+
+  /* INVISIBLE THINGS */
+  .invisible-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .invisible-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .invisible-icon { font-size: 1.6rem; margin-bottom: 8px; }
+  .invisible-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-family: -apple-system, sans-serif;
+  }
+  .invisible-desc { font-size: 0.78rem; color: var(--text-dim); font-family: -apple-system, sans-serif; }
+
+  /* CHANGE MODEL */
+  .change-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .change-layer {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .change-layer:last-child { border-bottom: none; }
+  .change-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+    flex-shrink: 0;
+    font-family: -apple-system, sans-serif;
+  }
+  .cn-teal { background: rgba(45,212,191,0.15); color: var(--teal); }
+  .cn-amber { background: rgba(251,146,60,0.15); color: var(--amber); }
+  .cn-purple { background: rgba(167,139,250,0.15); color: var(--purple); }
+  .change-title { font-weight: 700; margin-bottom: 4px; font-size: 0.95rem; font-family: -apple-system, sans-serif; }
+  .change-desc { font-size: 0.83rem; color: var(--text-dim); font-family: -apple-system, sans-serif; }
+
+  /* QUOTE */
+  .quote-block {
+    border-left: 3px solid var(--teal);
+    background: rgba(45,212,191,0.04);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 24px;
+    margin: 24px 0;
+    font-style: italic;
+    font-size: 0.97rem;
+    color: var(--text);
+  }
+  .quote-attr { font-size: 0.8rem; color: var(--text-dim); margin-top: 8px; font-style: normal; font-family: -apple-system, sans-serif; }
+
+  /* LLM LIMIT */
+  .limit-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 600px) { .limit-split { grid-template-columns: 1fr; } }
+  .limit-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .limit-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    margin-bottom: 12px;
+    font-family: -apple-system, sans-serif;
+  }
+  .limit-label.strong { color: var(--teal); }
+  .limit-label.weak { color: var(--rose); }
+  .limit-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-family: -apple-system, sans-serif;
+  }
+  .limit-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .dot-teal { background: var(--teal); }
+  .dot-rose { background: var(--rose); }
+
+  /* WORLD MODEL DIAGRAM */
+  .wm-diagram {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .wm-center {
+    display: inline-block;
+    background: rgba(45,212,191,0.12);
+    border: 2px solid var(--teal);
+    border-radius: 50%;
+    width: 120px; height: 120px;
+    line-height: 120px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--teal);
+    margin: 0 auto 24px;
+    font-family: -apple-system, sans-serif;
+  }
+  .wm-pillars {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .wm-pillar {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 0.83rem;
+    font-family: -apple-system, sans-serif;
+    color: var(--text-dim);
+  }
+  .wm-pillar strong { color: var(--text); display: block; margin-bottom: 2px; }
+  .wm-arrow {
+    font-size: 1.2rem;
+    color: var(--border);
+    margin-bottom: 16px;
+  }
+
+  /* INSIGHT CARDS */
+  .insight-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .insight-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+  .insight-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: var(--teal);
+    margin-bottom: 6px;
+    font-family: -apple-system, sans-serif;
+  }
+  .insight-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; font-family: -apple-system, sans-serif; }
+  .insight-body { font-size: 0.88rem; color: var(--text-dim); font-family: -apple-system, sans-serif; line-height: 1.65; }
+
+  /* MEMO */
+  .memo-area {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .memo-label { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 10px; font-family: -apple-system, sans-serif; font-weight: 600; letter-spacing: 0.04em; }
+  textarea {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: Georgia, serif;
+    font-size: 0.9rem;
+    padding: 14px;
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+    line-height: 1.7;
+  }
+  textarea:focus { border-color: var(--teal-dim); }
+  textarea::placeholder { color: var(--border); }
+
+  /* FINAL QUOTE */
+  .final-quote {
+    border: 1px solid rgba(45,212,191,0.2);
+    background: rgba(45,212,191,0.04);
+    border-radius: 12px;
+    padding: 36px 40px;
+    text-align: center;
+  }
+  .final-quote p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .final-quote p em { color: var(--teal); font-style: normal; }
+  .final-quote .final-attr { font-size: 0.82rem; color: var(--text-dim); font-family: -apple-system, sans-serif; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../00_홈/index.html">🏠 홈</a>
+  <span class="nav-sep">›</span>
+  <a href="#">06_나의_인사이트</a>
+  <span class="nav-sep">›</span>
+  <span style="color:var(--text)">월드모델 · 파운데이션 모델</span>
+  <span style="flex:1"></span>
+  <span class="nav-badge">인사이트</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">🌍</div>
+  <div class="hero-meta">
+    <span class="hero-tag">나의 인사이트</span>
+    <span class="hero-date">📅 2026.05.18</span>
+    <span class="hero-author">✍️ 양영진 기자 (kdtlab CEO) — 브랜드뉴스</span>
+  </div>
+  <h1>월드모델, 파운데이션 모델<br>그리고 <em>AI</em></h1>
+  <p class="hero-sub">보이는 데이터를 넘어, 변화하는 현실과 인간 문명을 이해하려는 도전</p>
+
+  <div class="hero-quotes">
+    <div class="hero-quote-chip">
+      <strong>핵심 질문</strong>
+      AI는 세상을 이해하는가, 아니면 인간이 남긴 표현의 흔적을 학습하는가
+    </div>
+    <div class="hero-quote-chip">
+      <strong>과학의 본질</strong>
+      본질을 완벽히 이해해서가 아니라, 더 잘 설명하는 모델을 발전시켜왔다
+    </div>
+    <div class="hero-quote-chip">
+      <strong>AI의 한계</strong>
+      LLM은 현실 자체가 아닌 인간이 관찰·해석·표현한 흔적을 학습한 모델
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- 1. 세상을 이해한다는 것 -->
+  <section id="understanding">
+    <h2><span class="icon">🔭</span> 세상을 안다는 것 — 모델과 현실의 간극</h2>
+    <div class="prose">
+      <p>
+        인간은 물질이 무엇인지 완전히 모른다. 질량이 무엇인지, 에너지가 무엇인지, 시간과 공간이 궁극적으로
+        무엇인지도 설명하지 못한다. 그럼에도 우리는 질량보존의 법칙을 쓰고, F=ma를 적용하며 우주선을 쏘아 올린다.
+      </p>
+      <p>
+        과학은 본질을 완벽히 이해하고 시작하지 않았다. <strong>현실에서 반복되는 현상을 관찰하고,
+        그것을 설명하는 모델을 발전시켜온 것</strong>이다. 그리고 그 모델은 언제나 현실의 부분적 표현에 불과하다.
+      </p>
+    </div>
+
+    <div class="quote-block">
+      "지도는 땅이 아니다. 모델은 현실을 단순화한 표현일 뿐이다. 어떤 모델도 현실 전체를 완벽하게 담을 수는 없다."
+      <div class="quote-attr">— 양영진, 월드모델·파운데이션 모델 그리고 AI</div>
+    </div>
+  </section>
+
+  <!-- 2. 물리학이 보여주는 패턴 -->
+  <section id="physics-models">
+    <h2><span class="icon">⚗️</span> 뉴턴에서 아인슈타인으로 — 모델의 확장 패턴</h2>
+
+    <div class="equation-row">
+      <div class="eq-card">
+        <div class="eq-era">뉴턴 (1687)</div>
+        <div class="eq-formula newton">F = ma</div>
+        <div class="eq-desc">힘 = 질량 × 가속도<br>운동의 규칙성 발견<br>왜 중력이 있는지는 몰랐지만</div>
+      </div>
+      <div class="eq-arrow">→</div>
+      <div class="eq-card">
+        <div class="eq-era">아인슈타인 (1905)</div>
+        <div class="eq-formula einstein">E = mc²</div>
+        <div class="eq-desc">에너지 = 질량 × 광속²<br>질량과 에너지는 하나<br>기존 법칙을 더 큰 틀로 흡수</div>
+      </div>
+    </div>
+
+    <div class="eq-insight">
+      뉴턴 역학이 <strong>틀린 것이 아니라</strong> 더 큰 개념 속으로 확장된 것이다.
+      질량만 보존이 아니라 질량+에너지 합이 보존된다는 더 정밀한 모델로 진화.
+      AI 모델의 발전도 같은 패턴을 따른다 — 이전 모델을 부정하는 것이 아니라 더 넓은 설명력으로 확장.
+    </div>
+  </section>
+
+  <!-- 3. 보이지 않는 것들 -->
+  <section id="invisible">
+    <h2><span class="icon">👁️</span> 보이는 것이 전부가 아니다</h2>
+
+    <div class="invisible-grid">
+      <div class="invisible-item">
+        <div class="invisible-icon">🌌</div>
+        <div class="invisible-label">중력</div>
+        <div class="invisible-desc">결과(낙하)만 보인다<br>중력 자체는 보이지 않음</div>
+      </div>
+      <div class="invisible-item">
+        <div class="invisible-icon">⚡</div>
+        <div class="invisible-label">전자기장</div>
+        <div class="invisible-desc">전류·자석 현상만 관찰<br>장(field) 자체는 불가시</div>
+      </div>
+      <div class="invisible-item">
+        <div class="invisible-icon">⏱️</div>
+        <div class="invisible-label">시간</div>
+        <div class="invisible-desc">변화를 통해 추론할 뿐<br>시간 자체를 보지 못함</div>
+      </div>
+      <div class="invisible-item">
+        <div class="invisible-icon">💭</div>
+        <div class="invisible-label">의도·감정</div>
+        <div class="invisible-desc">행동의 결과만 관찰<br>내면 상태는 추론 대상</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        아인슈타인의 상대성이론은 시간조차 절대적이지 않음을 보였다.
+        빠르게 움직이거나 강한 중력장에서는 시간의 흐름 자체가 달라진다.
+        결국 현실은 물체의 집합이 아니라 <strong>물질·힘·에너지·정보·관계·시간 변화가 얽혀 움직이는 거대한 시스템</strong>이다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 4. 변화의 원인 -->
+  <section id="change">
+    <h2><span class="icon">🔄</span> 변화는 왜 일어나는가 — 3중 구조</h2>
+
+    <div class="change-stack">
+      <div class="change-layer">
+        <div class="change-num cn-teal">1</div>
+        <div>
+          <div class="change-title">외부의 힘과 에너지</div>
+          <div class="change-desc">얼음이 녹는 것은 열에너지 유입, 공이 움직이는 것은 외부 힘의 작용. 가장 눈에 보이는 변화의 원인.</div>
+        </div>
+      </div>
+      <div class="change-layer">
+        <div class="change-num cn-amber">2</div>
+        <div>
+          <div class="change-title">내부 구조의 불안정성</div>
+          <div class="change-desc">겉으로 멀쩡해 보여도 내부 응력이 누적되면 작은 충격 하나로 무너진다. 방사성 원소는 외부 자극 없이도 스스로 붕괴. <strong>같은 충격에도 왜 결과가 다른가</strong>의 답.</div>
+        </div>
+      </div>
+      <div class="change-layer">
+        <div class="change-num cn-purple">3</div>
+        <div>
+          <div class="change-title">시간 속 상태 변화</div>
+          <div class="change-desc">에너지는 이동하고, 구조는 노화하며, 상태는 변한다. 현실은 정지된 상태가 아니라 시간 속에서 끊임없이 변화하는 과정이다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      "변화란 단순히 무언가 움직인 현상이 아니라 외부의 힘과 에너지, 내부 구조의 불안정성,
+      시간 속 상태 변화가 함께 작용한 결과다."
+      <div class="quote-attr">— 양영진</div>
+    </div>
+  </section>
+
+  <!-- 5. 월드모델과 문명 -->
+  <section id="civilization">
+    <h2><span class="icon">🏛️</span> 개인의 월드모델이 문명을 만든다</h2>
+
+    <div class="prose">
+      <p>
+        돌은 힘을 받으면 움직인다. 하지만 사람은 물리법칙만으로 움직이지 않는다.
+        같은 말을 들어도 어떤 사람은 화를 내고, 어떤 사람은 웃어넘기며, 어떤 사람은 침묵한다.
+        왜냐하면 <strong>사람마다 내부의 월드모델(World Model)이 다르기 때문</strong>이다.
+      </p>
+      <p>
+        무엇이 옳은지, 무엇이 위험한지, 무엇이 중요한지에 대한 내부 모델.
+        그리고 사람은 그 모델을 기반으로 판단하고 행동한다.
+        인간 문명의 큰 변화들도 결국 사람들의 내부 월드모델 변화에서 시작된다.
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3>문명 = 인간 월드모델의 축적</h3>
+      <div style="font-size:0.88rem; color:var(--text-dim); font-family:-apple-system,sans-serif; line-height:1.7;">
+        도시·국가·과학·기술·법·제도·문화·산업 모두 인간의 판단과 선택, 협력과 갈등이 쌓여 만들어진 것이다.
+        문명은 건물과 기술의 집합이 아니라 <strong style="color:var(--text)">인간이 무엇을 중요하게 생각하고,
+        어떤 방향으로 힘과 에너지를 사용해왔는가의 결과</strong>다.
+        <br><br>
+        불은 음식을 익히는 도구가 될 수도, 전쟁의 무기가 될 수도 있다.
+        <strong style="color:var(--teal)">AI도 마찬가지다. AI 자체가 문명을 발전시키는 것이 아니라,
+        인간의 목적과 가치관 속에서 어떻게 사용되는가가 중요하다.</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. LLM의 한계 -->
+  <section id="llm-limit">
+    <h2><span class="icon">🧠</span> LLM은 무엇을 학습한 것인가</h2>
+
+    <div class="limit-split">
+      <div class="limit-box">
+        <div class="limit-label strong">LLM이 잘하는 것</div>
+        <div class="limit-item"><div class="limit-dot dot-teal"></div><div>언어 패턴과 통계적 관계 포착</div></div>
+        <div class="limit-item"><div class="limit-dot dot-teal"></div><div>인간이 기록한 지식 검색·종합</div></div>
+        <div class="limit-item"><div class="limit-dot dot-teal"></div><div>문맥에 맞는 텍스트 생성</div></div>
+        <div class="limit-item"><div class="limit-dot dot-teal"></div><div>표현된 개념 간 유추·연결</div></div>
+      </div>
+      <div class="limit-box">
+        <div class="limit-label weak">LLM이 이해 못하는 것</div>
+        <div class="limit-item"><div class="limit-dot dot-rose"></div><div>물리적 제약 (컵이 실제로 깨지는 조건)</div></div>
+        <div class="limit-item"><div class="limit-dot dot-rose"></div><div>숨겨진 상태와 실제 인과관계</div></div>
+        <div class="limit-item"><div class="limit-dot dot-rose"></div><div>시간에 따른 동적 상태 변화</div></div>
+        <div class="limit-item"><div class="limit-dot dot-rose"></div><div>인간의 의도·목적·가치·두려움</div></div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      "LLM은 현실 자체를 경험한 것이 아니라 인간이 관찰하고 해석하여 표현한 흔적을 학습한 모델이다.
+      현재의 많은 AI는 보이는 결과를 학습한 것이지, 현실 세계 자체를 완전히 이해한 것은 아니다."
+      <div class="quote-attr">— 양영진</div>
+    </div>
+  </section>
+
+  <!-- 7. 진짜 월드모델 -->
+  <section id="world-model">
+    <h2><span class="icon">🌐</span> 진짜 월드모델 — 언어 모델을 넘어서</h2>
+
+    <div class="wm-diagram">
+      <div class="wm-center">World<br>Model</div>
+      <div class="wm-arrow">↑ 언어 모델만으로는 부족하다</div>
+      <div class="wm-pillars">
+        <div class="wm-pillar">
+          <strong>물리 기반 모델</strong>
+          실제 물리법칙·제약 반영
+        </div>
+        <div class="wm-pillar">
+          <strong>시뮬레이션</strong>
+          시간 흐름 속 상태 변화 예측
+        </div>
+        <div class="wm-pillar">
+          <strong>디지털 트윈</strong>
+          현실 시스템의 동적 복제
+        </div>
+        <div class="wm-pillar">
+          <strong>가상 실험·검증</strong>
+          DoD VV&amp;A 수준의 체계
+        </div>
+        <div class="wm-pillar">
+          <strong>인간 요소</strong>
+          목적·제약·불확실성·의미
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        월드모델은 단순히 문장을 생성하는 모델이 아니다.
+        세상이 어떻게 움직이는지 <strong>내부적으로 이해하고 예측하려는 모델</strong>이다.
+        사람은 모두 머릿속에 자신만의 월드모델을 가지고 산다.
+        공이 떨어질 것을 예상하고, 상대의 감정을 추론하며, 위험을 예측한다.
+      </p>
+      <p>
+        현실 세계는 정적인 데이터 집합이 아니라 시간 흐름 속에서 상태가 변화하는 동적 시스템이다.
+        그래서 진짜 월드모델은 단순한 언어 패턴 학습만으로는 만들 수 없다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 8. 나의 인사이트 -->
+  <section id="my-insight">
+    <h2><span class="icon">💡</span> 나의 인사이트 — C-레벨 관점</h2>
+
+    <div class="insight-card">
+      <div class="insight-icon">🗺️</div>
+      <div>
+        <div class="insight-label">인사이트 1</div>
+        <div class="insight-title">모델을 현실로 착각하지 마라</div>
+        <div class="insight-body">
+          AI 출력값을 그대로 현실로 받아들이는 조직은 위험하다.
+          LLM이 생성하는 텍스트는 현실의 표현 흔적에서 추출된 것이지, 현실 검증을 거친 사실이 아니다.
+          어떤 AI 결과든 "이 모델이 어떤 가정을 했는가", "어디까지 설명 가능한가"를 먼저 물어야 한다.
+          RAG·검색 보강이나 도메인 특화 검증 체계가 필요한 이유가 여기에 있다.
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-icon">⏳</div>
+      <div>
+        <div class="insight-label">인사이트 2</div>
+        <div class="insight-title">AI는 정적(static) 지식, 현실은 동적(dynamic) 시스템</div>
+        <div class="insight-body">
+          LLM의 학습 데이터는 특정 시점에 인간이 기록한 표현의 집합이다.
+          하지만 시장·경쟁·고객 행동·규제는 시간 속에서 끊임없이 변한다.
+          시뮬레이션·디지털트윈·실시간 데이터 파이프라인 없이 AI만으로
+          "현실을 이해했다"고 믿는 것이 가장 위험한 착각이다.
+          월드모델은 언어 모델 + 동적 시스템 모델의 결합이다.
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-icon">🔥</div>
+      <div>
+        <div class="insight-label">인사이트 3</div>
+        <div class="insight-title">AI의 방향은 기술이 아니라 인간의 목적이 결정한다</div>
+        <div class="insight-body">
+          불이 음식도 익히고 전쟁도 일으키듯, AI 자체는 가치 중립적이다.
+          같은 에너지라도 어디에 쓰느냐가 결과를 결정한다.
+          C-레벨이 AI 도입 시 가장 먼저 물어야 할 것은 "어떤 모델이 좋은가"가 아니라
+          "우리가 풀고자 하는 현실 문제가 무엇인가", "그 판단에 어떤 가치를 반영할 것인가"다.
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-icon">📐</div>
+      <div>
+        <div class="insight-label">인사이트 4 — 뉴턴→아인슈타인 패턴 적용</div>
+        <div class="insight-title">현재 AI는 F=ma 단계, World Model은 E=mc² 단계</div>
+        <div class="insight-body">
+          LLM은 강력하지만 더 큰 개념인 World Model의 부분집합이다.
+          뉴턴 역학이 틀린 게 아니라 더 큰 틀로 흡수된 것처럼,
+          LLM도 물리 기반 모델·시뮬레이션·인간 요소와 결합하는 방향으로 확장될 것이다.
+          지금 LLM에 올인하는 것은 뉴턴 역학만 공부하고 상대성이론은 무시하는 것과 같을 수 있다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 메모 -->
+  <section id="memo">
+    <h2><span class="icon">✍️</span> 나의 메모</h2>
+    <div class="memo-area">
+      <div class="memo-label">이 아티클을 읽고 떠오른 생각, 연결되는 프로젝트, 추가 질문을 기록하세요</div>
+      <textarea placeholder="예: 우리 회사의 AI 도입이 현실 문제 해결에 초점이 맞춰져 있는가? 아니면 모델 선택에만 집중하고 있는가?&#10;&#10;월드모델 관점에서 우리 비즈니스의 동적 시스템 요소는 무엇인가?"></textarea>
+    </div>
+  </section>
+
+  <!-- 마무리 -->
+  <section id="closing">
+    <div class="final-quote">
+      <p>
+        "월드모델, 파운데이션 모델, 그리고 AI의 본질은<br>
+        세상을 완벽히 안다고 착각하는 데 있는 것이 아니다.
+      </p>
+      <p>
+        <em>인간과 현실, 시간과 변화, 의미와 목적을 더 깊이 이해하며</em><br>
+        우리가 가진 힘과 에너지를 어디에 어떻게 사용할 것인지 고민하는 과정에 있다.
+      </p>
+      <p>
+        그리고 그 선택이 앞으로의 문명 방향을 결정하게 될 것이다."
+      </p>
+      <div class="final-attr">— 양영진, 브랜드뉴스 2026.05.18</div>
+    </div>
+  </section>
+
+  <!-- 출처 -->
+  <section>
+    <h2><span class="icon">📎</span> 출처 및 분류</h2>
+    <div class="card" style="font-size:0.85rem; font-family:-apple-system,sans-serif; color:var(--text-dim); line-height:1.8;">
+      <strong style="color:var(--text)">원문:</strong> 월드모델, 파운데이션 모델 그리고 AI &nbsp;|&nbsp;
+      <strong style="color:var(--text)">저자:</strong> 양영진 기자 (kdtlab CEO) &nbsp;|&nbsp;
+      <strong style="color:var(--text)">출처:</strong> 브랜드뉴스 2026.05.18<br>
+      <strong style="color:var(--text)">분류:</strong> 06_나의_인사이트 &nbsp;|&nbsp;
+      <strong style="color:var(--text)">키워드:</strong> #월드모델 #파운데이션모델 #AI #LLM한계 #시뮬레이션 #디지털트윈 &nbsp;|&nbsp;
+      <strong style="color:var(--text)">신뢰도:</strong> 전문가 칼럼 (실무 관점)<br>
+      <strong style="color:var(--text)">연관 문서:</strong>
+      <a href="2026-04_AI능력한계_시스템관점.html" style="color:var(--teal); text-decoration:none;">AI 능력·한계 시스템 관점</a> &nbsp;|&nbsp;
+      <a href="../04_트렌드_인텔리전스/2018-03_POSTECH_AI_수학적한계분석.html" style="color:var(--teal); text-decoration:none;">POSTECH AI 수학적 한계 분석</a>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

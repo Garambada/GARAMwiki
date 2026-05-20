@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSeek-V4 — 오픈소스 프론티어 | 노정석 EP95</title>
+<style>
+  :root {
+    --bg: #080c14;
+    --bg2: #0d1420;
+    --bg3: #121c2e;
+    --card: #162038;
+    --border: #1e3050;
+    --text: #e2e8f0;
+    --muted: #8aa0be;
+    --cyan: #06b6d4;
+    --cyan2: #22d3ee;
+    --teal: #14b8a6;
+    --red: #ef4444;
+    --red2: #f87171;
+    --green: #22c55e;
+    --yellow: #eab308;
+    --orange: #f97316;
+    --purple: #a855f7;
+    --blue: #3b82f6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    background: rgba(8,12,20,0.96);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .nav-brand { font-weight: 700; font-size: 0.85rem; color: var(--cyan); letter-spacing: 0.05em; }
+  .nav-links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .nav-links a {
+    font-size: 0.73rem; color: var(--muted); text-decoration: none;
+    padding: 4px 8px; border-radius: 4px; transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); background: var(--card); }
+  .nav-links a.active { color: var(--cyan); background: rgba(6,182,212,0.1); }
+  .nav-tag {
+    font-size: 0.62rem; font-weight: 700; padding: 1px 5px; border-radius: 3px;
+    background: rgba(6,182,212,0.15); color: var(--cyan2); margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #080c14 0%, #0a1628 40%, #0a1628 60%, #080c14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 72px 24px 56px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(6,182,212,0.07) 0%, transparent 70%);
+  }
+  .hero-badges { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; position: relative; }
+  .hero-badge {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 999px; border: 1px solid;
+  }
+  .badge-cyan { background: rgba(6,182,212,0.1); border-color: rgba(6,182,212,0.3); color: var(--cyan2); }
+  .badge-red { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: var(--red2); }
+  .badge-green { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: var(--green); }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900; margin-bottom: 6px; letter-spacing: -0.02em;
+    background: linear-gradient(120deg, var(--cyan2) 0%, var(--text) 50%, var(--teal) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    position: relative;
+  }
+  .hero-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 12px; position: relative; }
+  .hero-ep { color: var(--cyan2); font-size: 0.8rem; font-weight: 600; position: relative; }
+
+  /* HERO STATS */
+  .hero-stats {
+    display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 0; max-width: 960px; margin: 36px auto 0;
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    position: relative;
+  }
+  .stat-block {
+    flex: 1; min-width: 160px;
+    padding: 22px 20px; text-align: center;
+    border-right: 1px solid var(--border);
+    background: var(--bg3);
+    position: relative;
+  }
+  .stat-block:last-child { border-right: none; }
+  .stat-block.highlight { background: rgba(6,182,212,0.05); }
+  .stat-num {
+    font-size: 1.9rem; font-weight: 900; line-height: 1; margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-num.cyan { color: var(--cyan2); }
+  .stat-num.green { color: var(--green); }
+  .stat-num.red { color: var(--red2); }
+  .stat-num.yellow { color: var(--yellow); }
+  .stat-label { font-size: 0.7rem; color: var(--muted); line-height: 1.4; }
+
+  /* SECTION */
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 56px 0; border-bottom: 1px solid rgba(30,48,80,0.5); }
+  .section-tag {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 10px;
+  }
+  .section-tag.green { color: var(--green); }
+  .section-tag.red { color: var(--red); }
+  .section-tag.yellow { color: var(--yellow); }
+  h2 { font-size: 1.7rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .section-desc { color: var(--muted); font-size: 0.9rem; }
+
+  /* ARCHITECTURE CARDS */
+  .arch-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+  .arch-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; position: relative; overflow: hidden;
+  }
+  .arch-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--teal));
+  }
+  .arch-card.new::before { background: linear-gradient(90deg, var(--cyan), var(--blue)); }
+  .arch-card.inherited::before { background: linear-gradient(90deg, var(--purple), var(--blue)); opacity: 0.5; }
+  .arch-label {
+    font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 2px 7px; border-radius: 3px; margin-bottom: 12px; display: inline-block;
+  }
+  .label-new { background: rgba(6,182,212,0.15); color: var(--cyan2); }
+  .label-inherited { background: rgba(168,85,247,0.15); color: var(--purple); }
+  .arch-name { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .arch-name-full { font-size: 0.72rem; color: var(--muted); margin-bottom: 12px; }
+  .arch-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .arch-metric {
+    margin-top: 14px; padding: 10px 14px;
+    background: var(--bg2); border-radius: 7px;
+    font-size: 0.78rem; font-family: 'Courier New', monospace;
+    color: var(--cyan2);
+  }
+
+  /* MOE VISUAL */
+  .moe-visual {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px; margin-top: 20px;
+  }
+  .moe-title { font-size: 0.78rem; font-weight: 700; color: var(--muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .moe-equation {
+    font-family: 'Courier New', monospace; font-size: 0.95rem;
+    background: var(--bg); padding: 16px 20px; border-radius: 8px;
+    line-height: 2; text-align: center; margin-bottom: 16px;
+  }
+  .moe-equation .c { color: var(--cyan2); font-weight: 700; }
+  .moe-equation .g { color: var(--green); font-weight: 700; }
+  .moe-equation .y { color: var(--yellow); font-weight: 700; }
+  .moe-note { font-size: 0.8rem; color: var(--muted); text-align: center; }
+
+  /* BENCHMARK TABLE */
+  .bench-wrap { overflow-x: auto; }
+  .bench-table { width: 100%; border-collapse: collapse; }
+  .bench-table th {
+    background: var(--bg2); padding: 12px 16px; text-align: left;
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .bench-table td {
+    padding: 14px 16px; border-bottom: 1px solid rgba(30,48,80,0.4);
+    font-size: 0.88rem; vertical-align: middle;
+  }
+  .bench-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .bench-model { font-weight: 700; }
+  .bench-model.deepseek { color: var(--cyan2); }
+  .bench-model.claude { color: #a78bfa; }
+  .bench-model.gpt { color: #34d399; }
+  .bench-model.gemini { color: #fb923c; }
+  .win { color: var(--cyan2); font-weight: 700; }
+  .win-other { color: var(--muted); }
+  .badge-win {
+    display: inline-block; background: rgba(6,182,212,0.15);
+    color: var(--cyan2); font-size: 0.65rem; font-weight: 700;
+    padding: 1px 6px; border-radius: 3px; margin-left: 4px;
+  }
+
+  /* COST COMPARISON */
+  .cost-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 24px; }
+  .cost-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+  }
+  .cost-title { font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+
+  .price-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .price-model { font-size: 0.82rem; min-width: 120px; }
+  .price-model.deepseek { color: var(--cyan2); font-weight: 700; }
+  .price-bar-wrap { flex: 1; background: var(--bg2); border-radius: 4px; height: 10px; overflow: hidden; }
+  .price-bar { height: 100%; border-radius: 4px; transition: width 1s ease; }
+  .price-val { font-size: 0.78rem; min-width: 50px; text-align: right; font-family: 'Courier New', monospace; }
+  .price-val.cheap { color: var(--green); font-weight: 700; }
+
+  .savings-box {
+    background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 10px; padding: 18px; margin-top: 16px;
+  }
+  .savings-label { font-size: 0.7rem; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .savings-num { font-size: 2rem; font-weight: 900; color: var(--green); }
+  .savings-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+  /* GENERATION COMPARE */
+  .gen-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  .gen-table th {
+    background: var(--bg2); padding: 11px 16px; text-align: left;
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--border);
+  }
+  .gen-table td {
+    padding: 13px 16px; border-bottom: 1px solid rgba(30,48,80,0.4); font-size: 0.85rem;
+  }
+  .gen-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .gen-highlight td { background: rgba(6,182,212,0.04) !important; }
+  td.improvement { color: var(--green); font-weight: 600; }
+
+  /* PROS CONS */
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
+  .pros-card, .cons-card {
+    background: var(--card); border-radius: 12px; padding: 24px;
+  }
+  .pros-card { border: 1px solid rgba(34,197,94,0.2); }
+  .cons-card { border: 1px solid rgba(239,68,68,0.2); }
+  .pros-title { color: var(--green); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+  .cons-title { color: var(--red2); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+  .pc-item { font-size: 0.84rem; color: var(--muted); margin-bottom: 10px; padding-left: 18px; position: relative; }
+  .pc-item::before { position: absolute; left: 0; font-weight: 700; }
+  .pros-card .pc-item::before { content: '✓'; color: var(--green); }
+  .cons-card .pc-item::before { content: '✗'; color: var(--red2); }
+  .pc-item strong { color: var(--text); }
+
+  /* STRATEGY GRID */
+  .strategy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+  .strategy-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px;
+  }
+  .strategy-icon { font-size: 1.4rem; margin-bottom: 10px; }
+  .strategy-q { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .strategy-a { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+  .strategy-a .highlight { color: var(--cyan2); font-weight: 600; }
+
+  /* USE CASE DECISION */
+  .decision-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .decision-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px;
+  }
+  .decision-timing {
+    font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 3px 8px; border-radius: 999px; display: inline-block; margin-bottom: 12px;
+  }
+  .dt-now { background: rgba(239,68,68,0.15); color: var(--red2); }
+  .dt-eval { background: rgba(234,179,8,0.15); color: var(--yellow); }
+  .dt-skip { background: rgba(30,48,80,0.8); color: var(--muted); }
+  .decision-title { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .decision-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+  /* COMMENT */
+  .comment-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px; margin-top: 40px;
+  }
+  .comment-label { font-size: 0.8rem; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
+  .comment-textarea {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; color: var(--text); font-size: 0.86rem;
+    resize: vertical; min-height: 70px; font-family: inherit; line-height: 1.6;
+  }
+  .comment-textarea:focus { outline: none; border-color: var(--cyan); }
+  .comment-textarea::placeholder { color: var(--muted); }
+
+  /* SOURCES */
+  .sources { padding: 36px 0 56px; }
+  .sources-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; }
+  .sources-list { display: flex; gap: 10px; flex-wrap: wrap; }
+  .source-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 7px; padding: 7px 13px; font-size: 0.76rem;
+    color: var(--cyan2); text-decoration: none; transition: all 0.2s;
+  }
+  .source-link:hover { background: rgba(6,182,212,0.08); border-color: rgba(6,182,212,0.3); }
+
+  @media (max-width: 768px) {
+    .arch-grid, .cost-grid, .pros-cons, .strategy-grid { grid-template-columns: 1fr; }
+    .decision-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">🤖 모델 트래커</div>
+  <div class="nav-links">
+    <a href="2026-05_Karpathy_VibeCoding_to_AgenticEngineering.html">Karpathy</a>
+    <a href="2026-05_Sequoia_This_is_AGI.html">Sequoia AGI</a>
+    <a href="2026-05_Brockman_Human_Attention_Bottleneck.html">Brockman</a>
+    <a href="2026-05_Jim_Fan_Robotics_EndGame.html">Jim Fan</a>
+    <a href="2026-05_Boris_Cherny_Coding_Solved.html">Boris Cherny</a>
+    <a href="2026-05_LLM_Inference_TokenEconomics.html">LLM Inference</a>
+    <a href="2026-05_DeepSeek_V4.html" class="active">DeepSeek V4 <span class="nav-tag">모델</span></a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badges">
+    <span class="hero-badge badge-cyan">오픈 웨이트</span>
+    <span class="hero-badge badge-red">1.6조 파라미터</span>
+    <span class="hero-badge badge-green">1M 컨텍스트</span>
+  </div>
+  <h1>DeepSeek-V4</h1>
+  <p class="hero-sub">프론티어 수준 수학·코딩 성능 — GPT-5.5 대비 <strong style="color:var(--green)">85% 저렴하게</strong></p>
+  <div class="hero-ep">노정석 AI Frontier EP95 · 2026-04-26 | 논문 출시: 2026-04-24</div>
+
+  <div class="hero-stats">
+    <div class="stat-block highlight">
+      <div class="stat-num cyan">1.6T</div>
+      <div class="stat-label">총 파라미터<br>(활성: 49B / 토큰)</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num green">1M</div>
+      <div class="stat-label">컨텍스트 토큰<br>(CSA 아키텍처)</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num cyan">90%</div>
+      <div class="stat-label">KV Cache 감소<br>V3.2 대비</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num green">$0.28</div>
+      <div class="stat-label">입력 1M 토큰<br>Claude Opus 대비 54× 저렴</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num yellow">120/120</div>
+      <div class="stat-label">Putnam 2025 만점<br>오픈소스 최초</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1: ARCHITECTURE -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">01 — Architecture</div>
+      <h2>4개의 기술 혁신 — 무엇이 새로운가</h2>
+      <p class="section-desc">DeepSeek-V4는 단순 스케일업이 아니다. 1M 토큰 컨텍스트를 경제적으로 처리하기 위한 구조적 재설계.</p>
+    </div>
+
+    <div class="arch-grid">
+      <div class="arch-card new">
+        <span class="arch-label label-new">V4 신규</span>
+        <div class="arch-name">CSA + HCA</div>
+        <div class="arch-name-full">Compressed Sparse Attention + Heavily Compressed Attention</div>
+        <div class="arch-desc">하이브리드 어텐션 설계. CSA는 압축 비율 m으로 K/V를 압축한 뒤 top-k 엔트리에만 sparse attention 적용. HCA는 더 극단적인 압축으로 dense attention을 그룹 단위 처리. 중요한 토큰은 정밀하게, 나머지는 효율적으로.</div>
+        <div class="arch-metric">KV Cache: V3.2 대비 90% 감소<br>FLOPs: V3.2 대비 27% 수준</div>
+      </div>
+
+      <div class="arch-card new">
+        <span class="arch-label label-new">V4 신규</span>
+        <div class="arch-name">mHC</div>
+        <div class="arch-name-full">Manifold-Constrained Hyper-Connections</div>
+        <div class="arch-desc">레이어 간 잔차(residual) 연결을 리만 매니폴드 기하학적 제약 위에서 최적화. 깊은 네트워크에서 그래디언트 소실 억제, 학습 안정성 향상. 1.6T 규모에서 안정적 학습 가능하게 하는 핵심 혁신.</div>
+        <div class="arch-metric">효과: 학습 안정성 향상, 수렴 속도 개선</div>
+      </div>
+
+      <div class="arch-card new">
+        <span class="arch-label label-new">V4 신규</span>
+        <div class="arch-name">Engram Memory</div>
+        <div class="arch-name-full">Engram Conditional Memory</div>
+        <div class="arch-desc">생물학적 뇌의 기억 흔적(Engram) 개념 차용. 조건부 메모리 활성화로 장문 컨텍스트에서 관련 정보를 선택적으로 강화. 200K+ 토큰 범위에서 추론 품질 향상. 단순 어텐션만으로 잡기 어려운 장거리 의존성 포착.</div>
+        <div class="arch-metric">효과: 장문 컨텍스트 추론 품질 향상</div>
+      </div>
+
+      <div class="arch-card inherited">
+        <span class="arch-label label-inherited">V3 계승·강화</span>
+        <div class="arch-name">MLA + MTP</div>
+        <div class="arch-name-full">Multi-Head Latent Attention + Multi-Token Prediction</div>
+        <div class="arch-desc">MLA: 히든 상태를 소형 잠재 벡터로 압축 후 어텐션 계산 → KV Cache 추가 감소. MTP: 단일 forward pass에서 여러 토큰 동시 예측 → 추론 속도 향상. 256~384 전문가 중 6 routed + 1 shared expert 활성화.</div>
+        <div class="arch-metric">MoE: 1.6T 파라미터, 토큰당 49B 활성</div>
+      </div>
+    </div>
+
+    <div class="moe-visual">
+      <div class="moe-title">MoE 핵심 — "1.6T는 마케팅 숫자, 실제 계산은 49B"</div>
+      <div class="moe-equation">
+        총 파라미터: <span class="c">1,600B</span> &nbsp;|&nbsp; 토큰당 활성: <span class="g">49B</span> &nbsp;|&nbsp; 비율: <span class="y">3%만 활성화</span>
+        <br>
+        추론 비용은 <span class="g">49B 모델</span> 수준 — 성능은 <span class="c">1.6T</span> 규모
+      </div>
+      <div class="moe-note">Roofline 분석: 실제 GPU 비용은 활성 파라미터 기준으로 계산. 49B BF16 ≈ 98GB → H100 2장으로 서빙 가능</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: BENCHMARK -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag green">02 — Benchmarks</div>
+      <h2>성능 — 수학·코딩 최강, 과학은 2위</h2>
+      <p class="section-desc">2026년 4~5월 기준 주요 벤치마크. 오픈소스 모델로는 전례 없는 수준.</p>
+    </div>
+
+    <div class="bench-wrap">
+      <table class="bench-table">
+        <thead>
+          <tr>
+            <th>벤치마크</th>
+            <th>DeepSeek V4-Pro</th>
+            <th>Claude Opus 4.7</th>
+            <th>GPT-5.5</th>
+            <th>Gemini 3.1 Pro</th>
+            <th>특성</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HMMT 2026 Feb</strong></td>
+            <td class="win">95.2% <span class="badge-win">🥇</span></td>
+            <td class="win-other">~89%</td>
+            <td class="win-other">~91%</td>
+            <td class="win-other">~93%</td>
+            <td style="color:var(--muted); font-size:0.78rem">하버드 대학원 수학</td>
+          </tr>
+          <tr>
+            <td><strong>Putnam 2025</strong></td>
+            <td class="win">120/120 <span class="badge-win">만점</span></td>
+            <td class="win-other">115/120</td>
+            <td class="win-other">118/120</td>
+            <td class="win-other">119/120</td>
+            <td style="color:var(--muted); font-size:0.78rem">미국 대학생 수학올림피아드</td>
+          </tr>
+          <tr>
+            <td><strong>SWE-bench Verified</strong></td>
+            <td class="win">80.6% <span class="badge-win">🥇</span></td>
+            <td class="win-other">64.3%</td>
+            <td class="win-other">~75%</td>
+            <td class="win-other">~72%</td>
+            <td style="color:var(--muted); font-size:0.78rem">실제 GitHub 이슈 해결</td>
+          </tr>
+          <tr>
+            <td><strong>IMO Ans Bench</strong></td>
+            <td class="win">89.8% <span class="badge-win">🥇</span></td>
+            <td class="win-other">~86%</td>
+            <td class="win-other">~88%</td>
+            <td class="win-other">~91%</td>
+            <td style="color:var(--muted); font-size:0.78rem">국제수학올림피아드</td>
+          </tr>
+          <tr>
+            <td><strong>GPQA Diamond</strong></td>
+            <td class="win-other">~85%</td>
+            <td class="win-other">~92%</td>
+            <td class="win-other">~88%</td>
+            <td class="win">94.6% <span class="badge-win">🥇</span></td>
+            <td style="color:var(--muted); font-size:0.78rem">박사급 과학 추론</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background: rgba(6,182,212,0.05); border: 1px solid rgba(6,182,212,0.15); border-radius: 10px; padding: 18px 22px; margin-top: 20px; font-size: 0.83rem; color: var(--muted);">
+      <strong style="color: var(--cyan2);">패턴 요약:</strong> 수학 · 코딩 = DeepSeek V4-Pro 1위. 과학 추론(GPQA) = Gemini 3.1 Pro 1위. 태스크별 최강이 다르므로 용도에 따른 모델 선택이 핵심.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: COST -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">03 — Cost Economics</div>
+      <h2>가격 파괴 — 동급 성능 54배 저렴</h2>
+      <p class="section-desc">DeepSeek V4의 진짜 무기는 성능이 아닌 원가 구조다. LLM 시장 가격 압력의 새 기준점.</p>
+    </div>
+
+    <div class="cost-grid">
+      <div class="cost-card">
+        <div class="cost-title">입력 토큰 가격 비교 (1M 토큰)</div>
+        <div class="price-row">
+          <span class="price-model deepseek">DeepSeek V4-Pro</span>
+          <div class="price-bar-wrap"><div class="price-bar" style="width:2%; background: var(--cyan);"></div></div>
+          <span class="price-val cheap">$0.28</span>
+        </div>
+        <div class="price-row">
+          <span class="price-model" style="color:var(--teal)">DeepSeek V4-Flash</span>
+          <div class="price-bar-wrap"><div class="price-bar" style="width:0.5%; background: var(--teal);"></div></div>
+          <span class="price-val cheap">$0.07</span>
+        </div>
+        <div class="price-row">
+          <span class="price-model" style="color:var(--muted)">Gemini 3.1 Pro</span>
+          <div class="price-bar-wrap"><div class="price-bar" style="width:8%; background: var(--orange);"></div></div>
+          <span class="price-val">$1.25</span>
+        </div>
+        <div class="price-row">
+          <span class="price-model" style="color:var(--muted)">GPT-5.5</span>
+          <div class="price-bar-wrap"><div class="price-bar" style="width:13%; background: #34d399;"></div></div>
+          <span class="price-val">$1.90</span>
+        </div>
+        <div class="price-row">
+          <span class="price-model" style="color:var(--muted)">Claude Opus 4.6</span>
+          <div class="price-bar-wrap"><div class="price-bar" style="width:100%; background: var(--purple);"></div></div>
+          <span class="price-val">$15.00</span>
+        </div>
+      </div>
+
+      <div class="cost-card">
+        <div class="cost-title">실전 ROI 시나리오</div>
+        <div style="background: var(--bg2); border-radius: 8px; padding: 16px; font-size: 0.8rem; font-family: 'Courier New', monospace; color: var(--text); line-height: 2; margin-bottom: 16px;">
+          <div style="color: var(--muted); margin-bottom: 6px; font-family: inherit; font-size: 0.72rem;">// RAG 파이프라인 월 50,000회</div>
+          Claude Opus:  <span style="color:var(--red2)">~$9,000/월</span><br>
+          GPT-5.5:      <span style="color:var(--yellow)">~$1,200/월</span><br>
+          DeepSeek V4:  <span style="color:var(--green)">~$156/월</span>
+        </div>
+        <div class="savings-box">
+          <div class="savings-label">Claude Opus 대비 절감</div>
+          <div class="savings-num">98.3%</div>
+          <div class="savings-sub">$9,000 → $156 / 단, 보안·성능 검증 필수</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: rgba(234,179,8,0.05); border: 1px solid rgba(234,179,8,0.2); border-radius: 10px; padding: 18px 22px; margin-top: 20px; font-size: 0.83rem;">
+      <strong style="color: var(--yellow);">⚠️ 전략적 함의:</strong> <span style="color: var(--muted);">DeepSeek V4의 원가 구조는 GPT/Claude에 가격 하락 압력으로 작용. 이미 Claude/GPT 가격이 2025 대비 큰 폭 하락. "LLM API 비용"이 전략 변수에서 빠르게 commodity로 전환 중.</span>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: GENERATION EVOLUTION -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag yellow">04 — Evolution</div>
+      <h2>DeepSeek 세대별 진화</h2>
+      <p class="section-desc">V2 → V3 → V4: 스케일만 키운 게 아니라 아키텍처 자체를 바꾸며 성장.</p>
+    </div>
+
+    <table class="gen-table">
+      <thead>
+        <tr>
+          <th>세대</th>
+          <th>총 파라미터</th>
+          <th>활성 파라미터</th>
+          <th>컨텍스트</th>
+          <th>핵심 혁신</th>
+          <th>KV Cache (상대)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>V2</strong></td>
+          <td>236B</td>
+          <td>21B</td>
+          <td>128K</td>
+          <td>MoE + MLA 첫 도입</td>
+          <td>기준</td>
+        </tr>
+        <tr>
+          <td><strong>V3 / V3.2</strong></td>
+          <td>671B</td>
+          <td>37B</td>
+          <td>128K</td>
+          <td>MLA 개선 + MTP 추가</td>
+          <td>기준</td>
+        </tr>
+        <tr class="gen-highlight">
+          <td><strong style="color:var(--cyan2)">V4-Pro ★</strong></td>
+          <td style="color:var(--cyan2)">1,600B</td>
+          <td style="color:var(--cyan2)">49B</td>
+          <td style="color:var(--cyan2)">1M</td>
+          <td style="color:var(--cyan2)">CSA + HCA + mHC + Engram</td>
+          <td class="improvement">-90%</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--teal)">V4-Flash</strong></td>
+          <td>284B</td>
+          <td>13B</td>
+          <td>1M</td>
+          <td>CSA 경량 버전</td>
+          <td class="improvement">-90%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 5: PROS/CONS -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">05 — Assessment</div>
+      <h2>강점 & 한계 — 솔직한 평가</h2>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros-card">
+        <div class="pros-title">✅ 강점</div>
+        <div class="pc-item"><strong>수학·정량 추론 최강</strong> — Putnam 만점, HMMT 95%. 오픈소스 최초 프론티어 수준</div>
+        <div class="pc-item"><strong>코딩 성능 1위</strong> — SWE-bench 80%+, Claude Pro·GPT-5.5 능가</div>
+        <div class="pc-item"><strong>1M 토큰 실용화</strong> — CSA 덕분에 경제적 비용으로 장문 처리</div>
+        <div class="pc-item"><strong>원가 파괴</strong> — 동급 성능 대비 50~80배 저렴한 API 단가</div>
+        <div class="pc-item"><strong>오픈 웨이트 (Apache 2.0)</strong> — 파인튜닝, 자체 호스팅, 상업적 사용 완전 자유</div>
+        <div class="pc-item"><strong>KV Cache 혁신</strong> — 90% 감소로 자체 호스팅 GPU 비용도 대폭 절감</div>
+      </div>
+      <div class="cons-card">
+        <div class="cons-title">✗ 한계</div>
+        <div class="pc-item"><strong>과학 추론 2위</strong> — GPQA Diamond에서 Gemini 3.1 Pro에 밀림 (85% vs 94.6%)</div>
+        <div class="pc-item"><strong>멀티모달 미지원</strong> — 현재 텍스트 전용. 이미지·음성 처리 불가</div>
+        <div class="pc-item"><strong>풀 모델 자체 호스팅 난이도</strong> — 1.6T 전체는 NVL72급 클러스터 필요</div>
+        <div class="pc-item"><strong>중국 기업 리스크</strong> — 데이터 프라이버시, 지정학 리스크 존재</div>
+        <div class="pc-item"><strong>에이전트 생태계 미성숙</strong> — Claude, GPT 대비 툴·플러그인 지원 부족</div>
+        <div class="pc-item"><strong>한국어 성능 불확실</strong> — 영어·중국어 중심 학습, 한국어 품질 별도 검증 필요</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: STRATEGY -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag red">06 — C-Level Strategy</div>
+      <h2>지금 무엇을 결정해야 하는가</h2>
+      <p class="section-desc">DeepSeek V4가 가져오는 전략적 선택지와 리스크.</p>
+    </div>
+
+    <div class="decision-grid">
+      <div class="decision-card">
+        <div class="decision-timing dt-now">즉시 검토</div>
+        <div class="decision-title">수학·코딩 워크로드 이전</div>
+        <div class="decision-desc">현재 GPT/Claude로 처리 중인 수식 분석, 코드 생성, 정량 리포트 작업. DeepSeek V4-Pro 테스트 → 성능 동등 시 비용 50~80배 절감.</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-timing dt-now">즉시 검토</div>
+        <div class="decision-title">대량 처리 파이프라인</div>
+        <div class="decision-desc">분류, 추출, 요약 등 볼륨이 큰 비실시간 작업. V4-Flash ($0.07/M input) 사용 시 원가 구조 전면 재편 가능.</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-timing dt-eval">3개월 평가</div>
+        <div class="decision-title">오픈소스 파인튜닝 전략</div>
+        <div class="decision-desc">Apache 2.0으로 도메인 특화 파인튜닝 후 자산화. 자체 LLM 모델을 경쟁 해자로 만드는 경로. CV &lt; 0.4이면 자체 호스팅 검토.</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-timing dt-eval">3개월 평가</div>
+        <div class="decision-title">자체 호스팅 ROI 재계산</div>
+        <div class="decision-desc">V4-Pro의 활성 파라미터 49B → H100 2장으로 서빙 가능. 기존 70B 자체 호스팅 비용 기준 대비 재산출 필요.</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-timing dt-skip">보류</div>
+        <div class="decision-title">과학 추론 중심 워크로드</div>
+        <div class="decision-desc">GPQA 기준 Gemini 3.1 Pro가 10%p 우세. 의학·화학·물리 추론이 핵심인 작업은 전환 전 충분한 벤치마크 필요.</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-timing dt-skip">리스크 관리</div>
+        <div class="decision-title">민감 데이터 처리</div>
+        <div class="decision-desc">중국 기업 데이터 정책 리스크. 개인정보·의료·금융 데이터는 자체 호스팅 전제로만 검토. API 버전은 민감 데이터 금지.</div>
+      </div>
+    </div>
+
+    <div class="strategy-grid" style="margin-top: 24px;">
+      <div class="strategy-card">
+        <div class="strategy-icon">💡</div>
+        <div class="strategy-q">경쟁사가 DeepSeek V4로 원가를 90% 낮춘다면?</div>
+        <div class="strategy-a">LLM 비용이 더 이상 경쟁 우위가 아님. <span class="highlight">원가 절감보다 컨텍스트 데이터·워크플로우 자동화 속도</span>가 다음 해자. 지금 비용 감사해서 절감분을 에이전트 구축에 재투자.</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-icon">⚖️</div>
+        <div class="strategy-q">Claude/GPT vs DeepSeek — 언제 무엇을 쓰나?</div>
+        <div class="strategy-a">수학·코딩·대용량 → DeepSeek V4. 과학 추론·멀티모달 → Gemini. 에이전트·툴 체인 → Claude/GPT. <span class="highlight">단일 모델 전략은 2026년부터 비효율</span>. 태스크 라우팅 레이어 구축 검토.</div>
+      </div>
+    </div>
+
+    <div class="comment-box">
+      <div class="comment-label">📝 우리 조직에 적용할 것</div>
+      <textarea class="comment-textarea" placeholder="현재 LLM API 비용 중 수학·코딩 워크로드 비율은? DeepSeek V4-Pro 테스트 파이프라인 대상은?"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<div class="container">
+  <div class="sources">
+    <div class="sources-title">Sources</div>
+    <div class="sources-list">
+      <a href="https://www.youtube.com/watch?v=rJEMaldMyLE" class="source-link" target="_blank">▶ 노정석 EP95</a>
+      <a href="https://api-docs.deepseek.com/news/news260424" class="source-link" target="_blank">📄 DeepSeek V4 출시 발표</a>
+      <a href="https://earezki.com/ai-news/2026-04-24-deepseek-ai-releases-deepseek-v4-compressed-sparse-attention-and-heavily-compressed-attention-enable-one-million-token-contexts/" class="source-link" target="_blank">📄 CSA 기술 분석</a>
+      <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro" class="source-link" target="_blank">🤗 HuggingFace</a>
+      <a href="2026-05_LLM_Inference_TokenEconomics.html" class="source-link">← LLM Inference (EP96)</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.arch-card, .cost-card, .decision-card, .strategy-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(18px)';
+    el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+    observer.observe(el);
+  });
+
+  const textarea = document.querySelector('.comment-textarea');
+  if (textarea) {
+    const saved = sessionStorage.getItem('note_deepseek_v4');
+    if (saved) textarea.value = saved;
+    textarea.addEventListener('input', () => sessionStorage.setItem('note_deepseek_v4', textarea.value));
+  }
+</script>
+</body>
+</html>

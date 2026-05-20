@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boris Cherny: Why Coding Is Solved | Sequoia AI Ascent 2026</title>
+<style>
+  :root {
+    --bg: #090810;
+    --surface: #100f1a;
+    --surface2: #17162a;
+    --border: #1e1c30;
+    --accent: #a855f7;
+    --accent2: #c084fc;
+    --accent3: #7c3aed;
+    --blue: #4a9eff;
+    --blue2: #7bb8ff;
+    --red: #ff5f6b;
+    --green: #3ecf8e;
+    --gold: #e8b84b;
+    --text: #e4e8f0;
+    --text2: #8b95a8;
+    --text3: #5a6478;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.7; }
+
+  /* NAV */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav span { color: var(--text3); font-size: 12px; }
+  nav a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav a.active { color: var(--accent); border-color: var(--accent); background: rgba(168,85,247,0.08); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0a0812 0%, #110f20 50%, #0c0a14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(168,85,247,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(168,85,247,0.1);
+    border: 1px solid rgba(168,85,247,0.3);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--accent2);
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #e4e8f0 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: var(--text2);
+    margin-bottom: 32px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .stat-strip {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+  .section { margin-bottom: 64px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); }
+  .icon-blue { background: rgba(74,158,255,0.15); border: 1px solid rgba(74,158,255,0.3); }
+  .icon-green { background: rgba(62,207,142,0.15); border: 1px solid rgba(62,207,142,0.3); }
+  .icon-gold { background: rgba(232,184,75,0.15); border: 1px solid rgba(232,184,75,0.3); }
+  .icon-red { background: rgba(255,95,107,0.15); border: 1px solid rgba(255,95,107,0.3); }
+  .section-title { font-size: 22px; font-weight: 700; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .card-body { font-size: 14px; color: var(--text2); line-height: 1.6; }
+  .card-accent { color: var(--accent); font-size: 22px; font-weight: 800; display: block; margin-bottom: 6px; }
+
+  /* QUOTE */
+  .quote-block {
+    background: var(--surface);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    margin: 24px 0;
+    font-style: italic;
+    color: var(--text2);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .quote-block strong { color: var(--accent2); font-style: normal; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th {
+    background: var(--surface2);
+    color: var(--text2);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(168,85,247,0.03); }
+  td:first-child { color: var(--text); font-weight: 600; }
+
+  /* LOOP VISUAL */
+  .loop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .loop-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .loop-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .loop-title { font-size: 13px; font-weight: 700; color: var(--accent2); margin-bottom: 8px; }
+  .loop-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .loop-interval {
+    display: inline-block;
+    background: rgba(168,85,247,0.1);
+    border: 1px solid rgba(168,85,247,0.2);
+    color: var(--accent);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
+  /* POWERS GRID */
+  .powers-split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 600px) { .powers-split { grid-template-columns: 1fr; } }
+  .powers-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .powers-panel.danger { border-color: rgba(255,95,107,0.3); }
+  .powers-panel.safe { border-color: rgba(62,207,142,0.3); }
+  .powers-panel-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .powers-panel.danger .powers-panel-title { color: var(--red); }
+  .powers-panel.safe .powers-panel-title { color: var(--green); }
+  .power-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    align-items: flex-start;
+  }
+  .power-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .dot-red { background: var(--red); }
+  .dot-green { background: var(--green); }
+  .power-name { color: var(--text); font-weight: 600; margin-right: 4px; }
+  .power-why { color: var(--text2); }
+
+  /* PRESS ANALOGY */
+  .press-timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
+  .press-timeline::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent3));
+  }
+  .press-item { display: flex; gap: 20px; padding: 0 0 32px 0; }
+  .press-dot {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .press-content { padding-top: 8px; }
+  .press-label { font-size: 12px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .press-text { font-size: 14px; color: var(--text2); line-height: 1.6; }
+
+  /* WORKFLOW */
+  .workflow-viz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .workflow-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .workflow-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(168,85,247,0.15);
+    border: 1px solid rgba(168,85,247,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .workflow-arrow { color: var(--text3); font-size: 18px; }
+  .workflow-label { color: var(--text); font-weight: 600; }
+  .workflow-sub { color: var(--text2); font-size: 13px; margin-left: 40px; margin-bottom: 12px; }
+
+  /* BADGE STAT */
+  .big-stat-row { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; }
+  .big-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    flex: 1;
+    min-width: 160px;
+    text-align: center;
+  }
+  .big-stat-num { font-size: 28px; font-weight: 800; color: var(--accent); }
+  .big-stat-label { font-size: 12px; color: var(--text3); margin-top: 4px; }
+
+  /* PROGRESS BAR */
+  .bar-wrap { margin-bottom: 20px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+  .bar-label span:first-child { color: var(--text); font-weight: 600; }
+  .bar-label span:last-child { color: var(--accent2); font-weight: 700; }
+  .bar-track { background: var(--surface2); border-radius: 4px; height: 8px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent3), var(--accent2)); width: 0; transition: width 1.2s ease; }
+
+  /* ACTION CARDS */
+  .action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .action-card {
+    background: rgba(168,85,247,0.05);
+    border: 1px solid rgba(168,85,247,0.2);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .action-num { font-size: 28px; font-weight: 900; color: rgba(168,85,247,0.25); margin-bottom: 8px; }
+  .action-title { font-size: 14px; font-weight: 700; color: var(--accent2); margin-bottom: 8px; }
+  .action-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* COMMENT */
+  .comment-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .comment-box textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    padding: 14px;
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.7;
+    margin-top: 12px;
+  }
+  .comment-box textarea:focus { outline: none; border-color: var(--accent); }
+  .comment-label { font-size: 14px; color: var(--text2); font-weight: 600; }
+
+  /* SOURCE */
+  .source-list a {
+    color: var(--accent2);
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .source-list a:hover { text-decoration: underline; }
+  .source-list li { margin-bottom: 8px; color: var(--text2); font-size: 13px; }
+  .source-list { padding-left: 20px; }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    background: rgba(168,85,247,0.1);
+    border: 1px solid rgba(168,85,247,0.2);
+    color: var(--accent2);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  /* OVERHANG CARD */
+  .overhang-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .overhang-icon { font-size: 32px; flex-shrink: 0; }
+  .overhang-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--accent2); }
+  .overhang-body { font-size: 14px; color: var(--text2); line-height: 1.6; }
+  .badge-new {
+    display: inline-block;
+    background: rgba(62,207,142,0.1);
+    border: 1px solid rgba(62,207,142,0.3);
+    color: var(--green);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span>Sequoia AI Ascent 2026 ›</span>
+  <a href="2026-05_Sequoia_This_is_AGI.html">This is AGI</a>
+  <a href="2026-05_Demis_Hassabis_AGI_75percent.html">Demis Hassabis</a>
+  <a href="2026-05_Karpathy_VibeCoding_to_AgenticEngineering.html">Karpathy</a>
+  <a href="2026-05_Jim_Fan_Robotics_EndGame.html">Jim Fan</a>
+  <a href="2026-05_Brockman_Human_Attention_Bottleneck.html">Greg Brockman</a>
+  <a href="2026-05_Dolgov_Waymo_Full_Autonomy.html">Waymo</a>
+  <a href="2026-05_Boris_Cherny_Coding_Solved.html" class="active">Boris Cherny</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">⚡ Sequoia AI Ascent 2026 — May 2026</div>
+  <h1>코딩은 해결됐다</h1>
+  <p class="hero-sub">Anthropic's Boris Cherny: Why Coding Is Solved, and What Comes Next<br>Claude Code 창시자가 말하는 소프트웨어의 종말과 재탄생</p>
+  <div class="stat-strip">
+    <div class="stat-item">
+      <span class="stat-num">$1B+</span>
+      <span class="stat-label">Claude Code 연환산 수익</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">0줄</span>
+      <span class="stat-label">2026년 Boris 직접 작성 코드</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">150</span>
+      <span class="stat-label">단일일 최대 합병 PR 수</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">10×</span>
+      <span class="stat-label">다음 10년 스타트업 파괴 배수</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: ORIGIN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🚀</div>
+      <div>
+        <div class="section-title">Claude Code 탄생 — Product Overhang 전략</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;">3인 팀에서 10억 달러 제품으로</div>
+      </div>
+    </div>
+
+    <div class="card-grid" style="margin-bottom:28px;">
+      <div class="card">
+        <span class="card-accent">2024년 말</span>
+        <div class="card-title">출발점: Tab 키 하나</div>
+        <div class="card-body">당시 최첨단 = IDE에서 Tab 눌러 코드 한 줄 생성(Sonnet 3.5). Boris는 "모델이 이미 그 이상을 할 수 있다"는 것을 알아챘다.</div>
+      </div>
+      <div class="card">
+        <span class="card-accent">6개월</span>
+        <div class="card-title">PMF 없이 버틴 시간</div>
+        <div class="card-body">출시 후 6개월은 지수 성장 없음. Boris조차 코드의 10%만 Claude Code로 작성. 이는 <strong>다음 세대 모델을 위한 의도적 베팅</strong>이었다.</div>
+      </div>
+      <div class="card">
+        <span class="card-accent">Opus 4</span>
+        <div class="card-title">변곡점 (2025년 5월)</div>
+        <div class="card-body">Opus 4 출시 후 지수 성장 시작. 이후 세대마다 곡선이 재점프: 4.5 → 4.6 → 4.7. 모델이 올라올 때마다 제품이 새로 태어난다.</div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      "우리는 처음 6개월간 PMF가 없을 것을 알면서도 만들었다. 우리는 다음 세대 모델을 위해 제품을 만들고 있었다. 이게 우리의 시작부터 끝까지의 사고방식이었다."
+      <br><strong>— Boris Cherny, Sequoia AI Ascent 2026</strong>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;">
+      <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:16px;text-transform:uppercase;letter-spacing:0.06em;">Product Overhang이란?</div>
+      <div style="font-size:14px;color:var(--text2);line-height:1.8;">
+        모델 능력은 이미 X 수준에 도달했지만, 그 능력을 활용하는 제품이 아직 없는 상태. Anthropic은 <strong style="color:var(--text)">모델 능력 곡선의 다음 점에 먼저 서서 기다리는 전략</strong>을 쓴다. Claude Code, Routines, Claude Design이 모두 이 패턴으로 탄생.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: BORIS WORKFLOW -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">📱</div>
+      <div>
+        <div class="section-title">Boris의 워크플로우 — 손에서 피어나는 수백 개의 에이전트</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;">스마트폰 하나로 하루 수십 개 PR 머지</div>
+      </div>
+    </div>
+
+    <div class="big-stat-row">
+      <div class="big-stat">
+        <div class="big-stat-num">수십+</div>
+        <div class="big-stat-label">하루 합병 PR 수</div>
+      </div>
+      <div class="big-stat">
+        <div class="big-stat-num">150</div>
+        <div class="big-stat-label">단일일 기록 (PR 수)</div>
+      </div>
+      <div class="big-stat">
+        <div class="big-stat-num">수백</div>
+        <div class="big-stat-label">동시 운영 에이전트 (주간)</div>
+      </div>
+      <div class="big-stat">
+        <div class="big-stat-num">수천</div>
+        <div class="big-stat-label">야간 심층 작업 에이전트</div>
+      </div>
+    </div>
+
+    <div style="background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.2);border-radius:12px;padding:20px;margin-bottom:24px;">
+      <div style="font-size:14px;font-weight:700;color:var(--accent2);margin-bottom:12px;">🔁 Loop — Boris가 선언한 미래의 기본 단위</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:12px;">서브 에이전트보다 강력한 패턴. cron 기반으로 자율 순환하는 에이전트 루프. 노트북을 꺼도 지속 실행 (Anthropic Routines = 서버 이관 버전).</div>
+    </div>
+
+    <div class="loop-grid">
+      <div class="loop-card">
+        <div class="loop-title">🔧 PR 모니터링 Loop</div>
+        <div class="loop-body">PR 상태 자동 감시 → CI 실패 자동 수정 → 자동 rebase 처리</div>
+        <span class="loop-interval">상시 실행</span>
+      </div>
+      <div class="loop-card">
+        <div class="loop-title">🧪 품질 보장 Loop</div>
+        <div class="loop-body">Flaky 테스트 감지 → 자동 수정 → CI 전체 건강 상태 유지</div>
+        <span class="loop-interval">상시 실행</span>
+      </div>
+      <div class="loop-card">
+        <div class="loop-title">📡 인텔리전스 Loop</div>
+        <div class="loop-body">Twitter에서 Claude Code 피드백 자동 수집 → 클러스터링 → 구조화 보고서 생성</div>
+        <span class="loop-interval">30분마다</span>
+      </div>
+      <div class="loop-card">
+        <div class="loop-title">📊 데이터 감시 Loop</div>
+        <div class="loop-body">데이터 변화 자동 감지 → 분석 → Slack으로 자동 리포트 전송</div>
+        <span class="loop-interval">주기적</span>
+      </div>
+    </div>
+
+    <div class="quote-block" style="margin-top:24px;">
+      "내가 Claude에게 데이터 쿼리를 실행시키면, 4.7이 먼저 말한다: '이 데이터가 변화하고 있는 것을 확인했습니다. 30분마다 보고서를 드릴까요?' 나는 '응, Slack으로 보내줘'라고 하면 된다. Claude가 알아서 Slack MCP를 연결한다."
+      <br><strong>— Boris Cherny</strong>
+    </div>
+  </div>
+
+  <!-- SECTION 3: GENERALISTS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🌱</div>
+      <div>
+        <div class="section-title">통才의 부상 — 코딩하는 PM, 코딩하는 디자이너</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;">Claude Code 팀 내부의 현재</div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title" style="color:var(--text3);">과거의 통才</div>
+        <div class="card-body">프론트엔드 + 백엔드 + 인프라를 모두 하는 엔지니어 중심의 통才. 기술 영역 내 확장.</div>
+      </div>
+      <div class="card" style="border-color:rgba(168,85,247,0.3);">
+        <div class="card-title" style="color:var(--accent);">새로운 통才 (지금 일어나고 있음)</div>
+        <div class="card-body">
+          도메인 전문가 + 코딩 능력의 결합:<br><br>
+          <span class="tag">PM ✓ 코딩</span>
+          <span class="tag">디자이너 ✓ 코딩</span>
+          <span class="tag">재무 ✓ 코딩</span>
+          <span class="tag">데이터 과학자 ✓ 코딩</span>
+          <span class="tag">유저 리서처 ✓ 코딩</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">핵심 함의</div>
+        <div class="card-body">최고의 회계 소프트웨어를 만드는 사람은 이제 <strong>엔지니어가 아닌 회계사</strong>다. 코딩은 쉬운 부분, 도메인 이해가 어려운 부분이다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: 7 POWERS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚔️</div>
+      <div>
+        <div class="section-title">SaaS 변혁 — Hamilton Helmer의 7 Powers 분석</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;">어떤 해자가 무너지고, 어떤 해자가 살아남는가</div>
+      </div>
+    </div>
+
+    <div class="powers-split">
+      <div class="powers-panel danger">
+        <div class="powers-panel-title">🔴 AI가 무력화하는 해자</div>
+        <div class="power-item">
+          <div class="power-dot dot-red"></div>
+          <div>
+            <span class="power-name">전환 비용 (Switching Costs)</span>
+            <div class="power-why">모델이 마이그레이션을 자동화. "Salesforce에 300개 워크플로가 있어서 못 바꾼다"는 시대 종료. 하룻밤에 이전 가능.</div>
+          </div>
+        </div>
+        <div class="power-item">
+          <div class="power-dot dot-red"></div>
+          <div>
+            <span class="power-name">프로세스 효력 (Process Power)</span>
+            <div class="power-why">Claude 4.7이 목표 설정 시 자동 hill-climb(최적화) 수행. 수십 년 쌓아온 내부 프로세스 최적화가 AI에 의해 복제됨.</div>
+          </div>
+        </div>
+      </div>
+      <div class="powers-panel safe">
+        <div class="powers-panel-title">🟢 AI가 강화/유지하는 해자</div>
+        <div class="power-item">
+          <div class="power-dot dot-green"></div>
+          <div>
+            <span class="power-name">네트워크 효과 (Network Effects)</span>
+            <div class="power-why">사용자 증가로 가치가 올라가는 구조. AI가 복제 불가. 플랫폼, 마켓플레이스, 소셜 네트워크.</div>
+          </div>
+        </div>
+        <div class="power-item">
+          <div class="power-dot dot-green"></div>
+          <div>
+            <span class="power-name">규모의 경제 (Scale Economies)</span>
+            <div class="power-why">규모에서 나오는 비용 우위. AI 도입이 오히려 대형 플레이어의 인프라 우위를 강화할 수 있음.</div>
+          </div>
+        </div>
+        <div class="power-item">
+          <div class="power-dot dot-green"></div>
+          <div>
+            <span class="power-name">독점 자원 (Cornered Resource)</span>
+            <div class="power-why">특허, 규제 면허, 독점 계약, 희귀 데이터. AI가 대체할 수 없는 자산적 해자.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-block" style="margin-top:24px;">
+      "다음 10년, AI를 활용해 기존 시장을 뒤집는 스타트업 수는 과거 10년의 <strong>10배</strong>가 될 것이다. 대기업은 조직 전환 비용과 내부 저항에 묶여 있지만, 스타트업은 백지에서 출발한다."
+      <br><strong>— Boris Cherny</strong>
+    </div>
+  </div>
+
+  <!-- SECTION 5: PRINTING PRESS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-gold">📖</div>
+      <div>
+        <div class="section-title">인쇄술 유추 — 소프트웨어 민주화의 역사적 틀</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;">구텐베르크가 한 일을 AI 코딩이 반복한다</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px;">📜 인쇄술의 역사</div>
+        <div class="press-timeline">
+          <div class="press-item">
+            <div class="press-dot">📜</div>
+            <div class="press-content">
+              <div class="press-label">1400년대 이전</div>
+              <div class="press-text">유럽 식자율 10-30%. 국왕과 귀족이 대필 전문가를 고용.</div>
+            </div>
+          </div>
+          <div class="press-item">
+            <div class="press-dot">🖨️</div>
+            <div class="press-content">
+              <div class="press-label">구텐베르크 발명 직후</div>
+              <div class="press-text">인쇄기가 등장하자 50년 만에 이전 1000년치 이상 문헌이 출판됨.</div>
+            </div>
+          </div>
+          <div class="press-item">
+            <div class="press-dot">📚</div>
+            <div class="press-content">
+              <div class="press-label">수백 년 후</div>
+              <div class="press-text">전 세계 식자율 90%+. 책 1권 가격 100분의 1 하락. '전문 작가' 직업은 여전히 존재.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px;">💻 소프트웨어의 현재</div>
+        <div class="press-timeline">
+          <div class="press-item">
+            <div class="press-dot" style="border-color:var(--accent2);">💡</div>
+            <div class="press-content">
+              <div class="press-label" style="color:var(--accent2);">지금 이전</div>
+              <div class="press-text">소프트웨어 제작 = 전문 개발자 전유. 코딩 능력 없으면 의존해야 했음.</div>
+            </div>
+          </div>
+          <div class="press-item">
+            <div class="press-dot" style="border-color:var(--accent);">⚡</div>
+            <div class="press-content">
+              <div class="press-label" style="color:var(--accent);">지금 (AI 코딩 에이전트)</div>
+              <div class="press-text">도메인 전문가가 직접 소프트웨어를 만드는 시대. 인쇄술보다 훨씬 빠른 속도.</div>
+            </div>
+          </div>
+          <div class="press-item">
+            <div class="press-dot" style="border-color:var(--green);">🌐</div>
+            <div class="press-content">
+              <div class="press-label" style="color:var(--green);">가까운 미래</div>
+              <div class="press-text">소프트웨어 '발신' = "문자 보내기" 수준의 기술. 전문 엔지니어 역할은 여전히 존재.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.2);border-radius:12px;padding:20px;">
+      <div style="font-size:15px;font-style:italic;color:var(--text2);line-height:1.8;">
+        "소프트웨어 만들기는 문자 보내기처럼 보편적인 기술이 될 것이다. 가장 좋은 회계 소프트웨어를 만들 사람은 엔지니어가 아니라 <span style="color:var(--accent);">회계사</span>다. 코딩은 이미 쉬운 부분이고, 비즈니스를 이해하는 것이 어려운 부분이기 때문이다."
+        <br><strong style="color:var(--text);font-style:normal;">— Boris Cherny</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: ORG ADVANTAGE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🏢</div>
+      <div>
+        <div class="section-title">Anthropic의 진짜 리드 — 기술이 아닌 조직 전환</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;">모델은 모두가 쓸 수 있다. 조직 재편은 훨씬 느리다.</div>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-bottom:28px;">
+      <table>
+        <thead>
+          <tr>
+            <th>영역</th>
+            <th>Anthropic 내부 현황 (2026)</th>
+            <th>의미</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>코드 작성</td>
+            <td style="color:var(--accent);">수기(手記) 코드 = 0</td>
+            <td>모든 제품 코드를 모델이 생성</td>
+          </tr>
+          <tr>
+            <td>데이터베이스</td>
+            <td style="color:var(--accent);">모든 SQL을 모델이 생성</td>
+            <td>DBA 역할의 재정의</td>
+          </tr>
+          <tr>
+            <td>내부 소통</td>
+            <td style="color:var(--accent);">직원의 Claude가 Slack으로 다른 Claude에게 질문</td>
+            <td>에이전트 간 자율 협업 체계</td>
+          </tr>
+          <tr>
+            <td>사용 모델</td>
+            <td>내부 Mythos + Opus 4.7 dogfooding</td>
+            <td>외부 공개 전 모델로 자사 제품 개선</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">격차의 본질</div>
+      <div class="bar-wrap">
+        <div class="bar-label"><span>모델 접근성 격차</span><span>낮음</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="20" style="background:linear-gradient(90deg,var(--blue),var(--blue2));"></div></div>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-label"><span>조직 전환 격차</span><span>매우 높음</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="85" style="background:linear-gradient(90deg,var(--accent3),var(--accent2));"></div></div>
+      </div>
+      <div style="font-size:13px;color:var(--text3);margin-top:12px;">모델은 API로 접근 가능. 조직이 AI 중심으로 재편되는 데는 수년이 걸린다. 이것이 진짜 해자.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: NEXT OVERHANG -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🔮</div>
+      <div>
+        <div class="section-title">다음 Product Overhang — Boris가 지금 베팅하는 것들</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;">Claude Code 이후 Anthropic Labs의 다음 내기</div>
+      </div>
+    </div>
+
+    <div class="overhang-card">
+      <div class="overhang-icon">🎨</div>
+      <div>
+        <div class="overhang-title">Claude Design <span class="badge-new">출시됨</span></div>
+        <div class="overhang-body">대화로 프로토타입·슬라이드·마케팅 페이지 생성. 코드베이스를 읽어 design system 자동 적용. Figma/Canva 대체 또는 보완 포지션. 2026년 4월 Opus 4.7과 동시 출시.</div>
+      </div>
+    </div>
+    <div class="overhang-card">
+      <div class="overhang-icon">🔁</div>
+      <div>
+        <div class="overhang-title">Routines (Loop의 서버화) <span class="badge-new">출시됨</span></div>
+        <div class="overhang-body">cron Loop를 클라이언트에서 Anthropic 서버로 이관. 노트북을 꺼도 에이전트가 계속 돌아간다. "일등 시민"으로서의 Loop 패턴 정착.</div>
+      </div>
+    </div>
+    <div class="overhang-card">
+      <div class="overhang-icon">🖥️</div>
+      <div>
+        <div class="overhang-title">Computer Use 고도화</div>
+        <div class="overhang-body">MCP가 없는 시스템에 대한 'catch-all' 솔루션. Anthropic이 현재 가장 앞선 분야. 4.7로 품질 대폭 향상. "느리지만 작동한다"에서 "잘 작동한다"로 이동 중.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: C-LEVEL ACTIONS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">🎯</div>
+      <div>
+        <div class="section-title">C-레벨 액션 — 지금 검토해야 할 4가지</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;">Boris Cherny의 통찰을 우리 사업에 적용</div>
+      </div>
+    </div>
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="action-num">01</div>
+        <div class="action-title">우리 해자 재점검</div>
+        <div class="action-body">우리 사업의 주요 해자가 '전환 비용'이나 '프로세스 효력'에 의존하는가? 그렇다면 AI 시대에 취약. 네트워크 효과와 독점 자원 구축 전략 재검토.</div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">02</div>
+        <div class="action-title">조직 내 Loop 운영 현황</div>
+        <div class="action-body">현재 우리 조직에서 자율적으로 돌아가는 AI 루프가 몇 개인가? Loop 수 = AI 조직화 지표. 경쟁사 대비 비교 분석 필요.</div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">03</div>
+        <div class="action-title">도메인 전문가의 코딩화</div>
+        <div class="action-body">PM, 영업, 운영 팀이 직접 소프트웨어를 만들 수 있도록 지원하는 환경 구축. 회계사가 회계 소프트웨어를 직접 만드는 세계를 준비.</div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">04</div>
+        <div class="action-title">Product Overhang 스캔</div>
+        <div class="action-body">우리 산업에서 "모델 능력은 이미 충분한데, 제품화가 안 된 기회"는 무엇인가? 현재 모델 능력 수준에서 6~12개월 후를 베팅.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMENT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">✍️</div>
+      <div>
+        <div class="section-title">나의 코멘트</div>
+        <div style="font-size:13px;color:var(--text3);">Boris의 통찰이 우리 사업에 주는 시사점</div>
+      </div>
+    </div>
+    <div class="comment-box">
+      <div class="comment-label">개인 인사이트 & 메모</div>
+      <textarea placeholder="Boris Cherny의 SaaS 해자 분석과 우리 포트폴리오에의 시사점을 여기에...
+
+• 우리 핵심 사업의 해자 유형은?
+• 스타트업 파괴 10배 시대에서 우리 포지션은?
+• 조직 내 Loop를 먼저 도입할 영역은?"></textarea>
+    </div>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">📎</div>
+      <div><div class="section-title">참고 자료</div></div>
+    </div>
+    <ul class="source-list">
+      <li><a href="https://www.youtube.com/watch?v=SlGRN8jh2RI" target="_blank">YouTube: Anthropic's Boris Cherny — Why Coding Is Solved, and What Comes Next (Sequoia AI Ascent 2026)</a></li>
+      <li><a href="https://baoyu.io/blog/anthropics-boris-cherny-why-coding-is-solved-and-what-comes-next" target="_blank">宝玉의 상세 분석 (중국어): Claude Code 이후 코딩은 "에이전트 관리"로</a></li>
+      <li><a href="https://www.frontendmentor.io/articles/coding-is-solved-boris-cherny" target="_blank">Frontend Mentor: Is Coding Solved?</a></li>
+      <li><a href="https://jinlow.medium.com/from-ide-to-agent-console-what-boris-chernys-ai-ascent-interview-is-really-telling-us-about-the-9edab4c7742f" target="_blank">Medium: From IDE to Agent Console</a></li>
+      <li><a href="https://sequoiacap.com/article/ai-ascent-2026/" target="_blank">Sequoia Capital: AI Ascent 2026 공식 페이지</a></li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+  // Animate bars on load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.bar-fill').forEach(bar => {
+        const w = bar.getAttribute('data-width');
+        bar.style.width = w + '%';
+      });
+    }, 300);
+  });
+</script>
+
+</body>
+</html>

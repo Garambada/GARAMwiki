@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모델 경쟁 넘어 SI 영토 직접 겨냥하는 오픈AI·앤트로픽 | 비즈니스 인텔리전스</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #1c2330;
+    --border: #30363d;
+    --steel: #58a6ff;
+    --steel-dim: #1f6feb;
+    --red: #f85149;
+    --orange: #e3a74f;
+    --green: #3fb950;
+    --purple: #bc8cff;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --card-bg: #161b22;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 0.82rem;
+  }
+  nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  nav a:hover { background: var(--bg3); color: var(--steel); }
+  .nav-sep { color: var(--border); }
+  .nav-badge {
+    background: #1f3a5f;
+    color: var(--steel);
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #0f1e35 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 32px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(88,166,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 0.82rem;
+  }
+  .hero-tag {
+    background: rgba(88,166,255,0.15);
+    border: 1px solid rgba(88,166,255,0.3);
+    color: var(--steel);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+  .hero-date { color: var(--text-dim); }
+  .hero-author { color: var(--text-dim); }
+  .hero h1 {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.3;
+    max-width: 820px;
+    margin-bottom: 12px;
+  }
+  .hero h1 em { color: var(--steel); font-style: normal; }
+  .hero-sub {
+    color: var(--text-dim);
+    font-size: 1rem;
+    max-width: 700px;
+    margin-bottom: 36px;
+  }
+
+  /* HERO STATS */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+  }
+  .stat {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .stat-num {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--steel);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-num.warn { color: var(--orange); }
+  .stat-num.red { color: var(--red); }
+  .stat-num.green { color: var(--green); }
+  .stat-label { font-size: 0.8rem; color: var(--text-dim); }
+
+  /* LAYOUT */
+  main { max-width: 1100px; margin: 0 auto; padding: 48px 32px 80px; }
+  section { margin-bottom: 56px; }
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .icon { font-size: 1.1rem; }
+  h3 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; color: var(--steel); }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .card-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  /* SHIFT DIAGRAM */
+  .shift-diagram {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .shift-stage {
+    flex: 1;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .shift-stage.past { background: rgba(139,148,158,0.08); }
+  .shift-stage.now { background: rgba(88,166,255,0.08); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .shift-stage.future { background: rgba(248,81,73,0.06); }
+  .shift-arrow {
+    font-size: 1.5rem;
+    color: var(--text-dim);
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+  .shift-year {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+  .shift-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .shift-title.active { color: var(--steel); }
+  .shift-title.danger { color: var(--orange); }
+  .shift-desc { font-size: 0.82rem; color: var(--text-dim); }
+
+  /* COMPARISON TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  th {
+    background: var(--bg3);
+    color: var(--text-dim);
+    font-weight: 600;
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .pill-blue { background: rgba(88,166,255,0.15); color: var(--steel); }
+  .pill-orange { background: rgba(227,167,79,0.15); color: var(--orange); }
+  .pill-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .pill-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .pill-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+  /* LOCK-IN LAYERS */
+  .lockin-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .lockin-layer {
+    padding: 16px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lockin-layer:last-child { border-bottom: none; }
+  .lockin-layer.old { background: rgba(139,148,158,0.06); }
+  .lockin-layer.new-threat { background: rgba(248,81,73,0.05); }
+  .lockin-layer.critical { background: rgba(248,81,73,0.1); }
+  .lockin-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .lockin-num.gray { background: rgba(139,148,158,0.2); color: var(--text-dim); }
+  .lockin-num.orange { background: rgba(227,167,79,0.2); color: var(--orange); }
+  .lockin-num.red { background: rgba(248,81,73,0.2); color: var(--red); }
+  .lockin-title { font-weight: 700; margin-bottom: 4px; font-size: 0.95rem; }
+  .lockin-desc { font-size: 0.83rem; color: var(--text-dim); }
+
+  /* STRATEGY CARDS */
+  .strategy-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+  .strategy-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .strategy-label.openai { color: var(--green); }
+  .strategy-label.anthropic { color: var(--purple); }
+  .strategy-label.enterprise { color: var(--orange); }
+  .strategy-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    font-size: 0.88rem;
+  }
+  .strategy-item:last-child { margin-bottom: 0; }
+  .strategy-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .dot-green { background: var(--green); }
+  .dot-purple { background: var(--purple); }
+  .dot-orange { background: var(--orange); }
+  .dot-red { background: var(--red); }
+  .dot-blue { background: var(--steel); }
+
+  /* QUOTE */
+  .quote-block {
+    background: rgba(88,166,255,0.06);
+    border-left: 3px solid var(--steel);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.92rem;
+    color: var(--text);
+    font-style: italic;
+  }
+  .quote-attr { font-size: 0.8rem; color: var(--text-dim); margin-top: 8px; font-style: normal; }
+
+  /* ACTION CHECKLIST */
+  .action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .action-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 0.88rem;
+  }
+  .action-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .action-title { font-weight: 600; margin-bottom: 3px; }
+  .action-desc { color: var(--text-dim); font-size: 0.82rem; }
+  .priority-chip {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-left: 8px;
+  }
+  .chip-now { background: rgba(248,81,73,0.2); color: var(--red); }
+  .chip-90d { background: rgba(227,167,79,0.2); color: var(--orange); }
+  .chip-watch { background: rgba(63,185,80,0.2); color: var(--green); }
+
+  /* SUMMARY */
+  .summary-box {
+    background: rgba(88,166,255,0.05);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 8px;
+    padding: 24px 28px;
+  }
+  .summary-box p { margin-bottom: 10px; font-size: 0.92rem; }
+  .summary-box p:last-child { margin-bottom: 0; }
+  .highlight { color: var(--steel); font-weight: 600; }
+  .highlight.warn { color: var(--orange); }
+  .highlight.danger { color: var(--red); }
+
+  /* INFO ROW */
+  .info-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .info-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+  .info-chip strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../00_홈/index.html">🏠 홈</a>
+  <span class="nav-sep">›</span>
+  <a href="#">03_비즈니스_인텔리전스</a>
+  <span class="nav-sep">›</span>
+  <span style="color:var(--text)">SI 영토 확장</span>
+  <span style="flex:1"></span>
+  <span class="nav-badge">비즈니스</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-meta">
+    <span class="hero-tag">비즈니스 인텔리전스</span>
+    <span class="hero-date">📅 2026.05.18</span>
+    <span class="hero-author">✍️ 윤석빈 (트러스트 커넥터 대표) — IT조선</span>
+  </div>
+  <h1>모델 경쟁 넘어 <em>'SI' 영토</em> 직접 겨냥하는<br>오픈AI · 앤트로픽</h1>
+  <p class="hero-sub">
+    AI 패권 전쟁이 모델 성능 경쟁을 넘어 시스템통합(SI) 시장으로 확장됐다.
+    FDE 모델·신설 SI 법인으로 서비스 레이어 장악에 나선 빅테크 대응 전략.
+  </p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">FDE</div>
+      <div class="stat-label">Forward Deployed Engineer<br>OpenAI의 팔란티어식 현장 전략</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num warn">신설</div>
+      <div class="stat-label">Anthropic + Blackstone/Goldman<br>별도 SI 법인 설립 추진</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num red">3중</div>
+      <div class="stat-label">서비스 레이어 Lock-in<br>과거 SaaS보다 구조적 종속</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num green">NOW</div>
+      <div class="stat-label">기업의 대응 전략 수립<br>아키텍처 결정이 임계점</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- 1. 시장 전환 -->
+  <section id="market-shift">
+    <h2><span class="icon">🔄</span> 경쟁 전선의 이동 — 모델에서 SI로</h2>
+
+    <div class="shift-diagram">
+      <div class="shift-stage past">
+        <div class="shift-year">2023~2024</div>
+        <div class="shift-title">Foundation Model<br>성능 경쟁</div>
+        <div class="shift-desc">GPT vs Claude vs Gemini<br>벤치마크 숫자 싸움</div>
+      </div>
+      <div class="shift-arrow">→</div>
+      <div class="shift-stage now">
+        <div class="shift-year">2025~현재</div>
+        <div class="shift-title active">SI / 구현 경쟁</div>
+        <div class="shift-desc">현장 도입·운영·통합<br>서비스 레이어 장악</div>
+      </div>
+      <div class="shift-arrow">→</div>
+      <div class="shift-stage future">
+        <div class="shift-year">전망</div>
+        <div class="shift-title danger">생태계 Lock-in</div>
+        <div class="shift-desc">특정 AI 스택 종속<br>전환 비용 폭등</div>
+      </div>
+    </div>
+
+    <div class="summary-box">
+      <p>
+        핵심 논지: AI 시장의 <span class="highlight">진짜 수익원은 모델 API가 아니라 구현(Implementation)</span>이다.
+        오픈AI와 앤트로픽이 직접 SI 영역에 뛰어든 것은 Foundation Model 상품화로 인한
+        마진 압박에 대한 전략적 대응이자, 기업 데이터와 워크플로우 장악을 통한 장기 해자 구축 시도다.
+      </p>
+      <p>
+        한국 SI·솔루션 기업에게 이는 <span class="highlight warn">파트너에서 경쟁자로 변신하는 빅테크</span>를 의미한다.
+        아키텍처 결정과 계약 구조가 지금 이 순간 기업의 5년 후를 결정하고 있다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. OpenAI vs Anthropic 전략 비교 -->
+  <section id="strategy-compare">
+    <h2><span class="icon">⚔️</span> OpenAI vs Anthropic — SI 진출 전략 비교</h2>
+
+    <div class="card-grid" style="margin-bottom:24px;">
+      <div class="strategy-card">
+        <div class="strategy-label openai">OpenAI 전략</div>
+        <h3 style="color:var(--green);">FDE (Forward Deployed Engineer) 모델</h3>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-green"></div>
+          <div>팔란티어(Palantir)가 정부·군에 구사한 현장 파견 엔지니어 방식 차용</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-green"></div>
+          <div>OpenAI 엔지니어가 직접 기업 현장에 상주하며 구현·통합 수행</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-green"></div>
+          <div>기술 영업 → 기술 구현까지 원스톱 제공, SI 업체 역할 흡수</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-blue"></div>
+          <div>대형 엔터프라이즈 계약을 API 공급 아닌 장기 서비스 계약으로 전환</div>
+        </div>
+      </div>
+
+      <div class="strategy-card">
+        <div class="strategy-label anthropic">Anthropic 전략</div>
+        <h3 style="color:var(--purple);">SI 전문 법인 신설</h3>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-purple"></div>
+          <div>Blackstone, Goldman Sachs 등 PE·금융기관과 합작 SI 법인 설립 추진</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-purple"></div>
+          <div>모델 공급자 ↔ SI 사업자 분리로 이해충돌 최소화하며 시장 진입</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-purple"></div>
+          <div>자본력·네트워크 보유 금융기관을 통해 대형 공공·금융 SI 시장 빠른 침투</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-blue"></div>
+          <div>Claude 생태계 중심 구현 자산 독점 → 모델 교체 비용 극대화</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      "AI 회사들이 단순히 API를 파는 SaaS 회사가 아니라, 직접 컨설팅과 구현을 책임지는
+      SI 회사로 변신하고 있다. 이는 전통적인 IT 서비스 기업의 비즈니스 모델 자체를 위협한다."
+      <div class="quote-attr">— 윤석빈, 트러스트 커넥터 대표 (IT조선 2026.05.18)</div>
+    </div>
+  </section>
+
+  <!-- 3. Lock-in 구조 -->
+  <section id="lockin">
+    <h2><span class="icon">🔒</span> 새로운 Lock-in 구조 — 구 SaaS보다 강력한 종속</h2>
+
+    <p style="color:var(--text-dim); margin-bottom:20px; font-size:0.9rem;">
+      과거 SaaS Lock-in은 데이터 마이그레이션 비용이 주된 장벽이었다.
+      AI 서비스 레이어 Lock-in은 3중 구조로 전환 비용이 기하급수적으로 높다.
+    </p>
+
+    <div class="lockin-stack">
+      <div class="lockin-layer old">
+        <div class="lockin-num gray">구</div>
+        <div>
+          <div class="lockin-title" style="color:var(--text-dim);">데이터 Lock-in (기존 SaaS)</div>
+          <div class="lockin-desc">데이터가 벤더 DB에 저장 → 마이그레이션 비용. 이전 가능하나 시간·비용 소요. ETL 도구로 극복 가능.</div>
+        </div>
+      </div>
+      <div class="lockin-layer new-threat">
+        <div class="lockin-num orange">1</div>
+        <div>
+          <div class="lockin-title">워크플로우 Lock-in <span class="pill pill-orange">NEW</span></div>
+          <div class="lockin-desc">프롬프트·에이전트 워크플로우가 특정 모델 API에 최적화. 모델 교체 시 전체 프롬프트 재설계 필요. 숙련도·노하우도 손실.</div>
+        </div>
+      </div>
+      <div class="lockin-layer new-threat">
+        <div class="lockin-num orange">2</div>
+        <div>
+          <div class="lockin-title">파인튜닝 자산 Lock-in <span class="pill pill-orange">NEW</span></div>
+          <div class="lockin-desc">도메인 특화 파인튜닝 모델이 특정 기반 모델에 종속. LoRA 어댑터·RLHF 데이터가 이전 불가한 독점 자산이 됨.</div>
+        </div>
+      </div>
+      <div class="lockin-layer critical">
+        <div class="lockin-num red">3</div>
+        <div>
+          <div class="lockin-title">구현 레이어 Lock-in <span class="pill pill-red">가장 위험</span></div>
+          <div class="lockin-desc">FDE / SI 법인이 구현한 코드베이스·아키텍처 전체가 특정 AI 벤더 생태계에 종속. 재구축 비용이 초기 구현 비용의 3~5배. 사실상 영구 종속.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 기업 유형별 포지셔닝 -->
+  <section id="positioning">
+    <h2><span class="icon">🗺️</span> 이해관계자별 영향 분석</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>이해관계자</th>
+          <th>현재 포지션</th>
+          <th>위협 요소</th>
+          <th>기회 요소</th>
+          <th>권장 전략</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>국내 대형 SI<br>(삼성SDS, LG CNS 등)</strong></td>
+          <td><span class="pill pill-orange">경쟁자 등장</span></td>
+          <td>OpenAI FDE가 직접 고객사 진입, 기존 계약 잠식</td>
+          <td>현장 노하우·관계 자산, 데이터 주권 우위</td>
+          <td>특정 AI 독립 아키텍처 + 멀티LLM 포지셔닝</td>
+        </tr>
+        <tr>
+          <td><strong>국내 솔루션 업체<br>(ERP, SCM, HR 등)</strong></td>
+          <td><span class="pill pill-red">가장 위험</span></td>
+          <td>AI 내장 솔루션으로 기존 제품 무력화 위험</td>
+          <td>버티컬 도메인 데이터·프로세스 지식</td>
+          <td>자사 솔루션에 AI 내재화, 특정 모델 의존 금지</td>
+        </tr>
+        <tr>
+          <td><strong>수요 기업 IT부서</strong></td>
+          <td><span class="pill pill-blue">선택의 갈림길</span></td>
+          <td>벤더 Lock-in → 향후 협상력 상실</td>
+          <td>AI 도입으로 업무 효율화, 경쟁 우위</td>
+          <td>Modular Architecture + 오픈소스 병행</td>
+        </tr>
+        <tr>
+          <td><strong>공공기관</strong></td>
+          <td><span class="pill pill-purple">규제 복잡성</span></td>
+          <td>외국 AI 의존 시 데이터 주권·보안 리스크</td>
+          <td>Sovereign AI 정책으로 국산 모델 활용 근거</td>
+          <td>Sovereign AI + 자체 LLM 운영 검토</td>
+        </tr>
+        <tr>
+          <td><strong>스타트업 (AI 네이티브)</strong></td>
+          <td><span class="pill pill-green">기회</span></td>
+          <td>빅테크 SI 진출로 미들마켓 고객 이탈 가능성</td>
+          <td>버티컬 특화·속도·유연성으로 차별화</td>
+          <td>버티컬 AI SaaS → 니치 SI 포지셔닝</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 5. 대응 아키텍처 -->
+  <section id="architecture">
+    <h2><span class="icon">🏗️</span> 권장 대응 아키텍처 — Modular + Multi-LLM</h2>
+
+    <div class="card-grid" style="margin-bottom:24px;">
+      <div class="card">
+        <div class="strategy-label enterprise">핵심 원칙</div>
+        <h3>Modular Architecture</h3>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-blue"></div>
+          <div><strong>추상화 레이어</strong> — LLM 호출을 직접 코드에 박지 않고 인터페이스 레이어로 분리</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-blue"></div>
+          <div><strong>Router 패턴</strong> — 태스크 유형별로 최적 모델 자동 선택 (비용·성능 균형)</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-blue"></div>
+          <div><strong>Prompt 버저닝</strong> — 모델 교체 시 프롬프트 재사용 가능한 구조</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-orange"></div>
+          <div><strong>벤더 중립 평가 주기</strong> — 6개월마다 모델 성능·비용 재평가 의무화</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="strategy-label enterprise">전략적 선택</div>
+        <h3>Multi-LLM 전략</h3>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-green"></div>
+          <div><strong>Frontier 모델</strong> — 복잡한 추론·분석 (Claude/GPT, 비용 정당화 가능한 태스크)</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-blue"></div>
+          <div><strong>경량 모델</strong> — 분류·요약·대량 처리 (DeepSeek Flash, Haiku)</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-purple"></div>
+          <div><strong>자체 호스팅</strong> — 민감 데이터·규제 영역 (Llama, DeepSeek 오픈소스)</div>
+        </div>
+        <div class="strategy-item">
+          <div class="strategy-dot dot-orange"></div>
+          <div><strong>Sovereign AI</strong> — 공공·금융은 국내 모델 또는 온프레미스 병행</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>LLMOps 내재화 로드맵</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>단계</th>
+            <th>항목</th>
+            <th>목적</th>
+            <th>타임라인</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill pill-red">즉시</span></td>
+            <td>현재 AI 의존도 감사 (벤더별 API 비용·종속 위험도)</td>
+            <td>Lock-in 위험 정량화</td>
+            <td>Q2 2026</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-orange">단기</span></td>
+            <td>추상화 레이어 도입 (LiteLLM, 자체 API Gateway)</td>
+            <td>벤더 교체 유연성 확보</td>
+            <td>Q3 2026</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-orange">단기</span></td>
+            <td>RAG 아키텍처 오픈소스 기반 구축 (데이터 주권)</td>
+            <td>핵심 데이터 벤더 이전 방지</td>
+            <td>Q3 2026</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-blue">중기</span></td>
+            <td>멀티LLM 라우팅 시스템 + 성능/비용 모니터링 대시보드</td>
+            <td>비용 최적화 + 모델 독립성</td>
+            <td>Q4 2026</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-blue">중기</span></td>
+            <td>도메인 특화 파인튜닝 — 오픈소스 베이스 모델로</td>
+            <td>AI 자산 내재화</td>
+            <td>Q1 2027</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-green">장기</span></td>
+            <td>LLMOps 팀 구성 + MLOps 파이프라인 통합</td>
+            <td>AI 역량 자체 내재화</td>
+            <td>2027+</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6. C-레벨 액션 체크리스트 -->
+  <section id="actions">
+    <h2><span class="icon">✅</span> C-레벨 즉시 실행 체크리스트</h2>
+
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-icon">🔍</div>
+        <div>
+          <div class="action-title">AI 벤더 의존도 긴급 감사 <span class="priority-chip chip-now">즉시</span></div>
+          <div class="action-desc">
+            현재 어떤 AI API에 얼마를 쓰는지, 어떤 코드가 특정 벤더 SDK에 직접 의존하는지 파악.
+            FDE 제안이 들어왔다면 계약서에 데이터 귀속권·종료 후 데이터 이관 조항 필수 확인.
+          </div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">⚖️</div>
+        <div>
+          <div class="action-title">FDE 계약 조건 법무 검토 <span class="priority-chip chip-now">즉시</span></div>
+          <div class="action-desc">
+            OpenAI FDE 또는 Anthropic SI 법인과 협상 중이라면: 구현 코드 소유권, 파인튜닝 데이터 귀속,
+            계약 종료 시 마이그레이션 보장, 경쟁 모델 병행 사용 금지 조항 여부 반드시 확인.
+          </div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">🏛️</div>
+        <div>
+          <div class="action-title">아키텍처 원칙 선언 — 벤더 중립 <span class="priority-chip chip-90d">90일 내</span></div>
+          <div class="action-desc">
+            CTO/CISO가 서명하는 "AI 아키텍처 원칙" 문서 작성: 추상화 레이어 의무화,
+            단일 벤더 의존 금지, 오픈소스 병행 비율 목표 설정. 이후 모든 AI 프로젝트 검토 기준으로 활용.
+          </div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">🌐</div>
+        <div>
+          <div class="action-title">Sovereign AI 전략 검토 (공공·금융) <span class="priority-chip chip-90d">90일 내</span></div>
+          <div class="action-desc">
+            규제·보안 민감 업종: 해외 클라우드 AI 의존 위험도 평가 후 온프레미스 자체 호스팅(Llama, DeepSeek 오픈소스)
+            또는 국내 AI 파트너 이원화 전략 수립. 과기부 Sovereign AI 정책 동향 모니터링.
+          </div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">🤝</div>
+        <div>
+          <div class="action-title">국내 SI 파트너십 구조 재검토 <span class="priority-chip chip-watch">중기</span></div>
+          <div class="action-desc">
+            기존 SI 업체와의 계약에서 "AI 구현 포함 범위"가 명확한지 확인.
+            빅테크 FDE가 직접 접근할 경우 중간 SI의 역할이 재정의될 수 있으므로
+            부가가치 재포지셔닝 논의 선제 착수.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 핵심 요약 -->
+  <section id="summary">
+    <h2><span class="icon">💡</span> 이 칼럼의 핵심 — C-레벨 3줄 요약</h2>
+    <div class="summary-box">
+      <p>
+        <span class="highlight">① 경쟁 전선 이동:</span>
+        AI 시장의 본게임이 "누구 모델이 더 좋은가"에서 "누가 기업 현장에 더 깊이 들어가는가"로 옮겨갔다.
+        OpenAI FDE와 Anthropic SI 법인은 이 전선 이동의 상징이다.
+      </p>
+      <p>
+        <span class="highlight warn">② 새로운 Lock-in 경보:</span>
+        AI 서비스 레이어 종속은 기존 SaaS보다 훨씬 강력하다. 워크플로우·파인튜닝·구현 코드 3중 종속이
+        형성되면 전환 비용이 초기 구현비의 3~5배에 달한다. 지금 아키텍처 결정이 5년 뒤를 결정한다.
+      </p>
+      <p>
+        <span class="highlight danger">③ 대응 윈도우 좁아짐:</span>
+        벤더 중립 아키텍처 설계, Multi-LLM 전략, LLMOps 내재화는 지금 시작해야 한다.
+        특히 FDE 계약에 서명하기 전에 데이터 귀속권·마이그레이션 조항을 반드시 확보하라.
+      </p>
+    </div>
+  </section>
+
+  <!-- 출처 -->
+  <section>
+    <h2><span class="icon">📎</span> 출처 및 분류</h2>
+    <div class="card" style="font-size:0.88rem;">
+      <div class="info-row">
+        <div class="info-chip">📰 <strong>원문</strong> 모델 경쟁 넘어 'SI' 영토 직접 겨냥하는 오픈AI·앤트로픽</div>
+        <div class="info-chip">✍️ <strong>저자</strong> 윤석빈 (트러스트 커넥터 대표)</div>
+        <div class="info-chip">📅 <strong>발행</strong> IT조선 2026.05.18</div>
+      </div>
+      <div class="info-row">
+        <div class="info-chip">📁 <strong>분류</strong> 03_비즈니스_인텔리전스</div>
+        <div class="info-chip">🔗 <strong>관련</strong> FDE / Sovereign AI / LLMOps / Lock-in</div>
+        <div class="info-chip">📌 <strong>신뢰도</strong> 전문가 칼럼 (현업 관점)</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

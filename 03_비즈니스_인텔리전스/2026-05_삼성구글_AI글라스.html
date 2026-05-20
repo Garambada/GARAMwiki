@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>베일 벗은 삼성·구글 AI 글라스 | 비즈니스 인텔리전스</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #1c2330;
+    --border: #30363d;
+    --blue: #1428a0;
+    --blue-bright: #4f8ef7;
+    --cyan: #06b6d4;
+    --orange: #f97316;
+    --green: #22c55e;
+    --purple: #a78bfa;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --card-bg: #161b22;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.75;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    font-size: 0.82rem;
+  }
+  nav a { color: var(--text-dim); text-decoration: none; padding: 4px 10px; border-radius: 4px; transition: all 0.2s; }
+  nav a:hover { background: var(--bg3); color: var(--blue-bright); }
+  .nav-sep { color: var(--border); }
+  .nav-badge { background: rgba(79,142,247,0.13); color: var(--blue-bright); font-size: 0.72rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #0b1530 45%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 32px 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(79,142,247,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-meta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; font-size: 0.82rem; }
+  .hero-tag { background: rgba(79,142,247,0.13); border: 1px solid rgba(79,142,247,0.3); color: var(--blue-bright); padding: 3px 12px; border-radius: 4px; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.05em; }
+  .hero-tag.new { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.3); color: var(--green); }
+  .hero-date, .hero-src { color: var(--text-dim); }
+  .hero h1 { font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 800; line-height: 1.25; max-width: 820px; margin-bottom: 12px; letter-spacing: -0.01em; }
+  .hero h1 em { color: var(--blue-bright); font-style: normal; }
+  .hero-sub { color: var(--text-dim); font-size: 0.97rem; max-width: 680px; margin-bottom: 40px; }
+
+  .hero-collab {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .brand-chip {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand-chip.samsung { border-color: rgba(20,40,160,0.5); color: #6c8eff; }
+  .brand-chip.google { border-color: rgba(79,142,247,0.4); color: var(--blue-bright); }
+  .brand-chip.gm { border-color: rgba(167,139,250,0.4); color: var(--purple); }
+  .brand-chip.wb { border-color: rgba(34,197,94,0.4); color: var(--green); }
+  .collab-plus { color: var(--text-dim); font-size: 1.2rem; }
+
+  /* STATS */
+  .hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; max-width: 860px; }
+  .stat { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; }
+  .stat-num { font-size: 1.5rem; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+  .stat-num.blue { color: var(--blue-bright); }
+  .stat-num.cyan { color: var(--cyan); }
+  .stat-num.green { color: var(--green); }
+  .stat-num.orange { color: var(--orange); }
+  .stat-label { font-size: 0.78rem; color: var(--text-dim); }
+
+  /* LAYOUT */
+  main { max-width: 1100px; margin: 0 auto; padding: 52px 32px 90px; }
+  section { margin-bottom: 60px; }
+  h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 24px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  h3 { font-size: 0.97rem; font-weight: 700; margin-bottom: 10px; color: var(--blue-bright); }
+
+  /* CARDS */
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+
+  /* DESIGN CARDS */
+  .design-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .design-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .design-card.gm::before { background: linear-gradient(90deg, var(--purple), #ec4899); }
+  .design-card.wb::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+  .design-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em; margin-bottom: 10px; }
+  .design-label.gm { color: var(--purple); }
+  .design-label.wb { color: var(--green); }
+  .design-icon { font-size: 2.2rem; margin-bottom: 12px; }
+  .design-name { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+  .design-desc { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 16px; line-height: 1.6; }
+  .design-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+
+  /* FEATURE GRID */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .feature-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .feat-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+  .feat-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+  .feat-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.55; }
+
+  /* TIMELINE / FLOW */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .flow-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-row:last-child { border-bottom: none; }
+  .flow-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .fn-blue { background: rgba(79,142,247,0.15); color: var(--blue-bright); }
+  .fn-cyan { background: rgba(6,182,212,0.15); color: var(--cyan); }
+  .fn-green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .fn-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
+  .flow-title { font-weight: 700; margin-bottom: 4px; font-size: 0.95rem; }
+  .flow-desc { font-size: 0.83rem; color: var(--text-dim); }
+
+  /* QUOTE */
+  .quote-block {
+    border-left: 3px solid var(--blue-bright);
+    background: rgba(79,142,247,0.05);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 22px;
+    margin: 20px 0;
+    font-size: 0.93rem;
+    font-style: italic;
+  }
+  .quote-attr { font-size: 0.8rem; color: var(--text-dim); margin-top: 6px; font-style: normal; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--bg3); color: var(--text-dim); font-weight: 600; padding: 10px 16px; text-align: left; border-bottom: 2px solid var(--border); font-size: 0.8rem; letter-spacing: 0.04em; }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 0.77rem; font-weight: 600; }
+  .pill-blue { background: rgba(79,142,247,0.15); color: var(--blue-bright); }
+  .pill-cyan { background: rgba(6,182,212,0.15); color: var(--cyan); }
+  .pill-green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .pill-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
+  .pill-purple { background: rgba(167,139,250,0.15); color: var(--purple); }
+  .pill-gray { background: rgba(139,148,158,0.15); color: var(--text-dim); }
+
+  /* STRATEGY ITEMS */
+  .s-item { display: flex; gap: 14px; align-items: flex-start; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; font-size: 0.88rem; margin-bottom: 10px; }
+  .s-item:last-child { margin-bottom: 0; }
+  .s-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+  .s-title { font-weight: 600; margin-bottom: 3px; }
+  .s-desc { color: var(--text-dim); font-size: 0.82rem; }
+
+  /* SUMMARY */
+  .summary-box { background: rgba(79,142,247,0.05); border: 1px solid rgba(79,142,247,0.2); border-radius: 8px; padding: 24px 28px; }
+  .summary-box p { margin-bottom: 10px; font-size: 0.92rem; }
+  .summary-box p:last-child { margin-bottom: 0; }
+  .hl { color: var(--blue-bright); font-weight: 600; }
+  .hl.g { color: var(--green); }
+  .hl.o { color: var(--orange); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../00_홈/index.html">🏠 홈</a>
+  <span class="nav-sep">›</span>
+  <a href="#">03_비즈니스_인텔리전스</a>
+  <span class="nav-sep">›</span>
+  <span style="color:var(--text)">삼성·구글 AI 글라스</span>
+  <span style="flex:1"></span>
+  <span class="nav-badge">비즈니스</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-meta">
+    <span class="hero-tag">비즈니스 인텔리전스</span>
+    <span class="hero-tag new">Google I/O 2026</span>
+    <span class="hero-date">📅 2026.05.20</span>
+    <span class="hero-src">✍️ 노경조 기자 — 아시아경제</span>
+  </div>
+  <h1>베일 벗은 삼성·구글 <em>'AI 글라스'</em><br>스마트폰 없이 길 안내·번역 척척</h1>
+  <p class="hero-sub">젠틀몬스터·워비파커 협업 — 번역·길 안내·촬영 등 지원 / 하반기 출시 / 갤럭시 AI 생태계 웨어러블로 확장</p>
+
+  <div class="hero-collab">
+    <div class="brand-chip samsung">📱 Samsung</div>
+    <div class="collab-plus">×</div>
+    <div class="brand-chip google">🔍 Google</div>
+    <div class="collab-plus">×</div>
+    <div class="brand-chip gm">🕶️ Gentle Monster</div>
+    <div class="collab-plus">/</div>
+    <div class="brand-chip wb">👓 Warby Parker</div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num blue">2종</div>
+      <div class="stat-label">디자인 공개<br>젠틀몬스터 + 워비파커</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num cyan">Android XR</div>
+      <div class="stat-label">기반 플랫폼<br>확장현실 OS 탑재</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num green">Gemini</div>
+      <div class="stat-label">AI 엔진<br>실시간 번역·길안내·추천</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num orange">H2 2026</div>
+      <div class="stat-label">출시 예정<br>하반기 글로벌 출시</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- 1. 제품 개요 -->
+  <section id="overview">
+    <h2><span>🔭</span> 제품 개요 — 안경 폼팩터의 AI 컴패니언</h2>
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:0.95rem; margin-bottom:14px;">
+        삼성전자와 구글은 2026년 5월 19일(현지시간) 미국 캘리포니아 마운틴뷰 구글 본사에서 열린
+        <strong>구글 I/O 2026</strong>에서 <strong>안드로이드 XR 기반 AI 글라스 2종</strong>을 공개했다.
+        지난해 12월 글로벌 아이웨어 브랜드 <strong>젠틀몬스터·워비파커</strong>와의 협업을 발표한 이후
+        실제 디자인을 공개한 건 이번이 처음이다.
+      </p>
+      <p style="font-size:0.92rem; color:var(--text-dim);">
+        AI 글라스는 갤럭시 AI폰의 핵심 기능을 보조하는 <strong style="color:var(--text)">'컴패니언(동반자)' 기기</strong>로,
+        사용자가 스마트폰을 꺼내지 않고도 일상 속에서 고도화된 AI 경험을 누릴 수 있도록 설계됐다.
+        삼성의 정밀 하드웨어 + 구글 Gemini AI + 아이웨어 파트너사의 디자인을 결합한 협업 제품이다.
+      </p>
+    </div>
+
+    <div class="card-grid">
+      <div class="design-card gm">
+        <div class="design-label gm">GENTLE MONSTER</div>
+        <div class="design-icon">🕶️</div>
+        <div class="design-name">젠틀몬스터 디자인</div>
+        <div class="design-desc">독창적이고 대담한 스타일. 글로벌 아이웨어 트렌드를 이끄는 한국 브랜드의 아이덴티티를 담은 버전.</div>
+        <span class="design-tag">독창적 스타일</span>
+        <span class="design-tag">패션 포워드</span>
+        <span class="design-tag">한국 브랜드</span>
+      </div>
+      <div class="design-card wb">
+        <div class="design-label wb">WARBY PARKER</div>
+        <div class="design-icon">👓</div>
+        <div class="design-name">워비파커 디자인</div>
+        <div class="design-desc">클래식하고 일상적인 디자인. 미국 D2C 안경 브랜드의 실용적·친근한 감성을 담은 버전.</div>
+        <span class="design-tag">클래식 디자인</span>
+        <span class="design-tag">일상 착용</span>
+        <span class="design-tag">미국 브랜드</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 핵심 기능 -->
+  <section id="features">
+    <h2><span>⚡</span> 핵심 기능 — 스마트폰 없는 AI 경험</h2>
+    <p style="font-size:0.88rem; color:var(--text-dim); margin-bottom:20px;">
+      스피커·카메라·마이크 내장 → 사용자 상황 실시간 이해 → 별도 조작 없이 음성만으로 실행
+    </p>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="feat-icon">🗺️</div>
+        <div>
+          <div class="feat-title">핸즈프리 길 안내</div>
+          <div class="feat-desc">Gemini 호출로 스마트폰 보지 않고 목적지까지 실시간 내비게이션 수신</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feat-icon">🌐</div>
+        <div>
+          <div class="feat-title">실시간 음성 번역</div>
+          <div class="feat-desc">대화 상대의 목소리 톤을 반영한 실시간 통역 — 해외 출장·여행 필수 기능</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feat-icon">📖</div>
+        <div>
+          <div class="feat-title">텍스트 번역 (AR)</div>
+          <div class="feat-desc">메뉴판·표지판 등 눈앞의 텍스트를 인식해 번역 후 음성으로 들려줌</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feat-icon">☕</div>
+        <div>
+          <div class="feat-title">주변 서비스 추천·주문</div>
+          <div class="feat-desc">주변 카페 추천부터 음료 주문까지 음성만으로 처리</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feat-icon">💬</div>
+        <div>
+          <div class="feat-title">메시지 요약 알림</div>
+          <div class="feat-desc">스마트폰으로 수신된 메시지를 요약해 귀에 전달 — 폰 꺼내지 않아도 됨</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feat-icon">📅</div>
+        <div>
+          <div class="feat-title">음성 캘린더 추가</div>
+          <div class="feat-desc">음성만으로 일정 추가 — "내일 오전 10시 미팅 잡아줘" 형태의 자연어 명령</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feat-icon">📸</div>
+        <div>
+          <div class="feat-title">즉시 촬영</div>
+          <div class="feat-desc">내장 카메라로 눈앞의 장면 즉시 캡처 — 손을 쓰지 않는 순간 포착</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feat-icon">🔗</div>
+        <div>
+          <div class="feat-title">Galaxy 연동</div>
+          <div class="feat-desc">갤럭시 AI폰과 연동해 Gemini AI를 공유 — 컴패니언 포지셔닝</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 기술 스택 & 협업 구조 -->
+  <section id="tech">
+    <h2><span>🏗️</span> 기술 스택 & 3자 협업 구조</h2>
+
+    <div class="flow" style="margin-bottom:24px;">
+      <div class="flow-row">
+        <div class="flow-num fn-blue">🔧</div>
+        <div>
+          <div class="flow-title">Samsung — 하드웨어 레이어</div>
+          <div class="flow-desc">MX사업부 주도. 정밀 하드웨어 설계 (스피커·카메라·마이크 내장), 경량 폼팩터 구현, 배터리·열관리. 모바일 리더십 기반의 웨어러블 확장.</div>
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-num fn-cyan">🤖</div>
+        <div>
+          <div class="flow-title">Google — AI & OS 레이어</div>
+          <div class="flow-desc">Android XR 플랫폼 + Gemini AI 엔진 탑재. 개인화된 AI 서비스, 실시간 추론, Google 서비스(지도·번역·캘린더) 연동. 자연스러운 핸즈프리 경험 설계.</div>
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-num fn-green">👁️</div>
+        <div>
+          <div class="flow-title">Gentle Monster / Warby Parker — 디자인 레이어</div>
+          <div class="flow-desc">일상 착용 가능한 '안경 폼팩터' 실현. 기술 기기가 아닌 패션 아이템으로 포지셔닝. 각 브랜드 고유의 미감으로 다양한 고객층 커버.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      "이번 AI 글라스는 삼성의 AI 비전을 확장하는 중요한 이정표다. 삼성의 모바일 리더십과
+      파트너사와의 협업을 바탕으로 갤럭시 생태계 경험을 확장해 더 의미 있는 사용자 경험을 제공하는 데 집중할 것이다."
+      <div class="quote-attr">— 김정현 삼성전자 MX사업부 부사장</div>
+    </div>
+    <div class="quote-block">
+      "신규 글라스는 AI를 일상에서 더욱 유용하게 만들겠다는 구글과 삼성의 공동 비전이 담긴 제품이다. 자연스러운 핸즈프리 경험을 제공할 것이다."
+      <div class="quote-attr">— 샤람 이자디 구글 안드로이드 XR 담당 부사장</div>
+    </div>
+  </section>
+
+  <!-- 4. 경쟁 구도 -->
+  <section id="competition">
+    <h2><span>⚔️</span> 웨어러블 AI 안경 경쟁 구도</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>제품</th>
+          <th>제조사</th>
+          <th>AI 엔진</th>
+          <th>디자인 파트너</th>
+          <th>주요 기능</th>
+          <th>상태</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AI 글라스</strong></td>
+          <td><span class="pill pill-blue">Samsung + Google</span></td>
+          <td>Gemini (Google)</td>
+          <td>젠틀몬스터 / 워비파커</td>
+          <td>길안내·번역·촬영·메시지·일정</td>
+          <td><span class="pill pill-orange">2026 H2 출시 예정</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ray-Ban Meta</strong></td>
+          <td><span class="pill pill-purple">Meta</span></td>
+          <td>Meta AI (Llama)</td>
+          <td>EssilorLuxottica (Ray-Ban)</td>
+          <td>촬영·음악·통화·AI 어시스턴트</td>
+          <td><span class="pill pill-green">출시 중 (기존 제품)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Halliday</strong></td>
+          <td><span class="pill pill-gray">스타트업</span></td>
+          <td>다중 LLM</td>
+          <td>자체 디자인</td>
+          <td>HUD 디스플레이 + AI 어시스턴트</td>
+          <td><span class="pill pill-gray">얼리 액세스</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:0.82rem; color:var(--text-dim); margin-top:14px;">
+      * Ray-Ban Meta는 현재 시장 선점. 삼성·구글 AI 글라스는 <strong style="color:var(--text)">Android XR + Gemini 생태계</strong> 결합으로 차별화.
+      디스플레이 없는 "사운드 글라스" 계열이지만 AI 깊이에서 경쟁 우위 주장.
+    </p>
+  </section>
+
+  <!-- 5. 비즈니스 전략 시사점 -->
+  <section id="strategy">
+    <h2><span>💡</span> 비즈니스 전략 시사점</h2>
+
+    <div class="s-item">
+      <div class="s-icon">🔗</div>
+      <div>
+        <div class="s-title">갤럭시 생태계 Lock-in 강화 — 웨어러블로의 확장</div>
+        <div class="s-desc">
+          스마트폰 → 갤럭시 워치 → 갤럭시 버즈 → 이제 AI 글라스까지.
+          삼성의 전략은 각 기기를 독립 제품이 아닌 갤럭시 AI 에코시스템의 노드로 연결하는 것이다.
+          AI 글라스를 쓰면 Gemini·갤럭시 앱과의 연동이 자연스럽게 심화되며 타 플랫폼 이탈 비용이 증가한다.
+        </div>
+      </div>
+    </div>
+    <div class="s-item">
+      <div class="s-icon">👗</div>
+      <div>
+        <div class="s-title">패션 협업 = "착용 거부감" 극복 전략</div>
+        <div class="s-desc">
+          Google Glass (2013) 실패의 핵심 원인은 사회적 거부감과 디자인이었다.
+          삼성·구글은 젠틀몬스터(명품 아이웨어)·워비파커(라이프스타일 안경) 협업으로
+          "기술 기기"가 아닌 "패션 아이템"으로 포지셔닝. 일상 착용 허들을 낮추는 핵심 전략.
+        </div>
+      </div>
+    </div>
+    <div class="s-item">
+      <div class="s-icon">🌍</div>
+      <div>
+        <div class="s-title">Google Gemini의 물리 세계 확장 — 모바일→웨어러블 접점</div>
+        <div class="s-desc">
+          Gemini가 이미 Android 폰·Google 검색·Gmail·Docs에 통합됐고 이제 안경까지 확장.
+          사용자 눈앞의 물리 세계(표지판·메뉴판·길거리)를 AI가 실시간 인식·번역·추천하는
+          "상황 인지 AI" 단계로 진입. 광고·커머스·여행 등 신규 수익 모델 가능성 확대.
+        </div>
+      </div>
+    </div>
+    <div class="s-item">
+      <div class="s-icon">📦</div>
+      <div>
+        <div class="s-title">Android XR — 새로운 플랫폼 전쟁의 시작</div>
+        <div class="s-desc">
+          Android가 스마트폰 시장을 장악했듯 Android XR이 AR/AI 글라스 시장의 표준 OS가 될 수 있다.
+          삼성이 하드웨어 파트너로 참여하며 Apple Vision Pro, Meta의 XR OS와의 3파전 구도 형성.
+          앱 개발자·기업 IT 담당자는 Android XR 생태계 지원 여부를 검토할 시점.
+        </div>
+      </div>
+    </div>
+    <div class="s-item">
+      <div class="s-icon">🏢</div>
+      <div>
+        <div class="s-title">기업 활용 시나리오 — B2B 잠재력</div>
+        <div class="s-desc">
+          실시간 번역(다국어 협상·고객 응대), 현장 작업자 핸즈프리 가이드,
+          의료·물류·제조 현장의 AI 어시스턴트로의 B2B 확장 가능성.
+          하반기 출시 후 기업용 SKU 및 MDM 지원 여부가 B2B 채택의 관건.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 핵심 요약 -->
+  <section id="summary">
+    <h2><span>📌</span> 3줄 요약 — C-레벨 필독</h2>
+    <div class="summary-box">
+      <p>
+        <span class="hl">① 웨어러블 AI 경쟁 본격화:</span>
+        삼성·구글이 젠틀몬스터·워비파커와 협업해 Android XR + Gemini 기반 AI 글라스를 공개.
+        Google Glass 실패를 교훈 삼아 "패션 아이템" 포지셔닝으로 착용 거부감을 해소한 것이 핵심 전략 차이다.
+      </p>
+      <p>
+        <span class="hl g">② Galaxy 생태계의 새 노드:</span>
+        AI 글라스는 독립 제품이 아닌 갤럭시 AI 에코시스템의 확장이다.
+        스마트폰 없이도 Gemini를 통해 길 안내·실시간 번역·메시지·일정 관리가 가능해지며,
+        갤럭시 사용자의 플랫폼 이탈 비용이 한층 높아진다.
+      </p>
+      <p>
+        <span class="hl o">③ 2026 H2 출시 — 지금이 준비 시점:</span>
+        하반기 출시 전에 Android XR 생태계 지원 계획, B2B 활용 가능성(번역·현장 가이드),
+        그리고 Meta Ray-Ban과의 경쟁 구도를 면밀히 모니터링할 필요가 있다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 출처 -->
+  <section>
+    <h2><span>📎</span> 출처 및 분류</h2>
+    <div class="card" style="font-size:0.84rem; color:var(--text-dim);">
+      <strong style="color:var(--text);">원문:</strong> 베일 벗은 삼성·구글 'AI 글라스'…스마트폰 없이 길 안내·번역 척척 &nbsp;|&nbsp;
+      <strong style="color:var(--text);">저자:</strong> 노경조 기자 &nbsp;|&nbsp;
+      <strong style="color:var(--text);">출처:</strong> 아시아경제 2026.05.20<br>
+      <strong style="color:var(--text);">분류:</strong> 03_비즈니스_인텔리전스 &nbsp;|&nbsp;
+      <strong style="color:var(--text);">키워드:</strong> AI 글라스 · Samsung · Google · Android XR · Gemini · 젠틀몬스터 · 워비파커 · 웨어러블<br>
+      <strong style="color:var(--text);">연관:</strong>
+      <a href="2026-05_오픈AI앤트로픽_SI영토확장.html" style="color:var(--blue-bright); text-decoration:none;">OpenAI·Anthropic SI 영토 확장</a> &nbsp;|&nbsp;
+      <a href="../04_트렌드_인텔리전스/2026/2026-05_Google_Gemini_AI레이스역전.html" style="color:var(--blue-bright); text-decoration:none;">Google Gemini AI 레이스 역전</a>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
