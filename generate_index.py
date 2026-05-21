@@ -50,6 +50,10 @@ ARTICLE_META = {
         "tags":  ["YCombinator", "로보틱스", "휴머노이드", "방위드론", "데이터인프라"],
     },
     # 나의 인사이트
+    "2026-05_AI_Frontier_EP97_AI_Psychosis_인사이트.html": {
+        "title": "AI Frontier EP97 — AI Psychosis 시대<br>슈퍼 앱·Only One·T_brain 인사이트",
+        "tags":  ["AI Psychosis", "T_brain", "Only One", "AI Native", "노정석·최승준"],
+    },
     "2026-05_xAI_가스터빈_규제루프홀_인사이트.html": {
         "title": "xAI 가스터빈 46기 — AI 인프라 경쟁의<br>숨겨진 규제 루프홀과 사업 리스크",
         "tags":  ["xAI", "규제 루프홀", "ESG 리스크", "에너지 조달", "NAACP 소송"],

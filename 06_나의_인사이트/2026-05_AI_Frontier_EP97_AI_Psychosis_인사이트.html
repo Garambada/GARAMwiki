@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Frontier EP97 — AI Psychosis 시대의 인사이트 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --card2: #20232f;
+    --border: #2a2d3a; --text: #e8eaf0; --muted: #7a7f94;
+    --accent: #10b981; --accent2: #34d399;
+    --warn: #f59e0b; --danger: #ef4444;
+    --blue: #3b82f6; --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    line-height: 1.65; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 52px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo { font-weight: 800; font-size: 1rem;
+    background: linear-gradient(135deg,#10b981,#34d399);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-sep { color: var(--border); }
+  .nav-crumb { font-size: 0.82rem; color: var(--muted); }
+  .nav-crumb a { color: var(--muted); text-decoration: none; }
+  .nav-crumb a:hover { color: var(--accent); }
+  .nav-badge { margin-left: auto; font-size: 0.72rem; font-weight: 700;
+    background: rgba(16,185,129,0.12); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.3); border-radius: 20px; padding: 3px 10px; }
+
+  .hero {
+    background: linear-gradient(135deg, rgba(16,185,129,0.06) 0%, rgba(167,139,250,0.06) 100%);
+    border-bottom: 1px solid var(--border); padding: 52px 32px 44px;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .hero-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 20px;
+    background: rgba(16,185,129,0.12); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.25); }
+  .hero-tag.purple { background: rgba(167,139,250,0.12); color: var(--purple); border-color: rgba(167,139,250,0.25); }
+  .hero-tag.amber { background: rgba(245,158,11,0.12); color: var(--warn); border-color: rgba(245,158,11,0.25); }
+  .hero-date { font-size: 0.78rem; color: var(--muted); }
+  .hero h1 { font-size: clamp(1.4rem,3.5vw,2rem); font-weight: 800; line-height: 1.25;
+    letter-spacing: -0.5px; margin-bottom: 14px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 0.96rem; color: var(--muted); max-width: 700px; line-height: 1.65; margin-bottom: 32px; }
+
+  .stats-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .stat-box { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px; min-width: 110px; flex: 1; }
+  .stat-num { font-size: 1.6rem; font-weight: 800; line-height: 1; margin-bottom: 4px; color: var(--accent); }
+  .stat-num.purple { color: var(--purple); }
+  .stat-num.amber { color: var(--warn); }
+  .stat-num.blue { color: var(--blue); }
+  .stat-label { font-size: 0.72rem; color: var(--muted); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .sec-header { display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .sec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .sec-dot.purple { background: var(--purple); }
+  .sec-dot.amber { background: var(--warn); }
+  .sec-dot.blue { background: var(--blue); }
+  .sec-title { font-size: 0.95rem; font-weight: 700; }
+  .section { margin-bottom: 44px; }
+
+  .bq { border-left: 3px solid var(--accent); background: var(--card);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 14px; }
+  .bq.purple { border-left-color: var(--purple); }
+  .bq.amber { border-left-color: var(--warn); }
+  .bq.blue { border-left-color: var(--blue); }
+  .bq-text { font-size: 0.91rem; color: var(--text); line-height: 1.65; font-style: italic; }
+  .bq-attr { font-size: 0.74rem; color: var(--muted); margin-top: 6px; }
+
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; }
+  .concept-card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 22px; }
+  .concept-icon { font-size: 1.5rem; margin-bottom: 10px; }
+  .concept-name { font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; }
+  .concept-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* CHAPTER TIMELINE */
+  .chapter-grid { display: grid; gap: 8px; }
+  .chapter-row { background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 16px;
+    display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center; }
+  .chapter-time { font-size: 0.75rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .chapter-title { font-size: 0.85rem; color: var(--text); }
+  .chapter-desc { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  /* MATRIX */
+  .matrix-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .matrix-cell { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px; }
+  .matrix-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; margin-bottom: 8px; }
+  .matrix-label.green { color: var(--accent); }
+  .matrix-label.red { color: var(--danger); }
+  .matrix-label.amber { color: var(--warn); }
+  .matrix-label.blue { color: var(--blue); }
+  .matrix-content { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+
+  .insight-list { display: grid; gap: 12px; }
+  .insight-item { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 22px;
+    display: flex; gap: 16px; align-items: flex-start; }
+  .insight-num { font-size: 1.2rem; font-weight: 800; color: var(--accent); min-width: 28px; line-height: 1; }
+  .insight-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+  .insight-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+
+  .pill-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+  .pill { display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 7px 14px; font-size: 0.82rem; }
+  .pill-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag { font-size: 0.7rem; padding: 3px 9px; border-radius: 6px;
+    background: rgba(16,185,129,0.08); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.2); }
+  .tag.purple { background: rgba(167,139,250,0.08); color: var(--purple); border-color: rgba(167,139,250,0.2); }
+  .tag.amber { background: rgba(245,158,11,0.08); color: var(--warn); border-color: rgba(245,158,11,0.2); }
+  .tag.blue { background: rgba(59,130,246,0.08); color: var(--blue); border-color: rgba(59,130,246,0.2); }
+
+  .source-bar { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 48px; }
+  .source-label { font-size: 0.72rem; color: var(--muted); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .source-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; }
+  .source-link:hover { text-decoration: underline; }
+  .source-meta { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+
+  @media (max-width: 680px) {
+    nav, .hero, .main { padding-left: 16px; padding-right: 16px; }
+    .matrix-wrap { grid-template-columns: 1fr; }
+    .stats-row { gap: 10px; }
+    .chapter-row { grid-template-columns: 60px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">GARAMwiki</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-crumb"><a href="../index.html">홈</a> › 나의 인사이트</span>
+  <span class="nav-badge">💡 인사이트</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-tag">나의 인사이트</span>
+      <span class="hero-tag purple">🎙 AI Frontier EP97</span>
+      <span class="hero-tag amber">⚡ Psychosis 경보</span>
+      <span class="hero-date">2026-05-21 · 녹화 2026-05-17</span>
+    </div>
+    <h1>AI Psychosis 시대 — <em>슈퍼 앱·Only One·T_brain</em><br>노정석·최승준이 짚은 AI 전환의 핵심 구조</h1>
+    <p class="hero-sub">
+      AI Frontier 팟캐스트 EP97. Claude Code·Codex의 슈퍼 앱화, 인프라 시대의 종료와 AI 애플리케이션 시대 개막,
+      AI Native vs AI Assisted의 구분, 도메인 전문가형 vs 메타 옵티마이저형 인재, 그리고
+      도파민·번아웃·AI Psychosis로 대표되는 인간 측 병목 T_brain까지 —
+      Company Builder 관점에서 뽑아낸 핵심 인사이트 7가지.
+    </p>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">1:17</div><div class="stat-label">대화 분량 (시간)</div></div>
+      <div class="stat-box"><div class="stat-num purple">17</div><div class="stat-label">챕터 수</div></div>
+      <div class="stat-box"><div class="stat-num amber">2</div><div class="stat-label">호스트 (노정석·최승준)</div></div>
+      <div class="stat-box"><div class="stat-num blue">EP97</div><div class="stat-label">AI Frontier 시리즈</div></div>
+      <div class="stat-box"><div class="stat-num">2937</div><div class="stat-label">조회수 (게시 당일)</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SECTION 1: 핵심 주장 3줄 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">에피소드 핵심 명제 3가지</span></div>
+
+    <div class="bq">
+      <div class="bq-text">
+        "이제 사업자들이 팔아야 되는 건 문제의 해결, task completion이다. UX가 아니라
+        그냥 문제 해결 자체가 상품인 시대로 왔다."
+      </div>
+      <div class="bq-attr">— 노정석 (AI Frontier EP97)</div>
+    </div>
+    <div class="bq purple">
+      <div class="bq-text">
+        "AI Native와 AI Assisted를 구분해야 한다. 지금 거의 대부분의 회사에서 'AI 네이티브 컴퍼니가 돼야 돼'라고
+        얘기하는 건 거의 대부분 AI 어시스티드 컴퍼니가 되는 얘기다."
+      </div>
+      <div class="bq-attr">— 노정석 (AI Frontier EP97, 35:58)</div>
+    </div>
+    <div class="bq amber">
+      <div class="bq-text">
+        "이제 무언가를 만드는 빌드 능력보다 브랜드와 디스트리뷰션이 좀 더 중요해지는구나.
+        최고가 되는 것보다 베스트는 그 유일한 게 되는 거다 — Only One."
+      </div>
+      <div class="bq-attr">— 노정석 (AI Frontier EP97, 1:13:42)</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 17개 챕터 개요 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot blue"></div><span class="sec-title">17개 챕터 — 전체 지형도</span></div>
+    <div class="chapter-grid">
+      <div class="chapter-row">
+        <div><div class="chapter-time">00:00</div></div>
+        <div><div class="chapter-title">오프닝: Google I/O 하네스 전략</div><div class="chapter-desc">AI Studio의 "말하면 결과물 딱" vs Codex·Claude Code 질주</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">03:01</div></div>
+        <div><div class="chapter-title">GPT-5.6 · Anthropic 컴퓨테이션 제약</div><div class="chapter-desc">두 달 주기 frontier model 교체, Claude Mythos 군불</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">05:34</div></div>
+        <div><div class="chapter-title">탈 NVIDIA · T_brain 병목</div><div class="chapter-desc">추론 칩 생태계 확장, 진짜 병목은 이제 사람의 뇌(T_brain)</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">08:45</div></div>
+        <div><div class="chapter-title">Claude 정책 변화와 슈퍼 앱 Codex</div><div class="chapter-desc">Anthropic 컴퓨팅 제약 → Codex 이동, 슈퍼 앱 포지션 선언</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">11:36</div></div>
+        <div><div class="chapter-title">배휘동의 120x와 엔지니어 번아웃</div><div class="chapter-desc">도파민 슬롯머신, 밥 먹으며 SSH, bio token 소모</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">14:25</div></div>
+        <div><div class="chapter-title">소프트웨어 제작 특권의 종말</div><div class="chapter-desc">GitHub 레포 설치 대신 에이전트 분석, 딸깍 만들기가 MNIST화</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">17:25</div></div>
+        <div><div class="chapter-title">인프라 시대 종료 → AI 애플리케이션 시대</div><div class="chapter-desc">모바일 시대 비유, 문제 해결 자체가 상품, 12~24개월 격변</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">20:23</div></div>
+        <div><div class="chapter-title">AI Surface와 인터페이스의 미래</div><div class="chapter-desc">Jony Ive 폰, ChatGPT 대화형, AI surface = 혼돈기</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">22:24</div></div>
+        <div><div class="chapter-title">ChatGPT 플랫폼 긴장</div><div class="chapter-desc">쿠팡이 API 열어줄 리 없음 → 버티컬 자체 에이전트 구축</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">26:15</div></div>
+        <div><div class="chapter-title">버티컬 차별화 — 고객 데이터 × 툴</div><div class="chapter-desc">하네스 = 컨트롤 레이어, Unbundling Codex</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">35:53</div></div>
+        <div><div class="chapter-title">AI Native vs AI Assisted</div><div class="chapter-desc">AX 컨설팅 단가 하락, "남의 마진은 나의 기회"</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">46:20</div></div>
+        <div><div class="chapter-title">도메인 전문가 vs 메타 옵티마이저 인재</div><div class="chapter-desc">10x Lawyer·Banker vs 목적조차 delegation하는 신세대</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">50:33</div></div>
+        <div><div class="chapter-title">OMX · B2C/B2B 실험 문화</div><div class="chapter-desc">캐릭터 챗 Zeta 月 50억, 소규모 팀 月 5억 사례</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">57:14</div></div>
+        <div><div class="chapter-title">AI Psychosis와 도파민 슬롯머신</div><div class="chapter-desc">Karpathy의 psychosis 고백, Mitchell Hashimoto의 경고</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">1:08:02</div></div>
+        <div><div class="chapter-title">Dwarkesh의 학습법 — 부하 거는 작업</div><div class="chapter-desc">플래시 카드, AlphaGo 구현, Michael Nielsen의 조언</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">1:10:17</div></div>
+        <div><div class="chapter-title">Slow AI · mind-sized bites</div><div class="chapter-desc">Seymour Papert, AI 페이스 아닌 나의 페이스</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">1:13:28</div></div>
+        <div><div class="chapter-title">Only One 포지셔닝 · 100회 예고</div><div class="chapter-desc">흥행 비즈니스, 서브컬처가 월드가 됨</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: 핵심 개념 3가지 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot amber"></div><span class="sec-title">핵심 개념 — 세 가지 키 프레임</span></div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-icon">🧠</div>
+        <div class="concept-name">T_brain — 새로운 병목</div>
+        <div class="concept-desc">
+          T_compute(GPU) → T_mem(메모리) 다음 병목은 T_brain.
+          모델과 하네스는 충분히 좋아졌는데 사람의 뇌가 처리 한계.
+          AI Psychosis = 도파민 슬롯머신에 과몰입해 bio token이 소진되는 현상.
+          배휘동의 120x 생산성도 번아웃이라는 그림자를 달고 온다.
+        </div>
+        <div class="tags"><span class="tag amber">T_brain</span><span class="tag">번아웃</span><span class="tag amber">bio token</span></div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">🎛️</div>
+        <div class="concept-name">하네스 = 컨트롤 레이어</div>
+        <div class="concept-desc">
+          새 AI 애플리케이션의 95%는 하네스 덩어리.
+          Unbundling Codex = Unbundling Oracle(지난 20년)의 동형 반복.
+          차별화 축은 오직 둘: 볼모로 잡은 고객 데이터 × 독점 툴 조합.
+          이 두 가지를 컨트롤하는 레이어가 새로운 기업 가치.
+        </div>
+        <div class="tags"><span class="tag purple">컨트롤 레이어</span><span class="tag">고객 데이터</span><span class="tag purple">툴 조합</span></div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">🎯</div>
+        <div class="concept-name">Only One 포지셔닝</div>
+        <div class="concept-desc">
+          빌드 능력 → 브랜드·디스트리뷰션으로 가치 이동.
+          "최고(Best)"보다 "유일(Only One)"이 강하다.
+          서브컬처가 월드가 되는 시대 — 작은 포지셔닝도 시장.
+          Codex가 모든 일을 할 수 있어도 생일 파티 전문 사업자에게 고객은 간다.
+        </div>
+        <div class="tags"><span class="tag">Only One</span><span class="tag">포지셔닝</span><span class="tag">서브컬처</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: AI Native vs Assisted 매트릭스 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot purple"></div><span class="sec-title">AI Native vs AI Assisted — 4분면 진단</span></div>
+    <div class="matrix-wrap">
+      <div class="matrix-cell">
+        <div class="matrix-label green">✅ AI Native</div>
+        <div class="matrix-content">
+          사람 개입 없이 워크플로우 end-to-end 완결.
+          데이터 파이프라인이 이미 디지털화·정리돼 있음.
+          Claude Code SDK·Codex 붙이면 원하는 일 거의 자동.
+          → 소수 회사만 이 단계.
+        </div>
+      </div>
+      <div class="matrix-cell">
+        <div class="matrix-label amber">⚠️ AI Assisted (대다수)</div>
+        <div class="matrix-content">
+          사람 업무 100개 중 노가다 10개만 AI로 치환.
+          도입해도 구성원이 쓰지 않음 (존재감 상실 두려움).
+          컨설팅 나가고 나면 회사 생산성은 원상복귀.
+          → "AI 네이티브 된다"고 말하는 대부분 여기.
+        </div>
+      </div>
+      <div class="matrix-cell">
+        <div class="matrix-label blue">🔵 도메인 전문가형 인재</div>
+        <div class="matrix-content">
+          변호사·뱅커 등 깊은 도메인 + AI 극강 활용.
+          10x Lawyer·10x Banker = 에이전트와 함께 혼자 팀을 대체.
+          "어떤 목표"를 이미 알고 그 목표를 AI로 달성.
+          → 기존 필드 지식이 해자.
+        </div>
+      </div>
+      <div class="matrix-cell">
+        <div class="matrix-label red">🌀 메타 옵티마이저형 인재</div>
+        <div class="matrix-content">
+          목적조차 AI에 delegation, Ralph loop·auto research 결합.
+          필드 지식 없이도 빠른 캐치업 → B2C 실험 다수.
+          캐릭터 챗 Zeta 月 50억, 소규모 팀 月 5억 사례.
+          단: 도메인 내면화 없으면 지속성 의문 (최승준 지적).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 나의 인사이트 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">나의 인사이트 — Company Builder 관점 7가지</span></div>
+    <div class="insight-list">
+      <div class="insight-item">
+        <div class="insight-num">01</div>
+        <div class="insight-content">
+          <div class="insight-title">"UX 덩어리 → 문제 해결 자체" — 제품 정의를 바꿔라</div>
+          <div class="insight-desc">
+            노정석의 핵심 명제: 이제 AI 애플리케이션은 UX가 아니라 <strong>"task completion 자체"</strong>를 판다.
+            우리 회사의 제품 정의가 아직 "어떤 화면을 만들 것인가"로 시작한다면 이미 시대 뒤처진 것.
+            "고객의 인텐트를 어떻게 결과로 연결할 것인가" → 이게 이제 Product spec의 첫 줄이어야 한다.
+            실무 적용: 다음 PRD 작성 시 UX 섹션 이전에 "Task Completion Flow" 섹션을 먼저 쓸 것.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">02</div>
+        <div class="insight-content">
+          <div class="insight-title">하네스 전략 = 데이터 × 툴 두 축 명문화</div>
+          <div class="insight-desc">
+            Codex가 범용 슈퍼 앱이 된 세계에서 버티컬이 살아남는 방법은 오직 둘:
+            ① <strong>볼모 데이터</strong> — 고객이 우리한테만 쌓은 데이터(구매 이력, 선호, 컨텍스트)
+            ② <strong>독점 툴</strong> — Codex가 할 수 없는 우리만의 연결(결제, 물류, 파트너 API)
+            이 두 축을 현재 어느 정도 보유하고 있는지 내부 헥사 레이더를 그려볼 것.
+            빈 축이 보이면 그게 다음 분기 로드맵 우선순위다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">03</div>
+        <div class="insight-content">
+          <div class="insight-title">우리 팀은 AI Native인가 AI Assisted인가 — 솔직한 진단</div>
+          <div class="insight-desc">
+            노정석의 진단: 대부분의 회사가 AI Native를 외치지만 실제론 AI Assisted.
+            판별 기준: "사람 없이 이 워크플로우가 E2E로 돌아가는가?"
+            AI Native가 되려면 데이터 파이프라인 디지털화가 선행 조건.
+            엑셀 파일에 데이터가 흩어져 있다면 → AI 도입 전에 데이터 정리가 먼저.
+            처방: 팀별 "워크플로우 자동화 가능 비율" 측정을 이번 달 OKR에 넣을 것.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">04</div>
+        <div class="insight-content">
+          <div class="insight-title">채용 기준: 도메인 전문가형 + AI 극강 활용의 교집합</div>
+          <div class="insight-desc">
+            노정석의 인재 이분법: <strong>도메인 전문가형</strong>(10x Lawyer/Banker) vs <strong>메타 옵티마이저형</strong>(목적도 delegation).
+            Company Builder 입장에서 고용하고 싶은 건 교집합: 도메인 깊이 + AI 도구 극강 활용.
+            "Claude Code를 쓸 줄 안다"는 6개월 전 기준이다. 지금은 필요조건조차 아님.
+            실무 적용: 다음 채용 JD에서 "AI 툴 활용 능력" 항목을 삭제하고
+            "AI를 활용해 이 도메인 문제를 어떻게 새로 정의할 것인가"를 과제로 대체.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">05</div>
+        <div class="insight-content">
+          <div class="insight-title">T_brain 관리 = 팀 지속가능성의 핵심</div>
+          <div class="insight-desc">
+            모델과 컴퓨팅이 아무리 좋아져도 결국 사람의 뇌(T_brain)가 새 병목.
+            AI psychosis 증상: 투두리스트 = 완료처럼 착각, 밥 먹으며 SSH, bio token 과소모.
+            Mitchell Hashimoto 경고: 겉보기엔 돌아가지만 아키텍처가 조용히 깨지고 있음.
+            조직 설계 시 "AI 사용 강도 × 번아웃 리스크" 트레이드오프를 명시적으로 관리.
+            실무 적용: 주 1회 팀 "slow AI" 세션 도입 — 에이전트 OFF, 직접 손으로 생각하기.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">06</div>
+        <div class="insight-content">
+          <div class="insight-title">AX 컨설팅 시장의 함정 — "남의 마진은 나의 기회"</div>
+          <div class="insight-desc">
+            노정석의 통찰: AX 컨설팅(FDE 파견) 단가가 급락 중.
+            클라이언트가 "AI가 다 해주는데 너희가 하는 일이 뭔데?"라고 생각하기 때문.
+            대안 프레임: 그 회사에 AI 어시스티드 툴을 만들어 주는 대신
+            → <strong>그 워크플로우를 내가 직접 AI Native로 실행해서 그 회사를 공격하라.</strong>
+            "남의 마진은 나의 기회" — B2B 컨설팅 모델을 재검토할 시점.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">07</div>
+        <div class="insight-content">
+          <div class="insight-title">Only One 포지셔닝 — 지금 당장 서브카테고리 1등을 선점</div>
+          <div class="insight-desc">
+            Benedict Evans의 Unbundling Oracle → Unbundling Codex.
+            Codex가 생일 파티도 할 수 있지만, 생일 파티 전문 에이전트 사업자가 이긴다.
+            포지셔닝의 핵심: 최고(Best)가 아니라 유일(Only One).
+            시장이 작아도 그 안에서 1등이면 먹고산다.
+            실무 적용: 다음 주 우리 회사의 "Only One" 문장을 한 줄로 작성하는 워크숍 진행.
+            "우리는 [특정 고객군]의 [특정 문제]를 AI로 해결하는 유일한 회사다."
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: 주목할 인용 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot amber"></div><span class="sec-title">주목할 인용 & 레퍼런스</span></div>
+
+    <div class="bq blue">
+      <div class="bq-text">
+        "Karpathy가 자기가 psychosis 상태다 — Cursor에서 탭 치는 방식으로 신중하게 하다가,
+        이제 OpenClaw에서 에이전트에 다 delegation 하면서 계속 도파민 터지는 과몰입 상태에 있는 것 같다고 했다."
+      </div>
+      <div class="bq-attr">— 최승준, Karpathy의 Sarah Guo 팟캐스트 발언 인용</div>
+    </div>
+    <div class="bq purple">
+      <div class="bq-text">
+        "Make some kind of demanding artifact, write something — 자기 생각에 부하를 거는 작업을 하는 게
+        당신의 배움을 다음 단계로 인도할 것이다."
+      </div>
+      <div class="bq-attr">— Michael Nielsen → Dwarkesh에게 조언 (최승준 인용)</div>
+    </div>
+    <div class="bq">
+      <div class="bq-text">
+        "Mind-sized bites — 결국 내가 소화할 수 있을 만큼의 조각이어야 한다.
+        AI 페이스에 맞추는 게 아니라 나에 맞추는 식으로."
+      </div>
+      <div class="bq-attr">— Seymour Papert (최승준 인용, Slow AI 관점)</div>
+    </div>
+
+    <div class="pill-strip" style="margin-top: 20px;">
+      <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div><span>배휘동 120x 생산성</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--warn)"></div><span>캐릭터 챗 Zeta 月 50억</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--purple)"></div><span>Unbundling Codex 사이클</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--blue)"></div><span>METR Mythos 16.5시간</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--danger)"></div><span>Mitchell Hashimoto: 아키텍처 침식 경고</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div><span>Google I/O 이후 스타트업 지형 격변 예고</span></div>
+    </div>
+  </div>
+
+  <!-- SOURCE -->
+  <div class="source-bar">
+    <span class="source-label">출처</span>
+    <a class="source-link" href="https://www.youtube.com/watch?v=cUc8iK6LG0k" target="_blank">YouTube — AI Frontier EP97: AI Psychosis 시대의 사람들</a>
+    <span class="source-link" style="margin-left:8px;">|</span>
+    <a class="source-link" href="https://aifrontier.kr/ko/episodes/ep97" target="_blank">aifrontier.kr 전체 대본</a>
+    <span class="source-meta">노정석·최승준 · 2026.05.21 · 1:17:03</span>
+  </div>
+
+</div>
+</body>
+</html>
