@@ -21,6 +21,22 @@ from datetime import date
 # ───────────────────────────────────────────────
 ARTICLE_META = {
     # 비즈니스 인텔리전스
+    "2025-12_Sapphire_2026_AI_10예측.html": {
+        "title": "Sapphire Ventures — 2026 AI<br>10대 예측: 엔터프라이즈·인프라·혁신",
+        "tags":  ["$1T IPO", "$50B M&A", "에너지 제약", "오픈소스 모델", "로보틱스"],
+    },
+    "2026-05_아모데이_제본스역설_화이트칼라.html": {
+        "title": "AI가 화이트칼라를 대체할까,<br>아니면 10배 생산성을 줄까?",
+        "tags":  ["Jevons Paradox", "Amdahl's Law", "Dario Amodei", "화이트칼라", "Fortune"],
+    },
+    "2026-05_다리오아모데이_SaaS붕괴경고.html": {
+        "title": "Dario Amodei: SaaS 소프트웨어<br>복잡성은 더 이상 해자가 아니다",
+        "tags":  ["SaaS 붕괴", "해자 소멸", "Anthropic", "Yahoo Finance", "Jamie Dimon"],
+    },
+    "2026-05_YC_RFS_Summer2026.html": {
+        "title": "YC Requests for Startups<br>— Summer 2026 16개 테마",
+        "tags":  ["YCombinator", "Company Brain", "SaaS 도전자", "Agent용 SW", "반도체 공급망"],
+    },
     "2026-05_삼성구글_AI글라스.html": {
         "title": "베일 벗은 삼성·구글 'AI 글라스'<br>— 스마트폰 없이 길 안내·번역 척척",
         "tags":  ["Samsung", "Google", "Android XR", "Gemini", "웨어러블"],
@@ -28,6 +44,19 @@ ARTICLE_META = {
     "2026-05_오픈AI앤트로픽_SI영토확장.html": {
         "title": "OpenAI·Anthropic의 SI 영토 확장<br>— 파운데이션 모델에서 구현 레이어로",
         "tags":  ["OpenAI", "Anthropic", "SI", "FDE", "Lock-in"],
+    },
+    "2026-03_YC_로보틱스_스타트업.html": {
+        "title": "YC 로보틱스 스타트업 98개<br>— 10개 카테고리 전체 지도",
+        "tags":  ["YCombinator", "로보틱스", "휴머노이드", "방위드론", "데이터인프라"],
+    },
+    # 나의 인사이트
+    "2026-05_xAI_가스터빈_규제루프홀_인사이트.html": {
+        "title": "xAI 가스터빈 46기 — AI 인프라 경쟁의<br>숨겨진 규제 루프홀과 사업 리스크",
+        "tags":  ["xAI", "규제 루프홀", "ESG 리스크", "에너지 조달", "NAACP 소송"],
+    },
+    "2026-05_Anthropic_SMB_인사이트.html": {
+        "title": "Anthropic이 SMB를 공략하는<br>진짜 이유 — 나의 인사이트",
+        "tags":  ["Claude for SMB", "유통 채널 전쟁", "버티컬 AI", "GTM", "신뢰 설계"],
     },
     # 트렌드 인텔리전스
     "2026-05_Google_Gemini_AI레이스역전.html": {

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude for Small Business — 나의 인사이트 | GARAMwiki</title>
+<style>
+  :root {
+    --bg:      #0f1117;
+    --card:    #1a1d27;
+    --border:  #2a2d3a;
+    --text:    #e2e8f0;
+    --muted:   #8892a4;
+    --acc:     #10b981;   /* 인사이트 그린 */
+    --acc2:    #34d399;
+    --blue:    #3b82f6;
+    --purple:  #8b5cf6;
+    --yellow:  #f59e0b;
+    --red:     #ef4444;
+    --quote:   #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: rgba(15,17,23,.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: .75rem 2rem;
+    position: sticky; top: 0; z-index: 99;
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .82rem; color: var(--muted);
+  }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--text); }
+  nav .sep { color: var(--border); }
+  nav .cur { color: var(--acc); font-weight: 600; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 3.5rem 2rem 2.5rem;
+    max-width: 920px; margin: 0 auto;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(16,185,129,.12);
+    border: 1px solid rgba(16,185,129,.3);
+    color: var(--acc);
+    border-radius: 999px;
+    padding: .3rem 1rem;
+    font-size: .78rem; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.5rem, 4vw, 2.3rem);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto 2rem;
+  }
+  .hero-sub strong { color: var(--text); }
+
+  /* ── STATS ── */
+  .stats {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    justify-content: center; margin-bottom: 2.5rem;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: .8rem 1.3rem;
+    text-align: center; min-width: 110px;
+  }
+  .stat .val { font-size: 1.5rem; font-weight: 800; color: var(--acc); display: block; }
+  .stat .lbl { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ── MAIN ── */
+  main { max-width: 920px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+  /* ── SECTION HEADER ── */
+  .section-head {
+    display: flex; align-items: center; gap: .75rem;
+    margin: 2.5rem 0 1.2rem;
+    padding-bottom: .6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-head .icon { font-size: 1.2rem; }
+  .section-head h2 { font-size: 1rem; font-weight: 700; color: var(--text); }
+  .section-head .badge {
+    margin-left: auto;
+    font-size: .7rem; color: var(--muted);
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: .15rem .6rem;
+  }
+
+  /* ── WHAT IT IS ── */
+  .fact-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.3rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .fact-card .fc-title {
+    font-size: .75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--acc); margin-bottom: .5rem;
+  }
+  .fact-card p { color: var(--muted); font-size: .9rem; }
+  .fact-card strong { color: var(--text); }
+  .fact-card ul { padding-left: 1.2rem; color: var(--muted); font-size: .88rem; }
+  .fact-card ul li { margin-bottom: .3rem; }
+
+  /* ── PARTNER STACK ── */
+  .partner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: .75rem;
+    margin-bottom: 1rem;
+  }
+  .partner-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .9rem 1rem;
+    text-align: center;
+  }
+  .partner-pill .p-icon { font-size: 1.4rem; margin-bottom: .3rem; }
+  .partner-pill .p-name { font-size: .8rem; font-weight: 700; color: var(--text); }
+  .partner-pill .p-role { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
+
+  /* ── QUOTE ── */
+  .quote-card {
+    background: rgba(167,139,250,.06);
+    border: 1px solid rgba(167,139,250,.2);
+    border-left: 4px solid var(--quote);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .quote-card::before {
+    content: '"';
+    position: absolute; top: -.2rem; left: 1rem;
+    font-size: 4rem; color: rgba(167,139,250,.2);
+    font-family: Georgia, serif; line-height: 1;
+  }
+  .quote-card p { font-size: .95rem; font-style: italic; color: #c4b5fd; padding-left: .4rem; }
+  .quote-card .attr { margin-top: .5rem; font-size: .76rem; color: var(--muted); font-style: normal; padding-left: .4rem; }
+
+  /* ── INSIGHT CARDS (나의 인사이트) ── */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1rem;
+  }
+  .insight-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.3rem;
+    border-left: 4px solid var(--acc);
+    transition: border-color .2s;
+  }
+  .insight-card:hover { border-left-color: var(--acc2); }
+  .insight-card .ic-num {
+    font-size: .68rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--acc); margin-bottom: .3rem;
+  }
+  .insight-card h3 { font-size: .95rem; font-weight: 700; color: var(--text); margin-bottom: .5rem; }
+  .insight-card p { font-size: .84rem; color: var(--muted); }
+  .insight-card .ic-tag {
+    display: inline-block; margin-top: .6rem;
+    background: rgba(16,185,129,.08);
+    border: 1px solid rgba(16,185,129,.2);
+    color: var(--acc2); border-radius: 999px;
+    padding: .1rem .5rem; font-size: .7rem; font-weight: 600;
+  }
+
+  /* ── STRATEGIC 2×2 ── */
+  .matrix {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;
+  }
+  .m-cell {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.2rem;
+  }
+  .m-cell.green { border-top: 3px solid var(--acc); }
+  .m-cell.blue { border-top: 3px solid var(--blue); }
+  .m-cell.yellow { border-top: 3px solid var(--yellow); }
+  .m-cell.red { border-top: 3px solid var(--red); }
+  .m-cell .m-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .4rem; }
+  .m-cell.green .m-label { color: var(--acc); }
+  .m-cell.blue .m-label { color: var(--blue); }
+  .m-cell.yellow .m-label { color: var(--yellow); }
+  .m-cell.red .m-label { color: var(--red); }
+  .m-cell h3 { font-size: .9rem; font-weight: 700; margin-bottom: .4rem; }
+  .m-cell p { font-size: .83rem; color: var(--muted); }
+
+  /* ── SUMMARY BOX ── */
+  .summary-box {
+    background: rgba(16,185,129,.06);
+    border: 1px solid rgba(16,185,129,.25);
+    border-left: 4px solid var(--acc);
+    border-radius: 12px;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .summary-box .s-title { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--acc); margin-bottom: .5rem; }
+  .summary-box p { font-size: .9rem; color: var(--muted); }
+  .summary-box strong { color: var(--text); }
+
+  /* ── SOURCE ── */
+  .source-bar {
+    background: rgba(255,255,255,.03);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: .8rem 1.2rem;
+    margin-top: 2.5rem; font-size: .78rem; color: var(--muted);
+    display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  }
+  .source-bar a { color: var(--muted); text-decoration: underline; }
+  .source-bar a:hover { color: var(--text); }
+
+  @media (max-width: 600px) {
+    .matrix { grid-template-columns: 1fr; }
+    .partner-grid { grid-template-columns: repeat(3, 1fr); }
+    .hero { padding: 2rem 1rem 1.5rem; }
+    main { padding: 0 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html">← GARAMwiki</a>
+  <span class="sep">/</span>
+  <a href="../index.html#인사이트">나의 인사이트</a>
+  <span class="sep">/</span>
+  <span class="cur">Anthropic SMB 전략 분석</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">💡 나의 인사이트</div>
+  <h1>Anthropic이 SMB 시장을 공략하는<br>진짜 이유</h1>
+  <p class="hero-sub">
+    <strong>Claude for Small Business</strong> 출시(2026.05.13) 이후 내가 읽은 전략적 함의 —
+    엔터프라이즈 → SMB 다운스케일이 아니라, AI 유통 채널 전쟁의 새 전선이다.
+  </p>
+  <div class="stats">
+    <div class="stat"><span class="val">44%</span><span class="lbl">미국 GDP</span></div>
+    <div class="stat"><span class="val">15</span><span class="lbl">Agentic 워크플로</span></div>
+    <div class="stat"><span class="val">15</span><span class="lbl">스킬 패키지</span></div>
+    <div class="stat"><span class="val">10</span><span class="lbl">투어 도시</span></div>
+    <div class="stat"><span class="val">5</span><span class="lbl">파트너 SaaS</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- 팩트 요약 -->
+  <div class="section-head">
+    <span class="icon">📋</span>
+    <h2>팩트 요약 — Claude for Small Business란</h2>
+    <span class="badge">2026.05.13 발표</span>
+  </div>
+
+  <div class="fact-card">
+    <div class="fc-title">무엇인가</div>
+    <p>
+      Claude Cowork 안에서 <strong>토글 하나로 설치</strong>하는 SMB 전용 패키지.
+      소상공인이 이미 쓰는 툴들과 연결되어 에이전틱 워크플로를 즉시 실행한다.
+    </p>
+  </div>
+
+  <div class="fact-card">
+    <div class="fc-title">연결 가능한 스택</div>
+    <div class="partner-grid" style="margin-top:.7rem;">
+      <div class="partner-pill"><div class="p-icon">💰</div><div class="p-name">QuickBooks</div><div class="p-role">급여·정산·세금</div></div>
+      <div class="partner-pill"><div class="p-icon">💳</div><div class="p-name">PayPal</div><div class="p-role">결제·인보이스</div></div>
+      <div class="partner-pill"><div class="p-icon">📈</div><div class="p-name">HubSpot</div><div class="p-role">리드·캠페인</div></div>
+      <div class="partner-pill"><div class="p-icon">🎨</div><div class="p-name">Canva</div><div class="p-role">콘텐츠 생성</div></div>
+      <div class="partner-pill"><div class="p-icon">✍️</div><div class="p-name">Docusign</div><div class="p-role">계약 관리</div></div>
+      <div class="partner-pill"><div class="p-icon">📧</div><div class="p-name">Google·M365</div><div class="p-role">업무 전반</div></div>
+    </div>
+  </div>
+
+  <div class="fact-card">
+    <div class="fc-title">15개 아젠틱 워크플로 주요 예시</div>
+    <ul>
+      <li><strong>급여 계획:</strong> QuickBooks 잔고 + PayPal 정산 대조 → 30일 예측 → 연체 리마인더 큐</li>
+      <li><strong>월말 결산:</strong> 장부 자동 대사 → 불일치 플래그 → 평이한 영어 P&amp;L 작성 → 회계사용 패킷 전송</li>
+      <li><strong>비즈니스 펄스:</strong> 현금 포지션·매출 트렌드·파이프라인·이번주 약속 한 페이지 뷰</li>
+      <li><strong>캠페인 실행:</strong> HubSpot 성과 분석 → 프로모 전략 초안 → Canva 에셋 생성 → 발송 준비</li>
+    </ul>
+  </div>
+
+  <!-- DANIELA QUOTE -->
+  <div class="quote-card">
+    <p>
+      "Small businesses make up nearly half the American economy, but they've never had the resources of bigger companies. AI is the first technology that can finally close that gap."
+    </p>
+    <div class="attr">— Daniela Amodei, Co-founder &amp; President, Anthropic · 2026.05.13</div>
+  </div>
+
+  <!-- 나의 인사이트 -->
+  <div class="section-head">
+    <span class="icon">💡</span>
+    <h2>나의 인사이트 — Company Builder 관점</h2>
+    <span class="badge">개인 분석</span>
+  </div>
+
+  <div class="insight-grid">
+
+    <div class="insight-card">
+      <div class="ic-num">인사이트 01</div>
+      <h3>이건 SMB 자선이 아니라 유통 전쟁이다</h3>
+      <p>SMB는 AI 도구 결정권자가 아니다. 하지만 그들이 매일 열어두는 QuickBooks·HubSpot·PayPal을 장악한 쪽이 AI 접점을 독점한다. Anthropic이 "공공 이익"을 강조하지만, 실상은 Microsoft·Google이 지배하는 엔터프라이즈 바깥에서 분산된 수백만 SMB 접점을 먼저 확보하려는 포지셔닝이다.</p>
+      <span class="ic-tag">유통 채널</span>
+    </div>
+
+    <div class="insight-card">
+      <div class="ic-num">인사이트 02</div>
+      <h3>토글 설치 = 마찰 제거 = 진짜 도입</h3>
+      <p>기존 AI SaaS의 최대 장벽은 "세팅"이었다. Claude for SMB는 이미 쓰던 툴 위에 얹는 구조다. 소상공인이 새 툴을 배우지 않아도 된다. "Tool에서 Claude로"가 아니라 "Claude가 Tool 안으로" — 이 방향 전환이 채택률을 바꿀 것이다.</p>
+      <span class="ic-tag">온보딩 혁신</span>
+    </div>
+
+    <div class="insight-card">
+      <div class="ic-num">인사이트 03</div>
+      <h3>15개 워크플로 = 버티컬 AI 전략의 교과서</h3>
+      <p>급여·결산·캠페인·계약 — 이건 수평적 AI 플랫폼이 아니라 특정 업무의 엔드-투-엔드 자동화다. 스타트업이 버티컬 AI를 구축할 때 참조할 설계 원칙: "사용자가 가장 싫어하는 야근 업무"를 먼저 공략하라.</p>
+      <span class="ic-tag">버티컬 AI</span>
+    </div>
+
+    <div class="insight-card">
+      <div class="ic-num">인사이트 04</div>
+      <h3>"You approve before anything sends" — 신뢰 설계의 핵심</h3>
+      <p>SMB 오너의 AI 최대 우려는 데이터 보안(절반이 꼽은 장애물). Anthropic의 답은 기술이 아니라 UX다: "모든 실행은 당신이 먼저 승인한다." 자율 에이전트가 아니라 인간 확인 후 실행 모델. AI 제품 설계에서 신뢰를 쌓는 방식의 좋은 케이스스터디다.</p>
+      <span class="ic-tag">신뢰 설계</span>
+    </div>
+
+    <div class="insight-card">
+      <div class="ic-num">인사이트 05</div>
+      <h3>오프라인 투어 10개 도시 = B2SMB GTM의 복귀</h3>
+      <p>디지털 마케팅만으로 SMB를 잡기 어렵다는 걸 알고 있다. 시카고→털사→달라스→…로드쇼는 2010년대 Salesforce·QuickBooks가 성장할 때 쓰던 방식. AI 회사가 이걸 한다는 건 SMB 전환이 광고보다 직접 경험이 훨씬 효과적임을 데이터로 알기 때문이다.</p>
+      <span class="ic-tag">GTM 전략</span>
+    </div>
+
+    <div class="insight-card">
+      <div class="ic-num">인사이트 06</div>
+      <h3>CDFI 파트너십 — 규제·정치 리스크 헤징</h3>
+      <p>Accion, Community Reinvestment Fund, Pacific Community Ventures와의 파트너십은 순수 이타주의가 아니다. 현재 AI 규제 불확실성, Pentagon 소송 속에서 Anthropic이 "소외계층 지원 기업"임을 공공 기록으로 남기는 정치적 방어막이기도 하다. Daniela Amodei가 이 발표의 얼굴인 이유도 같은 맥락.</p>
+      <span class="ic-tag">규제 헤징</span>
+    </div>
+
+    <div class="insight-card">
+      <div class="ic-num">인사이트 07</div>
+      <h3>Simple Modern CEO의 말이 핵심을 찌른다</h3>
+      <p>"What we used to think were the constraints are just not constraints anymore." — 이게 AI 도입의 진짜 가치다. 속도·비용 절감이 아니라 <strong>조직이 불가능하다고 전제했던 것들을 가능하게 만드는 것</strong>. 우리 팀이 AI를 어디에 쓰고 있는지 이 기준으로 다시 점검해봐야 한다.</p>
+      <span class="ic-tag">조직 전환</span>
+    </div>
+
+    <div class="insight-card">
+      <div class="ic-num">인사이트 08</div>
+      <h3>우리 비즈니스에 적용할 수 있는 것</h3>
+      <p>Claude for SMB가 자동화한 15가지 워크플로 중 우리 팀이 수동으로 하고 있는 것이 몇 개인가? 급여 계획·월말 결산·리드 분류·캠페인 분석 — 이 중 하나라도 주당 2시간 이상 쓴다면 즉시 Claude로 대체 가능한지 테스트해볼 가치가 있다.</p>
+      <span class="ic-tag">즉시 적용</span>
+    </div>
+
+  </div>
+
+  <!-- 전략 매트릭스 -->
+  <div class="section-head">
+    <span class="icon">🗺️</span>
+    <h2>Anthropic SMB 전략 — 4가지 시각</h2>
+    <span class="badge">전략 분석</span>
+  </div>
+
+  <div class="matrix">
+    <div class="m-cell green">
+      <div class="m-label">✅ 강점</div>
+      <h3>기존 툴 내장 = 최저 마찰</h3>
+      <p>사용자가 새 습관을 만들 필요 없다. QuickBooks 열면 Claude가 거기 있다. 채택의 가장 큰 장벽인 "설치·학습·습관화"를 한번에 해결.</p>
+    </div>
+    <div class="m-cell blue">
+      <div class="m-label">🔵 기회</div>
+      <h3>SMB ↔ 엔터프라이즈 데이터 통로</h3>
+      <p>SMB 수백만 곳에서 쌓이는 재무·마케팅·운영 패턴이 Anthropic에게 독점 데이터 자산이 된다. 장기적으로 SMB 특화 모델 파인튜닝의 기반.</p>
+    </div>
+    <div class="m-cell yellow">
+      <div class="m-label">⚠️ 리스크</div>
+      <h3>파트너 SaaS 의존 = 취약한 공급망</h3>
+      <p>QuickBooks·PayPal이 정책 바꾸거나 자체 AI를 출시하면? 파트너십이 배포 채널이자 가장 큰 약점이다. Intuit의 자체 AI 행보를 주시해야.</p>
+    </div>
+    <div class="m-cell red">
+      <div class="m-label">🔴 경쟁 압력</div>
+      <h3>Microsoft·Google의 역습</h3>
+      <p>M365 Copilot·Google Workspace Gemini도 같은 SMB 시장을 노린다. 번들링 파워에서는 빅테크가 우위. Anthropic의 차별점은 모델 품질과 브랜드 신뢰뿐.</p>
+    </div>
+  </div>
+
+  <!-- 결론 -->
+  <div class="section-head">
+    <span class="icon">🎯</span>
+    <h2>결론 — 내가 주목하는 한 가지</h2>
+    <span class="badge">핵심 테이크어웨이</span>
+  </div>
+
+  <div class="summary-box">
+    <div class="s-title">💡 핵심 테이크어웨이</div>
+    <p>
+      Claude for Small Business의 가장 중요한 시사점은 <strong>"AI의 도입 경로가 바뀌고 있다"</strong>는 것이다.
+      이제 AI는 별도의 앱·플랫폼으로 채택되는 게 아니라, 이미 일상에서 열어두는 툴 안에 자연스럽게 녹아드는 방식으로 확산된다.
+      <br><br>
+      Company Builder로서 내가 얻는 교훈: <strong>우리가 만드는 제품이 고객의 기존 워크플로 안에서 작동하는가, 아니면 새로운 워크플로를 강요하는가?</strong>
+      후자라면, Claude for SMB가 보여주는 방향으로 설계를 재검토해야 한다.
+    </p>
+  </div>
+
+  <!-- SOURCE -->
+  <div class="source-bar">
+    <span>📰</span>
+    <strong>원문:</strong>
+    <a href="https://www.anthropic.com/news/claude-for-small-business" target="_blank">
+      Anthropic — Introducing Claude for Small Business (2026.05.13)
+    </a>
+    <span style="margin-left:auto;">분석: GARAMwiki 나의 인사이트</span>
+  </div>
+
+</main>
+</body>
+</html>

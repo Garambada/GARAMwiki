@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>xAI 가스터빈 46기 — AI 인프라 경쟁의 숨겨진 비용 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card2: #20232f;
+    --border: #2a2d3a;
+    --text: #e8eaf0;
+    --muted: #7a7f94;
+    --accent: #10b981;
+    --accent2: #34d399;
+    --danger: #ef4444;
+    --warn: #f59e0b;
+    --blue: #3b82f6;
+    --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    line-height: 1.6; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 52px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo { font-weight: 800; font-size: 1rem;
+    background: linear-gradient(135deg,#10b981,#34d399);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-sep { color: var(--border); }
+  .nav-crumb { font-size: 0.82rem; color: var(--muted); }
+  .nav-crumb a { color: var(--muted); text-decoration: none; }
+  .nav-crumb a:hover { color: var(--accent); }
+  .nav-badge {
+    margin-left: auto; font-size: 0.72rem; font-weight: 700;
+    background: rgba(16,185,129,0.12); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.3); border-radius: 20px; padding: 3px 10px;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, rgba(16,185,129,0.06) 0%, rgba(239,68,68,0.06) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 32px 44px;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; }
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+  }
+  .hero-tag {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 20px;
+    background: rgba(16,185,129,0.12); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.25);
+  }
+  .hero-tag.danger {
+    background: rgba(239,68,68,0.12); color: var(--danger);
+    border-color: rgba(239,68,68,0.25);
+  }
+  .hero-date { font-size: 0.78rem; color: var(--muted); }
+  .hero h1 {
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    font-weight: 800; line-height: 1.25;
+    letter-spacing: -0.5px; margin-bottom: 14px;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub {
+    font-size: 1rem; color: var(--muted); max-width: 680px; line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  /* STATS ROW */
+  .stats-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .stat-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px; min-width: 130px;
+    flex: 1;
+  }
+  .stat-num {
+    font-size: 1.8rem; font-weight: 800; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-num.green { color: var(--accent); }
+  .stat-num.red { color: var(--danger); }
+  .stat-num.amber { color: var(--warn); }
+  .stat-num.blue { color: var(--blue); }
+  .stat-label { font-size: 0.75rem; color: var(--muted); }
+
+  /* MAIN LAYOUT */
+  .main { max-width: 900px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* SECTION HEADER */
+  .sec-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .sec-dot.red { background: var(--danger); }
+  .sec-dot.amber { background: var(--warn); }
+  .sec-dot.blue { background: var(--blue); }
+  .sec-title { font-size: 0.95rem; font-weight: 700; }
+  .section { margin-bottom: 44px; }
+
+  /* CARD */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 24px; margin-bottom: 14px;
+  }
+  .card-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .card-body { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+
+  /* BLOCKQUOTE */
+  .bq {
+    border-left: 3px solid var(--accent); background: var(--card);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 14px;
+  }
+  .bq.red { border-left-color: var(--danger); }
+  .bq.amber { border-left-color: var(--warn); }
+  .bq-text { font-size: 0.92rem; color: var(--text); line-height: 1.6; font-style: italic; }
+  .bq-attr { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 10px; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, var(--danger), var(--warn), var(--accent));
+    border-radius: 2px;
+  }
+  .tl-item { position: relative; margin-bottom: 18px; }
+  .tl-dot {
+    position: absolute; left: -22px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid var(--bg); background: var(--accent);
+  }
+  .tl-dot.red { background: var(--danger); }
+  .tl-dot.amber { background: var(--warn); }
+  .tl-date { font-size: 0.72rem; color: var(--muted); margin-bottom: 3px; }
+  .tl-text { font-size: 0.88rem; color: var(--text); line-height: 1.5; }
+  .tl-text strong { color: var(--accent); }
+
+  /* CONCEPT GRID */
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .concept-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 22px;
+  }
+  .concept-icon { font-size: 1.6rem; margin-bottom: 10px; }
+  .concept-name { font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; }
+  .concept-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* 2x2 MATRIX */
+  .matrix-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .matrix-cell {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .matrix-label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .matrix-label.green { color: var(--accent); }
+  .matrix-label.red { color: var(--danger); }
+  .matrix-label.amber { color: var(--warn); }
+  .matrix-label.blue { color: var(--blue); }
+  .matrix-content { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+
+  /* INSIGHT LIST */
+  .insight-list { display: grid; gap: 12px; }
+  .insight-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 22px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .insight-num {
+    font-size: 1.2rem; font-weight: 800; color: var(--accent);
+    min-width: 28px; line-height: 1;
+  }
+  .insight-content {}
+  .insight-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+  .insight-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+
+  /* TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag {
+    font-size: 0.7rem; padding: 3px 9px; border-radius: 6px;
+    background: rgba(16,185,129,0.08); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.2);
+  }
+  .tag.red { background: rgba(239,68,68,0.08); color: var(--danger); border-color: rgba(239,68,68,0.2); }
+  .tag.amber { background: rgba(245,158,11,0.08); color: var(--warn); border-color: rgba(245,158,11,0.2); }
+  .tag.blue { background: rgba(59,130,246,0.08); color: var(--blue); border-color: rgba(59,130,246,0.2); }
+
+  /* PILL STRIP */
+  .pill-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+  .pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 7px 16px; font-size: 0.82rem;
+  }
+  .pill-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* SOURCE */
+  .source-bar {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    margin-top: 48px;
+  }
+  .source-label { font-size: 0.72rem; color: var(--muted); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .source-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; }
+  .source-link:hover { text-decoration: underline; }
+  .source-meta { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+
+  @media (max-width: 680px) {
+    nav, .hero, .main { padding-left: 16px; padding-right: 16px; }
+    .matrix-wrap { grid-template-columns: 1fr; }
+    .stats-row { gap: 10px; }
+    .stat-box { min-width: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">GARAMwiki</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-crumb">
+    <a href="../index.html">홈</a> › 나의 인사이트
+  </span>
+  <span class="nav-badge">💡 인사이트</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-tag">나의 인사이트</span>
+      <span class="hero-tag danger">🔥 환경 리스크</span>
+      <span class="hero-date">2026-05-13 · TechCrunch · Tim De Chant</span>
+    </div>
+    <h1>xAI 가스터빈 46기 — <em>AI 인프라 경쟁의</em><br>숨겨진 규제 루프홀과 사업 리스크</h1>
+    <p class="hero-sub">
+      Musk의 xAI가 Mississippi 데이터센터에 46기의 천연가스 터빈을 무허가 운영 중이다.
+      "이동식(mobile)" 분류로 1년간 환경 규제를 회피하는 전략이 NAACP 소송으로 역습당하고 있다.
+      AI 인프라 경쟁에서 에너지 조달 속도와 규제 리스크 관리는 이제 창업가의 필수 역량이다.
+    </p>
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num red">46</div>
+        <div class="stat-label">운영 중 가스터빈 (기)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num amber">15</div>
+        <div class="stat-label">허가 받은 터빈 (기)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num red">31</div>
+        <div class="stat-label">무허가 운영 터빈 (기)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num green">1년</div>
+        <div class="stat-label">mobile 루프홀 유효기간</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num blue">2</div>
+        <div class="stat-label">소송 당사자 (NAACP · SELC)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SECTION 1: 사건 개요 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot red"></div>
+      <span class="sec-title">사건 개요 — 무슨 일이 일어났나</span>
+    </div>
+
+    <div class="bq red">
+      <div class="bq-text">
+        Mississippi주는 가스터빈이 트레일러 위에 얹혀 있다는 이유로 "이동식(mobile)"으로 분류하고 있어,
+        1년간 대기오염 규제 적용을 면제받을 수 있다.
+        xAI는 이 루프홀을 활용해 46기 중 31기를 무허가로 운영 중이다.
+      </div>
+      <div class="bq-attr">— TechCrunch 요약, 2026.05.13</div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-date">2025년 초</div>
+        <div class="tl-text">xAI, Memphis Riverport Rd에 <strong>Colossus 데이터센터</strong> 가동 시작</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot amber"></div>
+        <div class="tl-date">2025년 5월</div>
+        <div class="tl-text">터빈 35기 운영 — Greater Memphis Chamber, "절반은 영구 잔류" 발표</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot amber"></div>
+        <div class="tl-date">2025년 7월</div>
+        <div class="tl-text">Tennessee 환경당국, <strong>15기만 허가</strong> 부여 (나머지는 무허가)</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-date">2026년 5월 11일</div>
+        <div class="tl-text"><em>Mississippi Today</em> 보도 — 터빈 수 <strong>46기로 증가</strong> (1년 만에 +11기)</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">2026년 5월 13일</div>
+        <div class="tl-text">NAACP·SELC, 법원에 <strong>긴급 금지명령(injunction)</strong> 신청 — TechCrunch 보도</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 핵심 개념 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot amber"></div>
+      <span class="sec-title">핵심 구조 이해 — 세 가지 키 컨셉</span>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-icon">🚛</div>
+        <div class="concept-name">Mobile 규제 루프홀</div>
+        <div class="concept-desc">
+          Mississippi주법: 트레일러 위에 있으면 "이동식" 장비로 분류 → 1년간 정지 오염원(stationary source) 규제 면제.
+          연방법(Clean Air Act)은 트레일러 위 장비도 실질적 운용 기간을 보면 정지 시설로 간주 가능하다고 명시.
+          주법 vs 연방법 간 해석 충돌이 핵심 쟁점.
+        </div>
+        <div class="tags">
+          <span class="tag red">규제 차익거래</span>
+          <span class="tag amber">Clean Air Act</span>
+          <span class="tag">주·연방 충돌</span>
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">⚡</div>
+        <div class="concept-name">AI 데이터센터 에너지 갭</div>
+        <div class="concept-desc">
+          Colossus 2는 전력망 연결 전 가스터빈으로 임시 전력 충당.
+          AI 훈련·추론의 전력 수요는 폭발적이지만 그리드 연결에는 수년이 소요됨.
+          Satya Nadella의 "가장 큰 문제는 컴퓨팅이 아니라 전력"이라는 말이 현실화된 사례.
+        </div>
+        <div class="tags">
+          <span class="tag blue">에너지 갭</span>
+          <span class="tag">임시 전력</span>
+          <span class="tag amber">그리드 병목</span>
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">⚖️</div>
+        <div class="concept-name">환경 정의 (Environmental Justice)</div>
+        <div class="concept-desc">
+          Memphis·Mississippi 지역은 이미 대기질이 열악한 저소득·유색인종 밀집 지역.
+          NAACP가 소송 주체인 이유. AI 인프라 입지 선정에서 '규제 취약 지역 선택'은
+          사회적 역풍(ESG backlash)과 소송 리스크를 동시에 키운다.
+        </div>
+        <div class="tags">
+          <span class="tag red">ESG 역풍</span>
+          <span class="tag">NAACP 소송</span>
+          <span class="tag">지역 공동체</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: 리스크 매트릭스 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot blue"></div>
+      <span class="sec-title">전략 매트릭스 — AI 인프라 속도 vs 규제 리스크</span>
+    </div>
+    <div class="matrix-wrap">
+      <div class="matrix-cell">
+        <div class="matrix-label green">✅ 단기 이득</div>
+        <div class="matrix-content">
+          그리드 연결 대기 없이 즉시 AI 훈련 가동.
+          경쟁사 대비 수개월 선점 효과.
+          "mobile" 분류로 허가 비용·시간 절약.
+          Grok 3·4 훈련 속도 경쟁에서 유리한 포지션.
+        </div>
+      </div>
+      <div class="matrix-cell">
+        <div class="matrix-label red">🚨 장기 리스크</div>
+        <div class="matrix-content">
+          긴급 금지명령 시 데이터센터 가동 중단 가능성.
+          연방 규제 강화 선례 제공 → 업계 전체 영향.
+          ESG 투자자 이탈 리스크.
+          지역 사회 반발 → 추가 시설 확장 불가.
+        </div>
+      </div>
+      <div class="matrix-cell">
+        <div class="matrix-label amber">⚠️ 업계 파급</div>
+        <div class="matrix-content">
+          Google·Microsoft·Meta 데이터센터도 유사 전략 사용 여부 주목받게 됨.
+          연방 EPA가 "mobile 루프홀" 자체를 폐지할 가능성.
+          AI 기업 = 환경 오염원이라는 내러티브 강화.
+        </div>
+      </div>
+      <div class="matrix-cell">
+        <div class="matrix-label blue">🔵 기회 재설계</div>
+        <div class="matrix-content">
+          소형 원자로(SMR), 지열, 이미 허가된 재생에너지 부지 확보 경쟁.
+          '에너지 선취' 전략이 AI 스타트업의 핵심 인프라 해자로 부상.
+          규제 친화적 입지 선정이 장기 경쟁력.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: 나의 인사이트 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot"></div>
+      <span class="sec-title">나의 인사이트 — Company Builder 관점 7가지</span>
+    </div>
+    <div class="insight-list">
+      <div class="insight-item">
+        <div class="insight-num">01</div>
+        <div class="insight-content">
+          <div class="insight-title">AI 경쟁 = 에너지 조달 전쟁</div>
+          <div class="insight-desc">
+            "가장 좋은 GPU를 가진 회사가 이긴다"는 시대는 끝났다. 이제는
+            <strong>"가장 빠르게 안정적 전력을 확보한 회사"</strong>가 이긴다.
+            xAI의 가스터빈 전략은 과감하지만, 이 사례가 보여주듯 에너지 조달은 기술보다 규제·지역 관계가 더 복잡하다.
+            창업 초기부터 인프라 입지 전략을 CEO가 직접 챙겨야 하는 이유.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">02</div>
+        <div class="insight-content">
+          <div class="insight-title">규제 차익거래의 반감기는 1~2년</div>
+          <div class="insight-desc">
+            "mobile 루프홀"은 1년짜리 유예다. xAI는 이걸 알면서도 선택했고,
+            이제 소송이라는 역풍을 맞고 있다.
+            규제 공백을 이용하는 전략은 단기 속도를 주지만,
+            <strong>소송·입법·여론의 3중 역습</strong>을 계산에 넣어야 한다.
+            AI 스타트업이 규제 우회를 전략으로 삼을 때의 기회비용 분석이 필수.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">03</div>
+        <div class="insight-content">
+          <div class="insight-title">ESG는 이제 벌금이 아니라 소송·운영 중단 리스크</div>
+          <div class="insight-desc">
+            NAACP의 <strong>긴급 금지명령 신청</strong>은 단순한 벌금이 아니다.
+            승소 시 46기 터빈 가동 중단 → Colossus 2 마비라는 최악 시나리오가 실재한다.
+            ESG를 IR 문서 단에서만 다루는 회사는 운영 레벨에서 이런 리스크를 못 잡는다.
+            데이터센터 입지 결정부터 환경 정의(environmental justice) 체크리스트가 필요.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">04</div>
+        <div class="insight-content">
+          <div class="insight-title">지역 사회 관계 = 인프라의 일부</div>
+          <div class="insight-desc">
+            Memphis·Mississippi 지역은 이미 대기질 취약 지역. xAI가 여기에 터빈 46기를 꽂은 건
+            규제가 약한 곳을 선택한 것이기도 하다.
+            그러나 <strong>취약 지역일수록 NAACP 같은 조직력이 강하고 미디어 이슈화가 빠르다</strong>.
+            "규제 약한 곳 = 반발도 약하다"는 가정은 틀렸다.
+            Community Relations를 인프라 투자의 선행 조건으로 봐야 한다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">05</div>
+        <div class="insight-content">
+          <div class="insight-title">"전력망 선점" 스타트업 기회</div>
+          <div class="insight-desc">
+            xAI 사태가 보여주는 역설: Big Tech도 전력이 없어 가스터빈을 쓴다.
+            여기서 스타트업 기회가 보인다.
+            <strong>이미 허가된 재생에너지 부지, SMR 계약권, 유틸리티 파트너십을 선점하는 회사</strong>가
+            AI 인프라 시대의 새로운 해자를 만든다.
+            에너지 중개·입지 컨설팅·전력망 최적화 버티컬의 VC 투자가 급증할 것.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">06</div>
+        <div class="insight-content">
+          <div class="insight-title">Musk 프리미엄의 소멸 신호?</div>
+          <div class="insight-desc">
+            과거라면 NAACP 소송은 화제가 되어도 xAI 사업에 큰 영향이 없었을 것이다.
+            하지만 지금은 SpaceX-xAI 합병 후 직원 이탈, Tesla 브랜드 위기, DOGE 정치 역풍이 겹친 상태.
+            <strong>Musk 후광효과(halo effect)가 약해진 시점에 터진 환경 소송</strong>은
+            xAI 투자자·파트너에게 새로운 리스크 프리미엄을 요구하게 만든다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">07</div>
+        <div class="insight-content">
+          <div class="insight-title">즉시 적용 포인트 — Company Builder로서</div>
+          <div class="insight-desc">
+            우리 회사가 AI 인프라를 구축하거나 데이터센터 의존 서비스를 기획할 때:
+            ① 에너지 공급 계획을 MVP 단계부터 명문화할 것.
+            ② 입지 선정 시 지역 사회 영향평가(EIA lite)를 사전에 수행.
+            ③ "규제 루프홀 전략"은 리스크 시나리오로 명시 후 이사회 승인 필요.
+            ④ 에너지 파트너가 ESG 트랙레코드를 갖고 있는지 DD(Due Diligence) 필수.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 핵심 인용 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot amber"></div>
+      <span class="sec-title">핵심 인용 & 배경 데이터</span>
+    </div>
+    <div class="bq amber">
+      <div class="bq-text">
+        NAACP가 법원에 긴급 금지명령을 신청했다. 연방법상 트레일러 위 전력장비도 실질적으로
+        정지 운영되면 정지 오염원으로 규제받아야 한다고 Southern Environmental Law Center는 주장한다.
+      </div>
+      <div class="bq-attr">— SELC Press Release, 2026.05.13</div>
+    </div>
+    <div class="bq">
+      <div class="bq-text">
+        Mississippi Today 보도에 따르면 xAI는 현재 46기의 가스터빈을 운영 중이며,
+        이는 허가받은 15기를 크게 초과한다. 허가 없이 운영 중인 31기는 연방 Clean Air Act 위반 소지가 있다.
+      </div>
+      <div class="bq-attr">— Mississippi Today, 2026.05.11</div>
+    </div>
+
+    <div class="pill-strip" style="margin-top: 20px;">
+      <div class="pill">
+        <div class="pill-dot" style="background:var(--danger)"></div>
+        <span>46기 운영 중 → 15기만 허가</span>
+      </div>
+      <div class="pill">
+        <div class="pill-dot" style="background:var(--warn)"></div>
+        <span>2025년 5월 35기 → 2026년 5월 46기 (+11기)</span>
+      </div>
+      <div class="pill">
+        <div class="pill-dot" style="background:var(--accent)"></div>
+        <span>Mobile 루프홀 = 주법 1년 면제</span>
+      </div>
+      <div class="pill">
+        <div class="pill-dot" style="background:var(--blue)"></div>
+        <span>Colossus 2 위치: Mississippi 데이터센터</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOURCE -->
+  <div class="source-bar">
+    <span class="source-label">출처</span>
+    <a class="source-link" href="https://techcrunch.com/2026/05/13/musks-xai-is-running-nearly-50-gas-turbines-unchecked-at-its-mississippi-data-center/" target="_blank">
+      TechCrunch — Musk's xAI is running nearly 50 gas turbines unchecked at its Mississippi data center
+    </a>
+    <span class="source-meta">Tim De Chant · 2026.05.13 · 나의 인사이트 요약</span>
+  </div>
+
+</div><!-- /main -->
+
+</body>
+</html>

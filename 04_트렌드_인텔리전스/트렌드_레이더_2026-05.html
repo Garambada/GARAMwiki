@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GARAMwiki — AI 트렌드 레이더 2026-05</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --red: #ff4444;
+    --red-soft: rgba(255,68,68,0.12);
+    --red-border: rgba(255,68,68,0.35);
+    --yellow: #f0a500;
+    --yellow-soft: rgba(240,165,0,0.12);
+    --yellow-border: rgba(240,165,0,0.35);
+    --green: #3fb950;
+    --green-soft: rgba(63,185,80,0.12);
+    --green-border: rgba(63,185,80,0.35);
+    --accent: #58a6ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header-left h1 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .header-left h1 span {
+    color: var(--accent);
+  }
+
+  .header-left p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .badge-updated {
+    font-size: 0.75rem;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.3);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 16px 40px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: inherit;
+  }
+
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #0d1117; font-weight: 600; }
+  .filter-btn.red.active  { background: var(--red);    border-color: var(--red);    color: #fff; }
+  .filter-btn.yellow.active { background: var(--yellow); border-color: var(--yellow); color: #0d1117; }
+  .filter-btn.green.active  { background: var(--green);  border-color: var(--green);  color: #0d1117; }
+
+  /* ── MAIN ── */
+  main { padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    margin-top: 36px;
+  }
+
+  .section-header:first-child { margin-top: 0; }
+
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+  }
+
+  .label-red    { background: var(--red-soft);    border: 1px solid var(--red-border);    color: var(--red); }
+  .label-yellow { background: var(--yellow-soft); border: 1px solid var(--yellow-border); color: var(--yellow); }
+  .label-green  { background: var(--green-soft);  border: 1px solid var(--green-border);  color: var(--green); }
+
+  .section-sub {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 10px 0 0 10px;
+  }
+
+  .card.red::before    { background: var(--red); }
+  .card.yellow::before { background: var(--yellow); }
+  .card.green::before  { background: var(--green); }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+    border-color: #444c56;
+  }
+
+  .card-title {
+    font-size: 0.93rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .card-summary {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+
+  .card-action {
+    font-size: 0.8rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #cdd9e5;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .card-action::before {
+    content: '▶ 우리에게 의미: ';
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+
+  .card-link {
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+  }
+
+  .card-link:hover { opacity: 1; text-decoration: underline; }
+
+  .new-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: rgba(255,68,68,0.2);
+    color: var(--red);
+    border: 1px solid var(--red-border);
+    padding: 1px 7px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline-section {
+    margin-top: 48px;
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+  }
+
+  .timeline-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .timeline-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.83rem;
+  }
+
+  .timeline-table thead th {
+    padding: 10px 14px;
+    text-align: left;
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .timeline-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+
+  .timeline-table tbody tr:hover { background: var(--surface2); }
+
+  .timeline-table td {
+    padding: 12px 14px;
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  .timeline-table td:first-child {
+    white-space: nowrap;
+    color: var(--muted);
+    font-size: 0.78rem;
+    min-width: 100px;
+  }
+
+  .impact-chip {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  .impact-red    { background: var(--red-soft);    border: 1px solid var(--red-border);    color: var(--red); }
+  .impact-yellow { background: var(--yellow-soft); border: 1px solid var(--yellow-border); color: var(--yellow); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex;
+    gap: 20px;
+    padding: 20px 40px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-num {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .stat-red    { color: var(--red); }
+  .stat-yellow { color: var(--yellow); }
+  .stat-green  { color: var(--green); }
+  .stat-accent { color: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px 40px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  /* ── HIDDEN ── */
+  .card.hidden { display: none; }
+
+  @media (max-width: 700px) {
+    header, .filter-bar, main, .stats-bar { padding-left: 16px; padding-right: 16px; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <h1>🛰 <span>GARAMwiki</span> AI 트렌드 레이더</h1>
+    <p>C-레벨 전략 의사결정을 위한 AI 시장·기술 동향 인텔리전스</p>
+  </div>
+  <span class="badge-updated">📅 마지막 업데이트: 2026-05-21</span>
+</header>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num stat-red">10</span>
+    <span class="stat-label">🔴 긴급 주목</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num stat-yellow">5</span>
+    <span class="stat-label">🟡 주목 관찰</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num stat-green">2</span>
+    <span class="stat-label">🟢 장기 관찰</span>
+  </div>
+  <div class="stat-item" style="margin-left:auto;">
+    <span class="stat-num stat-accent">4</span>
+    <span class="stat-label">이번 업데이트 신규</span>
+  </div>
+</div>
+
+<!-- FILTER -->
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all', this)">전체 보기</button>
+  <button class="filter-btn red"    onclick="filter('red', this)">🔴 긴급 주목</button>
+  <button class="filter-btn yellow" onclick="filter('yellow', this)">🟡 주목 관찰</button>
+  <button class="filter-btn green"  onclick="filter('green', this)">🟢 장기 관찰</button>
+</div>
+
+<main>
+
+  <!-- ── 🔴 긴급 주목 ── -->
+  <div class="section-header" data-section="red">
+    <span class="section-label label-red">🔴 긴급 주목</span>
+    <span class="section-sub">지금 바로 행동 검토 필요</span>
+  </div>
+
+  <div class="cards-grid" id="red-grid">
+
+    <div class="card red" data-level="red">
+      <div class="card-title">Google I/O 2026 — Gemini 3.5 + 에이전트 대량 출시 <span class="new-badge">NEW</span></div>
+      <div class="card-summary">Gemini 3.5 Flash: 프론티어 성능 + 저지연. 토큰 처리량 480T→3.2Q/월(6.6배). AI 에이전트가 Search 박스에 직접 탑재(구매·예약 자동처리). 지속 실행 "정보 에이전트" Google Cloud에 배포. Android XR 글래스 공개.</div>
+      <div class="card-action">Google 생태계 의존도가 높은 서비스 전략 즉시 점검. 에이전트 Search가 SEO·트래픽 전략에 미치는 파급 분석 필요.</div>
+      <a class="card-link" href="https://9to5google.com/2026/05/19/google-io-2026-news/" target="_blank">↗ 9to5Google 전체 발표</a>
+    </div>
+
+    <div class="card red" data-level="red">
+      <div class="card-title">Karpathy → Anthropic 합류 — AI 인재 지각변동 <span class="new-badge">NEW</span></div>
+      <div class="card-summary">OpenAI 공동창업자·Tesla FSD 리더·Eureka Labs 창업자 Andrej Karpathy가 Anthropic 프리트레이닝팀 합류(2026-05-19). Claude로 사전학습 연구 가속 팀 신설. Anthropic이 최상위 AI 인재 자석으로 부상.</div>
+      <div class="card-action">Anthropic 모델 품질 로드맵 상향 가능성. Claude 기반 제품·서비스 전략에 긍정 신호. 경쟁사 대비 Anthropic 파트너십 우선순위 재검토.</div>
+      <a class="card-link" href="https://techcrunch.com/2026/05/19/openai-co-founder-andrej-karpathy-joins-anthropics-pre-training-team/" target="_blank">↗ TechCrunch</a>
+    </div>
+
+    <div class="card red" data-level="red">
+      <div class="card-title">Enterprise Agent Governance Crisis <span class="new-badge">NEW</span></div>
+      <div class="card-summary">기업 에이전트 파일럿 88%가 프로덕션 전 실패 — 모델 품질이 아닌 거버넌스·가시성 부재가 원인. CISA·NSA가 주요 인프라에 이미 배포된 에이전트 AI 거버넌스 지침 긴급 발표. "AI 킬스위치" 필요성 부상.</div>
+      <div class="card-action">에이전트 도입 시 거버넌스 프레임워크 선설계 필수. 감사(audit trail)·인간-루프(human-in-loop) 설계 없이 자동화 확장 금지.</div>
+      <a class="card-link" href="https://fortune.com/2026/05/06/servicenow-kill-switch-ai-agents-bill-mcdermott/" target="_blank">↗ Fortune</a>
+    </div>
+
+    <div class="card red" data-level="red">
+      <div class="card-title">Software 3.0 & Agentic Engineering</div>
+      <div class="card-summary">Karpathy: 코드 작성(1.0)→데이터셋(2.0)→프롬프트(3.0). 2025.12 변곡점. Vibe Coding ≠ Agentic Engineering. 10x 이상 생산성 가능.</div>
+      <div class="card-action">개발팀 에이전틱 도구 즉시 도입. 채용 기준 재검토. "앱이 없어야 하는 것" 탐색.</div>
+      <a class="card-link" href="./2026/2026-05_Karpathy_VibeCoding_to_AgenticEngineering.html">↗ 상세 분석</a>
+    </div>
+
+    <div class="card red" data-level="red">
+      <div class="card-title">Long-Horizon Agent = 실용적 AGI 도달</div>
+      <div class="card-summary">Sequoia: "figure things out" 능력을 갖춘 에이전트가 실용적 AGI. Claude Code, Harvey 등 이미 "고용 가능"한 AI 등장. $10T 서비스 시장 개방.</div>
+      <div class="card-action">반복·판단 업무 에이전트화 즉시 검토. Outcome-based pricing 전략 준비.</div>
+      <a class="card-link" href="./2026/2026-05_Sequoia_This_is_AGI.md">↗ 상세 분석</a>
+    </div>
+
+    <div class="card red" data-level="red">
+      <div class="card-title">Physical AI — 로보틱스 엔드게임</div>
+      <div class="card-summary">Jim Fan(NVIDIA): 2028~29년 Physical Turing Test, 2030년대 Physical API. WAM 패러다임으로 전환 중. $38조 제조·노동 시장 재편 시작.</div>
+      <div class="card-action">제조·물류·헬스케어 사업 기회 스캔. 로봇 관련 투자 파이프라인 검토 시작.</div>
+      <a class="card-link" href="./2026/2026-05_Jim_Fan_Robotics_EndGame.html">↗ 상세 분석</a>
+    </div>
+
+    <div class="card red" data-level="red">
+      <div class="card-title">Human Attention = 새로운 병목</div>
+      <div class="card-summary">Brockman(OpenAI): 에이전트 자율화 → 인간 주의력이 가장 희귀한 자원. AI 코드 비율 20%→80% 한 달. 컨텍스트 누적이 새 해자.</div>
+      <div class="card-action">조직 주의력 감사. C-레벨 집중 영역 재설계. 컨텍스트 데이터 전략 수립.</div>
+      <a class="card-link" href="./2026/2026-05_Brockman_Human_Attention_Bottleneck.html">↗ 상세 분석</a>
+    </div>
+
+    <div class="card red" data-level="red">
+      <div class="card-title">Waymo — 자율주행 글로벌 확장</div>
+      <div class="card-summary">Dolgov(Waymo): 2천만 라이드·인간 13배 안전 달성. Driver·Simulator·Critic 3 Teacher 파운데이션 모델. 런던·도쿄 2026 진출. 하루에 4개 도시 동시 런칭.</div>
+      <div class="card-action">모빌리티·물류 사업 영향 시나리오 수립. 2차 효과(주차장·도시 재편) 기회 탐색.</div>
+      <a class="card-link" href="./2026/2026-05_Dolgov_Waymo_Full_Autonomy.html">↗ 상세 분석</a>
+    </div>
+
+    <div class="card red" data-level="red">
+      <div class="card-title">SaaS 해자 붕괴 — 전환비용·프로세스 효력 소멸</div>
+      <div class="card-summary">Boris Cherny(Anthropic): 코딩 해결 선언. AI가 Hamilton Helmer 7 Powers 중 전환 비용·프로세스 효력 무력화. 다음 10년 스타트업 파괴력 10배. Loop 패턴이 새로운 조직 운영 기준.</div>
+      <div class="card-action">SaaS 포트폴리오 해자 유형 재점검. 네트워크 효과·독점 자원 중심 전략 강화. 조직 내 자율 루프(Loop) 수 확장.</div>
+      <a class="card-link" href="./2026/2026-05_Boris_Cherny_Coding_Solved.html">↗ 상세 분석</a>
+    </div>
+
+    <div class="card red" data-level="red">
+      <div class="card-title">AI 에이전트 대중화</div>
+      <div class="card-summary">자율적으로 작업을 수행하는 에이전트가 프로덕션 수준으로 발전. 2026년 말까지 기업 신규 앱의 40%에 에이전틱 기능 탑재 예상.</div>
+      <div class="card-action">반복 업무 자동화 가속화 기회. 에이전트 가버넌스 설계 병행 필수.</div>
+    </div>
+
+  </div>
+
+  <!-- ── 🟡 주목 관찰 ── -->
+  <div class="section-header" data-section="yellow">
+    <span class="section-label label-yellow">🟡 주목 관찰</span>
+    <span class="section-sub">3~6개월 내 결정 필요</span>
+  </div>
+
+  <div class="cards-grid" id="yellow-grid">
+
+    <div class="card yellow" data-level="yellow">
+      <div class="card-title">EU AI Act 고위험 조항 발효 (2026-08) <span class="new-badge">NEW</span></div>
+      <div class="card-summary">EU AI Act의 고위험 시스템 적합성 평가·문서화 의무가 2026년 8월 발효. 위반 시 최대 €3,500만 또는 연매출 7%. 미국은 연방 단일 규제 프레임워크 추진 중.</div>
+      <div class="card-action">EU 시장 진출 제품 AI 컴플라이언스 감사 시작. 고위험 AI 분류 여부 법무팀과 확인. 미국 연방법 동향 모니터링.</div>
+      <a class="card-link" href="https://www.consilium.europa.eu/en/press/press-releases/2026/05/07/artificial-intelligence-council-and-parliament-agree-to-simplify-and-streamline-rules/" target="_blank">↗ EU Consilium</a>
+    </div>
+
+    <div class="card yellow" data-level="yellow">
+      <div class="card-title">아키텍처 혁신 — Subquadratic LLM + 효율 도약 <span class="new-badge">NEW</span></div>
+      <div class="card-summary">2026년 5월, 스케일보다 아키텍처가 화두. SubQ가 최초 상용 서브쿼드라틱 LLM(12M 컨텍스트) 출시. 7B 모델이 작년 70B 수준 성능. GPT-5.5 Instant가 OpenAI 기본 모델로 전환.</div>
+      <div class="card-action">고비용 모델 의존 구조 재검토. 소형+장문맥 모델 조합으로 비용 최적화 기회.</div>
+      <a class="card-link" href="https://whatllm.org/blog/new-ai-models-may-2026" target="_blank">↗ WhatLLM</a>
+    </div>
+
+    <div class="card yellow" data-level="yellow">
+      <div class="card-title">멀티모달 에이전트</div>
+      <div class="card-summary">텍스트+이미지+음성 통합 처리 에이전트 확산. Gemini Omni 등 비디오 생성까지 통합한 멀티모달 모델 등장.</div>
+      <div class="card-action">고객 접점 다변화. 텍스트 전용 AI 파이프라인의 멀티모달 전환 로드맵 검토.</div>
+    </div>
+
+    <div class="card yellow" data-level="yellow">
+      <div class="card-title">소형 모델(SLM) 경쟁</div>
+      <div class="card-summary">온디바이스 실행 가능한 경량 모델 발전. 효율 아키텍처와 결합해 비용 대비 성능 곡선이 급격히 개선 중.</div>
+      <div class="card-action">보안 민감 작업의 내부화 가능. 클라우드 API 비용 절감 기회 검토.</div>
+    </div>
+
+    <div class="card yellow" data-level="yellow">
+      <div class="card-title">AI 코딩 어시스턴트 성숙</div>
+      <div class="card-summary">개발 생산성 2~10배 향상 보고 증가. OpenAI 내부 AI 작성 코드 비율 80% 도달. Claude Code 10억 달러 돌파.</div>
+      <div class="card-action">개발팀 채용·운영 전략 재검토. AI 코딩 도구 도입 ROI 측정 시작.</div>
+    </div>
+
+  </div>
+
+  <!-- ── 🟢 장기 관찰 ── -->
+  <div class="section-header" data-section="green">
+    <span class="section-label label-green">🟢 장기 관찰</span>
+    <span class="section-sub">1년 이상 시간 지평</span>
+  </div>
+
+  <div class="cards-grid" id="green-grid">
+
+    <div class="card green" data-level="green">
+      <div class="card-title">AGI 논쟁</div>
+      <div class="card-summary">범용 인공지능 접근 논의 활발. Demis Hassabis "AGI 75% 도달" 발언 등 업계 리더들의 타임라인 예측이 빨라지는 추세.</div>
+      <div class="card-action">장기 전략 수립 시 고려 필요. 10년 단위 시나리오 플래닝에 반영.</div>
+    </div>
+
+    <div class="card green" data-level="green">
+      <div class="card-title">AI 규제 강화</div>
+      <div class="card-summary">EU AI Act 시행, 국내 AI 기본법, 미국 연방 프레임워크 추진. 글로벌 규제 지형이 복잡해지는 중.</div>
+      <div class="card-action">컴플라이언스 준비 필요. 법무·정책팀과 연계한 AI 거버넌스 체계 구축.</div>
+    </div>
+
+  </div>
+
+  <!-- ── TIMELINE ── -->
+  <div class="timeline-section">
+    <div class="timeline-title">📅 2026년 월별 주요 이슈</div>
+    <table class="timeline-table">
+      <thead>
+        <tr>
+          <th>날짜</th>
+          <th>핵심 이슈</th>
+          <th>임팩트</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2026-05</td>
+          <td>Sequoia "This is AGI" — Long-Horizon Agent가 실용적 AGI 도달 선언. $10T 서비스 시장 개방</td>
+          <td><span class="impact-chip impact-red">🔴 즉각 전략 검토</span></td>
+        </tr>
+        <tr>
+          <td>2026-05</td>
+          <td>Jim Fan (NVIDIA) — Physical Turing Test 2028~29년, Physical API 2030년대 로드맵. WAM 패러다임 전환 선언</td>
+          <td><span class="impact-chip impact-red">🔴 중장기 전략 검토</span></td>
+        </tr>
+        <tr>
+          <td>2026-05</td>
+          <td>Greg Brockman (OpenAI) — 인간 주의력 병목 선언. 코드 AI 작성 비율 80%. 컨텍스트 누적이 차세대 경쟁 해자</td>
+          <td><span class="impact-chip impact-red">🔴 즉각 조직 감사</span></td>
+        </tr>
+        <tr>
+          <td>2026-05</td>
+          <td>Dmitri Dolgov (Waymo) — 2천만 라이드·인간 13배 안전. 런던·도쿄 2026 진출. "글로벌 스케일링 단계" 선언</td>
+          <td><span class="impact-chip impact-yellow">🟡 모빌리티 전략 검토</span></td>
+        </tr>
+        <tr>
+          <td>2026-05</td>
+          <td>Boris Cherny (Anthropic) — "코딩은 해결됐다". SaaS 해자 붕괴 선언. Loop 패턴 = 조직 AI화 기본 단위. Claude Code 10억 달러 돌파</td>
+          <td><span class="impact-chip impact-red">🔴 SaaS 전략 즉시 재검토</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-19</td>
+          <td><strong>Google I/O 2026</strong> — Gemini 3.5 Flash 출시. 토큰 처리량 6.6배. AI 에이전트 Search 통합. Android XR 글래스</td>
+          <td><span class="impact-chip impact-red">🔴 Search 전략 즉시 점검</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-19</td>
+          <td><strong>Karpathy → Anthropic</strong> — OpenAI 공동창업자 Anthropic 프리트레이닝팀 합류. Claude 품질 로드맵 상향 예상</td>
+          <td><span class="impact-chip impact-yellow">🟡 파트너십 가중치 상향</span></td>
+        </tr>
+        <tr>
+          <td>2026-05</td>
+          <td><strong>Enterprise Agent Governance Crisis</strong> — 파일럿 88% 실패. CISA·NSA 긴급 지침. AI 킬스위치 솔루션 시장 부상</td>
+          <td><span class="impact-chip impact-red">🔴 거버넌스 프레임워크 선도입</span></td>
+        </tr>
+        <tr>
+          <td>2026-08 (예정)</td>
+          <td><strong>EU AI Act 고위험 조항 발효</strong> — 고위험 시스템 적합성 평가 의무화. 위반 시 €3,500만 또는 연매출 7%</td>
+          <td><span class="impact-chip impact-yellow">🟡 컴플라이언스 감사 시작</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  GARAMwiki · AI 트렌드 레이더 · 마지막 업데이트 2026-05-21 · Claude Cowork와 함께 성장합니다
+</footer>
+
+<script>
+  function filter(level, btn) {
+    // Update button states
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show/hide cards
+    document.querySelectorAll('.card').forEach(card => {
+      if (level === 'all' || card.dataset.level === level) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    // Show/hide section headers
+    document.querySelectorAll('[data-section]').forEach(header => {
+      if (level === 'all' || header.dataset.section === level) {
+        header.style.display = '';
+        // also show the grid
+        const gridId = header.dataset.section + '-grid';
+        const grid = document.getElementById(gridId);
+        if (grid) grid.style.display = '';
+      } else {
+        header.style.display = 'none';
+        const gridId = header.dataset.section + '-grid';
+        const grid = document.getElementById(gridId);
+        if (grid) grid.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
