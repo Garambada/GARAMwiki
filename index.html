@@ -14,6 +14,7 @@
     --model: #a78bfa; --model-bg: rgba(167,139,250,0.08);
     --tech: #06b6d4;  --tech-bg: rgba(6,182,212,0.08);
     --issue: #f97316; --issue-bg: rgba(249,115,22,0.08);
+    --discourse: #e879f9; --discourse-bg: rgba(232,121,249,0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text);
@@ -54,6 +55,7 @@
   .filter-btn[data-cat="모델"].active     { background:var(--model); border-color:var(--model); }
   .filter-btn[data-cat="기술"].active     { background:var(--tech); border-color:var(--tech); }
   .filter-btn[data-cat="사업현안"].active { background:var(--issue); border-color:var(--issue); }
+  .filter-btn[data-cat="담론"].active     { background:var(--discourse); border-color:var(--discourse); }
   main { max-width:1200px; margin:0 auto; padding:28px 32px 60px; }
   .section { margin-bottom:40px; }
   .section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px;
@@ -74,6 +76,7 @@
   .card[data-cat="모델"]::before     { background:var(--model); }
   .card[data-cat="기술"]::before     { background:var(--tech); }
   .card[data-cat="사업현안"]::before { background:var(--issue); }
+  .card[data-cat="담론"]::before      { background:var(--discourse); }
   .card:hover { transform:translateY(-2px); border-color:rgba(88,166,255,0.3);
     box-shadow:0 8px 24px rgba(0,0,0,0.4); }
   .card[data-cat="비즈니스"]:hover { border-color:rgba(245,158,11,0.3); }
@@ -82,6 +85,7 @@
   .card[data-cat="모델"]:hover     { border-color:rgba(167,139,250,0.3); }
   .card[data-cat="기술"]:hover     { border-color:rgba(6,182,212,0.3); }
   .card[data-cat="사업현안"]:hover { border-color:rgba(249,115,22,0.3); }
+  .card[data-cat="담론"]:hover     { border-color:rgba(232,121,249,0.3); }
   .card-meta { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
   .cat-badge { font-size:0.7rem; font-weight:700; padding:2px 8px;
     border-radius:10px; letter-spacing:0.3px; }
@@ -90,7 +94,8 @@
   .cat-badge.insight { background:var(--insight-bg); color:var(--insight); }
   .cat-badge.model   { background:var(--model-bg); color:var(--model); }
   .cat-badge.tech    { background:var(--tech-bg); color:var(--tech); }
-  .cat-badge.issue   { background:var(--issue-bg); color:var(--issue); }
+  .cat-badge.issue      { background:var(--issue-bg); color:var(--issue); }
+  .cat-badge.discourse  { background:var(--discourse-bg); color:var(--discourse); }
   .card-date { font-size:0.72rem; color:var(--muted); margin-left:auto; }
   .card-title { font-size:0.95rem; font-weight:600; line-height:1.45;
     margin-bottom:8px; color:var(--text); }
@@ -126,7 +131,7 @@
       <input id="searchInput" type="text" placeholder="제목, 태그로 검색…" autocomplete="off">
     </div>
     <div class="header-stats">
-      <span class="stat-chip"><b id="totalCount">32</b> 아티클</span>
+      <span class="stat-chip"><b id="totalCount">34</b> 아티클</span>
       <span class="stat-chip">업데이트 <b>2026-05-22</b></span>
     </div>
   </div>
@@ -142,6 +147,7 @@
   <button class="filter-btn" data-cat="모델" onclick="filterCat(this)">🔬 모델 트래커</button>
   <button class="filter-btn" data-cat="기술" onclick="filterCat(this)">🔩 심화 기술</button>
   <button class="filter-btn" data-cat="사업현안" onclick="filterCat(this)">🏢 사업 현안</button>
+  <button class="filter-btn" data-cat="담론" onclick="filterCat(this)">💬 담론 등등</button>
 </div>
 
 <main>
@@ -388,7 +394,7 @@
     <div class="section-header">
       <div class="section-dot" style="background:var(--insight)"></div>
       <span class="section-title">💡 나의 인사이트</span>
-      <span class="section-count">7개</span>
+      <span class="section-count">8개</span>
     </div>
     <div class="cards-grid">
       <a class="card" data-cat="인사이트"
@@ -421,6 +427,17 @@
         </div>
         <div class="card-title">xAI 가스터빈 46기 — AI 인프라 경쟁의<br>숨겨진 규제 루프홀과 사업 리스크</div>
         <div class="card-tags"><span class="tag">xAI</span><span class="tag">규제 루프홀</span><span class="tag">ESG 리스크</span><span class="tag">에너지 조달</span><span class="tag">NAACP 소송</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card" data-cat="인사이트"
+         href="./06_나의_인사이트/2026-05_Gavin_Baker_Watts_Wafers_Orbital_Compute_인사이트.html">
+        <div class="card-meta">
+          <span class="cat-badge insight">인사이트</span>
+          <span class="card-date">2026-05</span>
+        </div>
+        <div class="card-title">Gavin Baker — Watts &amp; Wafers:<br>Orbital Compute·TSMC·Frontier Models 인사이트</div>
+        <div class="card-tags"><span class="tag">Watts & Wafers</span><span class="tag">Orbital Compute</span><span class="tag">TSMC</span><span class="tag">Blackwell</span><span class="tag">SaaS Death Trap</span></div>
         <span class="card-arrow">→</span>
       </a>
 
@@ -547,6 +564,26 @@
         </div>
         <div class="card-title">OctaPulse — 수산양식 AI 비전·로보틱스<br>투자 검토 보고서 (YC W26)</div>
         <div class="card-tags"><span class="tag">Aquaculture</span><span class="tag">YC W26</span><span class="tag">Computer Vision</span><span class="tag">Hatchery QA</span><span class="tag">투자검토</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section" id="sec-담론" data-cat="담론">
+    <div class="section-header">
+      <div class="section-dot" style="background:var(--discourse)"></div>
+      <span class="section-title">💬 담론 등등</span>
+      <span class="section-count">1개</span>
+    </div>
+    <div class="cards-grid">
+      <a class="card" data-cat="담론"
+         href="./08_담론_등등/2026-05_스타벅스_탱크데이_규범윤리_정치철학_분석.html">
+        <div class="card-meta">
+          <span class="cat-badge discourse">담론</span>
+          <span class="card-date">2026-05</span>
+        </div>
+        <div class="card-title">스타벅스 '탱크데이' 사건의<br>규범윤리학·정치철학적 분석</div>
+        <div class="card-tags"><span class="tag">5·18</span><span class="tag">칸트·밀·샌델</span><span class="tag">시장의 도덕적 한계</span><span class="tag">상품화</span><span class="tag">공동체주의</span></div>
         <span class="card-arrow">→</span>
       </a>
     </div>

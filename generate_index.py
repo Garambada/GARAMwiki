@@ -125,6 +125,10 @@ ARTICLE_META = {
         "title": "AI 10x Leverage 두 방향성과<br>AX 실행론 심층 분석 (노정석·BFACTORY)",
         "tags":  ["AI 10x", "AX 실행론", "1/10x", "임계점 이론", "Pilot Purgatory"],
     },
+    "2026-05_Gavin_Baker_Watts_Wafers_Orbital_Compute_인사이트.html": {
+        "title": "Gavin Baker — Watts &amp; Wafers:<br>Orbital Compute·TSMC·Frontier Models 인사이트",
+        "tags":  ["Watts & Wafers", "Orbital Compute", "TSMC", "Blackwell", "SaaS Death Trap"],
+    },
     # 나의 인사이트
     "경량문명_나의인사이트.html": {
         "title": "경량문명의 도래와 기업의 미래<br>— 초개인화 AI 시대 대응 전략",
@@ -148,6 +152,11 @@ ARTICLE_META = {
         "title": "에너지 인프라 AX 전환전략 — AI 설계 기술 검증<br>용역 종합 기획서 PoC PRD (국가철도공단)",
         "tags":  ["GraphRAG", "PINN", "온톨로지", "SCADA", "전철전력 AX"],
     },
+    # 담론 등등
+    "2026-05_스타벅스_탱크데이_규범윤리_정치철학_분석.html": {
+        "title": "스타벅스 '탱크데이' 사건의<br>규범윤리학·정치철학적 분석",
+        "tags":  ["5·18", "칸트·밀·샌델", "시장의 도덕적 한계", "상품화", "공동체주의"],
+    },
     # 심화 기술
     "ontology-vs-genai-wiki.html": {
         "title": "온톨로지 기반 AI vs 생성형 LLM<br>— 판단하는 AI의 아키텍처 해부",
@@ -165,6 +174,7 @@ FOLDER_CAT = {
     "02_모델_트래커":          ("모델",     "🔬 모델 트래커",          "model"),
     "05_심화_기술":            ("기술",     "🔩 심화 기술",            "tech"),
     "07_사업_현안":            ("사업현안", "🏢 사업 현안",             "issue"),
+    "08_담론_등등":            ("담론",     "💬 담론 등등",             "discourse"),
 }
 
 # ───────────────────────────────────────────────
@@ -226,7 +236,8 @@ def sections_html(articles):
 
     dot_colors = {"비즈니스":"var(--biz)","트렌드":"var(--trend)",
                   "인사이트":"var(--insight)","모델":"var(--model)",
-                  "기술":"var(--tech)","사업현안":"var(--issue)"}
+                  "기술":"var(--tech)","사업현안":"var(--issue)",
+                  "담론":"var(--discourse)"}
 
     html = ""
     for (cat_id, cat_label, cat_class), items in grouped.items():
@@ -280,6 +291,7 @@ def build_index():
     --model: #a78bfa; --model-bg: rgba(167,139,250,0.08);
     --tech: #06b6d4;  --tech-bg: rgba(6,182,212,0.08);
     --issue: #f97316; --issue-bg: rgba(249,115,22,0.08);
+    --discourse: #e879f9; --discourse-bg: rgba(232,121,249,0.08);
   }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ background: var(--bg); color: var(--text);
@@ -320,6 +332,7 @@ def build_index():
   .filter-btn[data-cat="모델"].active     {{ background:var(--model); border-color:var(--model); }}
   .filter-btn[data-cat="기술"].active     {{ background:var(--tech); border-color:var(--tech); }}
   .filter-btn[data-cat="사업현안"].active {{ background:var(--issue); border-color:var(--issue); }}
+  .filter-btn[data-cat="담론"].active     {{ background:var(--discourse); border-color:var(--discourse); }}
   main {{ max-width:1200px; margin:0 auto; padding:28px 32px 60px; }}
   .section {{ margin-bottom:40px; }}
   .section-header {{ display:flex; align-items:center; gap:12px; margin-bottom:16px;
@@ -340,6 +353,7 @@ def build_index():
   .card[data-cat="모델"]::before     {{ background:var(--model); }}
   .card[data-cat="기술"]::before     {{ background:var(--tech); }}
   .card[data-cat="사업현안"]::before {{ background:var(--issue); }}
+  .card[data-cat="담론"]::before      {{ background:var(--discourse); }}
   .card:hover {{ transform:translateY(-2px); border-color:rgba(88,166,255,0.3);
     box-shadow:0 8px 24px rgba(0,0,0,0.4); }}
   .card[data-cat="비즈니스"]:hover {{ border-color:rgba(245,158,11,0.3); }}
@@ -348,6 +362,7 @@ def build_index():
   .card[data-cat="모델"]:hover     {{ border-color:rgba(167,139,250,0.3); }}
   .card[data-cat="기술"]:hover     {{ border-color:rgba(6,182,212,0.3); }}
   .card[data-cat="사업현안"]:hover {{ border-color:rgba(249,115,22,0.3); }}
+  .card[data-cat="담론"]:hover     {{ border-color:rgba(232,121,249,0.3); }}
   .card-meta {{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }}
   .cat-badge {{ font-size:0.7rem; font-weight:700; padding:2px 8px;
     border-radius:10px; letter-spacing:0.3px; }}
@@ -356,7 +371,8 @@ def build_index():
   .cat-badge.insight {{ background:var(--insight-bg); color:var(--insight); }}
   .cat-badge.model   {{ background:var(--model-bg); color:var(--model); }}
   .cat-badge.tech    {{ background:var(--tech-bg); color:var(--tech); }}
-  .cat-badge.issue   {{ background:var(--issue-bg); color:var(--issue); }}
+  .cat-badge.issue      {{ background:var(--issue-bg); color:var(--issue); }}
+  .cat-badge.discourse  {{ background:var(--discourse-bg); color:var(--discourse); }}
   .card-date {{ font-size:0.72rem; color:var(--muted); margin-left:auto; }}
   .card-title {{ font-size:0.95rem; font-weight:600; line-height:1.45;
     margin-bottom:8px; color:var(--text); }}

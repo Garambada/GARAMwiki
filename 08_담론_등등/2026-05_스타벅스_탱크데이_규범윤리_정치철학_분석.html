@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스타벅스 '탱크데이' 사건의 규범윤리학·정치철학적 분석 — GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0c0e14; --surface: #131720; --surface2: #1a2030;
+    --border: #252d3d; --text: #e2e8f8; --muted: #6b7a99; --accent: #e879f9;
+    --accent-bg: rgba(232,121,249,0.08); --accent-glow: rgba(232,121,249,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+    min-height: 100vh; line-height: 1.7; }
+
+  /* ── NAV ── */
+  nav { border-bottom: 1px solid var(--border); padding: 0 40px;
+    position: sticky; top: 0; background: rgba(12,14,20,0.92);
+    backdrop-filter: blur(12px); z-index: 100; }
+  .nav-inner { max-width: 1000px; margin: 0 auto;
+    display: flex; align-items: center; gap: 16px; height: 56px; }
+  .nav-logo { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px;
+    background: linear-gradient(135deg,#e879f9 0%,#a78bfa 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; text-decoration: none; }
+  .nav-sep { color: var(--border); }
+  .nav-cat { font-size: 0.78rem; padding: 3px 10px; border-radius: 12px;
+    background: var(--accent-bg); color: var(--accent); font-weight: 700; border: 1px solid rgba(232,121,249,0.2); }
+  .nav-back { margin-left: auto; font-size: 0.8rem; color: var(--muted);
+    text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero { max-width: 1000px; margin: 0 auto; padding: 56px 40px 32px; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .tag-disc { font-size: 0.72rem; padding: 3px 10px; border-radius: 12px;
+    background: var(--accent-bg); color: var(--accent); font-weight: 700;
+    border: 1px solid rgba(232,121,249,0.25); letter-spacing: 0.3px; }
+  .tag-date { font-size: 0.72rem; color: var(--muted); }
+  h1 { font-size: 2rem; font-weight: 800; line-height: 1.25; letter-spacing: -0.8px;
+    color: var(--text); margin-bottom: 14px; }
+  h1 em { font-style: normal;
+    background: linear-gradient(135deg,#e879f9 0%,#a78bfa 60%,#60a5fa 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; }
+  .subtitle { font-size: 1.05rem; color: var(--muted); max-width: 680px; line-height: 1.6; }
+
+  /* ── STAT PILLS ── */
+  .stat-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 28px 0 0; }
+  .stat { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 6px 16px; font-size: 0.78rem; color: var(--muted); }
+  .stat b { color: var(--text); }
+
+  /* ── DIVIDER ── */
+  .hero-line { max-width: 1000px; margin: 32px auto 0; padding: 0 40px; }
+  .hero-line hr { border: none; border-top: 1px solid var(--border); }
+
+  /* ── CONTENT ── */
+  .content { max-width: 1000px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* ── SECTION CARD ── */
+  .section-card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px 36px; margin: 32px 0;
+    position: relative; overflow: hidden; }
+  .section-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: linear-gradient(90deg,#e879f9,#a78bfa); border-radius: 16px 16px 0 0; }
+  .section-num { font-size: 0.7rem; font-weight: 800; color: var(--accent);
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; opacity: 0.7; }
+  .section-card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 18px;
+    color: var(--text); letter-spacing: -0.3px; }
+  .section-card h3 { font-size: 1rem; font-weight: 700; color: var(--accent);
+    margin: 24px 0 10px; }
+  .section-card p { font-size: 0.93rem; color: #c8d0e8; margin-bottom: 14px; line-height: 1.75; }
+  .section-card p:last-child { margin-bottom: 0; }
+
+  /* ── PHILOSOPHY GRID ── */
+  .phil-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+  .phil-card { background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; }
+  .phil-school { font-size: 0.7rem; font-weight: 800; color: var(--accent);
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .phil-thinker { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .phil-verdict { font-size: 0.82rem; color: #c8d0e8; line-height: 1.6; }
+  .phil-verdict b { color: #e879f9; }
+
+  /* ── QUOTE BLOCK ── */
+  .quote { background: var(--accent-bg); border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 18px 0;
+    font-size: 0.9rem; color: var(--text); line-height: 1.7; font-style: italic; }
+  .quote cite { display: block; margin-top: 8px; font-style: normal;
+    font-size: 0.76rem; color: var(--muted); font-weight: 600; }
+
+  /* ── LAYER TABLE ── */
+  .layer-table { width: 100%; border-collapse: collapse; margin: 18px 0;
+    font-size: 0.84rem; }
+  .layer-table th { background: var(--surface2); color: var(--muted);
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .layer-table td { padding: 12px 14px; border-bottom: 1px solid rgba(37,45,61,0.6);
+    color: #c8d0e8; vertical-align: top; line-height: 1.6; }
+  .layer-table tr:last-child td { border-bottom: none; }
+  .layer-table tr:hover td { background: rgba(232,121,249,0.04); }
+  .label-pill { display: inline-block; font-size: 0.68rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 8px; }
+  .label-agree { background: rgba(16,185,129,0.12); color: #10b981; }
+  .label-partial { background: rgba(245,158,11,0.12); color: #f59e0b; }
+  .label-tension { background: rgba(239,68,68,0.12); color: #ef4444; }
+
+  /* ── TENSION BOX ── */
+  .tension-box { background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px 24px; margin: 20px 0; }
+  .tension-box .t-num { font-size: 0.68rem; font-weight: 800; color: var(--accent);
+    letter-spacing: 1px; margin-bottom: 4px; }
+  .tension-box .t-title { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .tension-box .t-body { font-size: 0.84rem; color: #9aa5c0; line-height: 1.7; }
+
+  /* ── KEYWORD PILLS ── */
+  .kw-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+  .kw { font-size: 0.75rem; padding: 4px 12px; border-radius: 14px;
+    background: var(--surface2); color: var(--muted);
+    border: 1px solid var(--border); }
+  .kw-accent { background: var(--accent-bg); color: var(--accent);
+    border-color: rgba(232,121,249,0.25); font-weight: 600; }
+
+  /* ── FINAL INSIGHT ── */
+  .insight-box { background: linear-gradient(135deg, rgba(232,121,249,0.06) 0%, rgba(167,139,250,0.06) 100%);
+    border: 1px solid rgba(232,121,249,0.2); border-radius: 16px;
+    padding: 28px 32px; margin: 32px 0; }
+  .insight-box .i-label { font-size: 0.72rem; font-weight: 800; color: var(--accent);
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .insight-box p { font-size: 0.95rem; color: var(--text); line-height: 1.8; }
+  .insight-box p b { color: #e879f9; }
+
+  /* ── SOURCE BAR ── */
+  .source-bar { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 24px; margin: 40px 0 0; }
+  .source-bar .s-label { font-size: 0.72rem; font-weight: 700; color: var(--muted);
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+  .source-bar ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .source-bar li { font-size: 0.8rem; color: var(--muted); }
+  .source-bar li b { color: #c8d0e8; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    nav, .hero, .hero-line, .content { padding-left: 20px; padding-right: 20px; }
+    h1 { font-size: 1.5rem; }
+    .phil-grid { grid-template-columns: 1fr; }
+    .section-card { padding: 22px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">GARAMwiki</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-cat">💬 담론 등등</span>
+    <a class="nav-back" href="../index.html">← 전체 목록</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">
+    <span class="tag-disc">규범윤리학 · 정치철학</span>
+    <span class="tag-date">2026 · 05</span>
+  </div>
+  <h1>스타벅스 '<em>탱크데이</em>' 사건의<br>규범윤리학·정치철학적 분석</h1>
+  <p class="subtitle">역사적 기억, 공동체의 도덕적 정체성, 시장의 자유와 한계, 기업의 사회적 책임 —
+    네 층위의 규범적 쟁점이 응축된 이 사건을 칸트·밀·아리스토텔레스·롤즈·샌델·하버마스의 렌즈로 해부한다.</p>
+  <div class="stat-row">
+    <span class="stat">📅 사건: <b>2026년 5월 18일</b></span>
+    <span class="stat">🏷️ 키워드: <b>Tank Day · 책상에 탁!</b></span>
+    <span class="stat">⚖️ 이론: <b>의무론·결과주의·덕윤리·공동체주의</b></span>
+    <span class="stat">📐 결론: <b>3대 규범윤리이론 동일 결론 수렴</b></span>
+  </div>
+</div>
+<div class="hero-line"><hr></div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- I. 윤리적 좌표 -->
+  <div class="section-card">
+    <div class="section-num">I</div>
+    <h2>사건의 윤리적 좌표 설정</h2>
+    <p>2026년 5월 18일, 스타벅스코리아는 5·18 민주화운동 46주년 기념일 당일 <b>'탱크데이(Tank Day)' 텀블러 프로모션</b>을 진행하며 "책상에 탁!"이라는 문구를 병기했다. 표면적으로는 마케팅 실패담으로 보이나 그 안에는 네 층위의 규범적 쟁점이 응축되어 있다.</p>
+
+    <div class="kw-row">
+      <span class="kw kw-accent">역사적 기억</span>
+      <span class="kw kw-accent">공동체의 도덕적 정체성</span>
+      <span class="kw kw-accent">시장의 자유와 한계</span>
+      <span class="kw kw-accent">기업의 사회적 책임</span>
+    </div>
+
+    <div class="quote">
+      "기업의 이윤 추구와 마케팅의 자유도 타인의 고통과 공동체의 비극적 역사 위에서 행사될 수는 없다"
+      <cite>— 5·18기념재단 성명</cite>
+    </div>
+
+    <p>이 문장은 본 사건의 윤리적 핵심을 정확히 짚는다. 이 사건은 <b>시장 영역의 도덕적 한계(moral limits of markets)</b>라는 고전적 정치철학 주제를 한국적 맥락에서 재현한 사례다.</p>
+  </div>
+
+  <!-- II. 규범윤리학 -->
+  <div class="section-card">
+    <div class="section-num">II</div>
+    <h2>규범윤리학 세 이론의 평가</h2>
+
+    <div class="phil-grid">
+      <div class="phil-card">
+        <div class="phil-school">의무론</div>
+        <div class="phil-thinker">칸트 (Kant)</div>
+        <div class="phil-verdict">정언명령 위반. 희생자의 인격성을 마케팅 <b>수단으로 환원</b>. 의도 불문, 행위 형식 자체가 도덕법칙에 부합하지 않음.</div>
+      </div>
+      <div class="phil-card">
+        <div class="phil-school">결과주의</div>
+        <div class="phil-thinker">밀 (J.S. Mill)</div>
+        <div class="phil-verdict">부정적 효용 총합. 5·18 <b>조롱 콘텐츠 확산</b>으로 도덕적 담론 환경 오염. 규칙공리주의 관점에서도 명백한 위반.</div>
+      </div>
+      <div class="phil-card">
+        <div class="phil-school">덕윤리</div>
+        <div class="phil-thinker">아리스토텔레스</div>
+        <div class="phil-verdict">프로네시스(실천적 지혜) 결여. 맥락 분별 실패 또는 의도적 무시. <b>경향적 성품</b>의 표출 가능성.</div>
+      </div>
+    </div>
+
+    <h3>① 의무론 — 칸트적 시각</h3>
+    <p>칸트의 정언명령 제2정식 — "인간성을 항상 동시에 목적으로 대하라, 결코 단순한 수단으로 대하지 말라" — 는 이 사건에서 가장 직접적인 규탄 근거를 제공한다. '탱크데이'와 '책상에 탁!'은 희생자들의 비극을 텀블러 판촉의 <b>언어적 장식으로 전유</b>함으로써, 희생자들의 인격성을 마케팅 도구(수단)로 환원시킨다.</p>
+    <p><b>보편화가능성 검사</b>를 적용하면, "모든 기업이 비극적 역사의 기념일을 판촉 키워드로 활용한다"는 준칙은 자기모순에 빠진다. 사회적 추모의 의미 자체가 상업적 소음 속에서 해체되기 때문이다. 의무론은 행위자의 의도와 무관하게 <b>행위의 형식 자체</b>가 도덕법칙에 부합하지 않는다고 판정한다.</p>
+
+    <h3>② 결과주의 — 공리주의적 시각</h3>
+    <p>밀(J.S. Mill)의 질적 공리주의를 적용하면, 이 사건의 결과는 명백히 부정적 효용의 총합으로 귀결된다. 유가족과 광주 시민이 입은 직접적 고통, SNS에서 확산된 5·18 조롱 콘텐츠(전두환이 탱크 텀블러로 음료를 마시는 AI 영상 등)는 <b>사회 전체의 도덕적 담론 환경 오염</b>을 초래했다.</p>
+    <p>밀의 <b>고급 쾌락(higher pleasures)</b> 구분 — 역사적 진실에 대한 존중과 공감 능력은 단기적 흥미보다 질적으로 우월 — 과 <b>규칙공리주의</b> 관점("기업은 역사적 비극을 판촉 소재로 삼지 않는다"는 규칙의 장기 효용이 압도적으로 큼)에서 모두 위반이다.</p>
+
+    <h3>③ 덕윤리 — 아리스토텔레스적 시각</h3>
+    <p>덕윤리의 핵심 질문: "이런 행위를 한 조직은 어떤 종류의 존재인가". <b>프로네시스(phronesis, 실천적 지혜)</b> — 맥락에 대한 섬세한 분별력 — 의 결여가 핵심이다. 5·18이라는 날짜의 의미를 분별하지 못한 것(또는 분별했음에도 무시한 것)은 덕의 결여(vice) 그 자체다.</p>
+    <div class="quote">
+      정용진 회장의 2022년 1월 '멸공' 해시태그 논란과 연결해 볼 때, 이번 사건이 우발적 일탈이 아닌 <b>경향적 성품(character disposition)의 표출</b>일 가능성이 제기된다.
+      <cite>— 덕윤리의 판정: 문제는 행위가 아니라 행위자의 성품</cite>
+    </div>
+  </div>
+
+  <!-- III. 정치철학 -->
+  <div class="section-card">
+    <div class="section-num">III</div>
+    <h2>현대 정치철학의 다층적 해석</h2>
+
+    <h3>① 롤즈(Rawls) — 공정으로서의 정의</h3>
+    <p>롤즈의 기본구조론은 개별 기업 마케팅 행위를 직접 대상으로 하지 않지만, <b>자존감의 사회적 기반(social bases of self-respect)</b> 개념을 매개로 평가 가능하다. 5·18 유가족과 광주 시민에게 "고통이 상업적 농담거리가 되지 않으리라는 합당한 기대"는 자존감의 사회적 기반의 일부다.</p>
+    <p><b>원초적 입장(original position)</b>의 무지의 베일 뒤에서 합리적 당사자들이라면, "역사적 비극의 희생자 및 유가족의 존엄을 보호하는 사회 규범"에 합의할 것이다.</p>
+    <div class="quote">
+      정청래 의원의 법적 처벌 법안 추진은 롤즈의 자유주의적 정의관에서 <b>양가적</b>이다. 자존감의 사회적 기반 보호 vs. 표현의 자유 사이의 긴장이 발생한다. 롤즈라면 법적 처벌보다 <b>시민사회의 비판과 소비자 시장의 응답(불매운동)을 우선적 응답 방식</b>으로 권할 것이다.
+      <cite>— 공적 이성의 자제(restraint of public reason)</cite>
+    </div>
+
+    <h3>② 공동체주의(Communitarianism) — 가장 강력한 비판의 언어</h3>
+    <p><b>매킨타이어(MacIntyre)의 서사적 자아</b>: 개인의 정체성은 공동체의 역사적 서사 속에서만 의미를 갖는다. 한국 사회의 민주주의적 자기이해는 4·19, 5·18, 6월항쟁이라는 구성적 서사 위에 서 있으며, 이 서사를 훼손하는 행위는 <b>공동체의 도덕적 기억(moral memory)에 대한 공격</b>이다.</p>
+    <p><b>샌델(Sandel)의 연고적 자아와 상품화 비판</b>: 비극적 역사의 기억은 시장에서 거래될 수 없는 <b>도덕적 재화(moral good)</b>의 전형이다. 5·18을 'Tank Day'로 코드화하여 텀블러를 파는 행위는, 상품화(commodification)가 도덕적 의미를 <b>부식시키는(corrupt) 메커니즘</b>의 교과서적 사례다.</p>
+    <div class="quote">
+      "공동체의 근간을 뒤흔드는 반인륜적 패륜이자 사회적 범죄" / "자신의 이익을 위해 5월 광주의 거룩한 희생까지 상품화하는 것은 시정잡배에게도 허용하지 않을 비인간적인 작태"
+      <cite>— 한병도 더불어민주당 원내대표 (의식했든 안 했든, 정확히 공동체주의적 언어)</cite>
+    </div>
+    <p><b>월저(Walzer)의 영역들의 분리(Spheres of Justice)</b>: 돈의 영역, 정치의 영역, 명예와 기억의 영역은 각자의 분배 원리를 가진다. 한 영역의 논리가 다른 영역을 침범할 때 <b>지배(dominance)</b>가 발생한다. 시장 논리(돈)가 추모의 영역(기억)을 침범한 것이 이번 사건의 본질이다.</p>
+
+    <h3>③ 시장지상주의(Nozick·Friedman) — 자유지상주의의 응답과 한계</h3>
+    <p>형식적 논리만 따르면, 스타벅스의 행위는 합법적 사적 행위이며 시장의 자기교정 메커니즘(불매 → 서머 프로모션 연기, 손정현 대표 해임)이 적절한 응답이다. 자유지상주의자 관점에서 이는 시장이 작동했다는 증거다.</p>
+    <p>그러나 이 입장의 한계: 첫째, 소비자의 도덕적 분노 자체가 <b>시장 외부의 공동체적 가치에서 발원</b>한다. 둘째, 광고와 마케팅은 단순한 가격 신호가 아니라 <b>문화적 의미를 생산하는 행위</b>이며, 따라서 공적 도덕 영역에 속한다.</p>
+    <p>국민의힘 충북도당의 "내일 스벅 가야지" 게시물은 시장지상주의의 왜곡된 형태 — 소비자 주권이 아닌 <b>정치적 진영 논리가 시장 행위에 침투</b>한 사례 — 다.</p>
+
+    <h3>④ 하버마스(Habermas) — 의사소통적 합리성과 공론장</h3>
+    <p>이 사건은 SNS, 언론, 정치권, 기업 사과문, 시민사회 성명서가 다층적으로 교차하며 <b>공론장(Öffentlichkeit)이 작동하는 방식</b>을 보여준다.</p>
+    <div class="quote">
+      "이번 논란이 단순히 한 기업의 일시적인 해프닝이나 면피성 사과로 끝나지 않고 우리 사회 전체가 역사적 기억과 타인의 고통을 어떻게 존중하고 성찰해야 하는지 엄중히 되묻는 계기가 되기를 바란다"
+      <cite>— 5·18기념재단 성명 (하버마스적 의미의 학습 과정(Lernprozess)으로서의 공론장)</cite>
+    </div>
+    <p>다만 하버마스라면 공론장이 <b>전략적 행위(strategisches Handeln)에 의해 왜곡될 위험</b>을 경고할 것이다. 정치권의 비판이 진정한 도덕적 분노인지, 지방선거 국면의 정치적 활용인지의 분별이 필요하다.</p>
+  </div>
+
+  <!-- IV. 종합 평가 -->
+  <div class="section-card">
+    <div class="section-num">IV</div>
+    <h2>종합 평가: 다층적 정당화와 남는 질문들</h2>
+
+    <h3>이론별 판정 비교</h3>
+    <table class="layer-table">
+      <thead>
+        <tr>
+          <th>이론</th>
+          <th>주요 논거</th>
+          <th>비판 행위의 정당성</th>
+          <th>법적 처벌 입론</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>칸트 의무론</b></td>
+          <td>정언명령 위반, 수단 환원</td>
+          <td><span class="label-pill label-agree">강하게 지지</span></td>
+          <td><span class="label-pill label-tension">법 이전에 도덕법칙</span></td>
+        </tr>
+        <tr>
+          <td><b>밀 공리주의</b></td>
+          <td>사회적 효용 총합 부정적</td>
+          <td><span class="label-pill label-agree">지지 (규칙공리주의)</span></td>
+          <td><span class="label-pill label-partial">신중하게 검토 필요</span></td>
+        </tr>
+        <tr>
+          <td><b>덕윤리</b></td>
+          <td>성품의 경향적 문제</td>
+          <td><span class="label-pill label-agree">강하게 지지</span></td>
+          <td><span class="label-pill label-tension">성품 교정은 법 밖 영역</span></td>
+        </tr>
+        <tr>
+          <td><b>롤즈 자유주의</b></td>
+          <td>자존감의 사회적 기반 침해</td>
+          <td><span class="label-pill label-agree">지지</span></td>
+          <td><span class="label-pill label-tension">표현의 자유와 긴장</span></td>
+        </tr>
+        <tr>
+          <td><b>공동체주의</b></td>
+          <td>도덕적 기억·공동선 훼손</td>
+          <td><span class="label-pill label-agree">가장 강하게 지지</span></td>
+          <td><span class="label-pill label-partial">공동선 보호 근거 가능</span></td>
+        </tr>
+        <tr>
+          <td><b>시장지상주의</b></td>
+          <td>시장 자기교정 메커니즘</td>
+          <td><span class="label-pill label-partial">시장 응답으로 충분</span></td>
+          <td><span class="label-pill label-tension">국가 개입 불필요</span></td>
+        </tr>
+        <tr>
+          <td><b>하버마스</b></td>
+          <td>공론장의 학습 과정</td>
+          <td><span class="label-pill label-agree">지지 (공론장 통해)</span></td>
+          <td><span class="label-pill label-partial">전략적 왜곡 경계</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>주목할 점: 반성적 평형의 강한 성립</h3>
+    <p>규범윤리학의 세 주류 이론(의무론, 결과주의, 덕윤리)이 동일한 결론에 수렴한다. 이는 윤리학에서 이른바 <b>반성적 평형(reflective equilibrium)</b>이 강하게 성립하는 사례로, 비판의 도덕적 정당성은 매우 견고하다.</p>
+
+    <h3>남는 긴장과 경계해야 할 지점들</h3>
+    <div class="tension-box">
+      <div class="t-num">TENSION 01</div>
+      <div class="t-title">응답의 비례성 문제</div>
+      <div class="t-body">시민사회 비판·소비자 불매·기업 내부 인적 쇄신은 적절한 응답이다. 그러나 법적 처벌 도입은 표현의 자유와의 긴장을 면밀히 따져야 한다. 롤즈가 강조하는 공적 이성의 자제(restraint of public reason)가 요구된다.</div>
+    </div>
+    <div class="tension-box">
+      <div class="t-num">TENSION 02</div>
+      <div class="t-title">정치적 진영화의 위험</div>
+      <div class="t-body">도덕적 사건이 진영 논리로 흡수될 때, 공동체의 도덕적 학습 기회가 오히려 손상될 수 있다. 진영 결집을 위한 도구로 전락하면 하버마스가 경고한 공론장의 전략적 왜곡이 발생한다.</div>
+    </div>
+    <div class="tension-box">
+      <div class="t-num">TENSION 03</div>
+      <div class="t-title">기억의 상품화 일반론</div>
+      <div class="t-body">한국적 맥락의 특수성을 갖지만, 홀로코스트 굿즈, 9/11 기념품 등 역사적 비극의 상품화라는 보편적 문제와 연결된다. 시장의 도덕적 한계에 대한 사회적 합의를 어떤 절차로 형성해갈 것인가가 본질적 질문이다.</div>
+    </div>
+  </div>
+
+  <!-- FINAL INSIGHT -->
+  <div class="insight-box">
+    <div class="i-label">핵심 인사이트</div>
+    <p>이 사건의 가장 깊은 교훈은, 샌델의 표현을 빌리자면, <b>"시장 경제(market economy)를 갖는 것과 시장 사회(market society)가 되는 것은 다르다"</b>는 명제다.</p>
+    <p style="margin-top: 14px;">한국 사회는 지금 시장 경제의 효율성을 누리되 시장 사회의 도덕적 부식으로부터 무엇을, 어떻게 지킬 것인가라는 질문 앞에 서 있다. 5·18의 기억은 그 질문에 대한 응답의 시금석이다 — 그리고 이번 응답이 보여준 시민사회의 결집력은, 비록 슬픈 계기로 촉발되었지만, <b>한국 민주주의의 도덕적 자원이 여전히 살아있음</b>의 증거이기도 하다.</p>
+  </div>
+
+  <!-- KEYWORD CLOUD -->
+  <div class="kw-row">
+    <span class="kw kw-accent">시장의 도덕적 한계</span>
+    <span class="kw kw-accent">정언명령</span>
+    <span class="kw kw-accent">반성적 평형</span>
+    <span class="kw kw-accent">공동체의 도덕적 기억</span>
+    <span class="kw kw-accent">상품화(commodification)</span>
+    <span class="kw kw-accent">공론장</span>
+    <span class="kw">칸트</span>
+    <span class="kw">밀</span>
+    <span class="kw">아리스토텔레스</span>
+    <span class="kw">롤즈</span>
+    <span class="kw">샌델</span>
+    <span class="kw">매킨타이어</span>
+    <span class="kw">월저</span>
+    <span class="kw">하버마스</span>
+    <span class="kw">5·18</span>
+    <span class="kw">스타벅스코리아</span>
+  </div>
+
+  <!-- SOURCE BAR -->
+  <div class="source-bar">
+    <div class="s-label">참고 맥락 및 인용</div>
+    <ul>
+      <li><b>5·18기념재단</b> — 사건 관련 공식 성명문 (2026.05.18)</li>
+      <li><b>정치권 반응</b> — 한병도 원내대표, 정청래 대표 발언 인용</li>
+      <li><b>Michael Sandel</b> — 『정의란 무엇인가』(2009), 『돈으로 살 수 없는 것들』(2012)</li>
+      <li><b>John Rawls</b> — 『A Theory of Justice』(1971), 『Political Liberalism』(1993)</li>
+      <li><b>Alasdair MacIntyre</b> — 『After Virtue』(1981)</li>
+      <li><b>Michael Walzer</b> — 『Spheres of Justice』(1983)</li>
+      <li><b>Jürgen Habermas</b> — 『The Structural Transformation of the Public Sphere』(1962)</li>
+      <li><b>Immanuel Kant</b> — 『Groundwork of the Metaphysics of Morals』(1785)</li>
+      <li><b>J.S. Mill</b> — 『Utilitarianism』(1863)</li>
+    </ul>
+  </div>
+
+</div><!-- /content -->
+
+<footer style="border-top:1px solid var(--border);text-align:center;padding:20px;font-size:0.78rem;color:var(--muted);">
+  GARAMwiki · 담론 등등 · 2026-05 &nbsp;|&nbsp;
+  <a href="../index.html" style="color:var(--accent);text-decoration:none;">← 전체 목록으로</a>
+</footer>
+</body>
+</html>

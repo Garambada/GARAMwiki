@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gavin Baker — Watts & Wafers: Orbital Compute, TSMC, Frontier Models 인사이트 | GARAMwiki</title>
+<style>
+  :root{
+    --bg:#0c0e14; --surface:#13161f; --surface2:#1a1e2a; --surface3:#222635;
+    --border:#2a2f3e; --text:#e2e8f0; --muted:#8892a4; --dim:#555f72;
+    --accent:#10b981; --accent2:#34d399; --accent-bg:rgba(16,185,129,0.10);
+    --orange:#f97316; --blue:#3b82f6; --purple:#a78bfa; --cyan:#06b6d4;
+    --red:#f43f5e; --yellow:#f59e0b; --pink:#ec4899;
+    --r:10px; --r-sm:6px; --transition:0.2s ease;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;line-height:1.7;font-size:15px}
+
+  nav{position:sticky;top:0;z-index:100;background:rgba(12,14,20,0.92);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:16px;height:52px}
+  .nav-home{color:var(--accent);text-decoration:none;font-weight:700;font-size:15px}
+  .nav-sep{color:var(--dim)}
+  .nav-cat{background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;
+    padding:3px 10px;border-radius:20px;border:1px solid rgba(16,185,129,0.3)}
+  .nav-title{color:var(--muted);font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-back{color:var(--muted);font-size:12px;text-decoration:none;
+    padding:4px 12px;border:1px solid var(--border);border-radius:6px;transition:var(--transition)}
+  .nav-back:hover{color:var(--text);border-color:var(--accent)}
+
+  .hero{padding:60px 24px 48px;max-width:1060px;margin:0 auto}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-bg);
+    border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:5px 14px;
+    color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:24px}
+  .hero-title{font-size:clamp(24px,4vw,40px);font-weight:800;line-height:1.2;margin-bottom:8px;
+    background:linear-gradient(135deg,#fff 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero-sub{font-size:16px;color:var(--muted);margin-bottom:28px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+  .meta-chip{background:var(--surface2);border:1px solid var(--border);border-radius:6px;
+    padding:5px 12px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .meta-chip span{color:var(--text);font-weight:600}
+
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;
+    max-width:1060px;margin:0 auto 40px;padding:0 24px}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:20px 18px;position:relative;overflow:hidden;transition:var(--transition)}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+  .stat-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+  .stat-value{font-size:26px;font-weight:800;color:var(--accent);line-height:1}
+  .stat-unit{font-size:12px;color:var(--muted);margin-top:4px}
+
+  .section{max-width:1060px;margin:0 auto 48px;padding:0 24px}
+  .section-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;
+    display:flex;align-items:center;gap:10px}
+  .section-title::before{content:'';width:4px;height:20px;background:var(--accent);border-radius:2px;flex-shrink:0}
+
+  .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;
+    transition:var(--transition)}
+  .card:hover{border-color:var(--accent)}
+  .card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px}
+  .card-body{font-size:13px;color:var(--muted);line-height:1.7}
+
+  /* PILLAR CARDS */
+  .pillar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:24px;border-top:3px solid;transition:var(--transition)}
+  .pillar:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+  .pillar.watts{border-top-color:var(--yellow)}
+  .pillar.wafers{border-top-color:var(--blue)}
+  .pillar-icon{font-size:28px;margin-bottom:12px}
+  .pillar-badge{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+    padding:3px 10px;border-radius:4px;margin-bottom:10px;display:inline-block}
+  .pillar.watts .pillar-badge{background:rgba(245,158,11,0.12);color:var(--yellow);border:1px solid rgba(245,158,11,0.3)}
+  .pillar.wafers .pillar-badge{background:rgba(59,130,246,0.12);color:var(--blue);border:1px solid rgba(59,130,246,0.3)}
+  .pillar-title{font-size:16px;font-weight:700;margin-bottom:8px}
+  .pillar-desc{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.7}
+  .pillar-points{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .pillar-points li{font-size:12.5px;color:var(--muted);padding-left:16px;position:relative;line-height:1.6}
+  .pillar-points li::before{content:'›';position:absolute;left:0;color:var(--accent);font-weight:700}
+  .pillar-points li strong{color:var(--text)}
+
+  /* ORBITAL */
+  .orbital-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+  .orbital-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:20px;text-align:center;border-bottom:3px solid}
+  .orbital-card.power{border-bottom-color:var(--yellow)}
+  .orbital-card.cooling{border-bottom-color:var(--cyan)}
+  .orbital-card.speed{border-bottom-color:var(--purple)}
+  .orbital-icon{font-size:32px;margin-bottom:10px}
+  .orbital-metric{font-size:22px;font-weight:800;margin-bottom:6px}
+  .orbital-card.power .orbital-metric{color:var(--yellow)}
+  .orbital-card.cooling .orbital-metric{color:var(--cyan)}
+  .orbital-card.speed .orbital-metric{color:var(--purple)}
+  .orbital-label{font-size:13px;font-weight:700;margin-bottom:6px}
+  .orbital-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+  /* SCALING LAWS */
+  .scaling-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;position:relative}
+  .sl-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);
+    padding:20px;position:relative}
+  .sl-item::after{content:'⟶';position:absolute;right:-16px;top:50%;transform:translateY(-50%);
+    color:var(--dim);font-size:18px;z-index:1}
+  .sl-item:last-child::after{display:none}
+  .sl-num{font-size:28px;font-weight:900;color:rgba(16,185,129,0.15);margin-bottom:4px}
+  .sl-name{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+  .sl-title{font-size:14px;font-weight:700;margin-bottom:6px}
+  .sl-desc{font-size:12px;color:var(--muted);line-height:1.6}
+  @media(max-width:700px){.scaling-flow{gap:10px}.sl-item::after{display:none}}
+
+  /* IQ → UTILITY */
+  .iq-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:stretch}
+  @media(max-width:600px){.iq-compare{grid-template-columns:1fr}}
+  .iq-side{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px}
+  .iq-side.old{border-top:3px solid var(--red)}
+  .iq-side.new{border-top:3px solid var(--green)}
+  .iq-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+  .iq-side.old .iq-label{color:var(--red)}
+  .iq-side.new .iq-label{color:var(--green)}
+  .iq-title{font-size:16px;font-weight:700;margin-bottom:14px}
+  .iq-points{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .iq-points li{font-size:12.5px;color:var(--muted);padding-left:16px;position:relative;line-height:1.6}
+  .iq-points li::before{content:'•';position:absolute;left:0;color:var(--accent)}
+  .iq-arrow{display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--accent);
+    font-weight:700;padding:0 8px}
+
+  /* CONTEXT BLOCKS */
+  .context-cards{display:flex;flex-direction:column;gap:14px}
+  .context-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:18px;display:flex;gap:16px;align-items:flex-start}
+  .context-num{font-size:28px;font-weight:900;color:var(--accent-bg);min-width:44px;
+    display:flex;align-items:center;justify-content:center;border:2px solid rgba(16,185,129,0.3);
+    border-radius:8px;height:44px;color:var(--accent);font-size:18px;font-weight:800}
+  .context-content{}
+  .context-title{font-size:14px;font-weight:700;margin-bottom:6px}
+  .context-desc{font-size:13px;color:var(--muted);line-height:1.6}
+  .context-example{font-size:12px;color:var(--cyan);margin-top:6px;font-style:italic;
+    background:rgba(6,182,212,0.06);padding:6px 10px;border-radius:6px;border-left:2px solid var(--cyan)}
+
+  /* CASE STUDY */
+  .case-grid{display:grid;grid-template-columns:auto 1fr;gap:0;background:var(--surface);
+    border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+  @media(max-width:600px){.case-grid{grid-template-columns:1fr}}
+  .case-before{background:rgba(244,63,94,0.06);border-right:1px solid var(--border);padding:24px;
+    display:flex;flex-direction:column;gap:12px;min-width:200px}
+  .case-after{background:rgba(16,185,129,0.04);padding:24px;display:flex;flex-direction:column;gap:12px}
+  .case-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+    padding:3px 10px;border-radius:4px;display:inline-block;margin-bottom:4px}
+  .case-tag.before{background:rgba(244,63,94,0.15);color:var(--red)}
+  .case-tag.after{background:rgba(16,185,129,0.15);color:var(--accent)}
+  .case-metric{text-align:center}
+  .case-metric .val{font-size:30px;font-weight:800}
+  .case-metric.before-m .val{color:var(--red)}
+  .case-metric.after-m .val{color:var(--accent)}
+  .case-metric .unit{font-size:12px;color:var(--muted);margin-top:2px}
+
+  /* SAAS DEATH */
+  .margin-compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+  .margin-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;text-align:center;border-top:3px solid}
+  .margin-card.old{border-top-color:var(--red)}
+  .margin-card.ai{border-top-color:var(--accent)}
+  .margin-card.trap{border-top-color:var(--yellow);background:rgba(245,158,11,0.04)}
+  .margin-pct{font-size:48px;font-weight:900;margin:10px 0}
+  .margin-card.old .margin-pct{color:var(--red)}
+  .margin-card.ai .margin-pct{color:var(--accent)}
+  .margin-card.trap .margin-pct{color:var(--yellow);font-size:28px}
+  .margin-label{font-size:13px;font-weight:700;margin-bottom:6px}
+  .margin-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+  /* CHIP WAR TABLE */
+  .chip-table{width:100%;border-collapse:collapse;font-size:13px}
+  .chip-table th{background:var(--surface2);color:var(--muted);padding:10px 14px;
+    text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;
+    border-bottom:2px solid var(--border)}
+  .chip-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--muted)}
+  .chip-table tr:hover td{background:var(--surface2)}
+  .player-name{font-weight:700;color:var(--text)}
+  .status-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+  .status-lead{background:rgba(16,185,129,0.15);color:var(--accent)}
+  .status-risk{background:rgba(244,63,94,0.15);color:var(--red)}
+  .status-watch{background:rgba(245,158,11,0.15);color:var(--yellow)}
+  .status-dark{background:rgba(167,139,250,0.15);color:var(--purple)}
+
+  /* GEOPOLITICS */
+  .geo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .geo-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;border-left:3px solid}
+  .geo-card.us{border-left-color:var(--blue)}
+  .geo-card.cn{border-left-color:var(--red)}
+  .geo-card.key{border-left-color:var(--yellow)}
+  .geo-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+  .geo-card.us .geo-label{color:var(--blue)}
+  .geo-card.cn .geo-label{color:var(--red)}
+  .geo-card.key .geo-label{color:var(--yellow)}
+  .geo-title{font-size:14px;font-weight:700;margin-bottom:8px}
+  .geo-points{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .geo-points li{font-size:12.5px;color:var(--muted);padding-left:14px;position:relative;line-height:1.5}
+  .geo-points li::before{content:'›';position:absolute;left:0;color:var(--accent)}
+
+  /* MUSK CONVERGENCE */
+  .convergence{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative}
+  @media(max-width:600px){.convergence{grid-template-columns:1fr}}
+  .conv-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:20px;text-align:center;border-top:3px solid}
+  .conv-card.tesla{border-top-color:var(--red)}
+  .conv-card.xai{border-top-color:var(--purple)}
+  .conv-card.spacex{border-top-color:var(--blue)}
+  .conv-company{font-size:18px;font-weight:800;margin-bottom:6px}
+  .conv-card.tesla .conv-company{color:var(--red)}
+  .conv-card.xai .conv-company{color:var(--purple)}
+  .conv-card.spacex .conv-company{color:var(--blue)}
+  .conv-role{font-size:12px;color:var(--accent);font-weight:600;margin-bottom:8px}
+  .conv-desc{font-size:12px;color:var(--muted);line-height:1.5}
+  .conv-center{display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--accent)}
+
+  /* INSIGHT BOX */
+  .insight-box{background:linear-gradient(135deg,rgba(16,185,129,0.08) 0%,rgba(6,182,212,0.05) 100%);
+    border:1px solid rgba(16,185,129,0.25);border-radius:var(--r);padding:24px;
+    position:relative;overflow:hidden}
+  .insight-box::before{content:'💡';position:absolute;top:16px;right:20px;font-size:32px;opacity:0.2}
+  .insight-label{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;
+    letter-spacing:.8px;margin-bottom:10px}
+  .insight-text{font-size:14px;line-height:1.8;color:var(--text)}
+  .insight-text strong{color:var(--accent2)}
+
+  /* QUOTE */
+  .quote-block{background:var(--surface);border-left:3px solid var(--accent);
+    border-radius:0 var(--r) var(--r) 0;padding:20px 24px;margin:16px 0}
+  .quote-text{font-size:15px;color:var(--text);font-style:italic;line-height:1.8;margin-bottom:8px}
+  .quote-attr{font-size:12px;color:var(--muted)}
+  .quote-attr strong{color:var(--accent)}
+
+  /* VERIFICATION TABLE */
+  .verify-table{width:100%;border-collapse:collapse;font-size:13px}
+  .verify-table th{background:var(--surface2);color:var(--muted);padding:9px 14px;
+    text-align:left;font-size:11px;font-weight:600;border-bottom:2px solid var(--border)}
+  .verify-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--muted)}
+  .verify-table tr:hover td{background:var(--surface2)}
+  .verify-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+  .v-now{background:rgba(244,63,94,0.15);color:var(--red)}
+  .v-soon{background:rgba(245,158,11,0.15);color:var(--yellow)}
+  .v-later{background:rgba(16,185,129,0.15);color:var(--accent)}
+
+  /* INVESTMENT THESIS */
+  .thesis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .thesis-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:20px;border-top:3px solid var(--accent);transition:var(--transition)}
+  .thesis-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .thesis-num{font-size:32px;font-weight:900;color:rgba(16,185,129,0.15);margin-bottom:4px}
+  .thesis-title{font-size:14px;font-weight:700;margin-bottom:8px}
+  .thesis-body{font-size:12.5px;color:var(--muted);line-height:1.7}
+  .thesis-action{font-size:12px;color:var(--accent);margin-top:10px;font-weight:600}
+
+  /* BLACKWELL COMPARE */
+  .hw-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:0;overflow:hidden;
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+  @media(max-width:600px){.hw-compare{grid-template-columns:1fr}}
+  .hw-side{padding:22px}
+  .hw-side.hopper{border-right:1px solid var(--border)}
+  .hw-divider{display:flex;align-items:center;justify-content:center;padding:0 16px;
+    font-size:22px;color:var(--accent);font-weight:700;background:var(--surface2)}
+  .hw-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+    margin-bottom:10px;padding:3px 10px;border-radius:4px;display:inline-block}
+  .hw-side.hopper .hw-label{background:rgba(244,63,94,0.1);color:var(--red)}
+  .hw-side.blackwell .hw-label{background:rgba(16,185,129,0.1);color:var(--accent)}
+  .hw-rows{display:flex;flex-direction:column;gap:10px}
+  .hw-row{display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border-radius:6px;padding:6px 10px}
+  .hw-row .k{font-size:11px;color:var(--muted)}
+  .hw-row .v{font-size:13px;font-weight:700;color:var(--text)}
+
+  .source-bar{border-top:1px solid var(--border);margin-top:64px;padding:24px;
+    max-width:1060px;margin-left:auto;margin-right:auto;
+    display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  .source-label{font-size:11px;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.6px}
+  .source-tag{font-size:11px;background:var(--surface2);color:var(--muted);
+    padding:3px 10px;border-radius:4px;border:1px solid var(--border)}
+  .source-sep{color:var(--dim)}
+
+  .highlight{color:var(--accent);font-weight:700}
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tag{font-size:11px;background:var(--surface3);color:var(--muted);padding:3px 9px;border-radius:4px;border:1px solid var(--border)}
+
+  @media(max-width:640px){
+    .stats-row{grid-template-columns:repeat(2,1fr)}
+    .iq-compare{grid-template-columns:1fr}.iq-arrow{display:none}
+    .hw-compare{grid-template-columns:1fr}.hw-divider{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-home">GARAMwiki</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-cat">💡 나의 인사이트</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">Gavin Baker — Watts & Wafers: Orbital Compute, TSMC, Frontier Models</span>
+  <a href="../index.html" class="nav-back">← 목록</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">💡 나의 인사이트 · Invest Like The Best EP.473</div>
+  <h1 class="hero-title">Watts &amp; Wafers:<br>AI의 두 물리적 제약과 Orbital Compute</h1>
+  <p class="hero-sub">Gavin Baker (Atreides Management CIO) × Patrick O'Shaughnessy — AI 빌드아웃의 진짜 제약과 그 너머를 보는 인사이트</p>
+  <div class="hero-meta">
+    <div class="meta-chip">📅 <span>2026-05-20</span></div>
+    <div class="meta-chip">🎙️ 출처: <span>Invest Like The Best EP.473</span></div>
+    <div class="meta-chip">👤 화자: <span>Gavin Baker · Atreides Management CIO</span></div>
+    <div class="meta-chip">🔑 핵심 프레임: <span>Watts(전력) + Wafers(반도체) = AI의 두 병목</span></div>
+    <div class="meta-chip">🛰️ 핵심 주장: <span>Orbital Compute가 장기 해법</span></div>
+  </div>
+  <div class="tag-row">
+    <span class="tag">Watts &amp; Wafers</span><span class="tag">Orbital Compute</span>
+    <span class="tag">TSMC</span><span class="tag">Blackwell</span>
+    <span class="tag">Frontier Models</span><span class="tag">SaaS Death Trap</span>
+    <span class="tag">Edge AI Bear Case</span><span class="tag">Verification Rule</span>
+    <span class="tag">xAI</span><span class="tag">스케일링 법칙</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-label">Blackwell 전력 도약</div>
+    <div class="stat-value">130kW</div>
+    <div class="stat-unit">Hopper 30kW → 4.3배 증가</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Hopper GPU 동기화 한계</div>
+    <div class="stat-value">200K</div>
+    <div class="stat-unit">단일 클러스터 coherent 상한</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">우주 태양광 강도</div>
+    <div class="stat-value">+30%</div>
+    <div class="stat-unit">대기권 밖, 24/7 무배터리</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">ARC-AGI 벤치마크 도약</div>
+    <div class="stat-value">8→95%</div>
+    <div class="stat-unit">Reasoning 도입 수개월 만에</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">C.H. Robinson 견적 속도</div>
+    <div class="stat-value">즉시</div>
+    <div class="stat-unit">15~45분 → 수초, 응답률 60→100%</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">SaaS vs AI 마진 갭</div>
+    <div class="stat-value">−50%p</div>
+    <div class="stat-unit">80~90% → 35~40%로 압축</div>
+  </div>
+</div>
+
+<!-- SECTION 1: 핵심 프레임 -->
+<div class="section">
+  <div class="section-title">핵심 프레임 — "Watts & Wafers"</div>
+
+  <div class="insight-box" style="margin-bottom:24px">
+    <div class="insight-label">GARAMwiki 한 줄 요약</div>
+    <div class="insight-text">AI 빌드아웃의 진짜 제약은 <strong>두 가지 물리적 한계</strong>다. 전력(Watts)과 반도체(Wafers). 소프트웨어도, 자금도, 인재도 아니다. 이 두 병목을 누가, 어떻게 먼저 해결하느냐가 다음 AI 패권을 결정한다. 그리고 Gavin Baker는 장기적 해법이 지구 밖 — 궤도 위 데이터센터에 있다고 단언한다.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="pillar watts">
+      <div class="pillar-icon">⚡</div>
+      <div class="pillar-badge">Watts — 전력</div>
+      <div class="pillar-title">전력이 먼저 고갈된다</div>
+      <div class="pillar-desc">Blackwell 랙 하나가 130kW를 요구한다. 미국 가정 130채분 전력. 데이터센터 인허가보다 전력 확보가 더 오래 걸린다.</div>
+      <ul class="pillar-points">
+        <li><strong>단기(2027~28):</strong> 신규 가스·태양광 발전 증설로 숨통 트임</li>
+        <li><strong>원자력은 너무 느리다:</strong> 미국 NEPA 규제로 사실상 10년 이상 소요</li>
+        <li><strong>실질 해법:</strong> 천연가스(셰일) + 태양광이 현실적 단기 해결책</li>
+        <li><strong>장기 해법:</strong> Orbital Compute — 우주에서 무한 태양광 24/7 확보</li>
+        <li><strong>전력이 제약일 때:</strong> 칩 가격은 무의미. 와트당 토큰이 유일한 구매 기준</li>
+      </ul>
+    </div>
+    <div class="pillar wafers">
+      <div class="pillar-icon">🔬</div>
+      <div class="pillar-badge">Wafers — 반도체</div>
+      <div class="pillar-title">TSMC가 시장을 통제한다</div>
+      <div class="pillar-desc">Jensen Huang이 분기마다 TSMC를 방문해 2~3배 증산을 요청한다. TSMC는 매번 5% 증산만 승인한다. 이것이 버블을 막는 동시에 사이클을 연장시킨다.</div>
+      <ul class="pillar-points">
+        <li><strong>닷컴 버블과 다른 점:</strong> TSMC가 의도적으로 공급 과잉을 억제 중</li>
+        <li><strong>TSMC = 거버너(Governor):</strong> 역설적으로 버블 방지자이자 사이클 연장자</li>
+        <li><strong>Blackwell 전환:</strong> 랙 무게 1,000lbs → 3,000lbs, 액체 냉각 전면 교체 필요</li>
+        <li><strong>GB300 전략:</strong> GB200 랙과 드롭인 호환 → 지금 인프라 갖춘 자가 저비용 생산자 됨</li>
+        <li><strong>핵심 변수:</strong> TSMC 생산 결정이 AI 전체 사이클의 단일 최중요 변수</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: ORBITAL COMPUTE -->
+<div class="section">
+  <div class="section-title">🛰️ Orbital Compute — 3~4년 내 현실화</div>
+
+  <div class="quote-block">
+    <div class="quote-text">"From a first-principles physics perspective, space is the optimal location for compute. The laws of physics inevitably push AI data centers into orbit."</div>
+    <div class="quote-attr">— <strong>Gavin Baker</strong>, Invest Like The Best EP.473</div>
+  </div>
+
+  <div class="orbital-grid">
+    <div class="orbital-card power">
+      <div class="orbital-icon">☀️</div>
+      <div class="orbital-metric">+30%</div>
+      <div class="orbital-label">무한 태양광</div>
+      <div class="orbital-desc">대기권 밖에서 태양광은 30% 강도가 높고, 지구 그늘 없이 24시간 연속. 배터리 백업 불필요. 지상 데이터센터의 최대 고통 — 전력 확보 문제가 원천 소멸.</div>
+    </div>
+    <div class="orbital-card cooling">
+      <div class="orbital-icon">🌌</div>
+      <div class="orbital-metric">무료</div>
+      <div class="orbital-label">냉각비용 제로</div>
+      <div class="orbital-desc">우주 심공의 온도는 절대 영도(-273°C) 근처. 라디에이터 하나만 어두운 쪽으로 향하면 냉각은 공짜. 지상 데이터센터 운영비의 30~40%를 차지하는 냉각이 사라짐.</div>
+    </div>
+    <div class="orbital-card speed">
+      <div class="orbital-icon">🔮</div>
+      <div class="orbital-metric">더 빠름</div>
+      <div class="orbital-label">레이저 통신 속도</div>
+      <div class="orbital-desc">광섬유 케이블(유리) 속보다 진공 속 레이저가 더 빠르다. 위성 레이저 메시망이 지상 광섬유 네트워크보다 처리·전송 속도에서 우위를 가짐.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;border-left:3px solid var(--purple)">
+    <div class="card-title" style="color:var(--purple)">🚀 Musk Convergence가 Orbital Compute를 가능케 한다</div>
+    <div class="card-body">SpaceX의 Starship으로 발사 비용이 급락하면서 궤도 데이터센터 경제성이 처음으로 "계산이 맞기 시작"했다. Starlink Direct-to-Cell로 쿼리가 핸드폰 → 위성 → 핸드폰으로 직접 처리되면, 기존 핸드폰 → 기지국 → 광섬유 → 집선 → 데이터센터 경로보다 지연(Latency)이 낮아질 수 있다. Baker는 "3~4년 내 궤도 데이터센터가 가장 중요한 발전"이라고 단언했다.</div>
+  </div>
+</div>
+
+<!-- SECTION 3: BLACKWELL 하드웨어 전환 -->
+<div class="section">
+  <div class="section-title">⚙️ Hopper → Blackwell — 역사상 가장 복잡한 하드웨어 전환</div>
+
+  <div class="hw-compare" style="margin-bottom:16px">
+    <div class="hw-side hopper">
+      <div class="hw-label">Hopper (현재)</div>
+      <div class="hw-rows">
+        <div class="hw-row"><span class="k">랙 무게</span><span class="v" style="color:var(--red)">1,000 lbs</span></div>
+        <div class="hw-row"><span class="k">전력 소비</span><span class="v" style="color:var(--red)">30 kW / rack</span></div>
+        <div class="hw-row"><span class="k">냉각 방식</span><span class="v">공냉(Air Cooling)</span></div>
+        <div class="hw-row"><span class="k">GPU 동기화 한계</span><span class="v" style="color:var(--red)">~200,000개</span></div>
+        <div class="hw-row"><span class="k">학습 모드</span><span class="v">Training + Inference</span></div>
+      </div>
+    </div>
+    <div class="hw-divider">→</div>
+    <div class="hw-side blackwell">
+      <div class="hw-label">Blackwell (차세대)</div>
+      <div class="hw-rows">
+        <div class="hw-row"><span class="k">랙 무게</span><span class="v" style="color:var(--accent)">3,000 lbs</span></div>
+        <div class="hw-row"><span class="k">전력 소비</span><span class="v" style="color:var(--accent)">130 kW / rack</span></div>
+        <div class="hw-row"><span class="k">냉각 방식</span><span class="v" style="color:var(--accent)">수냉(Liquid Cooling)</span></div>
+        <div class="hw-row"><span class="k">훈련 클러스터</span><span class="v" style="color:var(--accent)">대규모 확장 가능</span></div>
+        <div class="hw-row"><span class="k">2026 용도</span><span class="v" style="color:var(--yellow)">주로 Training (수익 前)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">핵심 인사이트 — "Reasoning이 AI를 구했다"</div>
+    <div class="insight-text">Blackwell 딜레이로 인해 2024년 하반기 AI 발전이 <strong>18개월 정체될 뻔</strong>했다. 이를 구한 것이 Reasoning 모델(OpenAI o1)이다. Test-Time Compute — 더 큰 칩 대신 "더 오래 생각"함으로써 벤치마크를 ARC-AGI 기준 <strong>8% → 95%</strong>로 수개월 만에 끌어올렸다. Baker가 말하는 3개의 스케일링 법칙이 지금 동시에 작동 중이다.</div>
+  </div>
+</div>
+
+<!-- SECTION 4: 3 SCALING LAWS -->
+<div class="section">
+  <div class="section-title">📐 스케일링 법칙 3층 구조 — 동시 작동 중</div>
+
+  <div class="scaling-flow">
+    <div class="sl-item">
+      <div class="sl-num">01</div>
+      <div class="sl-name">Pre-Training Law</div>
+      <div class="sl-title">구법 — 더 많은 칩 + 더 많은 데이터</div>
+      <div class="sl-desc">칩과 데이터를 늘리면 모델이 똑똑해진다. 왜 되는지는 아무도 모른다. Baker 曰 "우리는 고대 이집트인처럼 정확히 측정하지만, 왜 그런지 궤도역학을 이해하지 못한다." Gemini 3가 이 법칙이 살아있음을 재확인했다.</div>
+    </div>
+    <div class="sl-item">
+      <div class="sl-num">02</div>
+      <div class="sl-name">Post-Training Law (RLVR)</div>
+      <div class="sl-title">신법 — 검증 가능한 보상 강화학습</div>
+      <div class="sl-desc">정답을 검증할 수 있는 영역(수학, 코딩, 체스)에서 강화학습으로 모델을 더 훈련한다. 이것이 Reasoning 모델의 핵심 엔진. Pre-Training 위에 새로운 지능 층을 쌓는다.</div>
+    </div>
+    <div class="sl-item">
+      <div class="sl-num">03</div>
+      <div class="sl-name">Test-Time Compute</div>
+      <div class="sl-title">추론 시간 — 더 오래 생각하기</div>
+      <div class="sl-desc">추론 시 더 많은 시간·연산을 허용하면 결과가 좋아진다. 더 큰 칩 없이 지능 향상 가능. Blackwell 공백을 메운 "에어갭 브리지." 3 법칙의 동시 작동이 현 AI 도약의 진짜 원인.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: IQ → UTILITY -->
+<div class="section">
+  <div class="section-title">🔄 AI의 다음 전환 — IQ에서 Utility로</div>
+
+  <div class="iq-compare" style="margin-bottom:20px">
+    <div class="iq-side old">
+      <div class="iq-label">지난 2년 — IQ 경쟁</div>
+      <div class="iq-title">벤치마크 vs 벤치마크</div>
+      <ul class="iq-points">
+        <li>Bar Exam 85% vs 90% 경쟁</li>
+        <li>물리 문제 대학원생 수준 달성</li>
+        <li>최상위 모델 간 차이: 일반 사용자 식별 불가</li>
+        <li>더 영리한 것이 더 많은 돈을 버는 시대 종료</li>
+        <li>IQ 100 → 130 → 150: 수익 불비례</li>
+      </ul>
+    </div>
+    <div class="iq-arrow">→</div>
+    <div class="iq-side new">
+      <div class="iq-label">다음 단계 — Utility 경쟁</div>
+      <div class="iq-title">지식 → 실행으로</div>
+      <ul class="iq-points">
+        <li>답을 아는 것 ≠ 해주는 것</li>
+        <li>여행 예약: 선호 파악 + 가족 스케줄 조율 + 실행</li>
+        <li>맥락(Context)이 IQ보다 중요한 해자(Moat)</li>
+        <li>Task Duration: 5분 → 5시간짜리 작업 처리</li>
+        <li>신뢰성(Reliability): 환각 없는 예약, 정확한 실행</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="context-cards">
+    <div class="context-item">
+      <div class="context-num">1</div>
+      <div class="context-content">
+        <div class="context-title">극한의 맥락(Massive Context) — "Huberman 룰"</div>
+        <div class="context-desc">AI가 진정한 비서가 되려면 나를 알아야 한다. 단순한 지식이 아니라 내 모든 슬랙 메시지, 이메일, 가족의 선호, 생활 습관을 동시에 기억해야 한다.</div>
+        <div class="context-example">Gavin Baker 예시: "여행 예약 시 'Huberman을 팔로우하니 아침 햇빛을 위한 동향 발코니 필요', '비행기는 Starlink 탑재 항공기로', '부모님·여동생·조카들의 충돌하는 선호 조율'" → 이 모든 것을 동시에 처리하는 것이 진짜 Agent</div>
+      </div>
+    </div>
+    <div class="context-item">
+      <div class="context-num">2</div>
+      <div class="context-content">
+        <div class="context-title">Task Duration 확장 — 5분 → 5시간짜리 작업</div>
+        <div class="context-desc">현재 AI는 짧은 작업 버스트에 강하다. 진짜 경제적 가치는 Duration이 늘어날 때 폭발한다.</div>
+        <div class="context-example">Level 1: "7시 레스토랑 예약해줘" (5분 절약)<br>Level 2: "대가족 여행 전체를 기획하고, 항공편 예약하고, 내 이상한 햇빛 선호에 맞는 호텔 찾아줘" (3~4시간 절약)</div>
+      </div>
+    </div>
+    <div class="context-item">
+      <div class="context-num">3</div>
+      <div class="context-content">
+        <div class="context-title">검증 가능성(Verification) = 자동화 가능성</div>
+        <div class="context-desc">Karpathy의 통찰을 Baker가 확장: "소프트웨어는 명세할 수 있으면 자동화 가능. AI는 검증할 수 있으면 자동화 가능." 코드 컴파일 성공 여부, 회계 장부 균형, 거래 성사 여부 — 모두 검증 가능하므로 AI가 최우선으로 정복한다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: VERIFICATION RULE -->
+<div class="section">
+  <div class="section-title">✅ The Verification Rule — 자동화 순서의 법칙</div>
+
+  <div style="overflow-x:auto">
+    <table class="verify-table">
+      <thead>
+        <tr>
+          <th>직업/업무</th>
+          <th>검증 방법</th>
+          <th>자동화 시기</th>
+          <th>이유</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--text);font-weight:600">회계·재무</td>
+          <td>차변=대변, 장부 균형</td>
+          <td><span class="verify-badge v-now">NOW</span></td>
+          <td>이중 부기의 결과는 수학적으로 맞거나 틀리다</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">소프트웨어 코딩</td>
+          <td>코드 컴파일 성공/실패</td>
+          <td><span class="verify-badge v-now">NOW</span></td>
+          <td>테스트 통과 여부가 명확한 이진 결과</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">영업(Sales)</td>
+          <td>거래 성사 Yes/No</td>
+          <td><span class="verify-badge v-now">NOW</span></td>
+          <td>Win 조건이 명확 → 수백만 번 시뮬레이션 학습 가능</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">고객 지원</td>
+          <td>인간 에스컬레이션 요청 여부</td>
+          <td><span class="verify-badge v-now">NOW</span></td>
+          <td>에스컬레이션 없음 = 성공의 이진 지표</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">물류·배송</td>
+          <td>제때 배달, 경로 최적화</td>
+          <td><span class="verify-badge v-soon">SOON</span></td>
+          <td>C.H. Robinson 사례: 견적 60%→100%, 시간 수십분→수초</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">법률(계약 검토)</td>
+          <td>조항 위반 여부</td>
+          <td><span class="verify-badge v-soon">SOON</span></td>
+          <td>표준 계약 조항은 규칙 기반으로 검증 가능</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">창작·광고 카피</td>
+          <td>클릭률, 전환율</td>
+          <td><span class="verify-badge v-later">LATER</span></td>
+          <td>피드백 루프가 길고 맥락 의존적</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">경영 전략 수립</td>
+          <td>측정 지표 다양·장기적</td>
+          <td><span class="verify-badge v-later">LATER</span></td>
+          <td>정답이 즉시 검증 불가, 판단 의존적</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 7: ROI — C.H. ROBINSON -->
+<div class="section">
+  <div class="section-title">💰 ROI는 이미 실재한다 — C.H. Robinson 사례</div>
+
+  <div class="insight-box" style="margin-bottom:20px">
+    <div class="insight-label">Baker의 "마이크 드롭" 사례</div>
+    <div class="insight-text">AI ROI가 없다는 회의론자들에게 Baker가 제시한 증거: 포춘 500대 기업 중 가장 <strong>'지루한'</strong> 업종 — 화물 중개업(C.H. Robinson)이 AI로 가장 극적인 성과를 냈다. 대형 공개기업들의 GPU 지출 증가 후 ROIC는 지출 전보다 <strong>높아졌다.</strong></div>
+  </div>
+
+  <div class="case-grid">
+    <div class="case-before">
+      <div class="case-tag before">BEFORE AI</div>
+      <div class="case-metric before-m">
+        <div class="val">15~45분</div>
+        <div class="unit">견적 생성 소요 시간</div>
+      </div>
+      <div class="case-metric before-m">
+        <div class="val">60%</div>
+        <div class="unit">인바운드 요청 응답률</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:12px">인간 에이전트가 직접 견적 계산. 물량 과부하 시 40%는 아예 응답 못 함.</div>
+    </div>
+    <div class="case-after">
+      <div class="case-tag after">AFTER AI</div>
+      <div class="case-metric after-m">
+        <div class="val">수초</div>
+        <div class="unit">견적 생성 소요 시간</div>
+      </div>
+      <div class="case-metric after-m">
+        <div class="val">100%</div>
+        <div class="unit">인바운드 요청 응답률</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:12px">결과: 실적 발표 당일 주가 <strong style="color:var(--accent)">+20%</strong> 급등. Baker: "포춘 500 공룡 기업이 해내면 ROI 논쟁 종결."</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: SAAS DEATH TRAP -->
+<div class="section">
+  <div class="section-title">💀 SaaS Death Trap — 마진의 역설</div>
+
+  <div class="margin-compare">
+    <div class="margin-card old">
+      <div class="margin-pct">80~90%</div>
+      <div class="margin-label">전통 SaaS 총마진</div>
+      <div class="margin-desc">코드 한 번 쓰고 무한 복제. Salesforce·Adobe·ServiceNow가 20년간 누린 구조적 해자.</div>
+    </div>
+    <div class="margin-card ai">
+      <div class="margin-pct">35~40%</div>
+      <div class="margin-label">AI 네이티브 총마진</div>
+      <div class="margin-desc">에이전트는 추론할 때마다 컴퓨트를 태운다. 마진이 낮아도 스타트업은 이 비용을 기꺼이 감수한다.</div>
+    </div>
+    <div class="margin-card trap">
+      <div class="margin-pct">생사의 결정</div>
+      <div class="margin-label">SaaS 기업들의 선택</div>
+      <div class="margin-desc">마진 수호 → 스타트업에 시장 빼앗김<br>마진 포기 → 생존 가능하지만 주주 불만<br>Baker: "거의 모든 SaaS가 실패 중. 예외: Microsoft"</div>
+    </div>
+  </div>
+
+  <div class="quote-block" style="margin-top:20px">
+    <div class="quote-text">"Traditional SaaS companies are making the exact same mistake brick-and-mortar retailers made with e-commerce. They are addicted to 80-90% gross margins and refuse to embrace AI Agents. AI-native startups, happy to run at 35% margins, will wipe them out."</div>
+    <div class="quote-attr">— <strong>Gavin Baker</strong></div>
+  </div>
+</div>
+
+<!-- SECTION 9: EDGE AI BEAR CASE -->
+<div class="section">
+  <div class="section-title">🐻 Edge AI Bear Case — 가장 현실적인 위협 시나리오</div>
+
+  <div class="grid-2">
+    <div class="card" style="border-left:3px solid var(--red)">
+      <div class="card-title" style="color:var(--red)">📱 Edge AI 시나리오 (Bear Case)</div>
+      <div class="card-body">
+        3년 내 iPhone/Samsung에서 Gemini 5급 압축 모델이 로컬 실행.<br><br>
+        • 30~60 token/sec (빠른 읽기 속도)<br>
+        • IQ ~115 (대부분 작업에 충분)<br>
+        • 비용: <strong style="color:var(--red)">무료</strong><br><br>
+        이것이 현실화되면 $1,000억 규모 서버팜의 수요가 붕괴할 수 있다. Baker가 명시한 "가장 그럴듯하고 무서운 시나리오."
+      </div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <div class="card-title" style="color:var(--accent)">🛡️ 클라우드의 유일한 방어선 — Context</div>
+      <div class="card-body">
+        Edge AI의 치명적 한계: <strong style="color:var(--text)">기억력</strong>.<br><br>
+        클라우드 모델이 수백만 토큰의 맥락(내 슬랙 전체, 이메일 전체, 회사 매뉴얼 전체)을 워킹 메모리에 유지한다면?<br><br>
+        폰의 '건망증 모델'은 IQ가 아무리 높아도 경쟁 불가. <strong style="color:var(--accent)">Context가 해자(Moat)다.</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 10: CHIP WARS -->
+<div class="section">
+  <div class="section-title">⚔️ Chip Wars — xAI vs Google vs Nvidia vs Amazon</div>
+
+  <div style="overflow-x:auto">
+    <table class="chip-table">
+      <thead>
+        <tr>
+          <th>플레이어</th>
+          <th>현재 포지션</th>
+          <th>전략</th>
+          <th>핵심 리스크</th>
+          <th>상태</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="player-name">Nvidia</td>
+          <td style="color:var(--muted)">GPU 시장 절대 지배</td>
+          <td style="color:var(--muted)">1년 릴리즈 사이클로 ASIC 추격 무력화</td>
+          <td style="color:var(--muted)">하이퍼스케일러 내재화(Amazon Trainium)</td>
+          <td><span class="status-badge status-lead">선두</span></td>
+        </tr>
+        <tr>
+          <td class="player-name">Google</td>
+          <td style="color:var(--muted)">TPU v6/v7로 현재 토큰당 최저 비용</td>
+          <td style="color:var(--muted)">마이너스 30% 마진으로 경쟁자 산소 빼앗기</td>
+          <td style="color:var(--muted)">Blackwell 대규모 배포 시 비용 우위 소멸</td>
+          <td><span class="status-badge status-watch">관찰</span></td>
+        </tr>
+        <tr>
+          <td class="player-name">xAI (Musk)</td>
+          <td style="color:var(--muted)">Blackwell 데이터센터 세계 최속 구축</td>
+          <td style="color:var(--muted)">Nvidia의 버그 테스터 → 2026년 최초 Blackwell 모델</td>
+          <td style="color:var(--muted)">규모 성장 시 조직·기술 복잡성</td>
+          <td><span class="status-badge status-lead">가속</span></td>
+        </tr>
+        <tr>
+          <td class="player-name">Amazon</td>
+          <td style="color:var(--muted)">하이퍼스케일러 중 최고 ASIC팀 (Trainium)</td>
+          <td style="color:var(--muted)">Graviton 경험 기반 3세대 칩 완성 추진</td>
+          <td style="color:var(--muted)">Nvidia 1년 사이클 추격 불가, 3세대 필요</td>
+          <td><span class="status-badge status-dark">다크호스</span></td>
+        </tr>
+        <tr>
+          <td class="player-name">Meta</td>
+          <td style="color:var(--muted)">2024년 프런티어 모델 구축 실패</td>
+          <td style="color:var(--muted)">중국 오픈소스(DeepSeek) 활용해 부트스트랩</td>
+          <td style="color:var(--muted)">무한 자금에도 Top-tier 프런티어 미달성</td>
+          <td><span class="status-badge status-risk">리스크</span></td>
+        </tr>
+        <tr>
+          <td class="player-name">Broadcom</td>
+          <td style="color:var(--muted)">Google TPU 백엔드 50~55% GM으로 공급</td>
+          <td style="color:var(--muted)">ASIC 설계 독점</td>
+          <td style="color:var(--muted)">Google 지출 $30B 돌파 시 내재화 불가피</td>
+          <td><span class="status-badge status-risk">위험</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 11: GEOPOLITICS -->
+<div class="section">
+  <div class="section-title">🌏 AI 지정학 — 중국의 전략적 오판</div>
+
+  <div class="geo-grid">
+    <div class="geo-card us">
+      <div class="geo-label">미국 우위</div>
+      <div class="geo-title">Blackwell이 격차를 벌린다</div>
+      <ul class="geo-points">
+        <li>xAI·OpenAI·Google: Blackwell 대규모 배포 진행</li>
+        <li>ARC-AGI 기준 8% → 95%가 미국 Reasoning 모델로 달성</li>
+        <li>Blackwell 대규모화 시 미중 AI 성능 격차 "폭발적 확대" 예측</li>
+        <li>DeepSeek 기술 논문: "충분한 컴퓨트 없음" 사실상 시인</li>
+      </ul>
+    </div>
+    <div class="geo-card cn">
+      <div class="geo-label">중국의 오판</div>
+      <div class="geo-title">희토류 제한 — 역효과</div>
+      <ul class="geo-points">
+        <li>중국의 희토류 수출 제한: "미국에 레버리지" 전략</li>
+        <li>Baker: "끔찍한 실수(Terrible Mistake)"</li>
+        <li>미국 DARPA + 우호국 정제 기술로 대체 공급망 빠르게 확보</li>
+        <li>기술이 흙을 이긴다 — "Blackwells이 필요하다는 것을 깨달을 것"</li>
+        <li>중국 오픈소스(DeepSeek)는 Meta에게 "신의 선물"이지만, Blackwell 격차는 축소 불가</li>
+      </ul>
+    </div>
+    <div class="geo-card key">
+      <div class="geo-label">핵심 관전 포인트</div>
+      <div class="geo-title">Reasoning이 만드는 플라이휠</div>
+      <ul class="geo-points">
+        <li>Pre-Training: 배포해도 다음 모델이 자동 개선 안 됨 (No Flywheel)</li>
+        <li>Reasoning: 검증 가능한 답변이 훈련 데이터로 환류 → 규모의 경제</li>
+        <li>상위 랩만 Reasoning Flywheel 구축 가능 → 승자독식 구조 강화</li>
+        <li>GPU 클러스터 가동률: 30%(하) vs 90%(상) — "스킬 이슈"가 최대 변수</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 12: MUSK CONVERGENCE -->
+<div class="section">
+  <div class="section-title">🔗 Musk Convergence — 세 회사의 통합 우위</div>
+
+  <div class="convergence">
+    <div class="conv-card tesla">
+      <div class="conv-company">Tesla</div>
+      <div class="conv-role">Bodies + Vision (Optimus)</div>
+      <div class="conv-desc">Optimus 로봇 제작 + 자율주행 비전 AI. 물리 세계 인터페이스. 데이터 수집 → xAI 훈련 데이터 공급.</div>
+    </div>
+    <div class="conv-card xai">
+      <div class="conv-company">xAI</div>
+      <div class="conv-role">Intelligence + Brains</div>
+      <div class="conv-desc">Grok 프런티어 모델. Blackwell 최초 대규모 배포. Tesla 비전 데이터 + SpaceX 궤도 컴퓨트 활용.</div>
+    </div>
+    <div class="conv-card spacex">
+      <div class="conv-company">SpaceX</div>
+      <div class="conv-role">Launch + Orbital Compute</div>
+      <div class="conv-desc">Starship으로 발사 비용 혁신. Starlink Direct-to-Cell로 저지연 AI 추론. 궤도 데이터센터 현실화 기반.</div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="margin-top:16px">
+    <div class="insight-label">세 회사의 시너지 포인트</div>
+    <div class="insight-text">Tesla가 Optimus를 통해 물리 세계 데이터를 수집 → xAI의 Intelligence가 이를 훈련 → SpaceX의 Orbital Compute가 추론 인프라를 무한 확장. 각각이 독립적으로도 강하지만, <strong>통합 시 상호 강화 효과</strong>가 발생한다. Baker는 이 수렴을 "단일 통합 우위"로 규정한다.</div>
+  </div>
+</div>
+
+<!-- SECTION 13: 투자 인사이트 -->
+<div class="section">
+  <div class="section-title">📊 Gavin Baker의 핵심 투자 명제 — C-Level 관점 해석</div>
+
+  <div class="thesis-grid">
+    <div class="thesis-card">
+      <div class="thesis-num">01</div>
+      <div class="thesis-title">전력 = 2027~28년까지 AI의 진짜 병목</div>
+      <div class="thesis-body">칩보다 전력 확보가 더 어렵다. 2027~28년까지 가스·태양광으로 완화. 그 전까지는 와트당 토큰이 유일한 칩 구매 기준. 에너지 인프라 사업자가 수혜.</div>
+      <div class="thesis-action">→ 에너지 인프라 투자 기회</div>
+    </div>
+    <div class="thesis-card">
+      <div class="thesis-title">TSMC = AI 사이클의 숨겨진 거버너</div>
+      <div class="thesis-body">TSMC가 의도적으로 공급 과잉을 막는다. 이는 버블을 억제하고 AI 사이클을 연장한다. 주의 깊게 볼 단일 최중요 변수. Baker: "TSMC 결정이 모든 것을 결정한다."</div>
+      <div class="thesis-action">→ TSMC 생산계획이 투자 선행 지표</div>
+    </div>
+    <div class="thesis-card">
+      <div class="thesis-title">SaaS 기업은 마진을 포기해야 생존</div>
+      <div class="thesis-body">80~90% 마진 고수 = 점진적 사망 선고. AI 네이티브 스타트업 35~40% 마진 수용. 기존 SaaS 기업에게 사업 모델 전환이 생사 문제. Microsoft는 예외적으로 올바른 대응 중.</div>
+      <div class="thesis-action">→ SaaS 기업 AI 전환 전략 필수</div>
+    </div>
+    <div class="thesis-card">
+      <div class="thesis-title">궤도 컴퓨트 — 3~4년 내 현실화</div>
+      <div class="thesis-body">물리 법칙 상 우주가 최적 컴퓨트 위치. Starship이 발사 비용을 낮추면서 경제성 확보. Baker: "3~4년 내 가장 중요한 발전." SpaceX의 궤도 인프라가 핵심 자산.</div>
+      <div class="thesis-action">→ SpaceX 관련 사업 기회 탐색</div>
+    </div>
+    <div class="thesis-card">
+      <div class="thesis-title">Reasoning Flywheel = 승자독식 구조</div>
+      <div class="thesis-body">검증 가능한 답변이 훈련 데이터로 환류. 상위 모델만 이 플라이휠 구동 가능. 시간이 갈수록 상위 1~2개 랩과 나머지의 격차가 벌어진다. 프런티어 모델 경쟁에서 탈락한 기업은 회복 불가.</div>
+      <div class="thesis-action">→ 프런티어 AI 투자 선별 필수</div>
+    </div>
+    <div class="thesis-card">
+      <div class="thesis-title">ROI 논쟁은 종결됐다</div>
+      <div class="thesis-body">C.H. Robinson처럼 가장 '지루한' 업종도 AI로 극적 성과. 대형 GPU 구매 기업의 ROIC가 투자 전보다 높아졌다. AI 투자 회의론은 데이터 기반으로 틀렸다.</div>
+      <div class="thesis-action">→ AI 도입 속도 가속 시점</div>
+    </div>
+  </div>
+</div>
+
+<!-- SOURCE BAR -->
+<div class="source-bar">
+  <span class="source-label">출처</span>
+  <span class="source-tag">Invest Like The Best EP.473 — Watts and Wafers (2026-05-20)</span>
+  <span class="source-sep">·</span>
+  <span class="source-tag">Gavin Baker, Atreides Management CIO</span>
+  <span class="source-sep">·</span>
+  <span class="source-tag">Patrick O'Shaughnessy (Host)</span>
+  <span class="source-sep">·</span>
+  <span class="source-tag">The Neuron AI — Grant Harvey 정리본</span>
+  <span class="source-sep">·</span>
+  <span class="source-tag">colossus.com/episode/watts-and-wafers/</span>
+  <span class="source-sep">·</span>
+  <span class="source-tag">YouTube: youtu.be/Mmj_G9RlW-I</span>
+</div>
+
+</body>
+</html>
