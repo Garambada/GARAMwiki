@@ -121,6 +121,21 @@ ARTICLE_META = {
         "title": "Google I/O 2026 — 풀스택 AI에서<br>에이전트 시대로 (DH Shin 심층 보고서)",
         "tags":  ["Google I/O 2026", "Gemini 3.5", "Antigravity 2.0", "Gemini Spark", "TPU 8세대"],
     },
+    # 나의 인사이트
+    "경량문명_나의인사이트.html": {
+        "title": "경량문명의 도래와 기업의 미래<br>— 초개인화 AI 시대 대응 전략",
+        "tags":  ["경량문명", "AX", "거래비용이론", "1인기업", "솔로프리너"],
+    },
+    # 비즈니스 인텔리전스
+    "공공기관_AX_Company_Builder_Wiki.html": {
+        "title": "공공기관 AX × AI-Native<br>Company Builder 전략 보고서",
+        "tags":  ["공공기관", "AX", "철도공단", "항만공사", "Company Builder"],
+    },
+    # 심화 기술
+    "ontology-vs-genai-wiki.html": {
+        "title": "온톨로지 기반 AI vs 생성형 LLM<br>— 판단하는 AI의 아키텍처 해부",
+        "tags":  ["Ontology", "Knowledge Graph", "Neuro-Symbolic", "Palantir-class", "Sovereign AI"],
+    },
 }
 
 # ───────────────────────────────────────────────
@@ -131,6 +146,7 @@ FOLDER_CAT = {
     "04_트렌드_인텔리전스":   ("트렌드",   "📡 트렌드 인텔리전스",   "trend"),
     "06_나의_인사이트":        ("인사이트", "💡 나의 인사이트",       "insight"),
     "02_모델_트래커":          ("모델",     "🔬 모델 트래커",          "model"),
+    "05_심화_기술":            ("기술",     "🔩 심화 기술",            "tech"),
 }
 
 # ───────────────────────────────────────────────
@@ -191,7 +207,7 @@ def sections_html(articles):
         grouped[(a["cat_id"], a["cat_label"], a["cat_class"])].append(a)
 
     dot_colors = {"비즈니스":"var(--biz)","트렌드":"var(--trend)",
-                  "인사이트":"var(--insight)","모델":"var(--model)"}
+                  "인사이트":"var(--insight)","모델":"var(--model)","기술":"var(--tech)"}
 
     html = ""
     for (cat_id, cat_label, cat_class), items in grouped.items():
@@ -243,6 +259,7 @@ def build_index():
     --trend: #3b82f6; --trend-bg: rgba(59,130,246,0.08);
     --insight: #10b981; --insight-bg: rgba(16,185,129,0.08);
     --model: #a78bfa; --model-bg: rgba(167,139,250,0.08);
+    --tech: #06b6d4;  --tech-bg: rgba(6,182,212,0.08);
   }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ background: var(--bg); color: var(--text);
@@ -281,6 +298,7 @@ def build_index():
   .filter-btn[data-cat="트렌드"].active   {{ background:var(--trend); border-color:var(--trend); }}
   .filter-btn[data-cat="인사이트"].active {{ background:var(--insight); border-color:var(--insight); }}
   .filter-btn[data-cat="모델"].active     {{ background:var(--model); border-color:var(--model); }}
+  .filter-btn[data-cat="기술"].active     {{ background:var(--tech); border-color:var(--tech); }}
   main {{ max-width:1200px; margin:0 auto; padding:28px 32px 60px; }}
   .section {{ margin-bottom:40px; }}
   .section-header {{ display:flex; align-items:center; gap:12px; margin-bottom:16px;
@@ -299,12 +317,14 @@ def build_index():
   .card[data-cat="트렌드"]::before   {{ background:var(--trend); }}
   .card[data-cat="인사이트"]::before {{ background:var(--insight); }}
   .card[data-cat="모델"]::before     {{ background:var(--model); }}
+  .card[data-cat="기술"]::before     {{ background:var(--tech); }}
   .card:hover {{ transform:translateY(-2px); border-color:rgba(88,166,255,0.3);
     box-shadow:0 8px 24px rgba(0,0,0,0.4); }}
   .card[data-cat="비즈니스"]:hover {{ border-color:rgba(245,158,11,0.3); }}
   .card[data-cat="트렌드"]:hover   {{ border-color:rgba(59,130,246,0.3); }}
   .card[data-cat="인사이트"]:hover {{ border-color:rgba(16,185,129,0.3); }}
   .card[data-cat="모델"]:hover     {{ border-color:rgba(167,139,250,0.3); }}
+  .card[data-cat="기술"]:hover     {{ border-color:rgba(6,182,212,0.3); }}
   .card-meta {{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }}
   .cat-badge {{ font-size:0.7rem; font-weight:700; padding:2px 8px;
     border-radius:10px; letter-spacing:0.3px; }}
@@ -312,6 +332,7 @@ def build_index():
   .cat-badge.trend   {{ background:var(--trend-bg); color:var(--trend); }}
   .cat-badge.insight {{ background:var(--insight-bg); color:var(--insight); }}
   .cat-badge.model   {{ background:var(--model-bg); color:var(--model); }}
+  .cat-badge.tech    {{ background:var(--tech-bg); color:var(--tech); }}
   .card-date {{ font-size:0.72rem; color:var(--muted); margin-left:auto; }}
   .card-title {{ font-size:0.95rem; font-weight:600; line-height:1.45;
     margin-bottom:8px; color:var(--text); }}

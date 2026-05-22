@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>공공기관 AX × AI-Native Company Builder | Business Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f4ec;
+    --paper: #fdfbf5;
+    --ink: #1a1a1a;
+    --ink-soft: #3a3a3a;
+    --muted: #6b6b6b;
+    --rule: #d8d2c2;
+    --rule-soft: #e8e3d4;
+    --accent: #8b2c2c;
+    --accent-soft: #c0392b;
+    --highlight: #f3e8c8;
+    --highlight-strong: #ead89e;
+    --link: #1e5a8a;
+    --code-bg: #ece6d2;
+    --sidebar-bg: #efeadc;
+    --sidebar-hover: #e4dcc4;
+    --shadow: 0 1px 0 rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+  body {
+    font-family: 'Noto Serif KR', 'Fraunces', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 16px;
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 12px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .brand {
+    display: flex; align-items: baseline; gap: 14px;
+    font-family: 'Fraunces', 'Noto Serif KR', serif;
+  }
+  .brand-mark {
+    width: 28px; height: 28px;
+    background: var(--ink);
+    color: var(--paper);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.05em;
+  }
+  .brand-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .brand-sub {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .topbar-search {
+    flex: 1;
+    max-width: 440px;
+  }
+  .topbar-search input {
+    width: 100%;
+    padding: 8px 14px;
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .topbar-search input:focus {
+    border-color: var(--ink);
+    background: var(--paper);
+  }
+  .topbar-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .topbar-meta .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* ===== LAYOUT ===== */
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr 240px;
+    max-width: 1480px;
+    margin: 0 auto;
+    gap: 0;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* ===== SIDEBAR ===== */
+  aside.sidebar {
+    border-right: 1px solid var(--rule);
+    padding: 32px 24px 80px;
+    background: var(--sidebar-bg);
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+  .sidebar h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .sidebar h4:not(:first-child) { margin-top: 28px; }
+  .sidebar nav ul { list-style: none; }
+  .sidebar nav ul li { margin-bottom: 2px; }
+  .sidebar nav a {
+    display: block;
+    padding: 6px 10px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 14px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .sidebar nav a:hover {
+    background: var(--sidebar-hover);
+    border-left-color: var(--ink);
+    color: var(--ink);
+  }
+  .sidebar nav a.sub {
+    padding-left: 22px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .sidebar nav a.active {
+    background: var(--paper);
+    border-left-color: var(--accent);
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .sidebar-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    background: var(--ink);
+    color: var(--paper);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ===== MAIN ARTICLE ===== */
+  main.article {
+    padding: 48px 56px 120px;
+    background: var(--paper);
+    border-right: 1px solid var(--rule);
+    max-width: 880px;
+  }
+
+  /* Article meta header */
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+  .article-meta .pill {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 8px;
+    letter-spacing: 0.1em;
+  }
+  .article-meta .pill.confidential {
+    background: var(--accent);
+  }
+  .article-meta .divider {
+    width: 2px; height: 2px;
+    background: var(--muted);
+    border-radius: 50%;
+  }
+
+  h1.article-title {
+    font-family: 'Fraunces', 'Noto Serif KR', serif;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  h1.article-title .accent {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .article-subtitle {
+    font-size: 20px;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    line-height: 1.45;
+    font-weight: 400;
+    font-family: 'Noto Serif KR', serif;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 24px;
+  }
+
+  /* Hero stats strip */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin: 0 0 40px;
+    padding: 18px 0;
+  }
+  .hero-stat {
+    padding: 0 16px;
+    border-right: 1px solid var(--rule);
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .hero-stat-num .unit {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+  .hero-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* Headings */
+  h2 {
+    font-family: 'Fraunces', 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 56px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink);
+    position: relative;
+  }
+  h2::before {
+    content: attr(data-num);
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    margin-right: 12px;
+    font-weight: 500;
+    vertical-align: middle;
+    letter-spacing: 0;
+  }
+  h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 36px 0 12px;
+    color: var(--ink);
+  }
+  h4 {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin: 28px 0 8px;
+  }
+
+  p {
+    margin-bottom: 18px;
+    color: var(--ink-soft);
+    font-size: 16.5px;
+  }
+
+  p strong, p b {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* Lead paragraph */
+  .lead {
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--ink);
+    font-weight: 400;
+    margin-bottom: 28px;
+  }
+  .lead::first-letter {
+    font-family: 'Fraunces', serif;
+    font-size: 56px;
+    font-weight: 800;
+    float: left;
+    line-height: 0.9;
+    margin: 6px 8px 0 0;
+    color: var(--accent);
+  }
+
+  /* Highlight quote box */
+  .highlight-box {
+    background: var(--highlight);
+    border-left: 4px solid var(--accent);
+    padding: 22px 26px;
+    margin: 28px 0;
+    position: relative;
+  }
+  .highlight-box::before {
+    content: "KEY INSIGHT";
+    position: absolute;
+    top: -10px;
+    left: 18px;
+    background: var(--accent);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    letter-spacing: 0.15em;
+  }
+  .highlight-box p {
+    margin: 0;
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* Pull quote */
+  .pullquote {
+    margin: 36px 0;
+    padding: 28px 0 24px;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    text-align: center;
+  }
+  .pullquote p {
+    font-family: 'Fraunces', 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+  }
+  .pullquote-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 48px;
+    color: var(--accent);
+    line-height: 0.5;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* Tables */
+  .table-wrap {
+    margin: 24px 0;
+    border: 1px solid var(--rule);
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    background: var(--paper);
+  }
+  table caption {
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    caption-side: top;
+  }
+  th {
+    background: var(--sidebar-bg);
+    color: var(--ink);
+    text-align: left;
+    padding: 12px 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--ink);
+    letter-spacing: -0.005em;
+  }
+  td {
+    padding: 14px;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top;
+    color: var(--ink-soft);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(243, 232, 200, 0.3); }
+  td strong { color: var(--ink); }
+  td .num {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* Phase / Card grid */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin: 24px 0;
+  }
+  .phase-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    padding: 22px 24px;
+    position: relative;
+  }
+  .phase-card .phase-num {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-family: 'Fraunces', serif;
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--rule);
+    line-height: 0.8;
+  }
+  .phase-card h4 {
+    color: var(--ink);
+    font-family: 'Fraunces', 'Noto Serif KR', serif;
+    font-size: 19px;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    margin: 0 0 4px;
+  }
+  .phase-card .phase-period {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+  .phase-card .phase-goal {
+    font-size: 14.5px;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .phase-card .phase-kpi {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    background: var(--highlight);
+    padding: 8px 12px;
+  }
+  .phase-card .phase-kpi strong {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .phase-card ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .phase-card ul li {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 4px 0 4px 18px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .phase-card ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 12px;
+    top: 4px;
+  }
+
+  /* Action list */
+  ul.actions {
+    list-style: none;
+    counter-reset: action;
+    margin: 24px 0;
+  }
+  ul.actions li {
+    counter-increment: action;
+    padding: 18px 18px 18px 64px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    background: var(--paper);
+  }
+  ul.actions li:first-child { border-top: 1px solid var(--rule); }
+  ul.actions li::before {
+    content: counter(action, decimal-leading-zero);
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  ul.actions li strong {
+    display: block;
+    color: var(--ink);
+    font-size: 15px;
+    margin-bottom: 4px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  ul.actions li .timeframe {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 7px;
+    margin-left: 6px;
+    letter-spacing: 0.1em;
+    vertical-align: middle;
+  }
+  ul.actions li .body {
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+  }
+
+  /* Inline tags */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--code-bg);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    margin-right: 4px;
+    letter-spacing: -0.005em;
+  }
+  .tag.red { background: #f5d5d5; color: #6b1d1d; }
+  .tag.green { background: #d5e8d5; color: #1d4d1d; }
+  .tag.amber { background: #f5e6c2; color: #7a5a1d; }
+
+  /* ===== TOC RIGHT RAIL ===== */
+  .toc-rail {
+    padding: 48px 20px 80px;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .toc-rail h5 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    font-weight: 500;
+  }
+  .toc-rail ul { list-style: none; }
+  .toc-rail li {
+    font-size: 12.5px;
+    padding: 5px 0;
+    border-left: 2px solid var(--rule);
+    padding-left: 10px;
+    margin-bottom: 0;
+  }
+  .toc-rail li a {
+    color: var(--muted);
+    text-decoration: none;
+    line-height: 1.4;
+    display: block;
+    transition: color 0.15s;
+  }
+  .toc-rail li a:hover, .toc-rail li.active a {
+    color: var(--ink);
+  }
+  .toc-rail li.active {
+    border-left-color: var(--accent);
+  }
+  .toc-rail .meta-info {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .toc-rail .meta-info .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+  }
+  .toc-rail .meta-info .row .label {
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .toc-rail .meta-info .row .val {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ===== FOOTER ===== */
+  footer.article-footer {
+    margin-top: 80px;
+    padding-top: 28px;
+    border-top: 3px double var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* ===== STRATEGIC IMPERATIVE BOX ===== */
+  .imperative {
+    margin: 48px 0 24px;
+    padding: 36px 36px 32px;
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+  }
+  .imperative::before {
+    content: "Strategic Imperative";
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: var(--accent);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+  .imperative p {
+    font-family: 'Fraunces', 'Noto Serif KR', serif;
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--paper);
+    font-style: italic;
+    margin: 0;
+  }
+  .imperative .signature {
+    display: block;
+    margin-top: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--highlight-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-style: normal;
+  }
+
+  /* ===== INFOBOX (Wikipedia-style) ===== */
+  .infobox {
+    float: right;
+    width: 280px;
+    margin: 0 0 24px 28px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12.5px;
+    box-shadow: 4px 4px 0 var(--rule);
+  }
+  .infobox-title {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 14px;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .infobox-subtitle {
+    padding: 8px 14px;
+    background: var(--highlight);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+  .infobox-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .infobox-row:last-child { border-bottom: none; }
+  .infobox-row .k {
+    padding: 8px 12px;
+    background: var(--sidebar-bg);
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--ink);
+    border-right: 1px solid var(--rule-soft);
+  }
+  .infobox-row .v {
+    padding: 8px 12px;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+
+  /* Search highlight */
+  .search-highlight {
+    background: var(--highlight-strong);
+    padding: 0 2px;
+  }
+
+  /* Edit / wiki actions row */
+  .wiki-actions {
+    display: flex;
+    gap: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--rule);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .wiki-actions a {
+    color: var(--link);
+    text-decoration: none;
+  }
+  .wiki-actions a:hover { color: var(--accent); text-decoration: underline; }
+  .wiki-actions .sep { color: var(--rule); }
+
+  /* responsive */
+  @media (max-width: 1240px) {
+    .layout { grid-template-columns: 240px 1fr; }
+    .toc-rail { display: none; }
+    main.article { border-right: none; }
+  }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.sidebar { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--rule); }
+    main.article { padding: 32px 24px 80px; }
+    h1.article-title { font-size: 36px; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .hero-stat:nth-child(2) { border-right: none; }
+    .infobox { float: none; width: 100%; margin: 24px 0; }
+  }
+
+  /* Print-friendly */
+  @media print {
+    aside.sidebar, .toc-rail, .topbar { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    main.article { padding: 0; }
+  }
+
+  /* Subtle paper grain */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 20% 20%, rgba(139,44,44,0.015) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(30,90,138,0.012) 0%, transparent 50%);
+    z-index: 1;
+  }
+  .layout { position: relative; z-index: 2; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">CB</span>
+    <div>
+      <div class="brand-title">Company Builder Wiki</div>
+      <div class="brand-sub">Internal Strategy Knowledge Base · v.2026.03</div>
+    </div>
+  </div>
+  <div class="topbar-search">
+    <input type="text" id="searchBox" placeholder="🔍  문서 내 검색 (e.g. 경영평가, GS인증, 디지털트윈)">
+  </div>
+  <div class="topbar-meta">
+    <span class="dot"></span>CONFIDENTIAL · INTERNAL
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar">
+    <h4>이 문서</h4>
+    <nav>
+      <ul>
+        <li><a href="#exec" class="active">Executive Summary</a></li>
+        <li><a href="#part1">Part 1 · 시장 구조</a></li>
+        <li><a href="#part1-1" class="sub">민간 대비 차별성</a></li>
+        <li><a href="#part1-2" class="sub">타겟 공공기관</a></li>
+        <li><a href="#part1-3" class="sub">장벽과 기회</a></li>
+        <li><a href="#part2">Part 2 · 버티컬 분석</a></li>
+        <li><a href="#part2-1" class="sub">철도</a></li>
+        <li><a href="#part2-2" class="sub">항만</a></li>
+        <li><a href="#part2-3" class="sub">어항/수산</a></li>
+        <li><a href="#part3">Part 3 · 사업 모델</a></li>
+        <li><a href="#part4">Part 4 · Company 육성</a></li>
+        <li><a href="#part5">Part 5 · 수익·재무</a></li>
+        <li><a href="#part6">Part 6 · 리스크·로드맵</a></li>
+        <li><a href="#part7">Part 7 · 결론·제언</a></li>
+      </ul>
+    </nav>
+
+    <h4>관련 문서</h4>
+    <nav>
+      <ul>
+        <li><a href="#">📄 WISE42 2026 Vision</a></li>
+        <li><a href="#">📄 KRNA AX Masterplan</a></li>
+        <li><a href="#">📄 FIPA AI Masterplan</a></li>
+        <li><a href="#">📄 Upstage Partner Strategy</a></li>
+        <li><a href="#">📄 Founders Studio 회사소개</a></li>
+      </ul>
+    </nav>
+
+    <h4>태그</h4>
+    <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+      <span class="sidebar-tag">AX</span>
+      <span class="sidebar-tag">PUBLIC</span>
+      <span class="sidebar-tag">RAIL</span>
+      <span class="sidebar-tag">PORT</span>
+      <span class="sidebar-tag">STRATEGY</span>
+    </div>
+  </aside>
+
+  <!-- MAIN ARTICLE -->
+  <main class="article" id="article">
+
+    <!-- META HEADER -->
+    <div class="article-meta">
+      <span class="pill confidential">Confidential</span>
+      <span class="pill">Strategy</span>
+      <span class="divider"></span>
+      <span>작성 · 2026.03.18</span>
+      <span class="divider"></span>
+      <span>Managing Partner Office</span>
+      <span class="divider"></span>
+      <span>읽는 시간 · 약 22분</span>
+    </div>
+
+    <div class="wiki-actions">
+      <a href="#">📖 Read</a><span class="sep">|</span>
+      <a href="#">✏️ Edit</a><span class="sep">|</span>
+      <a href="#">🕓 History</a><span class="sep">|</span>
+      <a href="#">💬 Discuss</a><span class="sep">|</span>
+      <a href="#">⭐ Star</a><span class="sep">|</span>
+      <a href="#">🔗 Share</a>
+    </div>
+
+    <h1 class="article-title">공공기관 AX × <br><span class="accent">AI-Native</span> Company Builder</h1>
+    <p class="article-subtitle">철도공단 · 항만공사 · 어항공단 등 국가 인프라 기관 중심 — AI-Native Company 발굴·육성을 위한 Company Builder 사업 전략 보고서</p>
+
+    <!-- Hero Stats -->
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">4,500<span class="unit">억+</span></div>
+        <div class="hero-stat-label">철도공단 스마트관제</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">388<span class="unit">억+</span></div>
+        <div class="hero-stat-label">부산항 DT 플랫폼</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">+1.5<span class="unit">점</span></div>
+        <div class="hero-stat-label">경영평가 AI 가점</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">130<span class="unit">+ 기관</span></div>
+        <div class="hero-stat-label">AI 도입 공공기관</div>
+      </div>
+    </div>
+
+    <!-- INFOBOX -->
+    <aside class="infobox">
+      <div class="infobox-title">Company Builder</div>
+      <div class="infobox-subtitle">Public Sector AX Vehicle</div>
+      <div class="infobox-row"><div class="k">유형</div><div class="v">B2B AI-Native Company Builder</div></div>
+      <div class="infobox-row"><div class="k">소속</div><div class="v">Managing Partner / Chief Builder Office</div></div>
+      <div class="infobox-row"><div class="k">타겟</div><div class="v">철도 · 항만 · 어항/수산 · 도로 · 에너지</div></div>
+      <div class="infobox-row"><div class="k">기간</div><div class="v">36개월 (2026–2028)</div></div>
+      <div class="infobox-row"><div class="k">목표 ARR</div><div class="v">80–200억 원</div></div>
+      <div class="infobox-row"><div class="k">포트폴리오</div><div class="v">10–15+ AI-Native Cos</div></div>
+      <div class="infobox-row"><div class="k">초기 투자</div><div class="v">1–2억 (운영비)</div></div>
+      <div class="infobox-row"><div class="k">상태</div><div class="v" style="color:#1d4d1d;font-weight:700;">● Active · Q2 2026</div></div>
+    </aside>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <section id="exec">
+      <p class="lead">본 보고서는 철도공단, 항만공사, 어항공단 등 국가 기반 인프라 공공기관의 AI Transformation(AX)을 목표시장으로 설정하고, AI-Native Company를 발굴·육성하는 Company Builder의 사업 전략을 수립합니다. 공공기관 AX는 민간 시장 대비 <strong>확실한 예산 파이프라인, 정부 정책 테일윈드, 경영평가 연계 인센티브</strong>를 갖춘 고유한 비즈니스 환경입니다.</p>
+
+      <div class="highlight-box">
+        <p><strong>핵심 투자 메시지 —</strong> 2026년 공공기관 경영평가에 AI 활용 가점(1.5점)이 신설되고, AI 조직·인력·예산·활용 실적 의무 공시가 시행됩니다. 130여 개 공공기관이 AI를 도입했으나, 대부분 초기 단계에 머물고 있습니다. 철도공단은 4,500억 원 규모의 스마트 관제 전환을, 부산항만공사는 388억 원 규모 디지털트윈 플랫폼 구축을 추진 중입니다. 이는 Company Builder가 AI-Native Company를 통해 공략할 수 있는 <strong>'확실한 예산이 있는 시장'</strong>입니다.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <caption>TL;DR — 핵심 발견과 전략적 함의</caption>
+          <thead><tr><th style="width:22%;">구분</th><th style="width:42%;">핵심 발견</th><th>전략적 함의</th></tr></thead>
+          <tbody>
+            <tr><td><strong>정책 환경</strong></td><td>경영평가 AI 가점 1.5점 신설<br>AI 실적 의무 공시 시행</td><td>공공기관의 AI 도입 강제력 확보</td></tr>
+            <tr><td><strong>철도 분야</strong></td><td><span class="num">스마트 관제 4,500억+</span><br>코레일 AI전략본부 출범</td><td>대규모 SI 시장 + Vertical AI 기회</td></tr>
+            <tr><td><strong>항만 분야</strong></td><td><span class="num">부산항 DT 플랫폼 388억+</span><br>AX·DX 워크숍 개최</td><td>스마트항만 전환 가속화</td></tr>
+            <tr><td><strong>조달 체계</strong></td><td>디지털 서비스몰 4,483억 계약<br>2주 내 계약 완료 가능</td><td>신속한 GTM 채널 확보</td></tr>
+            <tr><td><strong>클라우드 목표</strong></td><td>2026년까지 현행 50%, 신규 70% 클라우드 네이티브 전환</td><td>AI-Native 솔루션 필수 환경</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PART 1 -->
+    <h2 id="part1" data-num="PART 01">공공기관 AX 시장의 구조적 특성</h2>
+
+    <h3 id="part1-1">1.1 공공기관 AX 시장이 민간 대비 특별한 이유</h3>
+    <p>공공기관 AX 시장은 민간 B2B SaaS 시장과 근본적으로 다른 동력 구조를 가집니다. 민간 시장이 시장 경쟁과 ROI에 의해 움직인다면, 공공 시장은 <strong>정책 의지, 경영평가, 예산 배분 캘린더</strong>라는 세 가지 필러에 의해 구조적으로 움직입니다. 이 세 가지가 동시에 작동하는 2026년 현재의 환경은 Company Builder에게 유례없는 기회를 제공합니다.</p>
+
+    <p><strong>첫째, 정책 의지.</strong> 모든 대선 후보가 AI를 핵심 정책 아젠다로 내세웠으며, 차기 정부에서는 누가 집권하든 AI 경쟁력이 최우선 국정과제가 됩니다. 과기정통부는 AI 대전환·신산업 정책기금 <span class="num">8,100억 원</span>을 편성했고, 대한민국 전 사회적 'AX'를 목표로 하고 있습니다.</p>
+
+    <p><strong>둘째, 경영평가 인센티브.</strong> 2025년 9월 기획재정부는 공공기관 경영평가 편람을 대폭 개정하여 AI 활용 성과에 <strong>1.5점 가점</strong>을 신설했습니다. 또한 2026년부터 AI 조직·인력·예산·활용 실적이 의무 공시됩니다. 이는 공공기관이 AI를 '해보면 좋은 것'이 아닌 <strong>'해야 하는 것'</strong>으로 인식하게 만드는 결정적 전환점입니다.</p>
+
+    <p><strong>셋째, 예산 파이프라인의 확실성.</strong> 민간 시장과 달리 공공기관 예산은 연초 확정되며, 조달청 디지털 서비스몰을 통해 2주 내 계약이 가능합니다. 2024년 3월 기준 <span class="num">1,182건, 총 4,483억 원</span>의 디지털 서비스 계약이 진행되었습니다.</p>
+
+    <h3 id="part1-2">1.2 타겟 공공기관 세분화: 국가 인프라 기관 분석</h3>
+
+    <div class="table-wrap">
+      <table>
+        <caption>5대 인프라 버티컬 × Pain Point × 예산 규모</caption>
+        <thead><tr><th>기관 유형</th><th>대표 기관</th><th>AX 현황</th><th>핵심 Pain Point</th><th>예산 규모</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>철도</strong></td>
+            <td>국가철도공단<br>한국철도공사(코레일)</td>
+            <td>제2관제센터 2,500억 구축<br>AI전략본부 출범<br>AI On 플랫폼 운영</td>
+            <td>노후 관제시스템(20년)<br>인적 오류 의존<br>예측 유지보수 부재</td>
+            <td><span class="num">4,500억+</span><br>(스마트 관제)</td>
+          </tr>
+          <tr>
+            <td><strong>항만</strong></td>
+            <td>부산·인천·여수광양항만공사</td>
+            <td>디지털트윈 플랫폼 ISP<br>AX·DX 워크숍 개최<br>Port-I 시스템 운영</td>
+            <td>터미널 운영 비효율<br>선박 대기시간 과다<br>야드 혼잡도 관리</td>
+            <td><span class="num">388억+</span><br>(DT 플랫폼)</td>
+          </tr>
+          <tr>
+            <td><strong>수산/어항</strong></td>
+            <td>한국어촌어항공단<br>해양수산부</td>
+            <td>스마트 어항 구축 초기<br>수산물 유통 디지털화<br>어항 안전관리 고도화</td>
+            <td>수작업 중심 운영<br>기상재해 대응 어려움<br>수산물 이력 추적 불가</td>
+            <td>스마트 어항<br>연간 수백억</td>
+          </tr>
+          <tr>
+            <td><strong>도로/교통</strong></td>
+            <td>한국도로공사<br>국토교통부</td>
+            <td>AI 기반 안전관리<br>ITS 고도화<br>C-ITS 확대</td>
+            <td>교통량 예측 한계<br>시설물 점검 수작업<br>실시간 돌발상황 대응</td>
+            <td><span class="num">수천억+</span></td>
+          </tr>
+          <tr>
+            <td><strong>에너지</strong></td>
+            <td>한국전력공사<br>한국수력원자력</td>
+            <td>설비 예측 유지보수<br>전력망 최적화<br>신재생에너지 통합</td>
+            <td>노후 설비 점검 한계<br>수요 예측 정확도<br>탄소중립 대응</td>
+            <td><span class="num">수천억+</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="part1-3">1.3 구조적 장벽과 기회</h3>
+    <p>공공기관 AX 시장에는 민간 시장과 구별되는 구조적 장벽이 존재하며, 이 장벽을 <strong>AI-Native 접근</strong>으로 해결하는 것이 Company Builder의 핵심 공략 포인트입니다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>장벽</th><th>현상</th><th>AI-Native 해결 방향</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="tag red">보안 규제</span></td>
+            <td>공공 내부망 환경, 외부 클라우드 LLM 사용 제한, Private LLM 요구</td>
+            <td>Hybrid AI 아키텍처(Private LLM + RAG), 온프레미스/전용 클라우드, 데이터 비식별화 내재화</td>
+          </tr>
+          <tr>
+            <td><span class="tag amber">조달 프로세스</span></td>
+            <td>긴 발주-계약 사이클(80일+), 최저가 입찰, 대기업 중심 수주</td>
+            <td>디지털 서비스몰(2주 계약), GS인증/혁신제품 등록, SaaS 구독 모델</td>
+          </tr>
+          <tr>
+            <td><span class="tag amber">변화 저항</span></td>
+            <td>보수적 조직 문화, 신기술 도입 부담, AI 인력 부족</td>
+            <td>Human-in-the-Loop 점진적 전환, 기존 시스템 내 AI 임베딩, 경영평가 인센티브 활용</td>
+          </tr>
+          <tr>
+            <td><span class="tag red">데이터 사일로</span></td>
+            <td>부서별 단절, 비정형 데이터 방치, 데이터 품질 미관리</td>
+            <td>데이터 통합 플랫폼 선구축, RAG 기반 비정형 활용, 데이터 거버넌스 컨설팅 연계</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PART 2 -->
+    <h2 id="part2" data-num="PART 02">타겟 버티컬 심층 분석</h2>
+
+    <h3 id="part2-1">2.1 철도 버티컬 — 스마트 철도 전환의 핵심 기회</h3>
+    <p>국가철도공단은 <strong>4,500억 원 규모의 스마트 관제 체계 전환</strong>을 추진 중이며, 2028년 완공을 목표로 합니다. 코레일은 2025년 10월 디지털융합본부를 'AI전략본부'로 재편하고, ChatGPT, 제미나이 등이 통합된 AI 업무 플랫폼 'AI On'을 구축했습니다. ETRI와는 디지털 트윈, 5G/6G, AI 기술 협력 협약을 체결했습니다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>철도 버티컬 — AI-Native Company 기회 영역</caption>
+        <thead><tr><th>기회 영역</th><th>Pain Point</th><th>솔루션 방향</th><th>수익 모델</th></tr></thead>
+        <tbody>
+          <tr><td><strong>AI 열차 운행 최적화</strong></td><td>관제사 경험 의존<br>연간 13억+ 이용객<br>복잡한 다종 열차</td><td>실시간 AI 운행 최적화 엔진, 동적 시간표 조정</td><td>라이선스 + 절감액 성과보수</td></tr>
+          <tr><td><strong>선로/시설물 예측 유지보수</strong></td><td>20년+ 노후 설비<br>수작업 점검<br>사후 대응</td><td>IoT 센서 + AI 예측, 비전 AI 점검, 디지털 트윈</td><td>구독 SaaS + 장비 연동</td></tr>
+          <tr><td><strong>AI 철도 안전 관리</strong></td><td>이상행동 감지 한계<br>사고 예방 부재<br>수동 CCTV 모니터링</td><td>영상 AI 실시간 이상 감지, 자동 경보·대응</td><td>역사/구간별 월 구독</td></tr>
+          <tr><td><strong>지능형 역사 서비스</strong></td><td>승객 안내 한계<br>혼잡 정보 조회<br>피크 시간 관리</td><td>AI 챗봇/아바타 민원안내, 수요 예측, 동적 시설 운영</td><td>역사당 구독 + 트랜잭션</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="part2-2">2.2 항만 버티컬 — 스마트항만 전환의 핵심 기회</h3>
+    <p>부산항만공사는 2025년 12월 '부산항, 스마트항만 구현을 위한 AX·DX 워크숍'을 개최하며, AI·블록체인·로봇 등 첨단 기술 도입을 통한 세계 최고 수준의 스마트항만 실현을 선언했습니다. 해양수산부는 부산항 전체에 디지털트윈 기술을 적용하는 통합 시스템(388억+ 규모) 구축을 추진 중입니다.</p>
+
+    <div class="pullquote">
+      <span class="pullquote-mark">"</span>
+      <p>자동화 터미널의 연간 물동량은 30% 증가, 기존 터미널은 1.9% 감소.<br>수익은 자동화 터미널이 22% 상승했다.</p>
+    </div>
+
+    <h3 id="part2-3">2.3 어항/수산 버티컬 — 블루오션 시장의 디지털화</h3>
+    <p>한국어촌어항공단을 포함한 수산/어항 분야는 상대적으로 디지털 전환이 느린 <strong>블루오션 시장</strong>이지만, 그만큼 기회가 큽니다. 기상재해 대응, 어항 안전 관리, 수산물 유통 추적성 확보 등이 핵심 수요입니다. IoT 센서, AI 영상 분석, 수산물 이력추적 시스템 등이 핵심 기술 영역이 됩니다.</p>
+
+    <!-- PART 3 -->
+    <h2 id="part3" data-num="PART 03">Company Builder 사업 모델 설계</h2>
+
+    <h3>3.1 공공기관 특화 Company Builder의 차별화</h3>
+    <p>공공기관 AX를 타겟으로 하는 Company Builder는 일반 B2B SaaS Company Builder와 근본적으로 다른 역량을 필요로 합니다. <strong>공공 조달 프로세스 이해, 보안 인증 체계, 경영평가 연계 능력, 공공 데이터 거버넌스</strong>에 대한 전문성이 핵심 경쟁 우위입니다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>차별화 요소</th><th>일반 B2B Company Builder</th><th>공공기관 AX Company Builder</th></tr></thead>
+        <tbody>
+          <tr><td><strong>GTM 채널</strong></td><td>온라인 마케팅, PLG, 인바운드 세일즈</td><td>조달청 디지털 서비스몰, GS인증/혁신제품, 경영평가 연계 영업</td></tr>
+          <tr><td><strong>영업 사이클</strong></td><td>주-월 단위 상향식 클로징</td><td>연 단위 예산 사이클, ISP → 발주 → 구축, 선제적 제안</td></tr>
+          <tr><td><strong>인증/보안</strong></td><td>SOC2, ISO27001 선호</td><td>GS인증 1등급 필수, 공공 보안 규정, 하이브리드 클라우드</td></tr>
+          <tr><td><strong>성공 기준</strong></td><td>MRR/ARR, NRR</td><td>ARR + 경영평가 성과, Reference Selling, 정책 부합</td></tr>
+          <tr><td><strong>포트폴리오 시너지</strong></td><td>데이터 공유, 크로스셀</td><td>공통 보안 인프라, 공공데이터 연계, 유사기관 확산</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3.2 3단계 사업 전략 프레임워크</h3>
+
+    <div class="phase-grid">
+      <div class="phase-card">
+        <div class="phase-num">01</div>
+        <h4>Phase 1 — 공공 AX Vertical 탐색 및 AI-Native Company 발굴</h4>
+        <div class="phase-period">0–6개월 · Discovery</div>
+        <div class="phase-goal">공공기관 예산 사이클에 맞춰 타겟 버티컬 선정 및 AI-Native Company 후보 발굴</div>
+        <div class="phase-kpi"><strong>KPI</strong>타겟 버티컬 3개 · AI-Native 후보 15개 파이프라인 · ISP 분석 10건</div>
+        <ul>
+          <li>공공기관 예산 캘린더 분석 및 사업발주 예측</li>
+          <li>철도/항만/어항 도메인 전문가 탐색 및 스카우팅</li>
+          <li>GS인증/혁신제품 등록 로드맵 수립</li>
+          <li>디지털 서비스몰 등록 준비</li>
+        </ul>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">02</div>
+        <h4>Phase 2 — MVP 구축 및 공공 실증</h4>
+        <div class="phase-period">6–18개월 · Build</div>
+        <div class="phase-goal">타겟 공공기관에 AI-Native 솔루션 파일럿 배포 및 경영평가 성과 창출</div>
+        <div class="phase-kpi"><strong>KPI</strong>파일럿 기관 5개+ · GS인증 3건+ · 경영평가 AI 가점 획득 지원 5기관+</div>
+        <ul>
+          <li>Hybrid AI 아키텍처 기반 MVP 개발 (Private LLM + RAG)</li>
+          <li>공공기관 보안 규정 충족 실증</li>
+          <li>경영평가 AI 가점 획득을 위한 성과 측정 컨설팅</li>
+          <li>파일럿 기관 사례를 Reference로 유사기관 확산 준비</li>
+        </ul>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">03</div>
+        <h4>Phase 3 — 스케일링 및 포트폴리오 확장</h4>
+        <div class="phase-period">18–36개월 · Scale</div>
+        <div class="phase-goal">검증된 AI-Native Company의 공공기관 확산 및 포트폴리오 가치 극대화</div>
+        <div class="phase-kpi"><strong>KPI</strong>ARR 50억+/Co · 계약 기관 30개+ · 포트폴리오 10개+ AI-Native Co</div>
+        <ul>
+          <li>'철도 AI' → '항만 AI' → '어항 AI' 버티컬 순차 확대</li>
+          <li>공통 보안 인프라 및 데이터 플랫폼 포트폴리오 공유</li>
+          <li>해외 공공 인프라(동남아/중동) 수출 파이프라인 구축</li>
+          <li>M&A 또는 시리즈 A 펀딩 검토</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PART 4 -->
+    <h2 id="part4" data-num="PART 04">AI-Native Company 발굴·육성 전략</h2>
+
+    <h3>4.1 발굴 대상 — 공공 도메인 전문가 × AI 실행력</h3>
+    <p>공공기관 AX 시장에서 AI-Native Company의 핵심 경쟁력은 <strong>'공공 도메인 전문성'</strong>입니다. 철도 신호시스템, 항만 터미널 운영, 어항 안전관리 등 각 버티컬의 운영 현장을 깊이 이해하는 전문가가 AI 실행력을 갖추었을 때, 10x 가치의 솔루션이 탄생합니다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>발굴 소스</th><th>타겟 프로필</th><th>발굴 채널</th></tr></thead>
+        <tbody>
+          <tr><td><strong>공공기관 퇴직자</strong></td><td>철도/항만/에너지 15년+ 운영 현장 지식, AI 학습 의지</td><td>OB 협회, 산업별 학회, 퇴직자 네트워크</td></tr>
+          <tr><td><strong>SI/IT 기업 경력자</strong></td><td>공공 SI 5년+, 보안/인증 이해, AI/ML 기술력</td><td>공공 IT 커뮤니티, 커리어 전환자 보급</td></tr>
+          <tr><td><strong>연구기관 출신</strong></td><td>ETRI/철도연/KMI 분야별 연구, 기술사업화 의지</td><td>출연연 기술사업화, 국가 R&D 과제 네트워크</td></tr>
+          <tr><td><strong>스타트업 피벗</strong></td><td>기존 GovTech 스타트업, AI-Native 피벗 의지</td><td>GovTech 포럼, 나라장터 엑스포</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>4.2 육성 프로그램 설계</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>단계</th><th>기간</th><th>제공 가치</th><th>KPI</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Discovery</strong><br>발굴/선발</td><td>0–2개월</td><td>도메인 × AI 실행력 평가, 공공 시장 Fit 검증, 비즈니스 모델 초안</td><td>선발율 10% (50 → 5)</td></tr>
+          <tr><td><strong>Build</strong><br>구축/검증</td><td>2–8개월</td><td>공통 인프라 제공, GS인증/혁신제품 지원, 파일럿 기관 매칭</td><td>MVP 완성률 80%+<br>파일럿 기관 확보</td></tr>
+          <tr><td><strong>Scale</strong><br>확산</td><td>8–18개월</td><td>조달청 등록, Reference Selling, 경영평가 성과 컨설팅</td><td>계약 기관 10개+<br>ARR 10억+</td></tr>
+          <tr><td><strong>Grow</strong><br>성장</td><td>18개월+</td><td>포트폴리오 시너지, 해외 진출, 투자 유치/M&A</td><td>ARR 50억+<br>해외 파일럿 1건+</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PART 5 -->
+    <h2 id="part5" data-num="PART 05">수익 모델 및 재무 전망</h2>
+
+    <h3>5.1 Company Builder 수익 구조</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>수익원</th><th>설명</th><th>비중</th><th>시점</th></tr></thead>
+        <tbody>
+          <tr><td><strong>지분 투자 수익</strong></td><td>AI-Native Company 지분 20–40% 보유, 포트폴리오 가치 상승 시 수익</td><td><span class="num">40%</span></td><td>중장기</td></tr>
+          <tr><td><strong>공통 인프라 사용료</strong></td><td>보안·클라우드·데이터 플랫폼 제공 수수료</td><td><span class="num">25%</span></td><td>초기부터</td></tr>
+          <tr><td><strong>경영평가 컨설팅</strong></td><td>공공기관 AI 가점 획득 지원, 성과 측정·보고서</td><td><span class="num">20%</span></td><td>초기부터</td></tr>
+          <tr><td><strong>공공 사업 발주 수수료</strong></td><td>포트폴리오 연계 공공 사업 수주 PM 수수료</td><td><span class="num">15%</span></td><td>중기부터</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>5.2 포트폴리오 가치 전망 (36개월)</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>시나리오</th><th>AI-Native Co 수</th><th>포트폴리오 ARR</th><th>추정 가치</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag">Conservative</span></td><td>5개</td><td><span class="num">25억 원</span></td><td>75–125억 원</td></tr>
+          <tr><td><span class="tag amber">Base</span></td><td>10개</td><td><span class="num">80억 원</span></td><td>240–400억 원</td></tr>
+          <tr><td><span class="tag green">Optimistic</span></td><td>15개+</td><td><span class="num">200억+ 원</span></td><td>600–1,000억+ 원</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Vertical AI SaaS의 평균 밸류에이션 배수(<strong>ARR 3–5x</strong>)를 적용하여 추정했으며, 공공기관 시장의 높은 계약 유지율(NRR 120%+)과 예산 예측 가능성을 프리미엄으로 반영했습니다. 공공기관 시장의 핵심 강점은 <strong>Reference Selling의 파급력</strong>입니다. 하나의 공공기관에서 성공 사례가 생기면, 유사 기관으로의 확산이 구조적으로 보장됩니다.</p>
+
+    <!-- PART 6 -->
+    <h2 id="part6" data-num="PART 06">리스크 및 실행 로드맵</h2>
+
+    <h3>6.1 핵심 리스크 및 완화 전략</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>리스크</th><th>발생 확률</th><th>완화 전략</th></tr></thead>
+        <tbody>
+          <tr><td><strong>조달 프로세스 지연</strong> (예산 사이클 미스매치)</td><td><span class="tag red">높음</span></td><td>ISP 단계부터 선제 참여 · 디지털 서비스몰 우선 · 복수기관 동시 파이프라인</td></tr>
+          <tr><td><strong>보안 인증 획득 지연</strong> (GS인증 6개월+)</td><td><span class="tag red">높음</span></td><td>사전 인증 로드맵(Phase 1부터) · 인증 컨설팅 파트너 사전 확보 · 공통 보안 모듈</td></tr>
+          <tr><td><strong>공공기관 변화 저항</strong></td><td><span class="tag amber">중간</span></td><td>경영평가 가점 동력 활용 · 기존 시스템 임베딩 · Change Mgmt 번들링</td></tr>
+          <tr><td><strong>정치적 환경 변화</strong> (정권 교체)</td><td><span class="tag amber">중간</span></td><td>여야 공통 AI 의제 · 경영평가 제도화로 구조적 안정성 · 복수 버티컬 헤지</td></tr>
+          <tr><td><strong>대기업 SI 경쟁</strong></td><td><span class="tag green">낮음</span></td><td>대기업이 안하는 Vertical 틈새 · 하청/파트너 포지셔닝 · '실행 수준' 차별화</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>6.2 36개월 실행 로드맵</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>시기</th><th>핵심 마일스톤</th><th>KPI</th><th>투자 규모</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Q2 2026</strong><br><span style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">● NOW</span></td><td>철도 버티컬 우선 선정<br>예산 캘린더 분석<br>후보 파이프라인 구축</td><td>버티컬 3개<br>ISP 분석 10건<br>후보 50개</td><td>운영비<br>1–2억 원</td></tr>
+          <tr><td><strong>Q3-Q4 2026</strong></td><td>선발 5개 인큐베이팅<br>GS인증 착수(2건+)<br>파일럿 기관 확보</td><td>MVP 착수 5개<br>파일럿 3개+<br>경영평가 연계 시작</td><td>3–5억 원</td></tr>
+          <tr><td><strong>H1 2027</strong></td><td>GS인증 취득<br>디지털 서비스몰 등록<br>첫 본계약 체결</td><td>GS인증 3건+<br>본계약 5개+<br>ARR 5억+</td><td>5–10억 원</td></tr>
+          <tr><td><strong>H2 2027</strong></td><td>항만 버티컬 확대<br>Reference Selling 본격화<br>포트폴리오 2차 배치</td><td>계약 15개+<br>ARR 20억+<br>Co 8개</td><td>10–20억 원</td></tr>
+          <tr><td><strong>2028</strong></td><td>어항/에너지 확대<br>해외 공공 인프라 진출<br>시리즈 A 또는 M&A</td><td>계약 30개+<br>ARR 80억+<br>Co 10개+</td><td>외부 투자<br>또는 수익 재투자</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PART 7 -->
+    <h2 id="part7" data-num="PART 07">결론 및 전략적 제언</h2>
+
+    <h3>7.1 핵심 결론</h3>
+    <p>공공기관 AX 시장은 2026년 현재 <strong>'정책 의지 + 경영평가 강제력 + 확정된 예산'</strong>이라는 삼중 테일윈드가 동시에 작동하는 유례없는 환경입니다. 철도공단의 4,500억+ 원 스마트 관제 전환, 부산항만공사의 DT 플랫폼 388억+ 원, 정부의 423조 원 통합 AX 프로그램은 이 시장의 구체적인 규모를 보여줍니다.</p>
+
+    <p>그러나 130여 개 공공기관이 AI를 도입했음에도 대부분 초기 단계에 머물고 있습니다. 이는 <strong>공공 도메인 전문성과 AI 실행력을 겸비한 AI-Native Company가 부족하기 때문</strong>입니다. Company Builder는 이 공급-수요 갭을 메우는 전략적 허브 역할을 수행합니다.</p>
+
+    <p>핵심 차별화는 <strong>'공공기관 특화'</strong>에 있습니다. GS인증/혁신제품 등록, 디지털 서비스몰 진입, 경영평가 성과 연계, Reference Selling 파이프라인 — 이 네 가지를 포트폴리오 차원에서 체계적으로 지원하는 Company Builder는 아직 존재하지 않습니다.</p>
+
+    <h3>7.2 즉시 실행 액션 아이템</h3>
+
+    <ul class="actions">
+      <li>
+        <strong>공공기관 예산 캘린더 매핑<span class="timeframe">1주 내</span></strong>
+        <span class="body">2026–2027년 철도/항만/어항 분야 사업발주 예정 목록 수집 및 분석. ISP 단계 사업 우선 식별하여 선제적 제안 준비.</span>
+      </li>
+      <li>
+        <strong>AI-Native Company 후보 스카우팅 개시<span class="timeframe">2주 내</span></strong>
+        <span class="body">철도공단/코레일 퇴직자, 항만 SI 경력자, ETRI/KMI 연구원 중 AI 실행력 보유자 50명 1차 파이프라인 구축.</span>
+      </li>
+      <li>
+        <strong>GS인증 로드맵 착수<span class="timeframe">3주 내</span></strong>
+        <span class="body">GS인증 컨설팅 파트너 선정 및 인증 취득 6개월 로드맵 수립. 혁신제품 지정 신청 병행 검토.</span>
+      </li>
+      <li>
+        <strong>경영평가 연계 컨설팅 모듈 개발<span class="timeframe">4주 내</span></strong>
+        <span class="body">2026년 경영평가 편람 기반 AI 가점 획득 가이드 제작. 파일럿 기관 대상 'AI 성과 측정 프레임워크' 제안 준비.</span>
+      </li>
+      <li>
+        <strong>디지털 서비스몰 진입 전략 수립<span class="timeframe">6주 내</span></strong>
+        <span class="body">조달청 디지털 서비스몰 등록 요건 분석 및 등록 준비. Company Builder 공통 인프라(보안/클라우드)를 SaaS 형태로 패키징.</span>
+      </li>
+    </ul>
+
+    <!-- STRATEGIC IMPERATIVE -->
+    <div class="imperative">
+      <p>"공공기관 AX는 '기술을 어떻게 국민의 편익으로 바꿀 것인가?'라는 질문입니다. Company Builder로서 우리의 역할은, 공공 도메인의 깊은 전문성을 가진 AI-Native Company를 발굴하고, 공공 시장의 복잡한 진입 장벽을 체계적으로 해결하며, 포트폴리오 차원의 Reference Selling으로 스케일을 만들어내는 것입니다. 이 세 가지가 결합될 때, 공공기관의 AI가 실험에서 경영 성과로 전환됩니다."</p>
+      <span class="signature">— Managing Partner · Chief Builder Office</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="article-footer">
+      <span>마지막 수정 · 2026.03.18 by C-level Office</span>
+      <span>분류 · Confidential / Internal Only</span>
+      <span>버전 · v.2026.03.r1</span>
+    </footer>
+
+  </main>
+
+  <!-- RIGHT TOC RAIL -->
+  <aside class="toc-rail">
+    <h5>On this page</h5>
+    <ul id="onPageToc">
+      <li class="active"><a href="#exec">Executive Summary</a></li>
+      <li><a href="#part1">1. 시장 구조</a></li>
+      <li><a href="#part1-1">  1.1 민간 대비 차별성</a></li>
+      <li><a href="#part1-2">  1.2 타겟 공공기관</a></li>
+      <li><a href="#part1-3">  1.3 장벽과 기회</a></li>
+      <li><a href="#part2">2. 버티컬 분석</a></li>
+      <li><a href="#part2-1">  2.1 철도</a></li>
+      <li><a href="#part2-2">  2.2 항만</a></li>
+      <li><a href="#part2-3">  2.3 어항/수산</a></li>
+      <li><a href="#part3">3. 사업 모델</a></li>
+      <li><a href="#part4">4. Company 육성</a></li>
+      <li><a href="#part5">5. 수익·재무</a></li>
+      <li><a href="#part6">6. 리스크·로드맵</a></li>
+      <li><a href="#part7">7. 결론·제언</a></li>
+    </ul>
+
+    <div class="meta-info">
+      <div class="row"><span class="label">Status</span><span class="val" style="color:#1d4d1d;">● Active</span></div>
+      <div class="row"><span class="label">Owner</span><span class="val">MP Office</span></div>
+      <div class="row"><span class="label">Reviewers</span><span class="val">C-level</span></div>
+      <div class="row"><span class="label">Edits</span><span class="val">17</span></div>
+      <div class="row"><span class="label">Words</span><span class="val">~4,200</span></div>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  // ====== Smooth scroll active state for sidebar ======
+  const sections = document.querySelectorAll('main.article section, main.article h2, main.article h3');
+  const tocLinks = document.querySelectorAll('aside.sidebar nav a, .toc-rail li a');
+
+  function setActive() {
+    let current = '';
+    document.querySelectorAll('[id]').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < 200) current = el.id;
+    });
+    tocLinks.forEach(a => {
+      a.classList.remove('active');
+      a.parentElement && a.parentElement.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) {
+        a.classList.add('active');
+        if (a.parentElement.tagName === 'LI') a.parentElement.classList.add('active');
+      }
+    });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  // ====== Simple in-page search highlight ======
+  const searchBox = document.getElementById('searchBox');
+  const article = document.getElementById('article');
+  let originalHTML = null;
+
+  function clearHighlights() {
+    article.querySelectorAll('.search-highlight').forEach(el => {
+      const parent = el.parentNode;
+      parent.replaceChild(document.createTextNode(el.textContent), el);
+      parent.normalize();
+    });
+  }
+
+  function highlightSearch(term) {
+    if (!term || term.length < 2) { clearHighlights(); return; }
+    clearHighlights();
+    const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => {
+        if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if (node.parentElement.closest('input, script, style')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    let n;
+    while ((n = walker.nextNode())) nodes.push(n);
+
+    const re = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    let first = null;
+    nodes.forEach(node => {
+      if (!re.test(node.nodeValue)) return;
+      re.lastIndex = 0;
+      const frag = document.createDocumentFragment();
+      let lastIdx = 0;
+      let m;
+      const text = node.nodeValue;
+      while ((m = re.exec(text)) !== null) {
+        if (m.index > lastIdx) frag.appendChild(document.createTextNode(text.slice(lastIdx, m.index)));
+        const span = document.createElement('span');
+        span.className = 'search-highlight';
+        span.textContent = m[0];
+        frag.appendChild(span);
+        if (!first) first = span;
+        lastIdx = m.index + m[0].length;
+      }
+      if (lastIdx < text.length) frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+      node.parentNode.replaceChild(frag, node);
+    });
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  let searchTimer;
+  searchBox.addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => highlightSearch(e.target.value.trim()), 200);
+  });
+</script>
+
+</body>
+</html>

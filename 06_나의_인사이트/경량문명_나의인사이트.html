@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>경량문명의 도래와 기업의 미래 · 나의 인사이트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Noto+Serif+KR:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1814;
+  --ink-soft: #2c2823;
+  --paper: #f5f1e8;
+  --paper-warm: #ebe5d4;
+  --paper-deep: #e0d8c2;
+  --accent: #8b2c1d;
+  --accent-soft: #b8543e;
+  --gold: #a07a2a;
+  --rule: #c4baa0;
+  --muted: #6b6557;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Noto Serif KR', 'Fraunces', serif;
+  font-weight: 400;
+  line-height: 1.75;
+  font-size: 16px;
+  background-image:
+    radial-gradient(at 15% 8%, rgba(160, 122, 42, 0.04) 0%, transparent 50%),
+    radial-gradient(at 85% 92%, rgba(139, 44, 29, 0.03) 0%, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* 그레인 텍스처 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+.wiki {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 60px 48px 120px;
+  position: relative;
+  z-index: 2;
+}
+
+/* 위키 헤더 */
+.wiki-header {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 28px;
+  margin-bottom: 48px;
+}
+
+.breadcrumb {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.breadcrumb span { color: var(--accent); }
+.breadcrumb .sep { opacity: 0.4; }
+
+.wiki-title {
+  font-family: 'Fraunces', 'Noto Serif KR', serif;
+  font-weight: 500;
+  font-size: clamp(40px, 5.5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.wiki-title em {
+  font-style: normal;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.wiki-subtitle {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  max-width: 620px;
+  margin-bottom: 28px;
+}
+
+.wiki-meta {
+  display: flex;
+  gap: 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.wiki-meta .label {
+  display: block;
+  font-size: 10px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.wiki-meta .value {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* 태그 */
+.tags {
+  margin-top: 24px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: var(--paper-warm);
+  border: 1px solid var(--rule);
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+
+/* TL;DR 박스 */
+.tldr {
+  background: var(--paper-warm);
+  border-left: 3px solid var(--accent);
+  padding: 28px 32px;
+  margin: 48px 0;
+  position: relative;
+}
+
+.tldr-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.tldr-content {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 16.5px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.tldr-content strong {
+  color: var(--ink);
+  font-weight: 600;
+  background: linear-gradient(180deg, transparent 60%, rgba(160, 122, 42, 0.25) 60%);
+}
+
+/* 목차 */
+.toc {
+  background: rgba(245, 241, 232, 0.6);
+  border: 1px solid var(--rule);
+  padding: 24px 28px;
+  margin: 40px 0 56px;
+}
+
+.toc-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.toc ol {
+  list-style: none;
+  counter-reset: toc;
+}
+
+.toc li {
+  counter-increment: toc;
+  padding: 6px 0;
+  font-size: 15px;
+  border-bottom: 1px dotted var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.toc li:last-child { border-bottom: none; }
+
+.toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.toc a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.2s;
+  flex: 1;
+}
+
+.toc a:hover { color: var(--accent); }
+
+/* 섹션 */
+section {
+  margin: 72px 0;
+  scroll-margin-top: 40px;
+}
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-num::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+  max-width: 80px;
+}
+
+h2 {
+  font-family: 'Fraunces', 'Noto Serif KR', serif;
+  font-size: clamp(28px, 3.5vw, 38px);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+
+h3 {
+  font-family: 'Fraunces', 'Noto Serif KR', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 40px 0 16px;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+h3::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+h4 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 28px 0 10px;
+}
+
+p {
+  margin-bottom: 18px;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+p strong, li strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.lead {
+  font-size: 18px;
+  font-family: 'Fraunces', 'Noto Serif KR', serif;
+  font-weight: 400;
+  color: var(--ink);
+  font-style: italic;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+/* 인용 */
+blockquote {
+  border-left: 2px solid var(--gold);
+  padding: 8px 24px;
+  margin: 28px 0;
+  font-family: 'Fraunces', 'Noto Serif KR', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+blockquote cite {
+  display: block;
+  margin-top: 10px;
+  font-style: normal;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* 리스트 */
+ul, ol {
+  margin: 16px 0 24px 8px;
+}
+
+ul li, ol li {
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+
+ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* 사례 카드 */
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 28px 0;
+}
+
+.case {
+  background: var(--paper-warm);
+  border: 1px solid var(--rule);
+  padding: 20px 22px;
+  position: relative;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.case:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.case-name {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.case-name-ko {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.case-stat {
+  font-family: 'Fraunces', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+
+.case-stat-label {
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.case-desc {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+/* 비교 테이블 */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 32px 0;
+  border: 1px solid var(--rule);
+}
+
+.compare-col {
+  padding: 28px;
+  position: relative;
+}
+
+.compare-col.heavy {
+  background: var(--paper-warm);
+  border-right: 1px solid var(--rule);
+}
+
+.compare-col.light {
+  background: var(--paper);
+}
+
+.compare-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.compare-title {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  letter-spacing: -0.01em;
+}
+
+.compare-col.heavy .compare-title { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; text-decoration-color: var(--accent); }
+.compare-col.light .compare-title { color: var(--accent); }
+
+.compare ul { margin: 0; }
+.compare ul li {
+  font-size: 14px;
+  margin-bottom: 8px;
+  line-height: 1.55;
+}
+
+/* 액션 카드 */
+.action-block {
+  margin: 32px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 32px 0;
+}
+
+.action-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.action-icon {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.action-title {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.action-items {
+  counter-reset: action;
+  list-style: none;
+  margin: 0;
+}
+
+.action-items li {
+  counter-increment: action;
+  padding: 16px 0 16px 56px;
+  position: relative;
+  border-bottom: 1px dotted var(--rule);
+  margin-bottom: 0;
+}
+
+.action-items li:last-child { border-bottom: none; }
+
+.action-items li::before {
+  content: counter(action, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 16px;
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  color: var(--accent);
+  font-weight: 500;
+  font-style: italic;
+}
+
+.action-items li strong {
+  display: block;
+  color: var(--ink);
+  font-size: 16px;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.action-items li span {
+  display: block;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+/* 핵심 인용 */
+.pull-quote {
+  margin: 48px -20px;
+  padding: 36px 40px;
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+}
+
+.pull-quote::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: 30px;
+  font-family: 'Fraunces', serif;
+  font-size: 120px;
+  color: var(--accent);
+  line-height: 1;
+  font-weight: 900;
+}
+
+.pull-quote-text {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  padding-left: 24px;
+  border-left: 2px solid var(--accent);
+}
+
+.pull-quote-cite {
+  margin-top: 16px;
+  padding-left: 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent-soft);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* 결론 */
+.conclusion {
+  margin-top: 80px;
+  padding: 48px 40px;
+  background: linear-gradient(135deg, var(--paper-warm) 0%, var(--paper-deep) 100%);
+  border: 1px solid var(--rule);
+  position: relative;
+}
+
+.conclusion::before {
+  content: '∎';
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  color: var(--accent);
+}
+
+.conclusion h2 {
+  font-style: italic;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+/* C-Level 인사이트 */
+.exec-insight {
+  margin: 36px 0;
+  padding: 24px 28px;
+  background: var(--ink);
+  color: var(--paper);
+  border-left: 3px solid var(--gold);
+}
+
+.exec-insight-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.exec-insight p {
+  color: var(--paper);
+  font-size: 15px;
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+.exec-insight p:last-child { margin-bottom: 0; }
+
+/* 푸터 */
+.wiki-footer {
+  margin-top: 100px;
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.wiki-footer span { text-transform: uppercase; }
+
+.signature {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* 모바일 */
+@media (max-width: 640px) {
+  .wiki { padding: 32px 24px 80px; }
+  .compare { grid-template-columns: 1fr; }
+  .compare-col.heavy { border-right: none; border-bottom: 1px solid var(--rule); }
+  .pull-quote { margin: 32px 0; padding: 28px 24px; }
+  .pull-quote::before { font-size: 80px; top: -5px; left: 16px; }
+  .pull-quote-text { font-size: 18px; padding-left: 16px; }
+  .conclusion { padding: 32px 24px; }
+  .wiki-meta { gap: 20px; }
+  .action-items li { padding-left: 44px; }
+}
+</style>
+</head>
+<body>
+
+<article class="wiki">
+
+  <header class="wiki-header">
+    <div class="breadcrumb">
+      <span>나의 인사이트</span>
+      <span class="sep">/</span>
+      <span>AX 전략</span>
+      <span class="sep">/</span>
+      <span>문명론</span>
+    </div>
+
+    <h1 class="wiki-title">AI 시대, <em>경량문명</em>의 도래와<br>기업의 미래</h1>
+
+    <p class="wiki-subtitle">초개인화된 AI가 이끄는 새로운 경제 패러다임 분석 및 대응 전략 — 중량문명의 해체, 거래비용의 제로화, 그리고 1인 기업의 시대.</p>
+
+    <div class="wiki-meta">
+      <div>
+        <span class="label">Author</span>
+        <span class="value">skangbada@gmail.com</span>
+      </div>
+      <div>
+        <span class="label">Original</span>
+        <span class="value">2025.10.11</span>
+      </div>
+      <div>
+        <span class="label">Status</span>
+        <span class="value">Living Document</span>
+      </div>
+      <div>
+        <span class="label">Type</span>
+        <span class="value">Strategy Memo</span>
+      </div>
+    </div>
+
+    <div class="tags">
+      <span class="tag">#경량문명</span>
+      <span class="tag">#AX</span>
+      <span class="tag">#거래비용이론</span>
+      <span class="tag">#1인기업</span>
+      <span class="tag">#코스정리</span>
+      <span class="tag">#Founders Studio</span>
+      <span class="tag">#솔로프리너</span>
+    </div>
+  </header>
+
+  <div class="tldr">
+    <div class="tldr-label">▸ TL;DR — 한 줄 요약</div>
+    <div class="tldr-content">
+      AI는 코스(Coase)의 <strong>거래비용을 제로에 수렴</strong>시키고, 그 결과 <strong>거대 조직의 존재 이유 자체를 해체</strong>한다. 200년간 작동해온 분업·규모의 경제(중량문명)는, 소수 정예가 수십억 사용자를 지배하는 <strong>경량문명(Lightweight Civilization)</strong>으로 전환 중이다. 핵심 지표는 '직원 수'에서 '<strong>1인당 부가가치</strong>'로 이동했다.
+    </div>
+  </div>
+
+  <nav class="toc">
+    <div class="toc-label">목차 · Contents</div>
+    <ol>
+      <li><a href="#sec1">패러다임의 전환 — 중량문명의 해체</a></li>
+      <li><a href="#sec2">논리적 근거 — 거래비용의 제로화</a></li>
+      <li><a href="#sec3">검증된 사례 — 소수가 다수를 지배하다</a></li>
+      <li><a href="#sec4">미래 예측 — 기업·고용·투자·교육의 재편</a></li>
+      <li><a href="#sec5">개인 생존 전략</a></li>
+      <li><a href="#sec6">기업 전환 전략</a></li>
+      <li><a href="#sec7">국가 전략 — 대한민국의 기회</a></li>
+      <li><a href="#sec8">결론 — 위대한 기회의 시작</a></li>
+    </ol>
+  </nav>
+
+  <!-- 섹션 1 -->
+  <section id="sec1">
+    <div class="section-num">§ 01 — Paradigm Shift</div>
+    <h2>패러다임의 전환: 중량문명의 해체</h2>
+
+    <p class="lead">지난 200년간 아담 스미스의 분업과 규모의 경제 원칙에 기반한 중량문명은 인류의 번영을 이끌었다. 그러나 그 모델은 본질적으로 치명적 약점을 내포하고 있었다.</p>
+
+    <p>막대한 자본을 투입해 공장을 짓고, 수만 명의 인력을 고용해 표준화된 제품을 대량 생산하는 방식은 승리의 공식이었다. 하지만 이 모델은 <strong>높은 초기 투자 비용, 느린 의사결정 구조, 변화에 대한 둔감성</strong>이라는 약점을 안고 있었다.</p>
+
+    <p>2022년 11월 ChatGPT의 등장은 이 거대한 구조에 균열을 낸 변곡점이었다. 생성형 AI는 개인에게 과거 수백 명의 전문가 팀이 수행하던 지식 노동(코딩, 디자인, 분석, 마케팅)을 단 몇 시간 만에, 월 수십 달러의 비용으로 처리할 수 있는 능력을 부여했다.</p>
+
+    <div class="compare">
+      <div class="compare-col heavy">
+        <div class="compare-label">Old Order</div>
+        <div class="compare-title">중량문명</div>
+        <ul>
+          <li>대규모 자본 + 대량 인력</li>
+          <li>피라미드 조직 / 결재 라인</li>
+          <li>표준화 · 대량생산</li>
+          <li>평생직장 · 종신고용</li>
+          <li>규모(Scale) 중심</li>
+          <li>학위 · 스펙 기반 채용</li>
+        </ul>
+      </div>
+      <div class="compare-col light">
+        <div class="compare-label">New Order</div>
+        <div class="compare-title">경량문명</div>
+        <ul>
+          <li>아이디어 + AI 활용 능력</li>
+          <li>소수 정예 / 자율 실행</li>
+          <li>초개인화 · 맞춤 생산</li>
+          <li>프로젝트 연합체</li>
+          <li>밀도(Density) 중심</li>
+          <li>능력 · 포트폴리오 기반 채용</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>이는 생산의 핵심 요소가 <strong>자본과 노동력에서 아이디어와 AI 활용 능력으로 이동</strong>했음을 의미한다.</p>
+  </section>
+
+  <!-- 섹션 2 -->
+  <section id="sec2">
+    <div class="section-num">§ 02 — Theoretical Foundation</div>
+    <h2>논리적 근거: 거래비용의 제로화</h2>
+
+    <blockquote>
+      "기업이라는 조직은 시장 거래보다 효율적일 때 존재 가치가 있다. 거래비용을 내부화하여 줄이는 것이 기업의 본질이다."
+      <cite>— Ronald Coase, The Nature of the Firm (1937)</cite>
+    </blockquote>
+
+    <p>노벨경제학상 수상자 코스의 '기업 이론'은 명확하다. 그런데 AI는 이 거래비용을 획기적으로 낮춘다. 그것도 동시에, 모든 영역에서.</p>
+
+    <h3>탐색 비용 (Search Cost)</h3>
+    <p>AI는 시장 분석, 파트너 물색, 인재 검증에 드는 시간과 비용을 거의 <strong>'0'</strong>에 가깝게 만든다. 과거 컨설팅 펌이 수억 원에 제공하던 산업 분석을, 이제 1인이 수 시간 내에 수행한다.</p>
+
+    <h3>조정 비용 (Coordination Cost)</h3>
+    <p>프로젝트 관리 툴과 AI 에이전트는 소수의 인원이 복잡한 프로젝트를 유기적으로 수행하도록 돕는다. <strong>중간관리자의 존재 근거</strong> 자체가 흔들린다.</p>
+
+    <h3>계약 비용 (Contracting Cost)</h3>
+    <p>스마트 계약과 AI 기반 법률 검토는 계약 과정의 비효율을 제거한다. 변호사 검토 24시간이 24분으로 단축된다.</p>
+
+    <div class="exec-insight">
+      <div class="exec-insight-label">▸ C-Level Implication</div>
+      <p>거래비용이 사라진 환경에서는 거대한 관료 조직을 유지할 이유가 없다. 오히려 민첩하게 아이디어를 실행하고, 실패하면 즉시 방향을 전환할 수 있는 <strong>1인 기업 또는 소수 정예 팀이 압도적으로 유리</strong>해진다.</p>
+      <p>이것이 경량문명의 핵심 동력이며, Founders Studio 모델의 이론적 정당화이기도 하다.</p>
+    </div>
+  </section>
+
+  <!-- 섹션 3 -->
+  <section id="sec3">
+    <div class="section-num">§ 03 — Evidence</div>
+    <h2>검증된 사례: 소수가 다수를 지배하다</h2>
+
+    <p>이론은 이미 현실이 되었다. 다음 세 사례는 단순한 일화가 아니라, 거래비용 이론의 실증 데이터다.</p>
+
+    <div class="case-grid">
+      <div class="case">
+        <div class="case-name">Midjourney</div>
+        <div class="case-name-ko">미드저니</div>
+        <div class="case-stat">~40명</div>
+        <div class="case-stat-label">Team Size</div>
+        <div class="case-desc">수천 명의 디자이너를 고용한 Adobe의 이미지 생성 시장을 위협하는 핵심 팀의 규모.</div>
+      </div>
+
+      <div class="case">
+        <div class="case-name">Telegram</div>
+        <div class="case-name-ko">텔레그램</div>
+        <div class="case-stat">800M+</div>
+        <div class="case-stat-label">MAU / &lt;50 Engineers</div>
+        <div class="case-desc">50명 미만의 핵심 엔지니어가 8억 명 이상의 월간 활성 사용자를 관리한다.</div>
+      </div>
+
+      <div class="case">
+        <div class="case-name">Palantir</div>
+        <div class="case-name-ko">팔란티어</div>
+        <div class="case-stat">학위 무관</div>
+        <div class="case-stat-label">Talent Philosophy</div>
+        <div class="case-desc">"대학 교육은 불필요한 부채" — CEO Alex Karp. 문제 해결 능력이 학력을 대체한다.</div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">대학 교육은 불필요한 부채다. 문제 해결 능력을 갖춘 인재라면 학력과 무관하게 업계 최고 수준의 대우를 제공한다.</div>
+      <div class="pull-quote-cite">Alex Karp / CEO, Palantir Technologies</div>
+    </div>
+
+    <p>핵심은 초봉의 액수가 아니다. <strong>학위가 아닌 능력 중심 채용</strong>이라는 패러다임의 전환 그 자체가 신호다. 이는 곧 노동시장의 가격 결정 메커니즘이 근본적으로 재설계되고 있음을 의미한다.</p>
+  </section>
+
+  <!-- 섹션 4 -->
+  <section id="sec4">
+    <div class="section-num">§ 04 — Forecast</div>
+    <h2>미래 예측: 사회 전반의 재편</h2>
+
+    <h3>가. 기업과 고용 — '조직'에서 '프로젝트'로</h3>
+    <p>전통적인 승진 체계는 의미를 잃고, 개인의 역량과 포트폴리오가 가치를 증명하는 유일한 수단이 된다. 기업은 더 이상 '평생직장'이 아닌, 특정 목표 달성을 위한 <strong>'단기 프로젝트 연합체'</strong> 형태로 변모한다.</p>
+
+    <p>채용 공고의 표준은 이렇게 바뀐다: <em>"3개월 프로젝트에 참여할 최고의 프롬프트 엔지니어를 찾습니다."</em> 기업은 신입을 교육하는 대신, 즉시 투입 가능한 준비된 전문가와의 유연한 협력을 선호한다. <strong>평판이 곧 개인의 몸값이자 생명줄</strong>이 된다.</p>
+
+    <h4>역할의 재정의</h4>
+    <ul>
+      <li><strong>CHO(최고인사책임자)</strong>: 인재를 '관리'하는 것에서 외부 전문가 네트워크를 '확보하고 연결'하는 역할로</li>
+      <li><strong>CTO(최고기술책임자)</strong>: 불필요한 업무 프로세스를 AI로 자동화하여 '없애는' 역할로</li>
+    </ul>
+
+    <h3>나. 투자와 경제 — '규모'에서 '밀도'로</h3>
+    <p>투자 패러다임의 핵심 지표는 '직원 수'나 '자산 규모'가 아닌, <strong>'1인당 부가가치(Value per Head)'</strong>가 된다. 직원 10명이 수조 원의 가치를 창출하는 AI 스타트업이, 수만 명을 고용한 전통 대기업보다 높은 평가를 받는 시대다.</p>
+
+    <p>이는 '고용 없는 성장(Jobless Growth)'을 가속화한다. 준비되지 않은 인력은 노동 시장에서 급속히 소외될 위험이 있으며, 대기업은 생존을 위해 <strong>대규모 구조조정과 동시에 사내벤처·Squad 운영</strong>을 통해 경량 조직의 DNA를 이식하려 분투할 것이다.</p>
+
+    <h3>다. 교육과 인재 — '암기'에서 '질문'으로</h3>
+    <p>지식의 암기는 AI의 영역으로 완전히 넘어갔다. 미래 교육의 핵심은 <strong>정답을 찾는 능력이 아닌, AI가 해결할 수 있는 '올바른 질문을 던지는 능력'</strong>과 그 결과를 비판적으로 분석하고 창의적으로 융합하는 능력이다.</p>
+
+    <p>UCLA 졸업생이 졸업 연설에서 ChatGPT에게 감사를 표한 것은 상징적이다. 특정 분야의 문제 해결 능력을 증명할 수 있다면, <strong>대학 졸업장의 권위는 무의미</strong>해질 수 있다. 어제의 최신 기술이 내일의 구식이 되는 시대에, 끊임없는 학습 능력이야말로 유일한 생존 기술이다.</p>
+  </section>
+
+  <!-- 섹션 5 -->
+  <section id="sec5">
+    <div class="section-num">§ 05 — Action / Individual</div>
+    <h2>개인 생존 전략</h2>
+
+    <div class="action-block">
+      <div class="action-header">
+        <div class="action-icon">▸ FOR · INDIVIDUAL</div>
+        <div class="action-title">Survival Guide</div>
+      </div>
+      <ol class="action-items">
+        <li>
+          <strong>독립 생존성 확보</strong>
+          <span>"내일 당장 회사 없이, 내 이름과 능력만으로 수익을 창출할 수 있는가?" 스스로에게 답해야 한다. 개인 브랜딩과 포트폴리오 구축은 선택이 아닌 필수다.</span>
+        </li>
+        <li>
+          <strong>AI를 동료로 채택</strong>
+          <span>AI를 단순히 '도구'로 여기는 것을 넘어, 24시간 일하는 지치지 않는 '전략적 파트너'로 활용하는 협업 능력을 길러야 한다.</span>
+        </li>
+        <li>
+          <strong>대체 불가능성 강화</strong>
+          <span>AI가 대체하기 어려운 인간 고유의 영역 — 공감, 소통, 신뢰, 윤리적 판단, 복합적 문제 해결 — 에서 전문성을 극대화한다. 기술 전문성과 인간적 통찰력을 겸비한 '켄타우로스형 인재'.</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 섹션 6 -->
+  <section id="sec6">
+    <div class="section-num">§ 06 — Action / Organization</div>
+    <h2>기업 전환 전략</h2>
+
+    <div class="action-block">
+      <div class="action-header">
+        <div class="action-icon">▸ FOR · ENTERPRISE</div>
+        <div class="action-title">Transformation Playbook</div>
+      </div>
+      <ol class="action-items">
+        <li>
+          <strong>결재 라인 파괴 및 권한 위임</strong>
+          <span>의사결정 단계를 최소화하고, 현장의 소규모 팀이 자율적으로 판단하고 신속하게 실행할 수 있는 구조로 전면 개편한다.</span>
+        </li>
+        <li>
+          <strong>AI 기반 인력 재배치</strong>
+          <span>단순 반복 업무는 '부지런한 AI'에게 맡기고, 직원들은 고부가가치 창출이 가능한 '똑똑한 AI'와 협업하여 새로운 비즈니스를 기획하는 데 집중하도록 한다.</span>
+        </li>
+        <li>
+          <strong>유연한 고용 시스템 구축</strong>
+          <span>"만나고 헤어지는 것을 당연하게" 여기는 문화를 정착시킨다. 핵심 소수 정규직 외에는 프로젝트 단위의 외부 전문가 풀을 활용하고, 평판 데이터를 체계적으로 관리하여 최적의 팀을 빠르게 구성한다.</span>
+        </li>
+      </ol>
+    </div>
+
+    <div class="exec-insight">
+      <div class="exec-insight-label">▸ WISE42 / Garambada Note</div>
+      <p>이 세 가지 원칙은 그대로 <strong>AI Transformation 컨설팅의 진단 프레임워크</strong>로 전환 가능하다. 공공·인프라 고객(KRNA, KORAIL, FIPA)의 결재 라인은 가장 깊고, 따라서 가장 큰 변환 잠재력을 보유한다.</p>
+      <p>"중량문명의 가장 무거운 끝단"에서 경량화 컨설팅을 수행하는 것 — 이것이 Korea's Palantir 포지셔닝의 본질이다.</p>
+    </div>
+  </section>
+
+  <!-- 섹션 7 -->
+  <section id="sec7">
+    <div class="section-num">§ 07 — Action / Nation</div>
+    <h2>국가 전략: 대한민국의 기회</h2>
+
+    <p class="lead">대한민국은 경량문명 시대에 최적화된 잠재력을 가지고 있다. 이것은 낙관이 아니라, 구조적 진단이다.</p>
+
+    <h3>강점의 극대화</h3>
+    <ul>
+      <li><strong>속도와 적응력</strong> — '빨리빨리' 문화는 급변하는 기술 트렌드에 신속하게 대응하는 강력한 무기가 된다.</li>
+      <li><strong>브랜드 파워</strong> — K-컬처가 확보한 글로벌 인지도는 아이디어만 있다면 초기 시장 진입 장벽을 극적으로 낮춰준다.</li>
+      <li><strong>제조업 DNA</strong> — 기존 제조업의 정교한 공정 관리 능력과 창의적 아이디어가 결합될 때, 하드웨어와 소프트웨어를 아우르는 독보적인 제품 탄생이 가능하다.</li>
+    </ul>
+
+    <h3>국가적 지원 방향</h3>
+    <ul>
+      <li><strong>AI 네이티브 교육 혁신</strong> — 코딩 교육을 넘어, AI를 활용해 질문하고, 문제를 해결하고, 새로운 가치를 창조하는 '생성 능력' 중심의 공교육 혁신이 시급하다.</li>
+      <li><strong>1인 창조기업 클러스터 육성</strong> — 규제를 최소화하고, 아이디어와 노트북만 있으면 즉시 창업하고 글로벌 시장에 도전할 수 있는 법률, 금융, 인프라 지원을 강화한다.</li>
+      <li><strong>실패 자산화 시스템</strong> — 실패를 용납하고, 실패의 경험이 다음 도전의 자산이 될 수 있는 사회적 안전망과 재도전 지원 프로그램을 국가 차원에서 구축한다.</li>
+    </ul>
+  </section>
+
+  <!-- 결론 -->
+  <section id="sec8">
+    <div class="conclusion">
+      <div class="section-num">§ 08 — Conclusion</div>
+      <h2>위대한 기회의 시작</h2>
+
+      <blockquote>
+        "기계는 인간을 고된 노동에서 해방시켜 더 숭고한 사유에 집중하게 할 것이다."
+        <cite>— Nikola Tesla, c. 1935</cite>
+      </blockquote>
+
+      <p>AI의 등장은 90년 전 테슬라의 예언을 현실로 만들고 있다. 거대하고 둔한 공룡 같았던 중량문명의 기업들은 변화의 속도를 따라가지 못하고 쓰러질 것이다. 그 자리는 가볍고, 빠르고, 창의적인 <strong>경량문명의 새로운 플레이어들</strong>이 차지한다.</p>
+
+      <p>이 전환은 고통스럽지만, 동시에 개인의 창의성과 아이디어가 그 어느 때보다 큰 가치를 인정받는 <strong>위대한 기회의 시작</strong>이다. 지금 당장 AI를 전략적 파트너로 삼아, 다가오는 시대의 주역이 될 준비를 시작해야 한다.</p>
+
+      <p style="font-family: 'Fraunces', serif; font-style: italic; font-size: 19px; color: var(--accent); margin-top: 28px; font-weight: 500;">변화는 이미 시작되었다.</p>
+    </div>
+  </section>
+
+  <footer class="wiki-footer">
+    <span>나의 인사이트 · Personal Wiki</span>
+    <span class="signature">Garambada × WISE42 / YZ42</span>
+    <span>v1.0 · Oct 2025</span>
+  </footer>
+
+</article>
+
+</body>
+</html>

@@ -12,6 +12,7 @@
     --trend: #3b82f6; --trend-bg: rgba(59,130,246,0.08);
     --insight: #10b981; --insight-bg: rgba(16,185,129,0.08);
     --model: #a78bfa; --model-bg: rgba(167,139,250,0.08);
+    --tech: #06b6d4;  --tech-bg: rgba(6,182,212,0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text);
@@ -50,6 +51,7 @@
   .filter-btn[data-cat="트렌드"].active   { background:var(--trend); border-color:var(--trend); }
   .filter-btn[data-cat="인사이트"].active { background:var(--insight); border-color:var(--insight); }
   .filter-btn[data-cat="모델"].active     { background:var(--model); border-color:var(--model); }
+  .filter-btn[data-cat="기술"].active     { background:var(--tech); border-color:var(--tech); }
   main { max-width:1200px; margin:0 auto; padding:28px 32px 60px; }
   .section { margin-bottom:40px; }
   .section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px;
@@ -68,12 +70,14 @@
   .card[data-cat="트렌드"]::before   { background:var(--trend); }
   .card[data-cat="인사이트"]::before { background:var(--insight); }
   .card[data-cat="모델"]::before     { background:var(--model); }
+  .card[data-cat="기술"]::before     { background:var(--tech); }
   .card:hover { transform:translateY(-2px); border-color:rgba(88,166,255,0.3);
     box-shadow:0 8px 24px rgba(0,0,0,0.4); }
   .card[data-cat="비즈니스"]:hover { border-color:rgba(245,158,11,0.3); }
   .card[data-cat="트렌드"]:hover   { border-color:rgba(59,130,246,0.3); }
   .card[data-cat="인사이트"]:hover { border-color:rgba(16,185,129,0.3); }
   .card[data-cat="모델"]:hover     { border-color:rgba(167,139,250,0.3); }
+  .card[data-cat="기술"]:hover     { border-color:rgba(6,182,212,0.3); }
   .card-meta { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
   .cat-badge { font-size:0.7rem; font-weight:700; padding:2px 8px;
     border-radius:10px; letter-spacing:0.3px; }
@@ -81,6 +85,7 @@
   .cat-badge.trend   { background:var(--trend-bg); color:var(--trend); }
   .cat-badge.insight { background:var(--insight-bg); color:var(--insight); }
   .cat-badge.model   { background:var(--model-bg); color:var(--model); }
+  .cat-badge.tech    { background:var(--tech-bg); color:var(--tech); }
   .card-date { font-size:0.72rem; color:var(--muted); margin-left:auto; }
   .card-title { font-size:0.95rem; font-weight:600; line-height:1.45;
     margin-bottom:8px; color:var(--text); }
@@ -116,7 +121,7 @@
       <input id="searchInput" type="text" placeholder="제목, 태그로 검색…" autocomplete="off">
     </div>
     <div class="header-stats">
-      <span class="stat-chip"><b id="totalCount">25</b> 아티클</span>
+      <span class="stat-chip"><b id="totalCount">28</b> 아티클</span>
       <span class="stat-chip">업데이트 <b>2026-05-22</b></span>
     </div>
   </div>
@@ -130,6 +135,7 @@
   <button class="filter-btn" data-cat="트렌드" onclick="filterCat(this)">📡 트렌드 인텔리전스</button>
   <button class="filter-btn" data-cat="인사이트" onclick="filterCat(this)">💡 나의 인사이트</button>
   <button class="filter-btn" data-cat="모델" onclick="filterCat(this)">🔬 모델 트래커</button>
+  <button class="filter-btn" data-cat="기술" onclick="filterCat(this)">🔩 심화 기술</button>
 </div>
 
 <main>
@@ -138,9 +144,20 @@
     <div class="section-header">
       <div class="section-dot" style="background:var(--biz)"></div>
       <span class="section-title">📊 비즈니스 인텔리전스</span>
-      <span class="section-count">7개</span>
+      <span class="section-count">8개</span>
     </div>
     <div class="cards-grid">
+      <a class="card" data-cat="비즈니스"
+         href="./03_비즈니스_인텔리전스/공공기관_AX_Company_Builder_Wiki.html">
+        <div class="card-meta">
+          <span class="cat-badge biz">비즈니스</span>
+          <span class="card-date">—</span>
+        </div>
+        <div class="card-title">공공기관 AX Company Builder Wiki</div>
+        <div class="card-tags"></div>
+        <span class="card-arrow">→</span>
+      </a>
+
       <a class="card" data-cat="비즈니스"
          href="./03_비즈니스_인텔리전스/2026-05_오픈AI앤트로픽_SI영토확장.html">
         <div class="card-meta">
@@ -365,9 +382,20 @@
     <div class="section-header">
       <div class="section-dot" style="background:var(--insight)"></div>
       <span class="section-title">💡 나의 인사이트</span>
-      <span class="section-count">5개</span>
+      <span class="section-count">6개</span>
     </div>
     <div class="cards-grid">
+      <a class="card" data-cat="인사이트"
+         href="./06_나의_인사이트/경량문명_나의인사이트.html">
+        <div class="card-meta">
+          <span class="cat-badge insight">인사이트</span>
+          <span class="card-date">—</span>
+        </div>
+        <div class="card-title">경량문명 나의인사이트</div>
+        <div class="card-tags"></div>
+        <span class="card-arrow">→</span>
+      </a>
+
       <a class="card" data-cat="인사이트"
          href="./06_나의_인사이트/2026-05_월드모델_파운데이션모델_그리고AI.html">
         <div class="card-meta">
@@ -440,6 +468,26 @@
         </div>
         <div class="card-title">Google I/O 2026 — 풀스택 AI에서<br>에이전트 시대로 (DH Shin 심층 보고서)</div>
         <div class="card-tags"><span class="tag">Google I/O 2026</span><span class="tag">Gemini 3.5</span><span class="tag">Antigravity 2.0</span><span class="tag">Gemini Spark</span><span class="tag">TPU 8세대</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section" id="sec-기술" data-cat="기술">
+    <div class="section-header">
+      <div class="section-dot" style="background:var(--tech)"></div>
+      <span class="section-title">🔩 심화 기술</span>
+      <span class="section-count">1개</span>
+    </div>
+    <div class="cards-grid">
+      <a class="card" data-cat="기술"
+         href="./05_심화_기술/ontology-vs-genai-wiki.html">
+        <div class="card-meta">
+          <span class="cat-badge tech">기술</span>
+          <span class="card-date">—</span>
+        </div>
+        <div class="card-title">온톨로지 기반 AI vs 생성형 LLM<br>— 판단하는 AI의 아키텍처 해부</div>
+        <div class="card-tags"><span class="tag">Ontology</span><span class="tag">Knowledge Graph</span><span class="tag">Neuro-Symbolic</span><span class="tag">Palantir-class</span><span class="tag">Sovereign AI</span></div>
         <span class="card-arrow">→</span>
       </a>
     </div>

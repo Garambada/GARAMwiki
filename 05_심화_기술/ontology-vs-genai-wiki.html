@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>온톨로지 기반 AI vs 생성형 AI — 기술심화 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --bg-elev: #131316;
+    --bg-card: #18181c;
+    --ink: #e8e6e1;
+    --ink-dim: #9a978f;
+    --ink-faint: #5a5852;
+    --rule: #26252a;
+    --rule-bright: #3a3940;
+    --accent: #d4ff3a;   /* electric lime — Palantir-adjacent industrial */
+    --accent-warm: #ff6b35;
+    --accent-cool: #4ad6c4;
+    --danger: #ff4d6d;
+    --serif: 'Fraunces', 'IBM Plex Sans KR', serif;
+    --sans: 'IBM Plex Sans KR', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(212,255,58,0.04), transparent 40%),
+      radial-gradient(circle at 85% 100%, rgba(74,214,196,0.03), transparent 40%);
+    min-height: 100vh;
+  }
+
+  /* — TOP BAR — */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .topbar-inner {
+    max-width: 1400px; margin: 0 auto;
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  .brand-dot {
+    width: 8px; height: 8px; background: var(--accent);
+    border-radius: 50%; box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+  .brand-name { color: var(--ink); font-weight: 600; }
+  .meta-chips { display: flex; gap: 10px; font-family: var(--mono); font-size: 10px; }
+  .chip {
+    padding: 4px 10px; border: 1px solid var(--rule);
+    border-radius: 2px; color: var(--ink-dim);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .chip.live { color: var(--accent); border-color: rgba(212,255,58,0.3); }
+
+  /* — LAYOUT — */
+  .layout {
+    max-width: 1400px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px 1fr 240px;
+    gap: 56px;
+    padding: 48px 32px 120px;
+  }
+  @media (max-width: 1100px) {
+    .layout { grid-template-columns: 1fr; gap: 32px; }
+    .sidebar, .toc { display: none; }
+  }
+
+  /* — SIDEBAR NAV — */
+  .sidebar {
+    position: sticky; top: 80px;
+    align-self: start;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    padding-right: 12px;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--rule); }
+  .nav-label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-group { margin-bottom: 28px; }
+  .nav-item {
+    display: block;
+    padding: 7px 0 7px 14px;
+    color: var(--ink-dim);
+    text-decoration: none;
+    font-size: 13px;
+    border-left: 2px solid var(--rule);
+    transition: all 0.2s;
+    position: relative;
+  }
+  .nav-item:hover {
+    color: var(--ink); border-left-color: var(--accent);
+    padding-left: 18px;
+  }
+  .nav-item .num {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-faint); margin-right: 8px;
+  }
+
+  /* — MAIN — */
+  main { min-width: 0; }
+
+  /* — HERO — */
+  .hero { margin-bottom: 72px; }
+  .hero-eyebrow {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 28px; height: 1px; background: var(--accent);
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(40px, 5.5vw, 76px);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin-bottom: 28px;
+    color: var(--ink);
+  }
+  .hero-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+    font-feature-settings: "ss01" on;
+  }
+  .hero-sub {
+    font-size: 17px;
+    color: var(--ink-dim);
+    max-width: 680px;
+    line-height: 1.65;
+    margin-bottom: 36px;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-top: 40px;
+  }
+  @media (max-width: 700px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+  .stat {
+    background: var(--bg);
+    padding: 22px 20px;
+  }
+  .stat-label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+  .stat-value {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .stat-value.accent { color: var(--accent); }
+
+  /* — SECTION — */
+  section { margin-bottom: 88px; scroll-margin-top: 100px; }
+  .section-head {
+    display: flex; align-items: baseline; gap: 20px;
+    margin-bottom: 32px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-num {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--accent); letter-spacing: 0.1em;
+    min-width: 48px;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+  .section-lede {
+    font-size: 16px;
+    color: var(--ink-dim);
+    max-width: 760px;
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  /* — PROSE — */
+  .prose p { margin-bottom: 18px; color: var(--ink); font-size: 15.5px; line-height: 1.75; }
+  .prose strong { color: var(--accent); font-weight: 500; }
+  .prose code {
+    font-family: var(--mono); font-size: 0.88em;
+    background: var(--bg-elev);
+    color: var(--accent-cool);
+    padding: 2px 7px; border-radius: 2px;
+    border: 1px solid var(--rule);
+  }
+
+  h3.sub {
+    font-family: var(--serif);
+    font-size: 22px; font-weight: 500;
+    margin: 40px 0 16px;
+    letter-spacing: -0.01em;
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  h3.sub::before {
+    content: attr(data-num);
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); letter-spacing: 0.1em;
+  }
+
+  /* — COMPARISON DUEL — */
+  .duel {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+    margin: 32px 0;
+    align-items: stretch;
+  }
+  @media (max-width: 700px) {
+    .duel { grid-template-columns: 1fr; }
+    .duel-vs { display: none; }
+  }
+  .duel-side {
+    padding: 28px;
+    border: 1px solid var(--rule);
+    background: var(--bg-elev);
+    position: relative;
+  }
+  .duel-side.gen { border-right: none; }
+  .duel-side.onto {
+    border-left: none;
+    background: linear-gradient(135deg, var(--bg-elev), rgba(212,255,58,0.03));
+  }
+  @media (max-width: 700px) {
+    .duel-side.gen, .duel-side.onto { border: 1px solid var(--rule); }
+  }
+  .duel-vs {
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.15em;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg);
+    position: relative;
+  }
+  .duel-vs::before, .duel-vs::after {
+    content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+    width: 1px; background: var(--rule); height: 30%;
+  }
+  .duel-vs::before { top: 0; }
+  .duel-vs::after { bottom: 0; }
+
+  .duel-label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+  .duel-side.onto .duel-label { color: var(--accent); }
+  .duel-name {
+    font-family: var(--serif); font-size: 20px;
+    font-weight: 500; margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .duel-body { font-size: 14px; color: var(--ink-dim); line-height: 1.7; }
+  .duel-body p { margin-bottom: 10px; }
+
+  /* — DEFINITION CARDS — */
+  .def-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .def {
+    border: 1px solid var(--rule);
+    padding: 22px;
+    background: var(--bg-elev);
+    position: relative;
+  }
+  .def::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 32px; height: 2px; background: var(--accent);
+  }
+  .def-term {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); letter-spacing: 0.1em;
+    margin-bottom: 10px; text-transform: uppercase;
+  }
+  .def-title {
+    font-family: var(--serif); font-size: 18px;
+    font-weight: 500; margin-bottom: 10px;
+  }
+  .def-text { font-size: 13.5px; color: var(--ink-dim); line-height: 1.65; }
+
+  /* — DIAGRAM: KNOWLEDGE GRAPH — */
+  .diagram {
+    border: 1px solid var(--rule);
+    background: var(--bg-elev);
+    padding: 32px;
+    margin: 28px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .diagram-label {
+    position: absolute; top: 14px; right: 18px;
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-faint); letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .diagram-title {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  /* SVG graph */
+  .kg-svg { width: 100%; height: auto; display: block; }
+  .kg-node-circle {
+    fill: var(--bg-card);
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
+  .kg-node-circle.warn { stroke: var(--accent-warm); }
+  .kg-node-circle.cool { stroke: var(--accent-cool); }
+  .kg-node-circle.danger { stroke: var(--danger); fill: rgba(255,77,109,0.08); }
+  .kg-node-text {
+    font-family: var(--mono); font-size: 10px;
+    fill: var(--ink); text-anchor: middle;
+    letter-spacing: 0.05em;
+  }
+  .kg-node-sub {
+    font-family: var(--mono); font-size: 8px;
+    fill: var(--ink-faint); text-anchor: middle;
+  }
+  .kg-edge {
+    stroke: var(--rule-bright); stroke-width: 1;
+    fill: none;
+  }
+  .kg-edge.hot { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .kg-edge-label {
+    font-family: var(--mono); font-size: 8px;
+    fill: var(--ink-dim); text-anchor: middle;
+    letter-spacing: 0.05em;
+  }
+
+  /* — TABLE — */
+  .table-wrap {
+    border: 1px solid var(--rule);
+    margin: 28px 0;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 14px;
+    min-width: 640px;
+  }
+  thead { background: var(--bg-elev); }
+  th {
+    padding: 16px 18px;
+    text-align: left;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--rule);
+    font-weight: 500;
+  }
+  th.accent-col { color: var(--accent); }
+  td {
+    padding: 18px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  tr:last-child td { border-bottom: none; }
+  td.dim { color: var(--ink-dim); font-size: 13.5px; }
+  td.accent { color: var(--ink); font-weight: 500; }
+  td.label {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-dim); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* — CODE BLOCK — */
+  .code {
+    background: #0d0d10;
+    border: 1px solid var(--rule);
+    padding: 22px 24px;
+    margin: 24px 0;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+    position: relative;
+    color: var(--ink-dim);
+  }
+  .code-header {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 10px 24px;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-bottom: none;
+    margin-bottom: 0;
+    display: flex; justify-content: space-between;
+  }
+  .code-header + .code { margin-top: 0; border-top: none; }
+  .code .k { color: var(--accent); }
+  .code .s { color: var(--accent-cool); }
+  .code .c { color: var(--ink-faint); font-style: italic; }
+  .code .n { color: var(--accent-warm); }
+  .code .p { color: var(--ink); }
+
+  /* — CALLOUT — */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: linear-gradient(90deg, rgba(212,255,58,0.06), transparent);
+    padding: 20px 24px;
+    margin: 24px 0;
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+  .callout.warn {
+    border-left-color: var(--accent-warm);
+    background: linear-gradient(90deg, rgba(255,107,53,0.06), transparent);
+  }
+  .callout-label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px;
+    display: block;
+  }
+  .callout.warn .callout-label { color: var(--accent-warm); }
+
+  /* — FLOW DIAGRAM — */
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 28px 0;
+    border: 1px solid var(--rule);
+    background: var(--bg-elev);
+    padding: 28px;
+  }
+  .flow-step {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px dashed var(--rule);
+    position: relative;
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--serif); font-size: 28px;
+    font-weight: 300; font-style: italic;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .flow-title {
+    font-family: var(--serif); font-size: 17px;
+    font-weight: 500; margin-bottom: 6px;
+  }
+  .flow-desc { color: var(--ink-dim); font-size: 13.5px; line-height: 1.65; }
+  .flow-meta {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-faint); letter-spacing: 0.1em;
+    margin-top: 6px; text-transform: uppercase;
+  }
+
+  /* — TOC right — */
+  .toc {
+    position: sticky; top: 80px;
+    align-self: start;
+    font-size: 12.5px;
+  }
+  .toc-label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 14px;
+  }
+  .toc a {
+    display: block;
+    color: var(--ink-dim);
+    text-decoration: none;
+    padding: 5px 0;
+    border-left: 1px solid var(--rule);
+    padding-left: 12px;
+    transition: all 0.2s;
+  }
+  .toc a:hover { color: var(--accent); border-left-color: var(--accent); }
+
+  /* — FOOTER — */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 40px 32px;
+    max-width: 1400px;
+    margin: 80px auto 0;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 11px;
+    display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+    letter-spacing: 0.08em;
+  }
+  footer span { color: var(--ink-dim); }
+
+  /* tag pill */
+  .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .tag {
+    font-family: var(--mono); font-size: 10px;
+    padding: 3px 8px; border: 1px solid var(--rule);
+    color: var(--ink-dim); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .tag.hot { color: var(--accent); border-color: rgba(212,255,58,0.3); }
+
+  /* Decision tree */
+  .matrix {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  @media (max-width: 600px) { .matrix { grid-template-columns: 1fr; } }
+  .matrix-cell {
+    border: 1px solid var(--rule);
+    padding: 22px;
+    background: var(--bg-elev);
+  }
+  .matrix-cell.recommend {
+    border-color: rgba(212,255,58,0.3);
+    background: linear-gradient(135deg, var(--bg-elev), rgba(212,255,58,0.05));
+  }
+  .matrix-title {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .matrix-cell.recommend .matrix-title { color: var(--accent); }
+  .matrix-content {
+    font-family: var(--serif); font-size: 17px;
+    font-weight: 500; line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .matrix-sub { font-size: 13px; color: var(--ink-dim); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span class="brand-name">WISE42</span>
+      <span>/</span>
+      <span>AX Technical Wiki</span>
+    </div>
+    <div class="meta-chips">
+      <span class="chip live">● Active</span>
+      <span class="chip">v2.3 · 2026</span>
+      <span class="chip">C-Level</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="nav-group">
+      <div class="nav-label">Document</div>
+      <a class="nav-item" href="#intro"><span class="num">00</span>Overview</a>
+      <a class="nav-item" href="#paradigm"><span class="num">01</span>Paradigm Shift</a>
+      <a class="nav-item" href="#architecture"><span class="num">02</span>Architecture</a>
+      <a class="nav-item" href="#reasoning"><span class="num">03</span>Reasoning Engine</a>
+      <a class="nav-item" href="#trust"><span class="num">04</span>Trust & xAI</a>
+      <a class="nav-item" href="#sovereign"><span class="num">05</span>Sovereign Deploy</a>
+      <a class="nav-item" href="#hybrid"><span class="num">06</span>Hybrid Stack</a>
+      <a class="nav-item" href="#decision"><span class="num">07</span>Decision Matrix</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Related</div>
+      <a class="nav-item" href="#">WeBIG.ai Case</a>
+      <a class="nav-item" href="#">Seoul AX Proposal</a>
+      <a class="nav-item" href="#">KRNA Harness</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="intro">
+      <div class="hero-eyebrow">Technical Deep-Dive · 기술심화 위키</div>
+      <h1 class="hero-title">
+        말하는 AI에서<br>
+        <em>판단하는 AI</em>로.
+      </h1>
+      <p class="hero-sub">
+        온톨로지 기반 AI와 생성형 LLM은 같은 'AI'라는 이름을 쓰지만, 작동 원리·신뢰 모델·배포 방식이 근본적으로 다른 패러다임이다. 본 문서는 양자의 기술적 차이를 행정 운영체제(Governance OS) 관점에서 정밀 해부한다.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-label">Core Mode</div>
+          <div class="stat-value accent">Judgment</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Reasoning</div>
+          <div class="stat-value">Symbolic + Neural</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Hallucination</div>
+          <div class="stat-value">≈ 0%</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Deployment</div>
+          <div class="stat-value accent">On-Prem</div>
+        </div>
+      </div>
+
+      <div class="tag-row">
+        <span class="tag hot">Ontology</span>
+        <span class="tag hot">Knowledge Graph</span>
+        <span class="tag">RAG</span>
+        <span class="tag">Neuro-Symbolic</span>
+        <span class="tag">xAI</span>
+        <span class="tag">Sovereign AI</span>
+        <span class="tag">Palantir-class</span>
+      </div>
+    </section>
+
+    <!-- 01 PARADIGM -->
+    <section id="paradigm">
+      <div class="section-head">
+        <span class="section-num">01 ·</span>
+        <h2 class="section-title">패러다임 시프트 — 생성에서 추론으로</h2>
+      </div>
+      <p class="section-lede">
+        2022~2024년이 '생성(Generation)'의 시대였다면, 2025년 이후의 공공·산업 AI는 '추론(Reasoning)'과 '실행(Action)'의 시대로 이동하고 있다. 그 분기점이 온톨로지 기반 AI다.
+      </p>
+
+      <div class="duel">
+        <div class="duel-side gen">
+          <div class="duel-label">Mode A · 기존</div>
+          <div class="duel-name">Generative LLM</div>
+          <div class="duel-body">
+            <p>확률적 토큰 예측을 통해 "다음에 올 가장 그럴듯한 말"을 만든다. 학습된 패턴의 통계적 재구성이다.</p>
+            <p>유창함이 강점이지만, 사실성·일관성·감사가능성은 부산물에 불과하다.</p>
+            <p>→ <code>P(token | context)</code> 최적화</p>
+          </div>
+        </div>
+        <div class="duel-vs">VS</div>
+        <div class="duel-side onto">
+          <div class="duel-label">Mode B · 제안</div>
+          <div class="duel-name">Ontology-Grounded AI</div>
+          <div class="duel-body">
+            <p>현실 세계의 객체·관계·규칙을 명시적으로 모델링한 지식 그래프 위에서 추론한다.</p>
+            <p>판단 근거를 트레이싱 가능하고, 규정 위반 시 거부할 수 있다. 책임을 질 수 있는 AI다.</p>
+            <p>→ <code>Reason(Entity, Relation, Rule)</code> 실행</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Insight · WISE42 Thesis</span>
+        공공·국방·인프라 영역에서 LLM 단독 배포는 본질적으로 부적합하다. 책임 소재(accountability)와 감사 추적(audit trail)이 불가능하기 때문이다. 온톨로지는 LLM을 '현실의 규칙'에 묶어두는(grounding) 닻이며, 이것이 행정 운영체제(Governance OS)의 본질이다.
+      </div>
+    </section>
+
+    <!-- 02 ARCHITECTURE -->
+    <section id="architecture">
+      <div class="section-head">
+        <span class="section-num">02 ·</span>
+        <h2 class="section-title">아키텍처 해부 — 지식 그래프의 구조</h2>
+      </div>
+      <p class="section-lede">
+        온톨로지 기반 AI는 단순한 데이터베이스나 검색 시스템이 아니다. 그것은 행정 현실을 컴퓨터가 추론할 수 있는 형태로 번역해놓은 '의미망(Semantic Network)'이다.
+      </p>
+
+      <h3 class="sub" data-num="2.1">온톨로지의 4계층 구조</h3>
+
+      <div class="def-grid">
+        <div class="def">
+          <div class="def-term">Layer 1 · Entities</div>
+          <div class="def-title">객체 (Things)</div>
+          <div class="def-text">시민, 차량, 건물, 정책, 부서, 사건, 시설 등 행정이 다루는 실세계의 모든 명사. 각 객체는 고유 ID와 속성 집합을 갖는다.</div>
+        </div>
+        <div class="def">
+          <div class="def-term">Layer 2 · Relations</div>
+          <div class="def-title">관계 (Edges)</div>
+          <div class="def-text">"거주한다", "관할한다", "위배한다", "발생했다" 등 객체 간 의미적 연결. 방향성과 시간 속성을 갖는 1차 술어 관계다.</div>
+        </div>
+        <div class="def">
+          <div class="def-term">Layer 3 · Rules</div>
+          <div class="def-title">규칙 (Axioms)</div>
+          <div class="def-text">"폭우 + 침수이력 + 노인가구 → 즉각대응 대상" 같은 추론 규칙. SWRL/SHACL로 인코딩되며, 행정 규정이 이 계층에 산다.</div>
+        </div>
+        <div class="def">
+          <div class="def-term">Layer 4 · Actions</div>
+          <div class="def-title">행동 (Operators)</div>
+          <div class="def-text">'알림 발송', '예산 집행 요청', '담당자 배정' 등 실제 행정 시스템에 발화 가능한 실행 가능 행위. 워크플로우 엔진과 연결된다.</div>
+        </div>
+      </div>
+
+      <h3 class="sub" data-num="2.2">실제 지식 그래프 예시 — 재난 대응 시나리오</h3>
+
+      <div class="diagram">
+        <div class="diagram-label">FIG · 2.2</div>
+        <div class="diagram-title">Disaster Response Knowledge Graph</div>
+        <svg class="kg-svg" viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg">
+          <!-- Edges (drawn first so they sit behind nodes) -->
+          <line class="kg-edge" x1="120" y1="80" x2="350" y2="80"/>
+          <line class="kg-edge" x1="350" y1="80" x2="580" y2="80"/>
+          <line class="kg-edge" x1="120" y1="80" x2="120" y2="200"/>
+          <line class="kg-edge" x1="350" y1="80" x2="350" y2="200"/>
+          <line class="kg-edge" x1="580" y1="80" x2="580" y2="200"/>
+          <line class="kg-edge hot" x1="120" y1="200" x2="350" y2="320"/>
+          <line class="kg-edge hot" x1="350" y1="200" x2="350" y2="320"/>
+          <line class="kg-edge hot" x1="580" y1="200" x2="350" y2="320"/>
+
+          <!-- Edge labels -->
+          <text class="kg-edge-label" x="235" y="73">발생지점</text>
+          <text class="kg-edge-label" x="465" y="73">관할</text>
+          <text class="kg-edge-label" x="135" y="140" text-anchor="start">속성</text>
+          <text class="kg-edge-label" x="365" y="140" text-anchor="start">속성</text>
+          <text class="kg-edge-label" x="595" y="140" text-anchor="start">속성</text>
+          <text class="kg-edge-label" x="225" y="265">조건적용</text>
+          <text class="kg-edge-label" x="370" y="265" text-anchor="start">조건적용</text>
+          <text class="kg-edge-label" x="475" y="265">조건적용</text>
+
+          <!-- Nodes Layer 1 -->
+          <g>
+            <circle class="kg-node-circle cool" cx="120" cy="80" r="34"/>
+            <text class="kg-node-text" x="120" y="78">EVENT</text>
+            <text class="kg-node-sub" x="120" y="92">폭우</text>
+          </g>
+          <g>
+            <circle class="kg-node-circle cool" cx="350" cy="80" r="34"/>
+            <text class="kg-node-text" x="350" y="78">LOCATION</text>
+            <text class="kg-node-sub" x="350" y="92">강남역</text>
+          </g>
+          <g>
+            <circle class="kg-node-circle cool" cx="580" cy="80" r="34"/>
+            <text class="kg-node-text" x="580" y="78">DEPT</text>
+            <text class="kg-node-sub" x="580" y="92">방재과</text>
+          </g>
+
+          <!-- Nodes Layer 2 -->
+          <g>
+            <circle class="kg-node-circle warn" cx="120" cy="200" r="30"/>
+            <text class="kg-node-text" x="120" y="198">112mm</text>
+            <text class="kg-node-sub" x="120" y="212">/시간</text>
+          </g>
+          <g>
+            <circle class="kg-node-circle warn" cx="350" cy="200" r="30"/>
+            <text class="kg-node-text" x="350" y="198">침수이력</text>
+            <text class="kg-node-sub" x="350" y="212">2022,2024</text>
+          </g>
+          <g>
+            <circle class="kg-node-circle warn" cx="580" cy="200" r="30"/>
+            <text class="kg-node-text" x="580" y="198">노인가구</text>
+            <text class="kg-node-sub" x="580" y="212">+27%</text>
+          </g>
+
+          <!-- Decision node -->
+          <g>
+            <circle class="kg-node-circle danger" cx="350" cy="320" r="38"/>
+            <text class="kg-node-text" x="350" y="318" style="fill: var(--danger);">DECIDE</text>
+            <text class="kg-node-sub" x="350" y="332" style="fill: var(--danger);">즉각대응</text>
+          </g>
+        </svg>
+      </div>
+
+      <p class="prose">
+        위 그래프에서 보듯, 부서별로 흩어진 데이터(<strong>기상청</strong>의 강수량, <strong>도시계획과</strong>의 침수이력, <strong>복지과</strong>의 가구 통계)가 단일 의미망으로 연결된다. LLM에게는 별개의 텍스트일 뿐인 정보가, 온톨로지에서는 하나의 <code>DECIDE</code> 노드로 수렴한다.
+      </p>
+
+      <div class="code-header">
+        <span>ontology / disaster.ttl</span>
+        <span>Turtle / RDF</span>
+      </div>
+      <div class="code">
+<span class="c"># 규칙 (Layer 3): 추론 엔진이 자동 실행</span>
+<span class="k">Rule</span> <span class="n">UrgentResponseTrigger</span>:
+  <span class="k">IF</span>   <span class="p">Event(?e, type=Flood)</span>
+  <span class="k">AND</span>  <span class="p">Location(?l, hasHistory=?h)</span>
+  <span class="k">AND</span>  <span class="p">?h.count >= 2</span>
+  <span class="k">AND</span>  <span class="p">District(?l).elderlyRatio > 0.20</span>
+  <span class="k">THEN</span> <span class="p">Trigger(action=</span><span class="s">"IMMEDIATE_DISPATCH"</span><span class="p">,</span>
+              <span class="p">target=?l,</span>
+              <span class="p">priority=</span><span class="s">"CRITICAL"</span><span class="p">,</span>
+              <span class="p">audit=</span><span class="s">"§시행령14-3"</span><span class="p">)</span>
+      </div>
+
+      <p class="prose">
+        이 규칙은 LLM의 'attention weight'처럼 블랙박스가 아니다. <strong>읽을 수 있고, 디버깅할 수 있으며, 법령 조항과 1:1로 매핑된다.</strong> 이것이 행정에서 요구되는 '감사 가능한 자동화'의 본질이다.
+      </p>
+    </section>
+
+    <!-- 03 REASONING ENGINE -->
+    <section id="reasoning">
+      <div class="section-head">
+        <span class="section-num">03 ·</span>
+        <h2 class="section-title">추론 엔진 — Symbolic × Neural의 결합</h2>
+      </div>
+      <p class="section-lede">
+        오해를 풀자. 온톨로지 기반 AI는 LLM을 '대체'하지 않는다. LLM을 '경계 짓는다'. 양자는 다른 임무를 수행하는 보완재다.
+      </p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">01</div>
+          <div>
+            <div class="flow-title">사용자 자연어 질의 입력</div>
+            <div class="flow-desc">"강남역 일대 폭우 대응 계획 보여줘" — 비정형 한국어 자연어.</div>
+            <div class="flow-meta">Input · Natural Language</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">02</div>
+          <div>
+            <div class="flow-title">LLM이 의도를 온톨로지 쿼리로 번역</div>
+            <div class="flow-desc">LLM은 답을 '생성'하지 않는다. 자연어를 SPARQL/Cypher 쿼리로 변환하는 '번역기' 역할만 수행한다.</div>
+            <div class="flow-meta">LLM as Translator · Not Generator</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">03</div>
+          <div>
+            <div class="flow-title">지식 그래프에서 사실(Facts) 조회</div>
+            <div class="flow-desc">실제 행정 DB·센서 데이터에 연결된 그래프에서 해당 객체와 관계를 추출한다. 여기서 '환각'은 구조적으로 불가능하다.</div>
+            <div class="flow-meta">Knowledge Graph · Ground Truth</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">04</div>
+          <div>
+            <div class="flow-title">규칙 엔진이 추론 및 의사결정 수행</div>
+            <div class="flow-desc">SWRL/SHACL 기반 추론기가 행정 규정에 따라 결정을 내린다. 각 결정에는 적용된 규칙 ID가 부착된다.</div>
+            <div class="flow-meta">Symbolic Reasoner · Auditable</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">05</div>
+          <div>
+            <div class="flow-title">LLM이 결과를 자연어로 재가공</div>
+            <div class="flow-desc">추론 결과(JSON/RDF)를 사람이 읽기 좋은 보고서·시각화로 변환. 이 단계에서도 LLM은 사실을 '추가'하지 않고 '표현'만 한다.</div>
+            <div class="flow-meta">LLM as Presenter · Bound</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">06</div>
+          <div>
+            <div class="flow-title">실행 행위 발화 또는 사람 결재 요청</div>
+            <div class="flow-desc">결정의 위험도(risk score)에 따라 자동 실행하거나 인간 결재자에게 라우팅. Human-in-the-loop이 설계의 핵심.</div>
+            <div class="flow-meta">Action / Approval Gate</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <span class="callout-label">Common Misconception</span>
+        "온톨로지 AI는 LLM이 없어서 안 똑똑하다"는 오해가 흔하다. 사실은 정반대다. <strong>LLM의 유창함을 쓰되, 사실 판단은 결정론적 그래프 엔진에 위임</strong>한다. 이것이 'Neuro-Symbolic AI'의 핵심이며, Palantir AIP·DARPA XAI 프로그램이 채택한 표준 아키텍처다.
+      </div>
+    </section>
+
+    <!-- 04 TRUST -->
+    <section id="trust">
+      <div class="section-head">
+        <span class="section-num">04 ·</span>
+        <h2 class="section-title">신뢰 모델 — Hallucination부터 xAI까지</h2>
+      </div>
+      <p class="section-lede">
+        공공 영역에서 AI 도입의 가장 큰 장벽은 '왜 그렇게 판단했느냐'는 질문에 답할 수 없다는 점이다. 온톨로지는 이 질문에 정면으로 답한다.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>차원</th>
+              <th>Generative LLM</th>
+              <th class="accent-col">Ontology-Based AI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="label">Hallucination Rate</td>
+              <td class="dim">3~27% (GPT-4 기준, 도메인 의존)</td>
+              <td class="accent">구조적 ≈ 0% — 그래프 외 사실 생성 불가</td>
+            </tr>
+            <tr>
+              <td class="label">Explainability</td>
+              <td class="dim">Black Box — Attention Map으로도 인간 해석 불가</td>
+              <td class="accent">White Box — 적용된 규칙 ID·근거 노드 추적 가능</td>
+            </tr>
+            <tr>
+              <td class="label">Audit Trail</td>
+              <td class="dim">없음. 로그는 입출력 텍스트만 보존.</td>
+              <td class="accent">완전 — 모든 추론 단계 RDF 트리플로 저장</td>
+            </tr>
+            <tr>
+              <td class="label">Regulation Compliance</td>
+              <td class="dim">법령 변경 시 재학습 필요. 정합성 보장 불가.</td>
+              <td class="accent">규칙 1줄 수정으로 즉시 반영. 정합성 검증 가능.</td>
+            </tr>
+            <tr>
+              <td class="label">Adversarial Robustness</td>
+              <td class="dim">프롬프트 인젝션·탈옥 공격에 취약</td>
+              <td class="accent">스키마 위반 입력은 거부. 공격면 축소.</td>
+            </tr>
+            <tr>
+              <td class="label">Update Cycle</td>
+              <td class="dim">파인튜닝 = 수일~수주, GPU 비용 발생</td>
+              <td class="accent">규칙·온톨로지 편집 = 분 단위, CPU 추론</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub" data-num="4.1">설명 가능성(xAI)의 실제 작동</h3>
+
+      <div class="code-header">
+        <span>audit_trace.json — 단일 의사결정의 감사 흔적</span>
+        <span>Output</span>
+      </div>
+      <div class="code">
+<span class="p">{</span>
+  <span class="s">"decision_id"</span><span class="p">:</span> <span class="s">"DEC-2026-05-22-0014"</span><span class="p">,</span>
+  <span class="s">"action"</span><span class="p">:</span> <span class="s">"IMMEDIATE_DISPATCH"</span><span class="p">,</span>
+  <span class="s">"target"</span><span class="p">:</span> <span class="s">"강남역_침수위험구역"</span><span class="p">,</span>
+  <span class="s">"confidence"</span><span class="p">:</span> <span class="n">0.94</span><span class="p">,</span>
+  <span class="s">"rules_applied"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s">"R-FLOOD-001 (시행령 §14조3항)"</span><span class="p">,</span>
+    <span class="s">"R-ELDERLY-007 (재난기본법 §22조)"</span>
+  <span class="p">],</span>
+  <span class="s">"evidence_facts"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s">"기상청.강수량(2026-05-22T15:00) = 112mm/h"</span><span class="p">,</span>
+    <span class="s">"도시계획.침수이력(강남역) = [2022, 2024]"</span><span class="p">,</span>
+    <span class="s">"통계청.노인가구비율(강남구) = 0.27"</span>
+  <span class="p">],</span>
+  <span class="s">"human_reviewer"</span><span class="p">:</span> <span class="s">"방재과장_OOO"</span><span class="p">,</span>
+  <span class="s">"reviewed_at"</span><span class="p">:</span> <span class="s">"2026-05-22T15:03:42Z"</span>
+<span class="p">}</span>
+      </div>
+
+      <p class="prose">
+        이 JSON은 행정 감사관, 의회, 시민 누구든 열어볼 수 있다. <strong>"왜 그렇게 결정했는가"에 대한 답이 코드가 아닌 법령 조항으로 제시</strong>된다. 이것이 공공 AI가 도달해야 할 신뢰의 표준이다.
+      </p>
+    </section>
+
+    <!-- 05 SOVEREIGN -->
+    <section id="sovereign">
+      <div class="section-head">
+        <span class="section-num">05 ·</span>
+        <h2 class="section-title">소버린 AI — 데이터 주권의 기술적 실현</h2>
+      </div>
+      <p class="section-lede">
+        공공·국방 데이터를 OpenAI 서버로 보내는 것은 단순한 보안 문제가 아니라 주권의 문제다. 온톨로지 기반 AI는 설계 단계부터 폐쇄망 운영을 전제한다.
+      </p>
+
+      <div class="def-grid">
+        <div class="def">
+          <div class="def-term">Topology</div>
+          <div class="def-title">완전 폐쇄망 배포</div>
+          <div class="def-text">관용 클라우드(K-Cloud) 또는 기관 자체 데이터센터 내에 On-Premise로 설치. 외부 인터넷 연결 없이 동작 가능.</div>
+        </div>
+        <div class="def">
+          <div class="def-term">Model</div>
+          <div class="def-title">국내 LLM 결합</div>
+          <div class="def-text">Upstage Solar, LG EXAONE 등 국내 sLLM을 온톨로지 위에서 운영. 한국어·한국 법령 도메인에 최적화.</div>
+        </div>
+        <div class="def">
+          <div class="def-term">Governance</div>
+          <div class="def-title">데이터 출국 0</div>
+          <div class="def-text">학습 데이터·추론 로그·사용자 입력 어떤 것도 국외로 전송되지 않음. GDPR·개인정보보호법 자동 준수.</div>
+        </div>
+        <div class="def">
+          <div class="def-term">Resilience</div>
+          <div class="def-title">독립 운영</div>
+          <div class="def-text">외부 API 의존성 제로. OpenAI 서비스 장애·정책 변경·지정학 리스크에 영향 없음.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Reference · WeBIG.ai 사례</span>
+        WISE42의 <strong>WeBIG.ai</strong>는 KRNA, FIPA 등 공공기관 배포에서 폐쇄망 온프레미스 설치를 표준으로 한다. 기관 IDC 내부에서 LLM 추론·온톨로지 추론·실행 액션이 모두 닫힌 경계 안에서 발생하며, 이는 'Sovereign AX'의 실증 모델이다.
+      </div>
+    </section>
+
+    <!-- 06 HYBRID -->
+    <section id="hybrid">
+      <div class="section-head">
+        <span class="section-num">06 ·</span>
+        <h2 class="section-title">하이브리드 스택 — 실전 구현 청사진</h2>
+      </div>
+      <p class="section-lede">
+        현실의 행정 AI는 '온톨로지냐 LLM이냐'의 선택이 아니다. 양자를 어떻게 배치하느냐의 설계 문제다. 다음은 WISE42 표준 7계층 스택이다.
+      </p>
+
+      <div class="diagram">
+        <div class="diagram-label">FIG · 6.1</div>
+        <div class="diagram-title">WISE42 AX Operating Stack (7-Layer)</div>
+        <svg class="kg-svg" viewBox="0 0 700 460" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="layerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#18181c"/>
+              <stop offset="100%" stop-color="#1f1f24"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Layers -->
+          <g font-family="JetBrains Mono, monospace" font-size="11">
+            <!-- L7 -->
+            <rect x="20" y="20" width="660" height="50" fill="url(#layerGrad)" stroke="#d4ff3a" stroke-width="1.5"/>
+            <text x="40" y="42" fill="#d4ff3a" font-size="10" letter-spacing="2">L7</text>
+            <text x="40" y="58" fill="#e8e6e1" font-size="13">User Interface · Cowork Harness · 자연어 IF</text>
+            <text x="660" y="50" fill="#9a978f" text-anchor="end" font-size="10">CHAT · DASHBOARD</text>
+
+            <!-- L6 -->
+            <rect x="20" y="78" width="660" height="50" fill="url(#layerGrad)" stroke="#3a3940"/>
+            <text x="40" y="100" fill="#9a978f" font-size="10" letter-spacing="2">L6</text>
+            <text x="40" y="116" fill="#e8e6e1" font-size="13">LLM Layer · Solar / EXAONE — 번역 &amp; 표현 전용</text>
+            <text x="660" y="108" fill="#9a978f" text-anchor="end" font-size="10">NLU · NLG</text>
+
+            <!-- L5 -->
+            <rect x="20" y="136" width="660" height="50" fill="url(#layerGrad)" stroke="#d4ff3a" stroke-width="1.5"/>
+            <text x="40" y="158" fill="#d4ff3a" font-size="10" letter-spacing="2">L5</text>
+            <text x="40" y="174" fill="#e8e6e1" font-size="13">Reasoning Engine · 추론기 (SWRL / SHACL / Datalog)</text>
+            <text x="660" y="166" fill="#9a978f" text-anchor="end" font-size="10">SYMBOLIC CORE</text>
+
+            <!-- L4 -->
+            <rect x="20" y="194" width="660" height="50" fill="url(#layerGrad)" stroke="#d4ff3a" stroke-width="1.5"/>
+            <text x="40" y="216" fill="#d4ff3a" font-size="10" letter-spacing="2">L4</text>
+            <text x="40" y="232" fill="#e8e6e1" font-size="13">Ontology · 행정 지식그래프 (Entity · Relation · Rule)</text>
+            <text x="660" y="224" fill="#9a978f" text-anchor="end" font-size="10">DOMAIN MODEL</text>
+
+            <!-- L3 -->
+            <rect x="20" y="252" width="660" height="50" fill="url(#layerGrad)" stroke="#3a3940"/>
+            <text x="40" y="274" fill="#9a978f" font-size="10" letter-spacing="2">L3</text>
+            <text x="40" y="290" fill="#e8e6e1" font-size="13">Data Fabric · 부서별 silo 통합 · ETL · Streaming</text>
+            <text x="660" y="282" fill="#9a978f" text-anchor="end" font-size="10">INTEGRATION</text>
+
+            <!-- L2 -->
+            <rect x="20" y="310" width="660" height="50" fill="url(#layerGrad)" stroke="#3a3940"/>
+            <text x="40" y="332" fill="#9a978f" font-size="10" letter-spacing="2">L2</text>
+            <text x="40" y="348" fill="#e8e6e1" font-size="13">Source Systems · 행정정보시스템 · IoT · GIS · 민원DB</text>
+            <text x="660" y="340" fill="#9a978f" text-anchor="end" font-size="10">RAW</text>
+
+            <!-- L1 -->
+            <rect x="20" y="368" width="660" height="50" fill="url(#layerGrad)" stroke="#3a3940"/>
+            <text x="40" y="390" fill="#9a978f" font-size="10" letter-spacing="2">L1</text>
+            <text x="40" y="406" fill="#e8e6e1" font-size="13">Infrastructure · On-Prem · K-Cloud · GPU Cluster</text>
+            <text x="660" y="398" fill="#9a978f" text-anchor="end" font-size="10">SOVEREIGN</text>
+          </g>
+          <text x="350" y="450" font-family="Fraunces, serif" font-style="italic" font-size="12" fill="#5a5852" text-anchor="middle">L4·L5가 책임의 무게중심 — 여기에 도메인 전문가가 산다</text>
+        </svg>
+      </div>
+
+      <p class="prose">
+        핵심은 <strong>L4·L5(Ontology + Reasoning)가 시스템의 무게중심</strong>이라는 점이다. LLM(L6)은 입출력 인터페이스일 뿐이며, 교체 가능하다(Solar→EXAONE→Llama). 반면 온톨로지와 규칙은 기관의 도메인 자산이자 영속적 IP가 된다.
+      </p>
+    </section>
+
+    <!-- 07 DECISION MATRIX -->
+    <section id="decision">
+      <div class="section-head">
+        <span class="section-num">07 ·</span>
+        <h2 class="section-title">의사결정 매트릭스 — 언제 무엇을 쓸 것인가</h2>
+      </div>
+      <p class="section-lede">
+        모든 업무에 온톨로지가 필요한 것은 아니다. 다음 매트릭스는 C-level 도입 결정에 직접 사용할 수 있다.
+      </p>
+
+      <div class="matrix">
+        <div class="matrix-cell">
+          <div class="matrix-title">Quadrant I · 저위험 · 비정형</div>
+          <div class="matrix-content">민원 1차 응대<br>회의록 요약</div>
+          <div class="matrix-sub">→ <strong style="color:var(--accent-cool);">생성형 LLM 단독</strong>으로 충분. 인간 검토 후 외부 발신.</div>
+        </div>
+        <div class="matrix-cell recommend">
+          <div class="matrix-title">Quadrant II · 고위험 · 규정기반</div>
+          <div class="matrix-content">재난 대응 의사결정<br>복지 사각지대 판정<br>국방·SCADA 운영</div>
+          <div class="matrix-sub">→ <strong style="color:var(--accent);">온톨로지 기반 AI 필수</strong>. LLM은 보조적 NLU/NLG로만.</div>
+        </div>
+        <div class="matrix-cell">
+          <div class="matrix-title">Quadrant III · 저위험 · 정형</div>
+          <div class="matrix-content">통계 보고서 생성<br>FAQ 자동화</div>
+          <div class="matrix-sub">→ <strong style="color:var(--accent-cool);">LLM + RAG</strong>로 처리. 온톨로지는 ROI 낮음.</div>
+        </div>
+        <div class="matrix-cell recommend">
+          <div class="matrix-title">Quadrant IV · 고위험 · 비정형</div>
+          <div class="matrix-content">정책 영향 시뮬레이션<br>예산 우선순위 추론</div>
+          <div class="matrix-sub">→ <strong style="color:var(--accent);">하이브리드(온톨로지 + LLM)</strong>. WISE42 Harness 표준 영역.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Closing · Operating System Thesis</span>
+        서울시 AX 제안서가 말하는 온톨로지 기반 AI는 단순한 챗봇이 아니다. 그것은 <strong>복잡한 행정 규정과 데이터를 이해하고, 실제 업무를 수행하며, 그 결과를 설명할 수 있는 '행정 운영체제(Governance OS)'</strong>다. 윈도우와 리눅스가 PC 시대를 정의했듯, 온톨로지 기반 AI는 공공 AX 시대의 OS다. 그리고 그 OS의 한국형 표준을 만드는 것이 WISE42의 사명이다.
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-label">On this page</div>
+    <a href="#intro">Overview</a>
+    <a href="#paradigm">Paradigm Shift</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#reasoning">Reasoning Engine</a>
+    <a href="#trust">Trust &amp; xAI</a>
+    <a href="#sovereign">Sovereign Deploy</a>
+    <a href="#hybrid">Hybrid Stack</a>
+    <a href="#decision">Decision Matrix</a>
+  </aside>
+
+</div>
+
+<footer>
+  <div>
+    <span>WISE42 / Garambada</span> · Technical Wiki · Ontology-Based AI Series
+  </div>
+  <div>
+    Last edited 2026.05.22 · Classification: Internal / Partner
+  </div>
+</footer>
+
+<script>
+  // Subtle scroll-spy highlight on TOC
+  const sections = document.querySelectorAll('main section');
+  const tocLinks = document.querySelectorAll('.toc a');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        tocLinks.forEach(a => {
+          if (a.getAttribute('href') === '#' + id) {
+            a.style.color = 'var(--accent)';
+            a.style.borderLeftColor = 'var(--accent)';
+          } else {
+            a.style.color = 'var(--ink-dim)';
+            a.style.borderLeftColor = 'var(--rule)';
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
