@@ -116,6 +116,11 @@ ARTICLE_META = {
         "title": "AI 능력·한계 재고찰<br>— 시스템 관점에서",
         "tags":  ["AI 한계", "시스템 사고", "C-레벨 인사이트"],
     },
+    # 모델 트래커
+    "2026-05_Google_IO2026_풀스택AI_에이전트시대.html": {
+        "title": "Google I/O 2026 — 풀스택 AI에서<br>에이전트 시대로 (DH Shin 심층 보고서)",
+        "tags":  ["Google I/O 2026", "Gemini 3.5", "Antigravity 2.0", "Gemini Spark", "TPU 8세대"],
+    },
 }
 
 # ───────────────────────────────────────────────

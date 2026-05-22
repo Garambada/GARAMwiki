@@ -116,8 +116,8 @@
       <input id="searchInput" type="text" placeholder="제목, 태그로 검색…" autocomplete="off">
     </div>
     <div class="header-stats">
-      <span class="stat-chip"><b id="totalCount">24</b> 아티클</span>
-      <span class="stat-chip">업데이트 <b>2026-05-21</b></span>
+      <span class="stat-chip"><b id="totalCount">25</b> 아티클</span>
+      <span class="stat-chip">업데이트 <b>2026-05-22</b></span>
     </div>
   </div>
 </header>
@@ -129,6 +129,7 @@
   <button class="filter-btn" data-cat="비즈니스" onclick="filterCat(this)">📊 비즈니스 인텔리전스</button>
   <button class="filter-btn" data-cat="트렌드" onclick="filterCat(this)">📡 트렌드 인텔리전스</button>
   <button class="filter-btn" data-cat="인사이트" onclick="filterCat(this)">💡 나의 인사이트</button>
+  <button class="filter-btn" data-cat="모델" onclick="filterCat(this)">🔬 모델 트래커</button>
 </div>
 
 <main>
@@ -424,6 +425,26 @@
     </div>
   </section>
 
+  <section class="section" id="sec-모델" data-cat="모델">
+    <div class="section-header">
+      <div class="section-dot" style="background:var(--model)"></div>
+      <span class="section-title">🔬 모델 트래커</span>
+      <span class="section-count">1개</span>
+    </div>
+    <div class="cards-grid">
+      <a class="card" data-cat="모델"
+         href="./02_모델_트래커/2026-05_Google_IO2026_풀스택AI_에이전트시대.html">
+        <div class="card-meta">
+          <span class="cat-badge model">모델</span>
+          <span class="card-date">2026-05</span>
+        </div>
+        <div class="card-title">Google I/O 2026 — 풀스택 AI에서<br>에이전트 시대로 (DH Shin 심층 보고서)</div>
+        <div class="card-tags"><span class="tag">Google I/O 2026</span><span class="tag">Gemini 3.5</span><span class="tag">Antigravity 2.0</span><span class="tag">Gemini Spark</span><span class="tag">TPU 8세대</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
   <div class="empty-state" id="emptyState">
     <h3>검색 결과가 없습니다</h3>
     <p>다른 키워드나 태그로 검색해 보세요.</p>
@@ -431,7 +452,7 @@
 </main>
 
 <footer>
-  GARAMwiki · 개인 AI 지식 베이스 · 마지막 갱신 <b>2026-05-21</b>
+  GARAMwiki · 개인 AI 지식 베이스 · 마지막 갱신 <b>2026-05-22</b>
   &nbsp;|&nbsp; 새 파일 추가 후 <code>python generate_index.py</code> 또는 Claude에게 "랜딩 페이지 업데이트해줘"
 </footer>
 

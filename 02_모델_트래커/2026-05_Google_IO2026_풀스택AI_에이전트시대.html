@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google I/O 2026 — 풀스택 AI에서 에이전트 시대로 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --card2: #20232f;
+    --border: #2a2d3a; --text: #e8eaf0; --muted: #7a7f94;
+    --accent: #4285f4;   /* Google Blue */
+    --green:  #34a853;   /* Google Green */
+    --amber:  #fbbc04;   /* Google Yellow */
+    --red:    #ea4335;   /* Google Red */
+    --purple: #a78bfa;
+    --model:  #a78bfa;   /* 모델 트래커 색 */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    line-height: 1.65; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 52px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo { font-weight: 800; font-size: 1rem;
+    background: linear-gradient(135deg,#4285f4,#34a853,#fbbc04,#ea4335);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-sep { color: var(--border); }
+  .nav-crumb { font-size: 0.82rem; color: var(--muted); }
+  .nav-crumb a { color: var(--muted); text-decoration: none; }
+  .nav-crumb a:hover { color: var(--accent); }
+  .nav-badge { margin-left: auto; font-size: 0.72rem; font-weight: 700;
+    background: rgba(167,139,250,0.12); color: var(--model);
+    border: 1px solid rgba(167,139,250,0.3); border-radius: 20px; padding: 3px 10px; }
+
+  .hero {
+    background: linear-gradient(135deg,rgba(66,133,244,0.07) 0%,rgba(52,168,83,0.05) 50%,rgba(167,139,250,0.07) 100%);
+    border-bottom: 1px solid var(--border); padding: 52px 32px 44px;
+  }
+  .hero-inner { max-width: 960px; margin: 0 auto; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .hero-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 20px; }
+  .ht-model  { background: rgba(167,139,250,0.12); color: var(--model); border: 1px solid rgba(167,139,250,0.25); }
+  .ht-google { background: rgba(66,133,244,0.12);  color: var(--accent); border: 1px solid rgba(66,133,244,0.25); }
+  .ht-green  { background: rgba(52,168,83,0.12);   color: var(--green);  border: 1px solid rgba(52,168,83,0.25); }
+  .ht-amber  { background: rgba(251,188,4,0.12);   color: var(--amber);  border: 1px solid rgba(251,188,4,0.25); }
+  .hero-date { font-size: 0.78rem; color: var(--muted); }
+  .hero h1 { font-size: clamp(1.4rem,3.5vw,2rem); font-weight: 800; line-height: 1.25;
+    letter-spacing: -0.5px; margin-bottom: 14px; }
+  .hero h1 .g { background: linear-gradient(90deg,#4285f4,#34a853,#fbbc04,#ea4335);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { font-size: 0.96rem; color: var(--muted); max-width: 720px; line-height: 1.65; margin-bottom: 32px; }
+
+  .stats-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .stat-box { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; min-width: 110px; flex: 1; }
+  .stat-num { font-size: 1.55rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .sn-blue   { color: var(--accent); }
+  .sn-green  { color: var(--green); }
+  .sn-amber  { color: var(--amber); }
+  .sn-red    { color: var(--red); }
+  .sn-purple { color: var(--model); }
+  .stat-label { font-size: 0.7rem; color: var(--muted); }
+
+  .main { max-width: 960px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .sec-header { display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .sec-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .sec-title { font-size: 0.95rem; font-weight: 700; }
+  .section { margin-bottom: 44px; }
+
+  .bq { border-left: 3px solid var(--accent); background: var(--card);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 14px; }
+  .bq.green  { border-left-color: var(--green); }
+  .bq.amber  { border-left-color: var(--amber); }
+  .bq.red    { border-left-color: var(--red); }
+  .bq.purple { border-left-color: var(--model); }
+  .bq-text { font-size: 0.91rem; color: var(--text); line-height: 1.65; font-style: italic; }
+  .bq-attr { font-size: 0.74rem; color: var(--muted); margin-top: 6px; }
+
+  /* CHAPTER CARDS */
+  .chapter-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 14px; }
+  .chapter-card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 22px; position: relative; overflow: hidden; }
+  .chapter-card::before { content:''; position:absolute; top:0;left:0;right:0;height:3px; border-radius:14px 14px 0 0; }
+  .chapter-card.blue::before  { background: var(--accent); }
+  .chapter-card.green::before { background: var(--green); }
+  .chapter-card.amber::before { background: var(--amber); }
+  .chapter-card.red::before   { background: var(--red); }
+  .chapter-card.purple::before{ background: var(--model); }
+  .chapter-num { font-size: 0.68rem; font-weight: 700; color: var(--muted); margin-bottom: 8px;
+    letter-spacing: 0.8px; text-transform: uppercase; }
+  .chapter-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; }
+  .chapter-body { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* TABLE */
+  .tbl-wrap { overflow-x: auto; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  th { background: var(--card2); color: var(--muted); font-weight: 700;
+    padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .td-hi { color: var(--green); font-weight: 700; }
+  .td-label { color: var(--muted); font-size: 0.78rem; }
+
+  /* COMPARE GRID */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .compare-cell { background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 22px; }
+  .compare-head { font-size: 0.88rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .compare-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .compare-body { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+  .compare-body li { margin-bottom: 4px; padding-left: 4px; }
+
+  /* INSIGHT */
+  .insight-list { display: grid; gap: 12px; }
+  .insight-item { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 22px;
+    display: flex; gap: 16px; align-items: flex-start; }
+  .insight-num { font-size: 1.2rem; font-weight: 800; color: var(--accent); min-width: 28px; line-height: 1; }
+  .insight-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+  .insight-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+
+  /* TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag { font-size: 0.7rem; padding: 3px 9px; border-radius: 6px; }
+  .tg-blue   { background: rgba(66,133,244,0.08);  color: var(--accent); border: 1px solid rgba(66,133,244,0.2); }
+  .tg-green  { background: rgba(52,168,83,0.08);   color: var(--green);  border: 1px solid rgba(52,168,83,0.2); }
+  .tg-amber  { background: rgba(251,188,4,0.08);   color: var(--amber);  border: 1px solid rgba(251,188,4,0.2); }
+  .tg-red    { background: rgba(234,67,53,0.08);   color: var(--red);    border: 1px solid rgba(234,67,53,0.2); }
+  .tg-purple { background: rgba(167,139,250,0.08); color: var(--model);  border: 1px solid rgba(167,139,250,0.2); }
+
+  .pill-strip { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill { display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 7px 14px; font-size: 0.82rem; }
+  .pill-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .source-bar { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 48px; }
+  .source-label { font-size: 0.72rem; color: var(--muted); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .source-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; }
+  .source-link:hover { text-decoration: underline; }
+  .source-meta { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+
+  @media (max-width: 680px) {
+    nav, .hero, .main { padding-left: 16px; padding-right: 16px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .stats-row { gap: 10px; }
+    .stat-num { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">GARAMwiki</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-crumb"><a href="../index.html">홈</a> › 모델 트래커</span>
+  <span class="nav-badge">🔬 모델 트래커</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-tag ht-model">모델 트래커</span>
+      <span class="hero-tag ht-google">Google I/O 2026</span>
+      <span class="hero-tag ht-green">풀스택 AI</span>
+      <span class="hero-tag ht-amber">에이전트 시대</span>
+      <span class="hero-date">2026-05-20 · 작성: DH Shin (신동형)</span>
+    </div>
+    <h1><span class="g">Google I/O 2026</span> 심층 분석<br>풀스택 AI에서 에이전트 시대로</h1>
+    <p class="hero-sub">
+      「AI-first」 10년의 결산. Gemini 3.5 Flash(4배 빠름·절반 가격), TPU 8세대 듀얼 칩,
+      Antigravity 2.0, Gemini Spark, 생성형 검색 UI, 에이전트 커머스(UCP·AP2·Universal Cart),
+      Android XR 글래스, AGI 로드맵까지 — 5개 챕터 종합 보고서.
+    </p>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num sn-blue">3.2경</div><div class="stat-label">월 토큰 처리량 (7x YoY)</div></div>
+      <div class="stat-box"><div class="stat-num sn-green">9억</div><div class="stat-label">Gemini 앱 월 사용자 (2x YoY)</div></div>
+      <div class="stat-box"><div class="stat-num sn-amber">1,900억$</div><div class="stat-label">연간 설비투자 (6x vs 2022)</div></div>
+      <div class="stat-box"><div class="stat-num sn-blue">25억</div><div class="stat-label">AI Overviews 사용자</div></div>
+      <div class="stat-box"><div class="stat-num sn-green">850만</div><div class="stat-label">월간 활성 개발자</div></div>
+      <div class="stat-box"><div class="stat-num sn-purple">5억</div><div class="stat-label">Gemma 4 누적 다운로드</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SECTION 1: 5장 챕터 개요 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot" style="background:var(--accent)"></div>
+      <span class="sec-title">5개 챕터 핵심 요약</span>
+    </div>
+    <div class="chapter-cards">
+      <div class="chapter-card blue">
+        <div class="chapter-num">Chapter I</div>
+        <div class="chapter-title">구글 풀스택 AI 전환</div>
+        <div class="chapter-body">
+          AI-first 10주년. 토큰 9.7조 → 480조 → 3.2경 개 (2년 만에 3,000배 이상).
+          13개 제품이 월 10억 이상 사용자, 5개가 30억 이상.
+          AI 채택이 임계점을 넘으면서 설비투자 6배 확대.
+        </div>
+        <div class="tags">
+          <span class="tag tg-blue">토큰 경제</span>
+          <span class="tag tg-blue">풀스택 수직통합</span>
+          <span class="tag tg-blue">AI Overviews 25억</span>
+        </div>
+      </div>
+      <div class="chapter-card green">
+        <div class="chapter-num">Chapter II</div>
+        <div class="chapter-title">Gemini 3.5 · Omni · TPU 8세대</div>
+        <div class="chapter-body">
+          Gemini 3.5 Flash: 타 프론티어 대비 4배 빠름·절반 가격·Antigravity에서 12배.
+          Gemini Omni: 월드 모델, 입력→출력 全형식.
+          TPU 8t(학습) + 8i(추론) 듀얼 칩, 와트당 성능 2배.
+        </div>
+        <div class="tags">
+          <span class="tag tg-green">Gemini 3.5 Flash</span>
+          <span class="tag tg-green">월드 모델</span>
+          <span class="tag tg-green">TPU 8t·8i</span>
+        </div>
+      </div>
+      <div class="chapter-card amber">
+        <div class="chapter-num">Chapter III</div>
+        <div class="chapter-title">Antigravity 2.0 · Gemini Spark</div>
+        <div class="chapter-body">
+          Antigravity 2.0: 에이전트 우선 IDE, 93개 서브에이전트·26억 토큰으로 OS 빌드.
+          Gemini Spark: 24시간 자율 작동 개인 AI 에이전트.
+          Ultra 요금제 $250→$200 인하, 신규 $100 플랜 도입.
+        </div>
+        <div class="tags">
+          <span class="tag tg-amber">Antigravity 2.0</span>
+          <span class="tag tg-amber">Gemini Spark</span>
+          <span class="tag tg-amber">24h 에이전트</span>
+        </div>
+      </div>
+      <div class="chapter-card red">
+        <div class="chapter-num">Chapter IV</div>
+        <div class="chapter-title">AI 검색 · 에이전트 커머스</div>
+        <div class="chapter-body">
+          AI Mode 10억 사용자, 분기마다 쿼리 2배 증가. 25년 만의 최대 업그레이드 「지능형 검색창」.
+          생성형 UI: 질문마다 즉석 인터랙티브 미니 앱 생성.
+          UCP·AP2·Universal Cart로 에이전트 커머스 표준화.
+        </div>
+        <div class="tags">
+          <span class="tag tg-red">생성형 UI</span>
+          <span class="tag tg-red">UCP·AP2</span>
+          <span class="tag tg-red">Universal Cart</span>
+        </div>
+      </div>
+      <div class="chapter-card purple">
+        <div class="chapter-num">Chapter V</div>
+        <div class="chapter-title">생태계 · XR 글래스 · AGI 과학</div>
+        <div class="chapter-body">
+          Gemma 4 첫달 1억 다운로드. Android XR 글래스(오디오) 올가을 출시.
+          CodeMender(코드 보안 에이전트), WeatherNext(허리케인 예측), Isomorphic Labs(전임상 신약).
+          허사비스: "우리는 특이점의 기슭에 서 있다."
+        </div>
+        <div class="tags">
+          <span class="tag tg-purple">Android XR</span>
+          <span class="tag tg-purple">AGI 로드맵</span>
+          <span class="tag tg-purple">Gemini for Science</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Gemini 3.5 Flash 스펙 비교 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot" style="background:var(--green)"></div>
+      <span class="sec-title">Gemini 3.5 Flash — 프론티어 가성비 모델 상세</span>
+    </div>
+
+    <div class="bq green">
+      <div class="bq-text">
+        "매일 1조 개의 토큰을 처리하는 대형 고객이 워크로드의 80%를
+        다른 프론티어 모델에서 3.5 Flash로 전환하면 연간 10억 달러 이상 절감 가능."
+      </div>
+      <div class="bq-attr">— Google I/O 2026 키노트, Gemini 3.5 Flash 발표</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>Gemini 3.5 Flash</th>
+            <th>타 프론티어 모델 대비</th>
+            <th>비고</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>처리 속도</td>
+            <td class="td-hi">4배 빠름</td>
+            <td>Antigravity 환경에서 12배</td>
+            <td>출력 토큰 기준</td>
+          </tr>
+          <tr>
+            <td>가격</td>
+            <td class="td-hi">절반 이하</td>
+            <td>비슷한 성능 프론티어 대비</td>
+            <td>5월 예산 소진 고객 다수</td>
+          </tr>
+          <tr>
+            <td>코딩 성능</td>
+            <td class="td-hi">전 세대 크게 상회</td>
+            <td>3.1 Pro 대비 전 벤치마크 우위</td>
+            <td>GDPval 두드러진 도약</td>
+          </tr>
+          <tr>
+            <td>최적화 환경</td>
+            <td>Antigravity Harness 공동 최적화</td>
+            <td>—</td>
+            <td>Harness와 결합 시 12x</td>
+          </tr>
+          <tr>
+            <td>상위 모델</td>
+            <td>Gemini 3.5 Pro (예정)</td>
+            <td>다음 달 출시 예고</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>절감 효과</td>
+            <td class="td-hi">연간 10억$ 이상</td>
+            <td>1조 토큰/일 고객 기준, 80% 전환 시</td>
+            <td>에이전트 시대 전제 조건</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 3: TPU 8세대 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot" style="background:var(--blue)"></div>
+      <span class="sec-title">TPU 8세대 듀얼 칩 — 학습·추론 분리 설계</span>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-cell">
+        <div class="compare-head">
+          <div class="compare-dot" style="background:var(--accent)"></div>
+          TPU 8t — 학습 전용
+        </div>
+        <div class="compare-body">
+          <li>대규모 사전학습 최적화</li>
+          <li>이전 세대 대비 raw 컴퓨팅 약 <strong>3배</strong></li>
+          <li>JAX + Pathways로 단일 데이터센터 한계 탈피</li>
+          <li>100만 개 이상 TPU 분산 학습 클러스터</li>
+          <li>대형 모델을 수개월 → 수주 만에 학습</li>
+        </div>
+      </div>
+      <div class="compare-cell">
+        <div class="compare-head">
+          <div class="compare-dot" style="background:var(--green)"></div>
+          TPU 8i — 추론 전용
+        </div>
+        <div class="compare-body">
+          <li>지연(latency) 최소화 초점</li>
+          <li>Flash 모델 데모: 초당 약 <strong>1,500 토큰</strong> 생성</li>
+          <li>구글 27년 검색 철학: "지연이 중요하다"</li>
+          <li>와트당 성능 최대 <strong>2배</strong> 개선</li>
+          <li>Gemini 3.5 Flash 4배 속도의 하드웨어 근거</li>
+        </div>
+      </div>
+    </div>
+    <div class="bq" style="margin-top:14px;">
+      <div class="bq-text">
+        칩부터 제품까지 한 회사가 통제할 때, 각 계층의 최적화가 곱셈으로 누적된다.
+        4배 속도·절반 가격이 가능한 근본 이유가 바로 이 풀스택 수직 통합에 있다.
+      </div>
+      <div class="bq-attr">— Google I/O 2026 보고서 (DH Shin)</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Antigravity 2.0 vs Gemini Spark -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot" style="background:var(--amber)"></div>
+      <span class="sec-title">에이전트 플랫폼 — Antigravity 2.0 vs Gemini Spark</span>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-cell">
+        <div class="compare-head">
+          <div class="compare-dot" style="background:var(--amber)"></div>
+          Antigravity 2.0 — 만드는 사람을 위한
+        </div>
+        <div class="compare-body">
+          <li>독립 데스크톱 앱, 에이전트 우선 설계</li>
+          <li>93개 서브에이전트 병렬 → 15,000회 모델 호출, 26억 토큰으로 OS 핵심 빌드</li>
+          <li>비용: API 크레딧 기준 <strong>1,000달러 미만</strong></li>
+          <li>전 세계 즉시 공개, 이미 수백만 명 사용</li>
+          <li>내부: 3월 하루 5,000억 → 현재 3조 토큰 (수주마다 2배)</li>
+          <li>Android·Firebase·AI Studio 통합</li>
+        </div>
+      </div>
+      <div class="compare-cell">
+        <div class="compare-head">
+          <div class="compare-dot" style="background:var(--accent)"></div>
+          Gemini Spark — 쓰는 사람을 위한
+        </div>
+        <div class="compare-body">
+          <li><strong>24시간 자율 작동</strong>, 노트북 꺼도 백그라운드 실행</li>
+          <li>구글 클라우드 전용 가상머신 운영</li>
+          <li>MCP 지원 → 서드파티 도구 연동 예정</li>
+          <li>Android & iPhone 동기화</li>
+          <li>단계적 출시: 트러스티드 테스터 → US Ultra 구독자 베타</li>
+          <li>여름: Chrome 에이전트 브라우저 + Android Halo 확장</li>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px;">
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>구분</th><th>Antigravity 2.0</th><th>Gemini Spark</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>대상</td><td>개발자·빌더</td><td>일반 사용자</td></tr>
+            <tr><td>핵심 가치</td><td>에이전트 코딩·오케스트레이션</td><td>24h 개인 비서</td></tr>
+            <tr><td>동력</td><td>Antigravity Harness + Flash</td><td>Gemini 3.5 + Harness</td></tr>
+            <tr><td>접근법</td><td>전 세계 즉시 공개</td><td>단계적 베타 (안전 우선)</td></tr>
+            <tr><td>요금</td><td>API 크레딧 기준</td><td>Ultra $200/월 포함</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 에이전트 커머스 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot" style="background:var(--red)"></div>
+      <span class="sec-title">에이전트 커머스 3대 빌딩블록</span>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>프로토콜</th>
+            <th>풀네임</th>
+            <th>역할</th>
+            <th>핵심 파트너</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-hi">UCP</td>
+            <td>Universal Commerce Protocol</td>
+            <td>조사→결제→배송 전 여정 공통 언어<br><span class="td-label">"HTTP가 웹에 한 일을 에이전트 커머스에"</span></td>
+            <td>Amazon, Meta, Microsoft, Salesforce, Stripe</td>
+          </tr>
+          <tr>
+            <td class="td-hi">AP2</td>
+            <td>Agent Payments Protocol</td>
+            <td>경계 설정(브랜드·예산 조건부 구매) +<br>변조 불가 디지털 위임장으로 책임성 확보</td>
+            <td>Gemini Spark 우선 적용</td>
+          </tr>
+          <tr>
+            <td class="td-hi">Universal Cart</td>
+            <td>—</td>
+            <td>검색·Gemini·YouTube·Gmail 횡단 장바구니<br>가격 추적·재고 알림·카드 혜택 자동 적용</td>
+            <td>미국 올여름 검색·Gemini부터</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bq red" style="margin-top:0;">
+      <div class="bq-text">
+        UCP에 Amazon·Meta·Microsoft·Salesforce·Stripe 등 경쟁사들이 합류했다는 점이 핵심.
+        경쟁과 표준 협력이 동시에 진행되는 복합 구도 — 에이전트 커머스의 HTTP 표준 경쟁이 시작됐다.
+      </div>
+      <div class="bq-attr">— Google I/O 2026 보고서 (DH Shin), "국가·글로벌 관점" 분석</div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: 주목 데이터 포인트 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot" style="background:var(--model)"></div>
+      <span class="sec-title">주목할 수치 · 제품 · 사건</span>
+    </div>
+    <div class="pill-strip">
+      <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div><span>AI Mode: 분기마다 쿼리 2배 증가</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--green)"></div><span>Gemma 4: 첫달 1억 다운로드 → 누적 5억</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--amber)"></div><span>SynthID: 1,000억 장 이미지 + 6만 년 오디오 워터마크</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--red)"></div><span>SynthID 채택: OpenAI·카카오·ElevenLabs</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--model)"></div><span>WeatherNext: 허리케인 3일 조기 예측 성공</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div><span>Isomorphic Labs: 전임상 단계 신약 다수</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--green)"></div><span>Android XR 글래스(오디오) 올가을 출시</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--amber)"></div><span>375개+ 고객사가 연 1조 이상 토큰 처리</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div><span>분당 190억 토큰 API 처리 (외부 개발자)</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--red)"></div><span>순다르 피차이가 직접 Antigravity로 버그 수정</span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Devil's Advocate -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot" style="background:var(--red)"></div>
+      <span class="sec-title">Devil's Advocate — 냉정한 5가지 시각</span>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-cell">
+        <div class="compare-head"><div class="compare-dot" style="background:var(--red)"></div>검증의 문제</div>
+        <div class="compare-body">93개 서브에이전트가 만든 OS 코드를 누가 어떻게 검증하는가?
+          겉으로는 작동하지만 아키텍처 수준에서 깨진 산출물이 누적될 리스크.</div>
+      </div>
+      <div class="compare-cell">
+        <div class="compare-head"><div class="compare-dot" style="background:var(--red)"></div>집중의 위험</div>
+        <div class="compare-body">칩·모델·플랫폼·표준까지 구글 한 곳에 집중.
+          수직 통합이 혁신 속도를 높이지만, 단일 장애점이 될 가능성도.</div>
+      </div>
+      <div class="compare-cell">
+        <div class="compare-head"><div class="compare-dot" style="background:var(--amber)"></div>콘텐츠 범람</div>
+        <div class="compare-body">생성형 UI와 에이전트 커머스가 콘텐츠를 폭증시킬 때,
+          오픈 웹 창작자의 수익 구조와 정보 신뢰성 문제가 심화될 수 있음.</div>
+      </div>
+      <div class="compare-cell">
+        <div class="compare-head"><div class="compare-dot" style="background:var(--amber)"></div>신뢰 설계</div>
+        <div class="compare-body">Gemini Spark가 24시간 자율 작동할 때 사용자 신뢰 확보는
+          기술 문제가 아니라 UX·정책 문제. 구글 스스로 "아직 초기 단계"라 인정.</div>
+      </div>
+      <div class="compare-cell">
+        <div class="compare-head"><div class="compare-dot" style="background:var(--accent)"></div>자본 비대칭</div>
+        <div class="compare-body">연 1,900억 달러 설비투자는 대형 빅테크만 감당 가능.
+          스타트업이 경쟁할 수 있는 지점이 API 레이어와 버티컬 특화로 좁아짐.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: 관점별 인사이트 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-dot" style="background:var(--accent)"></div>
+      <span class="sec-title">관점별 시사점 — Company Builder 관점 정리</span>
+    </div>
+    <div class="insight-list">
+      <div class="insight-item">
+        <div class="insight-num">▶</div>
+        <div class="insight-content">
+          <div class="insight-title">개인 관점 — "무엇을 위임하고 무엇을 직접 검증할 것인가"</div>
+          <div class="insight-desc">Gemini Spark 같은 24시간 에이전트의 편의를 누리되, 자율 작동의 결과물을 점검하는 습관이 새로운 리터러시. 에이전트 위임 판단력이 AI 시대 핵심 역량.</div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">▶</div>
+        <div class="insight-content">
+          <div class="insight-title">조직 관점 — 프론티어 vs 효율 모델 워크로드 재배분</div>
+          <div class="insight-desc">Gemini 3.5 Flash의 가성비는 "어떤 작업에 어떤 모델을 쓸 것인가" 전략을 재검토할 기회. 동시에 풀스택 종속의 전환 비용과 에이전트 산출물 검증 체계를 도입 전에 설계해야 함.</div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">▶</div>
+        <div class="insight-content">
+          <div class="insight-title">에이전트 커머스 — UCP·AP2 표준 선점이 B2C 사업자의 과제</div>
+          <div class="insight-desc">UCP가 HTTP처럼 확산된다면, 에이전트가 "쿠팡을 직접 조작"하는 대신 UCP API로 연결. B2C 사업자는 에이전트 친화적 API 설계와 고객 데이터 보호를 동시에 설계해야 함. 표준 채택 타이밍이 관건.</div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">▶</div>
+        <div class="insight-content">
+          <div class="insight-title">국가·산업 관점 — 칩·모델·표준이 AI 주권의 척도</div>
+          <div class="insight-desc">UCP·AP2 협상 참여 여부가 에이전트 커머스 시대의 주도권을 결정. SynthID가 업계 표준이 된 것처럼, 표준 전쟁에서 늦게 합류하면 룰 테이커가 됨. 한국 기업의 UCP 참여 검토 필요.</div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">▶</div>
+        <div class="insight-content">
+          <div class="insight-title">스타트업 기회 — 버티컬 특화 에이전트와 Managed Agent 생태계</div>
+          <div class="insight-desc">구글이 Managed Agents를 API 한 번으로 에이전트+샌드박스 동시 제공. 스타트업은 인프라 부담 없이 버티컬 문제를 에이전트로 직접 공략 가능. "Build with Gemini XPRIZE 해커톤 200만$"이 그 신호.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOURCE -->
+  <div class="source-bar">
+    <span class="source-label">원본 문서</span>
+    <span class="source-link">GoogleIO2026_KR_Report_20260520.docx</span>
+    <span style="color:var(--border)">|</span>
+    <span class="source-link" style="cursor:default; color:var(--muted)">작성: DH Shin (신동형) · 2026.05.20</span>
+    <span class="source-meta">Google I/O 2026 메인·개발자 키노트 기반 분석 · 모델 트래커</span>
+  </div>
+
+</div>
+</body>
+</html>
