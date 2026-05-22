@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>레거시 산업 AI 혁신 · Founders Studio 컴퍼니 빌더 전략 · 사업 현안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0c0e14;
+  --bg-card:   #13161f;
+  --bg-raise:  #1a1e2a;
+  --border:    #252836;
+  --border-hi: #353a50;
+  --text:      #e4e8f0;
+  --muted:     #7a8099;
+  --faint:     #3d4260;
+  --accent:    #f97316;
+  --accent-bg: rgba(249,115,22,0.08);
+  --accent-dim: rgba(249,115,22,0.25);
+  --green:     #22c55e;
+  --green-bg:  rgba(34,197,94,0.08);
+  --blue:      #60a5fa;
+  --blue-bg:   rgba(96,165,250,0.08);
+  --purple:    #a78bfa;
+  --purple-bg: rgba(167,139,250,0.08);
+  --red:       #f87171;
+  --red-bg:    rgba(248,113,113,0.08);
+  --yellow:    #fbbf24;
+  --yellow-bg: rgba(251,191,36,0.08);
+  --sans: 'IBM Plex Sans KR', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --serif: 'Fraunces', serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 5% 0%, rgba(249,115,22,0.06), transparent 40%),
+    radial-gradient(circle at 95% 100%, rgba(96,165,250,0.04), transparent 40%);
+  min-height: 100vh;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(12,14,20,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1120px; margin: 0 auto;
+  padding: 0 32px; height: 54px;
+  display: flex; align-items: center; gap: 14px;
+}
+.breadcrumb {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); display: flex; align-items: center; gap: 8px;
+}
+.breadcrumb a { color: var(--muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--text); }
+.breadcrumb .sep { color: var(--faint); }
+.breadcrumb .cur { color: var(--accent); }
+.nav-badge {
+  margin-left: auto; font-family: var(--mono); font-size: 10px;
+  padding: 3px 10px; border-radius: 2px;
+  border: 1px solid var(--accent-dim); color: var(--accent); letter-spacing: 0.08em;
+}
+
+/* ── HERO ── */
+.hero {
+  max-width: 1120px; margin: 0 auto;
+  padding: 60px 32px 40px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 18px;
+}
+.hero-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 10px var(--accent);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 4vw, 50px);
+  font-weight: 600; line-height: 1.2;
+  letter-spacing: -0.5px; margin-bottom: 16px;
+}
+.hero h1 em { font-style: italic; color: var(--accent); font-weight: 400; }
+.hero-sub {
+  font-size: 15px; color: var(--muted); max-width: 740px;
+  line-height: 1.72; margin-bottom: 28px;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 20px;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+}
+.hero-meta span b { color: var(--text); }
+
+/* ── STATS ── */
+.stats-row {
+  max-width: 1120px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(145px,1fr));
+  gap: 1px; background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat-box { background: var(--bg-card); padding: 20px 22px; }
+.stat-num {
+  font-family: var(--serif); font-size: 30px; font-weight: 600;
+  color: var(--accent); line-height: 1; margin-bottom: 5px;
+}
+.stat-num.green  { color: var(--green); }
+.stat-num.blue   { color: var(--blue); }
+.stat-num.purple { color: var(--purple); }
+.stat-num.red    { color: var(--red); }
+.stat-label { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+/* ── LAYOUT ── */
+.body-wrap {
+  max-width: 1120px; margin: 0 auto;
+  padding: 48px 32px 80px;
+  display: grid; grid-template-columns: 1fr 296px;
+  gap: 44px; align-items: start;
+}
+@media (max-width: 900px) { .body-wrap { grid-template-columns: 1fr; } }
+
+/* ── SECTION ── */
+.section { margin-bottom: 52px; }
+.section-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 22px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.section-num {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--accent); letter-spacing: 0.1em;
+}
+.section-title { font-family: var(--serif); font-size: 20px; font-weight: 600; }
+.section p { color: var(--muted); margin-bottom: 14px; line-height: 1.75; }
+.section p b { color: var(--text); font-weight: 600; }
+
+/* ── COMPARE GRID ── */
+.compare-2 {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin: 20px 0;
+}
+@media (max-width: 640px) { .compare-2 { grid-template-columns: 1fr; } }
+.cmp-card {
+  border-radius: 10px; padding: 22px 22px;
+  border: 1px solid var(--border);
+}
+.cmp-card.heavy { background: rgba(248,113,113,0.04); border-color: rgba(248,113,113,0.2); }
+.cmp-card.light { background: var(--accent-bg); border-color: var(--accent-dim); }
+.cmp-head {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
+}
+.cmp-card.heavy .cmp-head { color: var(--red); }
+.cmp-card.light .cmp-head { color: var(--accent); }
+.cmp-title {
+  font-family: var(--serif); font-size: 22px; font-weight: 700;
+  margin-bottom: 10px; line-height: 1.2;
+}
+.cmp-card.heavy .cmp-title { color: var(--red); }
+.cmp-card.light .cmp-title { color: var(--accent); }
+.cmp-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.cmp-body b { color: var(--text); }
+.cmp-list { list-style: none; margin-top: 12px; }
+.cmp-list li {
+  font-size: 12px; color: var(--muted); padding: 5px 0;
+  border-bottom: 1px solid var(--border); display: flex; gap: 8px;
+}
+.cmp-list li:last-child { border: none; }
+.cmp-list li::before { content: '→'; color: var(--faint); flex-shrink: 0; }
+
+/* ── TABLE ── */
+.table-wrap { overflow-x: auto; margin: 18px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  background: var(--bg-raise); padding: 10px 14px; text-align: left;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  color: var(--muted); vertical-align: top; line-height: 1.55;
+}
+td:first-child { color: var(--text); font-weight: 500; }
+td b   { color: var(--accent); font-weight: 600; }
+td .g  { color: var(--green);  font-weight: 600; }
+td .b  { color: var(--blue);   font-weight: 600; }
+td .p  { color: var(--purple); font-weight: 600; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(249,115,22,0.02); }
+
+/* ── INFO BOX ── */
+.ibox {
+  border-radius: 8px; padding: 20px 22px; margin: 18px 0;
+  border: 1px solid var(--accent-dim); background: var(--accent-bg);
+}
+.ibox.blue   { border-color: rgba(96,165,250,0.25); background: var(--blue-bg); }
+.ibox.green  { border-color: rgba(34,197,94,0.25);  background: var(--green-bg); }
+.ibox.purple { border-color: rgba(167,139,250,0.25); background: var(--purple-bg); }
+.ibox.yellow { border-color: rgba(251,191,36,0.25);  background: var(--yellow-bg); }
+.ibox-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+}
+.ibox.blue   .ibox-label { color: var(--blue); }
+.ibox.green  .ibox-label { color: var(--green); }
+.ibox.purple .ibox-label { color: var(--purple); }
+.ibox.yellow .ibox-label { color: var(--yellow); }
+.ibox-body { font-size: 13px; color: var(--text); line-height: 1.72; }
+.ibox-body b   { color: var(--accent); }
+.ibox.blue   .ibox-body b { color: var(--blue); }
+.ibox.green  .ibox-body b { color: var(--green); }
+.ibox.purple .ibox-body b { color: var(--purple); }
+.ibox.yellow .ibox-body b { color: var(--yellow); }
+
+/* ── 3 TRACKS ── */
+.track-list { display: flex; flex-direction: column; gap: 16px; margin: 20px 0; }
+.track-item {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px 22px;
+  display: flex; gap: 18px; align-items: flex-start;
+}
+.track-badge {
+  width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+}
+.track-item.t1 .track-badge { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-dim); }
+.track-item.t2 .track-badge { background: var(--blue-bg);   color: var(--blue);   border: 1px solid rgba(96,165,250,0.3); }
+.track-item.t3 .track-badge { background: var(--purple-bg); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+.track-content { flex: 1; }
+.track-label { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.track-tag {
+  display: inline-block; margin-bottom: 8px;
+  font-family: var(--mono); font-size: 9px; padding: 2px 6px;
+  border-radius: 2px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.t1 .track-tag { background: var(--accent-bg); color: var(--accent); }
+.t2 .track-tag { background: var(--blue-bg);   color: var(--blue); }
+.t3 .track-tag { background: var(--purple-bg); color: var(--purple); }
+.track-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.track-body b { color: var(--text); }
+
+/* ── RISK GRID ── */
+.risk-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 10px; margin: 18px 0;
+}
+.risk-item {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 7px; padding: 14px 16px;
+}
+.risk-level {
+  display: inline-block; margin-bottom: 6px;
+  font-family: var(--mono); font-size: 9px; padding: 2px 6px;
+  border-radius: 2px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.risk-level.crit { background: var(--red-bg);    color: var(--red);    border: 1px solid rgba(248,113,113,0.25); }
+.risk-level.high { background: var(--yellow-bg); color: var(--yellow); border: 1px solid rgba(251,191,36,0.25); }
+.risk-level.mid  { background: var(--blue-bg);   color: var(--blue);   border: 1px solid rgba(96,165,250,0.25); }
+.risk-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.risk-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.risk-mit  { margin-top: 8px; font-size: 11px; color: var(--text);
+  background: var(--bg-raise); border-radius: 4px; padding: 5px 8px; }
+
+/* ── AUTONOMOUS PRINCIPLES ── */
+.principle-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 18px 0; }
+.principle-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 7px; padding: 14px 16px;
+}
+.principle-num {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  background: var(--accent-bg); border: 1px solid var(--accent-dim);
+  color: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.principle-body { flex: 1; font-size: 13px; color: var(--muted); line-height: 1.65; }
+.principle-body b { color: var(--text); font-weight: 600; }
+
+/* ── KPI CHIPS ── */
+.kpi-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.kpi-chip {
+  background: var(--bg-raise); border: 1px solid var(--border);
+  border-radius: 6px; padding: 8px 14px;
+  font-size: 12px;
+}
+.kpi-chip b { color: var(--accent); display: block; font-size: 15px; font-family: var(--serif); }
+
+/* ── SIDEBAR ── */
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+.side-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.side-head {
+  padding: 10px 16px; background: var(--bg-raise);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.side-body { padding: 14px 16px; }
+.kv-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 7px 0; border-bottom: 1px solid var(--border);
+  font-size: 12px; gap: 8px;
+}
+.kv-row:last-child { border-bottom: none; }
+.kv-row .k { color: var(--muted); flex-shrink: 0; }
+.kv-row .v { color: var(--text); font-weight: 500; text-align: right; }
+.kv-row .v.acc    { color: var(--accent); }
+.kv-row .v.green  { color: var(--green); }
+.kv-row .v.blue   { color: var(--blue); }
+.kv-row .v.red    { color: var(--red); }
+
+/* ── TAG STRIP ── */
+.tag-strip { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-family: var(--mono); font-size: 10px;
+  padding: 3px 8px; border-radius: 3px;
+  background: var(--bg-raise); border: 1px solid var(--border);
+  color: var(--muted); letter-spacing: 0.06em;
+}
+.tag.hot { color: var(--accent); border-color: var(--accent-dim); }
+
+/* ── SOURCE BAR ── */
+.source-bar {
+  max-width: 1120px; margin: 0 auto;
+  padding: 18px 32px; border-top: 1px solid var(--border);
+  font-family: var(--mono); font-size: 10px;
+  color: var(--faint); display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+}
+.source-bar a { color: var(--muted); text-decoration: none; }
+.source-bar a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .hero, .body-wrap, .source-bar { padding-left: 18px; padding-right: 18px; }
+  .stats-row { padding: 0; }
+  nav .nav-inner { padding: 0 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="breadcrumb">
+      <a href="../index.html">GARAMwiki</a>
+      <span class="sep">›</span><span>사업 현안</span>
+      <span class="sep">›</span><span class="cur">Founders Studio 전략</span>
+    </div>
+    <div class="nav-badge">🏢 사업 현안</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag"><span class="hero-dot"></span>사업 기획 보고서 · 2026</div>
+  <h1>전통 레거시 산업의 구조적 위기 극복을 위한<br><em>AI-Native Solopreneur 기반 Founders Studio 전략</em></h1>
+  <p class="hero-sub">중량문명(Heavyweight Civilization)에서 경량문명(Lightweight Civilization)으로의 패러다임 전환. AI가 거래비용을 제로화하는 시대에 전통 레거시 산업은 LaaS(Labor-as-a-Service)와 AI Growth Buyout 전략으로 생존 경로를 재설계해야 한다. Founders Studio는 AI-Native Solopreneur를 핵심 실행 유닛으로 삼아 인건비 시장(40~70%)을 타깃하는 새로운 벤처 방정식이다.</p>
+  <div class="hero-meta">
+    <span>분류 <b>사업 기획 / 컴퍼니 빌더 전략</b></span>
+    <span>대상 <b>전통 레거시 산업 중견·중소기업</b></span>
+    <span>모델 <b>Founders Studio (AI Growth Buyout)</b></span>
+    <span>소스 <b>AI 기반 레거시 산업 혁신 사업 기획.pdf</b></span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-box">
+    <div class="stat-num red">46%</div>
+    <div class="stat-label">최저임금 5년 누적 인상<br>→ 중소기업 매출 12% 감소</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">42%</div>
+    <div class="stat-label">기업 AI 프로젝트<br>중단율 (2024)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num blue">72%</div>
+    <div class="stat-label">벤처 스튜디오<br>시리즈 A 진출률</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num green">53%</div>
+    <div class="stat-label">벤처 스튜디오 IRR<br>(전통 VC 21.3% 대비)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">54%</div>
+    <div class="stat-label">AI Growth Buyout<br>투자 수익률(IRR) Year5</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num purple">$79.2M</div>
+    <div class="stat-label">레거시 $20M 기업<br>5년 후 기업 가치(EV)</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body-wrap">
+<main>
+
+  <!-- 1. 패러다임 전환 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">중량문명 → 경량문명: 패러다임의 근본적 전환</span>
+    </div>
+    <p>2022년 11월 ChatGPT 등장을 변곡점으로 <b>거대 조직 중심의 중량문명(Heavyweight Civilization)에 돌이킬 수 없는 균열</b>이 발생했다. 생성형 AI는 과거 수백 명의 전문가 팀이 수행하던 지식 노동을 월 수십 달러로 처리할 수 있게 함으로써, 생산의 핵심 요소를 자본·노동력에서 <b>아이디어·AI 활용 능력</b>으로 이동시켰다.</p>
+    <p>노벨경제학상 수상자 로널드 코스의 거래비용 이론에 따르면 기업은 내부 거래비용이 낮을 때 존재 가치를 지닌다. AI 에이전트는 탐색·조정·계약 비용을 혁신적으로 낮춰 <b>거래비용을 사실상 제로화</b>하였고, 이로 인해 1인 기업·소수 정예 팀이 대기업보다 압도적 경쟁 우위를 점하는 경량문명 시대가 도래했다.</p>
+
+    <div class="compare-2">
+      <div class="cmp-card heavy">
+        <div class="cmp-head">구시대</div>
+        <div class="cmp-title">중량문명</div>
+        <div class="cmp-body">대규모 자본과 물리적 노동력이 핵심. 수직적 관료제, 규모의 경제가 진입장벽.</div>
+        <ul class="cmp-list">
+          <li>핵심 생산 요소: 대규모 자본, 물리적 노동력</li>
+          <li>의사결정: 수직적 관료제, 느린 승인 절차</li>
+          <li>거래비용: 조직 내부화를 통한 비용 절감</li>
+          <li>기업 본질: 평생직장 및 정기 채용 중심</li>
+          <li>성공 지표: 직원 수, 자산 규모, 매출 총액</li>
+        </ul>
+      </div>
+      <div class="cmp-card light">
+        <div class="cmp-head">신시대</div>
+        <div class="cmp-title">경량문명</div>
+        <div class="cmp-body">창의적 아이디어와 AI 활용 능력이 핵심. 민첩한 실행과 1인 기업의 시대.</div>
+        <ul class="cmp-list">
+          <li>핵심 생산 요소: 창의적 아이디어, AI 활용 능력</li>
+          <li>의사결정: 수평적 네트워크, 즉각적 의사결정</li>
+          <li>거래비용: AI 기반 자동화로 거래비용 소멸</li>
+          <li>기업 본질: 단기 프로젝트 연합체, 유연한 협업</li>
+          <li>성공 지표: 1인당 부가가치, 자율성 지수, 속도</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ibox">
+      <div class="ibox-label">■ 실증 사례</div>
+      <div class="ibox-body"><b>텔레그램</b> — 50명 미만 엔지니어로 8억 명+ 사용자 관리. <b>미드저니</b> — 40명 팀으로 수천 명의 디자이너를 고용한 Adobe의 시장 위협. 투자 지표도 직원 수·자산 규모 → <b>1인당 부가가치(밀도의 경제)</b>로 이행 중.</div>
+    </div>
+  </div>
+
+  <!-- 2. 레거시 위기 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">전통 레거시 산업의 구조적 위기 분석</span>
+    </div>
+    <p>대한민국 중견·중소기업은 <b>인건비 상승 + 생산성 저하</b>의 이중고에 시달리고 있다. 최저임금 5년간 누적 46% 인상으로 평균 매출은 12% 감소했다. KDI는 연평균 폐업률이 15%를 돌파할 수 있다고 경고한다.</p>
+    <p>전통적 조직 확장 모델은 <b>브룩스의 법칙(Brooks' Law)</b>과 <b>링겔만 효과(Ringelmann Effect)</b>라는 구조적 함정에 빠져 있다. 인력을 추가할수록 커뮤니케이션 채널이 기하급수적으로 늘어나고(n(n-1)/2), 개인 기여도는 오히려 감소한다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>산업 분야</th><th>AI 채택률</th><th>위기 요인</th></tr></thead>
+        <tbody>
+          <tr><td>제조</td><td><b>38%</b></td><td>노동집약적 구조, 혁신 동력 부족, 인건비 타격</td></tr>
+          <tr><td>건설</td><td><b>28%</b></td><td>낮은 디지털 전환율, 보수적 조직 문화</td></tr>
+          <tr><td>금융 서비스</td><td class="g">61%</td><td>AI 도입을 통한 높은 ROI 달성 중</td></tr>
+          <tr><td>기술 기업</td><td class="g">72%</td><td>AX 선도, 인당 생산성 극대화 추구</td></tr>
+          <tr><td>100인↓ 기업</td><td><b>30.5%</b></td><td>AI 인재 채용 계획 있으나 실행 못함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ibox yellow">
+      <div class="ibox-label">⚠ 핵심 진단</div>
+      <div class="ibox-body">전통 레거시 기업 위기의 본질은 <b>자금 부족·기술 부재가 아니다.</b> 기술을 효율적으로 수용할 수 없는 <b>비대한 조직 구조와 노동 중심 비즈니스 모델</b>에 있다. AX의 골든타임을 놓치면 소외는 피할 수 없다.</div>
+    </div>
+  </div>
+
+  <!-- 3. SaaS 한계 vs LaaS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">SaaS의 한계와 AI Growth Buyout(LaaS)의 부상</span>
+    </div>
+    <p>전세계 기업의 88%가 AI를 활용하지만, 기업 AI 프로젝트의 42%가 중단된다. 전통적 SaaS 모델은 레거시 AX에 명확한 한계를 지닌다. <b>기업 지출의 5~10%에 불과한 IT 예산</b>만을 타깃하며, 진짜 큰 비용인 <b>인건비(60~80%) 영역을 건드리지 못한다.</b></p>
+
+    <div class="compare-2">
+      <div class="cmp-card heavy">
+        <div class="cmp-head">기존 방식</div>
+        <div class="cmp-title">전통 SaaS</div>
+        <div class="cmp-body">도구를 판매하는 방식. IT 예산(비용의 5~10%)만 타깃.</div>
+        <ul class="cmp-list">
+          <li>목표 시장: IT 소프트웨어 예산 (5~10%)</li>
+          <li>가치 창출: 도구 판매 및 구독</li>
+          <li>갱신율: 60~70% 수준의 낮은 갱신율</li>
+          <li>성공 핵심: 제품-시장 적합성 (PMF)</li>
+          <li>마진 개선: 제한적 (소프트웨어 효율성)</li>
+        </ul>
+      </div>
+      <div class="cmp-card light">
+        <div class="cmp-head">새로운 방식</div>
+        <div class="cmp-title">AI Growth Buyout (LaaS)</div>
+        <div class="cmp-body">비즈니스 자체를 운영하며 AI라는 새 노동력을 직접 배포.</div>
+        <ul class="cmp-list">
+          <li>목표 시장: <b>인건비 시장 (비용의 40~70%)</b></li>
+          <li>가치 창출: 비즈니스 운영 및 프로세스 재설계</li>
+          <li>성공 핵심: 운영·통합 (PMI) 및 기술 이식</li>
+          <li>마진 개선: <b>2~3배 확대 (인건비 절감 중심)</b></li>
+          <li>대표 사례: Metropolis (주차장 인수 후 AI 이식)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ibox blue">
+      <div class="ibox-label">💡 경제적 논리</div>
+      <div class="ibox-body">연간 인건비 $2,000만인 중견 로펌이 AI로 인건비의 30%를 절감한다면 <b>$600만 이익 창출</b>. 이는 기존 IT 예산 $100만을 아끼는 것보다 <b>6배 큰 성과</b>다. 지향점은 인간이 비전·전략에 집중하고 AI 에이전트 군단이 실행하는 <b>Autonomous Company(자율 기업)</b>.</div>
+    </div>
+  </div>
+
+  <!-- 4. Solopreneur -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">AI-Native Solopreneur — AX 실행의 핵심 유닛</span>
+    </div>
+    <p>AI 시대 최소 실행 유닛의 정점은 <b>AI-Native Solopreneur(1인 창업가)</b>이다. AI를 단순 보조 도구가 아닌 <b>공동 창업자(Co-founder) 수준</b>으로 활용하며, 인간의 통찰력과 AI의 확장력을 결합해 비선형적 성장을 만든다.</p>
+
+    <div class="kpi-row">
+      <div class="kpi-chip"><b>$500~$1,000</b>MVP 제작비 (기존 $5~10만)</div>
+      <div class="kpi-chip"><b>48시간</b>내 프로토타이핑</div>
+      <div class="kpi-chip"><b>40~60%</b>엔지니어링 인력 절감</div>
+      <div class="kpi-chip"><b>90%+</b>코드베이스 AI 지원 작성</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>역량</th><th>과거 경쟁력</th><th>AI 시대 솔로프리너 경쟁력</th></tr></thead>
+        <tbody>
+          <tr><td>기술 역량</td><td>코딩·엔지니어링 숙련도</td><td><b>문제 프레이밍 및 시스템 사고</b></td></tr>
+          <tr><td>자원 확보</td><td>대규모 투자 유치·채용</td><td><b>AI 자동화 인프라 및 API 활용</b></td></tr>
+          <tr><td>시장 대응</td><td>장기 계획·대규모 마케팅</td><td><b>빠른 실험 및 데이터 기반 피봇</b></td></tr>
+          <tr><td>조직 형태</td><td>직무 분리형 다인 조직</td><td><b>통합형(Creator-Operator) 개인 체제</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:13px;">솔로프리너는 AI 시대 새로운 KPI를 가장 높게 달성할 수 있는 유닛이다. ① <b>Revenue per Employee</b> 극대화 ② <b>인당 가상 팀원 수</b>(배포한 AI 에이전트 수) ③ <b>Decision Velocity</b>(소통 채널 0 → 조정 부채 소멸).</p>
+  </div>
+
+  <!-- 5. Founders Studio -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Founders Studio — 컴퍼니 빌더 모델의 구조적 우월성</span>
+    </div>
+    <p>전통 액셀러레이터(YC 배치 모델, 23% 생존율 향상)와 달리, 벤처 스튜디오는 <b>Stage Zero부터 공동 창업자로 직접 참여</b>하며 72%의 시리즈 A 진출률을 기록한다. GPU 클러스터·MLOps·법무 인력을 스튜디오 차원의 <b>공유 서비스(Shared Service)</b>로 제공하여 초기 비용과 위험을 최소화한다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>지표</th><th>전통 VC / 액셀러레이터</th><th>Founders Studio</th></tr></thead>
+        <tbody>
+          <tr><td>시리즈 A 진출률</td><td>42%</td><td class="g">72%</td></tr>
+          <tr><td>시드-시리즈 A 기간</td><td>56개월</td><td class="g">25.2개월</td></tr>
+          <tr><td>내부 수익률(IRR)</td><td>21.3%</td><td class="g">53.0%</td></tr>
+          <tr><td>시드 라운드 달성률</td><td>상대적 저조</td><td class="g">84%</td></tr>
+          <tr><td>수익 실현</td><td>10년 후 Exit 의존</td><td><b>현금 흐름(플랫폼) + Exit(옵션)</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ibox green">
+      <div class="ibox-label">■ Founders Studio의 포지셔닝</div>
+      <div class="ibox-body">단순 투자사가 아니라 <b>AI-Native Solopreneur들을 발굴해 전통 산업 AX 문제를 해결하는 비즈니스를 공동 제조하는 '공장(Factory)'</b>. "블랙박스" 위탁 투자 → <b>"유리상자(Glass Box)" 모델</b>: 능동적 참여와 공동 창출. 이중 수익 구조(Two-Pronged Return): 플랫폼 수익 + 벤처 Exit.</div>
+    </div>
+  </div>
+
+  <!-- 6. 3 Tracks -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">모듈형 빌더 생태계 — 3 Track 실행 파이프라인</span>
+    </div>
+
+    <div class="track-list">
+      <div class="track-item t1">
+        <div class="track-badge">T1</div>
+        <div class="track-content">
+          <div class="track-label">Track 1 — 발굴 및 검증</div>
+          <span class="track-tag">AI-Native Solopreneur 영입</span>
+          <div class="track-body">도메인 전문성을 가진 솔로프리너를 <b>EIR(Entrepreneur-in-Residence)</b> 프로그램으로 영입. 전통 산업의 Pain Point 포착 → AI 해결 가설 수립 → 48시간 내 프로토타이핑 → 실제 사용자 피드백으로 <b>Problem-Solution Fit 검증</b>.</div>
+        </div>
+      </div>
+      <div class="track-item t2">
+        <div class="track-badge">T2</div>
+        <div class="track-content">
+          <div class="track-label">Track 2 — 개발 및 확립</div>
+          <span class="track-tag">컴퍼니 빌딩과 AX 이식</span>
+          <div class="track-body">스튜디오 내부 전임 빌더 팀(AI 엔지니어·디자이너·마케터)과 결합하여 MVP 구체화. <b>"돈보다 코드(Code over Cash)"</b> 철학 — 자금 지원을 넘어 파트너들이 직접 데이터 파이프라인 설계. 레거시 중견기업과 테스트베드 협력으로 실제 필드 데이터 학습 → PMF 도출.</div>
+        </div>
+      </div>
+      <div class="track-item t3">
+        <div class="track-badge">T3</div>
+        <div class="track-content">
+          <div class="track-label">Track 3 — 성장 및 확장</div>
+          <span class="track-tag">AI Growth Buyout 및 스케일업</span>
+          <div class="track-body">PMF 확인 후 두 경로: ① 마이크로 SaaS(동일 도메인 확산) ② <b>레거시 기업 직접 Buyout → AI를 내부 운영체제로 이식</b>. 인건비 절감을 통한 2~3배 마진 개선 → 기업 가치 평가의 기술 프리미엄 실현. <b>"실패의 자산화"</b>: 실패한 프로젝트 리더를 다른 프로젝트 핵심 인력으로 재배치.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. 자율 기업 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <span class="section-title">자율 기업(Autonomous Company) 4원칙</span>
+    </div>
+    <p>Founders Studio가 지향하는 궁극적 조직 형태. 인간의 개입을 최소화하고 AI 에이전트가 조직의 핵심 업무를 수행하는 디지털 노동력으로 부상한 현실을 반영한다.</p>
+
+    <ul class="principle-list">
+      <li class="principle-item"><div class="principle-num">1</div><div class="principle-body"><b>AI를 조직 운영체제(OS)로 채택</b> — 단순 보조 도구가 아니라 서버 운영·결제 처리·고객 대응 등 모든 비즈니스 프로세스를 구동하는 엔진.</div></li>
+      <li class="principle-item"><div class="principle-num">2</div><div class="principle-body"><b>Two-Human-Core 팀 구조</b> — 5~7명 이내의 소규모 인간 팀은 전략 수립과 AI 감독에 집중. 무한 확장 가능한 AI 에이전트 군단이 모든 실행을 담당.</div></li>
+      <li class="principle-item"><div class="principle-num">3</div><div class="principle-body"><b>신호 기반 조정(Coordination via Signals)</b> — 관료주의적 회의·보고서 대신 표준화된 API나 이벤트 버스 같은 '신호'를 통해 비동기 협업. 의사결정 속도 극대화.</div></li>
+      <li class="principle-item"><div class="principle-num">4</div><div class="principle-body"><b>관측 가능성(Observability) 확보</b> — 조직 전체 상태와 성과를 실시간 대시보드로 통합. 문제 발생 시 즉각적 원인 파악 및 대응.</div></li>
+    </ul>
+  </div>
+
+  <!-- 8. 재무 모델 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <span class="section-title">AI Growth Buyout 재무 모델링</span>
+    </div>
+    <p>초기 상태(Year 0) 매출 $20M, EBITDA $3M(마진 15%)인 레거시 기업 인수 가정. AI 이식을 통한 5년 후 예측값.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>재무 항목</th><th>Year 0 (인수)</th><th>Year 3 (통합)</th><th>Year 5 (Exit)</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>매출(Revenue)</td><td>$20.0M</td><td>$24.8M</td><td class="g">$30.0M</td><td>연평균 성장률 10%</td></tr>
+          <tr><td>EBITDA</td><td>$3.0M</td><td>$7.7M</td><td class="g">$9.9M</td><td><b>3.3배 증가</b></td></tr>
+          <tr><td>EBITDA 마진</td><td>15%</td><td>31%</td><td class="g">33%</td><td><b>마진 2.2배 확대</b></td></tr>
+          <tr><td>기업 가치(EV)</td><td>$15.0M</td><td>$46.2M</td><td class="g">$79.2M</td><td>Exit 배수 8x (AI 프리미엄)</td></tr>
+          <tr><td>투자 수익률(IRR)</td><td>—</td><td>46%</td><td class="g">54%</td><td>시나리오 B 기준</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ibox">
+      <div class="ibox-label">■ 목표 벤치마크</div>
+      <div class="ibox-body">ROIC 20~30% 목표. <b>Constellation Software가 25년간 보여준 주가 150배 상승의 궤적을 AI 시대 버전으로 재현</b>하는 것. 안정적 플랫폼 수익(현금흐름) + 폭발적 벤처 수익(Exit)의 이중 방정식.</div>
+    </div>
+  </div>
+
+  <!-- 9. Risk -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <span class="section-title">4대 리스크 관리 원칙</span>
+    </div>
+
+    <div class="risk-grid">
+      <div class="risk-item">
+        <span class="risk-level crit">영향도 5 · 가능성 4</span>
+        <div class="risk-name">인수 통합 실패 (PMI Risk)</div>
+        <div class="risk-body">M&A의 50% 이상이 가치를 파괴. 조직 저항·문화 충돌이 치명적.</div>
+        <div class="risk-mit">→ 인수 전 100일 계획 수립, 기존 인력 재교육·고부가가치 자문 전환</div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-level high">영향도 4 · 가능성 3</span>
+        <div class="risk-name">AI 성능 저하·환각</div>
+        <div class="risk-body">모델 Drift·Hallucination이 비즈니스 신뢰도를 저해.</div>
+        <div class="risk-mit">→ Human-in-the-loop 체크포인트, 멀티 LLM 앙상블 접근법</div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-level crit">영향도 5 · 가능성 2</span>
+        <div class="risk-name">과도한 재무 레버리지</div>
+        <div class="risk-body">무리한 차입매수 → 금리 변동기 Thrasio식 파산 위험.</div>
+        <div class="risk-mit">→ 부채 비율 EBITDA 대비 3:1 이하, FCF 중심 보수적 성장</div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-level high">영향도 3 · 가능성 4</span>
+        <div class="risk-name">기술 종속성</div>
+        <div class="risk-body">특정 LLM 공급자 의존 → 서비스 중단·가격 인상 취약</div>
+        <div class="risk-mit">→ 멀티 LLM 전략, 오픈소스 모델 병행 활용</div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-level high">영향도 4 · 가능성 3</span>
+        <div class="risk-name">규제 및 윤리 리스크</div>
+        <div class="risk-body">EU AI Act 등 AI 규제 강화, 데이터 프라이버시 이슈.</div>
+        <div class="risk-mit">→ 초기부터 LegalOps 프레임워크 설계, AI 윤리 위원회 구성</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px;">리스크 점수 15점 이상 항목은 월간 단위 집중 리뷰. 모든 의사결정은 관측 가능성(Observability) 기반.</p>
+  </div>
+
+</main>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+  <div class="side-card">
+    <div class="side-head">문서 정보</div>
+    <div class="side-body">
+      <div class="kv-row"><span class="k">분류</span><span class="v acc">사업 기획 보고서</span></div>
+      <div class="kv-row"><span class="k">모델</span><span class="v">Founders Studio</span></div>
+      <div class="kv-row"><span class="k">전략</span><span class="v">AI Growth Buyout</span></div>
+      <div class="kv-row"><span class="k">대상</span><span class="v">레거시 중견·중소기업</span></div>
+      <div class="kv-row"><span class="k">핵심 유닛</span><span class="v acc">AI-Native Solopreneur</span></div>
+    </div>
+  </div>
+
+  <div class="side-card">
+    <div class="side-head">핵심 수치 비교</div>
+    <div class="side-body">
+      <div class="kv-row"><span class="k">시리즈A 진출률</span><span class="v green">72% vs 42%</span></div>
+      <div class="kv-row"><span class="k">시드→시리즈A</span><span class="v green">25.2개월 vs 56개월</span></div>
+      <div class="kv-row"><span class="k">IRR</span><span class="v green">53% vs 21.3%</span></div>
+      <div class="kv-row"><span class="k">시드 달성률</span><span class="v green">84%</span></div>
+      <div class="kv-row"><span class="k">MVP 비용</span><span class="v acc">$500~1,000</span></div>
+      <div class="kv-row"><span class="k">프로토타이핑</span><span class="v acc">48시간 이내</span></div>
+    </div>
+  </div>
+
+  <div class="side-card">
+    <div class="side-head">AI Growth Buyout 재무</div>
+    <div class="side-body">
+      <div class="kv-row"><span class="k">인수 규모(Year 0)</span><span class="v">$20M 매출</span></div>
+      <div class="kv-row"><span class="k">인건비 절감</span><span class="v acc">60% → 30%</span></div>
+      <div class="kv-row"><span class="k">EBITDA 성장</span><span class="v green">$3M → $9.9M</span></div>
+      <div class="kv-row"><span class="k">마진 확대</span><span class="v green">15% → 33%</span></div>
+      <div class="kv-row"><span class="k">EV (Year 5)</span><span class="v green">$79.2M</span></div>
+      <div class="kv-row"><span class="k">목표 IRR</span><span class="v acc">54%</span></div>
+    </div>
+  </div>
+
+  <div class="side-card">
+    <div class="side-head">3 Track 구조</div>
+    <div class="side-body">
+      <div class="kv-row"><span class="k">Track 1</span><span class="v acc">발굴·검증 (EIR)</span></div>
+      <div class="kv-row"><span class="k">Track 2</span><span class="v blue">개발·확립 (MVP+PMF)</span></div>
+      <div class="kv-row"><span class="k">Track 3</span><span class="v" style="color:var(--purple);">성장·확장 (Buyout)</span></div>
+      <div class="kv-row"><span class="k">수익 구조</span><span class="v">플랫폼 + Exit 이중</span></div>
+    </div>
+  </div>
+
+  <div class="side-card">
+    <div class="side-head">태그</div>
+    <div class="side-body">
+      <div class="tag-strip">
+        <span class="tag hot">경량문명</span>
+        <span class="tag hot">Founders Studio</span>
+        <span class="tag hot">AI Growth Buyout</span>
+        <span class="tag hot">Solopreneur</span>
+        <span class="tag">LaaS</span>
+        <span class="tag">거래비용이론</span>
+        <span class="tag">컴퍼니 빌더</span>
+        <span class="tag">Autonomous Company</span>
+        <span class="tag">Two-Human-Core</span>
+        <span class="tag">Brooks' Law</span>
+        <span class="tag">레거시 혁신</span>
+      </div>
+    </div>
+  </div>
+
+</aside>
+</div>
+
+<!-- SOURCE BAR -->
+<div class="source-bar">
+  <span>출처</span>
+  <span>AI 기반 레거시 산업 혁신 사업 기획.pdf</span>
+  <span>·</span>
+  <a href="http://www.thedailymoney.com/news/articleView.html?idxno=1116334" target="_blank">데일리머니 (한국 중소기업 위기)</a>
+  <span>·</span>
+  <a href="https://www.carrotglobalblog.com/2026-korean-enterprise-ai-utilization-status-debriefing-260312/" target="_blank">2026 한국기업 AI 활용 현황</a>
+  <span>·</span>
+  <a href="https://www.mk.co.kr/news/it/11961147" target="_blank">매경 AX클럽</a>
+  <span style="margin-left:auto;">GARAMwiki 사업현안</span>
+</div>
+
+</body>
+</html>

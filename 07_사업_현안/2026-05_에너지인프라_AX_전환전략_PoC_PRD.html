@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에너지 인프라 AX 전환전략 — AI 설계 기술 검증 용역 종합 기획서 PoC PRD | GARAMwiki</title>
+<style>
+  :root{
+    --bg:#0c0e14; --surface:#13161f; --surface2:#1a1e2a; --surface3:#222635;
+    --border:#2a2f3e; --text:#e2e8f0; --muted:#8892a4; --dim:#555f72;
+    --accent:#f97316; --accent2:#fb923c; --accent-bg:rgba(249,115,22,0.10);
+    --green:#10b981; --blue:#3b82f6; --purple:#a78bfa; --cyan:#06b6d4;
+    --red:#f43f5e; --yellow:#f59e0b;
+    --r:10px; --r-sm:6px; --transition:0.2s ease;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;line-height:1.7;font-size:15px}
+
+  /* ── NAV ── */
+  nav{position:sticky;top:0;z-index:100;background:rgba(12,14,20,0.92);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:16px;height:52px}
+  .nav-home{color:var(--accent);text-decoration:none;font-weight:700;font-size:15px;white-space:nowrap}
+  .nav-sep{color:var(--dim)}
+  .nav-cat{background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;
+    padding:3px 10px;border-radius:20px;border:1px solid rgba(249,115,22,0.3)}
+  .nav-title{color:var(--muted);font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-back{color:var(--muted);font-size:12px;text-decoration:none;white-space:nowrap;
+    padding:4px 12px;border:1px solid var(--border);border-radius:6px;transition:var(--transition)}
+  .nav-back:hover{color:var(--text);border-color:var(--accent)}
+
+  /* ── HERO ── */
+  .hero{padding:60px 24px 48px;max-width:1060px;margin:0 auto}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-bg);
+    border:1px solid rgba(249,115,22,0.3);border-radius:20px;padding:5px 14px;
+    color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:24px}
+  .hero-title{font-size:clamp(24px,4vw,38px);font-weight:800;line-height:1.25;margin-bottom:8px;
+    background:linear-gradient(135deg,#fff 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero-sub{font-size:16px;color:var(--muted);margin-bottom:28px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+  .meta-chip{background:var(--surface2);border:1px solid var(--border);border-radius:6px;
+    padding:5px 12px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .meta-chip span{color:var(--text);font-weight:600}
+
+  /* ── STATS ROW ── */
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;
+    max-width:1060px;margin:0 auto 40px;padding:0 24px}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:20px 18px;position:relative;overflow:hidden;transition:var(--transition)}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+  .stat-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+  .stat-value{font-size:26px;font-weight:800;color:var(--accent);line-height:1}
+  .stat-unit{font-size:13px;color:var(--muted);margin-top:4px}
+
+  /* ── SECTION LAYOUT ── */
+  .section{max-width:1060px;margin:0 auto 48px;padding:0 24px}
+  .section-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;
+    display:flex;align-items:center;gap:10px}
+  .section-title::before{content:'';width:4px;height:20px;background:var(--accent);border-radius:2px;flex-shrink:0}
+
+  /* ── GRID ── */
+  .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+
+  /* ── CARD ── */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;
+    transition:var(--transition);position:relative;overflow:hidden}
+  .card:hover{border-color:var(--accent);box-shadow:0 0 0 1px rgba(249,115,22,0.15)}
+  .card-icon{font-size:22px;margin-bottom:10px}
+  .card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+  .card-body{font-size:13px;color:var(--muted);line-height:1.6}
+
+  /* ── ENV CARDS ── */
+  .env-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:20px;border-left:3px solid}
+  .env-card.policy{border-color:var(--accent)}
+  .env-card.tech{border-color:var(--cyan)}
+  .env-card.industry{border-color:var(--green)}
+  .env-tag{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+    padding:2px 8px;border-radius:4px;margin-bottom:10px;display:inline-block}
+  .env-tag.policy{background:var(--accent-bg);color:var(--accent)}
+  .env-tag.tech{background:rgba(6,182,212,0.1);color:var(--cyan)}
+  .env-tag.industry{background:rgba(16,185,129,0.1);color:var(--green)}
+  .env-title{font-size:14px;font-weight:700;margin-bottom:10px}
+  .env-points{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .env-points li{font-size:12.5px;color:var(--muted);padding-left:14px;position:relative}
+  .env-points li::before{content:'›';position:absolute;left:0;color:var(--accent)}
+
+  /* ── PROBLEM FLOW ── */
+  .problem-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+  .prob-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:18px;border-top:3px solid var(--red);position:relative}
+  .prob-num{font-size:28px;font-weight:900;color:rgba(244,63,94,0.15);position:absolute;top:10px;right:14px}
+  .prob-label{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+  .prob-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
+  .prob-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+  /* ── TECH TRIO ── */
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+  .tech-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:22px;border-top:3px solid;transition:var(--transition)}
+  .tech-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+  .tech-card.onto{border-color:var(--accent)}
+  .tech-card.graph{border-color:var(--blue)}
+  .tech-card.pinn{border-color:var(--green)}
+  .tech-badge{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+    padding:3px 10px;border-radius:4px;margin-bottom:12px;display:inline-block}
+  .tech-card.onto .tech-badge{background:var(--accent-bg);color:var(--accent)}
+  .tech-card.graph .tech-badge{background:rgba(59,130,246,0.1);color:var(--blue)}
+  .tech-card.pinn .tech-badge{background:rgba(16,185,129,0.1);color:var(--green)}
+  .tech-title{font-size:15px;font-weight:700;margin-bottom:8px}
+  .tech-desc{font-size:12.5px;color:var(--muted);margin-bottom:14px;line-height:1.6}
+  .tech-metrics{display:flex;flex-direction:column;gap:8px}
+  .tech-metric{display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface2);border-radius:6px;padding:6px 10px}
+  .tech-metric .label{font-size:11px;color:var(--muted)}
+  .tech-metric .value{font-size:12px;font-weight:700;color:var(--text)}
+
+  /* ── DATA LIFECYCLE ── */
+  .lifecycle{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+  @media(max-width:700px){.lifecycle{grid-template-columns:1fr}}
+  .lc-stage{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);
+    padding:16px 12px;position:relative;text-align:center}
+  .lc-stage::after{content:'→';position:absolute;right:-12px;top:50%;transform:translateY(-50%);
+    color:var(--dim);font-size:16px;z-index:1}
+  .lc-stage:last-child::after{display:none}
+  .lc-num{font-size:10px;color:var(--dim);font-weight:600;margin-bottom:4px}
+  .lc-name{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:8px}
+  .lc-tool{font-size:10px;color:var(--cyan);background:rgba(6,182,212,0.1);
+    padding:2px 6px;border-radius:3px;margin-bottom:8px;display:inline-block}
+  .lc-issue{font-size:10.5px;color:var(--muted);line-height:1.5;text-align:left}
+  .lc-dot{display:inline-block;width:6px;height:6px;background:var(--red);border-radius:50%;margin-right:4px;vertical-align:middle}
+
+  /* ── ROADMAP ── */
+  .roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .rm-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px}
+  .rm-phase{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+    padding:3px 10px;border-radius:4px;margin-bottom:10px;display:inline-block}
+  .rm-phase.p1{background:var(--accent-bg);color:var(--accent);border:1px solid rgba(249,115,22,0.3)}
+  .rm-phase.p2{background:rgba(59,130,246,0.1);color:var(--blue);border:1px solid rgba(59,130,246,0.3)}
+  .rm-phase.p3{background:rgba(16,185,129,0.1);color:var(--green);border:1px solid rgba(16,185,129,0.3)}
+  .rm-title{font-size:15px;font-weight:700;margin-bottom:6px}
+  .rm-period{font-size:12px;color:var(--muted);margin-bottom:14px}
+  .rm-kpis{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+  .rm-kpi{display:flex;justify-content:space-between;align-items:center}
+  .rm-kpi .k-label{font-size:11.5px;color:var(--muted)}
+  .rm-kpi .k-val{font-size:13px;font-weight:700}
+  .rm-kpi .k-val.p1{color:var(--accent)}
+  .rm-kpi .k-val.p2{color:var(--blue)}
+  .rm-kpi .k-val.p3{color:var(--green)}
+  .rm-budget{font-size:12px;color:var(--dim);border-top:1px solid var(--border);padding-top:10px}
+  .rm-budget strong{color:var(--yellow)}
+
+  /* ── KPI MASTER TABLE ── */
+  .kpi-table{width:100%;border-collapse:collapse;font-size:13px}
+  .kpi-table th{background:var(--surface2);color:var(--muted);padding:10px 14px;
+    text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;
+    border-bottom:2px solid var(--border)}
+  .kpi-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+  .kpi-table tr:hover td{background:var(--surface2)}
+  .kpi-val{font-weight:700;padding:2px 8px;border-radius:4px;display:inline-block;font-size:12px}
+  .kpi-val.y1{background:var(--accent-bg);color:var(--accent)}
+  .kpi-val.y2{background:rgba(59,130,246,0.1);color:var(--blue)}
+  .kpi-val.y3{background:rgba(16,185,129,0.1);color:var(--green)}
+
+  /* ── FR CARDS ── */
+  .fr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .fr-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;
+    border-left:3px solid;transition:var(--transition)}
+  .fr-card:hover{transform:translateY(-2px)}
+  .fr-card.p0{border-left-color:var(--red)}
+  .fr-card.p1{border-left-color:var(--blue)}
+  .fr-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+  .fr-code{font-size:11px;font-weight:700;color:var(--dim);letter-spacing:.5px}
+  .fr-priority{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+  .fr-priority.p0{background:rgba(244,63,94,0.15);color:var(--red)}
+  .fr-priority.p1{background:rgba(59,130,246,0.1);color:var(--blue)}
+  .fr-title{font-size:14px;font-weight:700;margin-bottom:8px}
+  .fr-desc{font-size:12.5px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+  .fr-stack{display:flex;flex-wrap:wrap;gap:5px}
+  .fr-tag{font-size:10px;background:var(--surface3);color:var(--muted);
+    padding:2px 7px;border-radius:4px;border:1px solid var(--border)}
+  .fr-perf{font-size:11px;color:var(--cyan);margin-top:8px;font-style:italic}
+
+  /* ── ARCHITECTURE ── */
+  .arch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .arch-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:18px;border-top:3px solid;text-align:center}
+  .arch-card.l1{border-color:var(--accent)}
+  .arch-card.l2{border-color:var(--blue)}
+  .arch-card.l3{border-color:var(--purple)}
+  .arch-card.l4{border-color:var(--green)}
+  .arch-layer{font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px}
+  .arch-card.l1 .arch-layer{color:var(--accent)}
+  .arch-card.l2 .arch-layer{color:var(--blue)}
+  .arch-card.l3 .arch-layer{color:var(--purple)}
+  .arch-card.l4 .arch-layer{color:var(--green)}
+  .arch-name{font-size:13px;font-weight:700;margin-bottom:8px}
+  .arch-stack{font-size:11px;color:var(--cyan);margin-bottom:8px;font-style:italic}
+  .arch-role{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* ── BUDGET ── */
+  .budget-bars{display:flex;flex-direction:column;gap:10px}
+  .budget-row{display:flex;align-items:center;gap:12px}
+  .budget-label{width:120px;font-size:12px;color:var(--muted);text-align:right;flex-shrink:0}
+  .budget-bar-wrap{flex:1;background:var(--surface2);border-radius:4px;height:28px;position:relative;overflow:hidden}
+  .budget-bar{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;
+    font-size:12px;font-weight:700;color:#fff}
+  .budget-amt{font-size:12px;color:var(--muted);white-space:nowrap;width:80px;text-align:right;flex-shrink:0}
+
+  /* ── RISK TABLE ── */
+  .risk-table{width:100%;border-collapse:collapse;font-size:13px}
+  .risk-table th{background:var(--surface2);color:var(--muted);padding:10px 14px;
+    text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;
+    border-bottom:2px solid var(--border)}
+  .risk-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--muted)}
+  .risk-table tr:hover td{background:rgba(249,115,22,0.03)}
+  .risk-id{font-weight:700;color:var(--text)}
+  .severity-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+  .severity-high{background:rgba(244,63,94,0.15);color:var(--red)}
+  .severity-mid{background:rgba(245,158,11,0.15);color:var(--yellow)}
+  .severity-low{background:rgba(16,185,129,0.15);color:var(--green)}
+
+  /* ── PERSONA ── */
+  .persona-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .persona-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+  .persona-name{font-size:16px;font-weight:700;margin-bottom:4px}
+  .persona-role{font-size:12px;color:var(--accent);margin-bottom:12px}
+  .persona-row{display:flex;gap:8px;align-items:baseline;margin-bottom:6px}
+  .persona-key{font-size:11px;color:var(--dim);width:52px;flex-shrink:0}
+  .persona-val{font-size:12px;color:var(--muted)}
+  .persona-pain{font-size:12px;color:var(--red);margin-top:10px;line-height:1.5;
+    background:rgba(244,63,94,0.08);border-radius:6px;padding:8px 10px}
+  .persona-need{font-size:12px;color:var(--green);margin-top:8px;line-height:1.5;
+    background:rgba(16,185,129,0.08);border-radius:6px;padding:8px 10px}
+
+  /* ── SCADA TABLE ── */
+  .data-table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .data-table th{background:var(--surface2);color:var(--muted);padding:9px 12px;
+    text-align:left;font-size:11px;font-weight:600;border-bottom:2px solid var(--border)}
+  .data-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--muted)}
+  .data-table tr:hover td{background:var(--surface2)}
+
+  /* ── GANTT ── */
+  .gantt-wrap{overflow-x:auto}
+  .gantt{width:100%;border-collapse:collapse;font-size:11.5px;min-width:760px}
+  .gantt th{background:var(--surface2);color:var(--muted);padding:7px 10px;
+    text-align:center;border:1px solid var(--border);font-size:10.5px;font-weight:600}
+  .gantt td{border:1px solid var(--border);padding:6px 10px}
+  .gantt td:first-child{color:var(--text);font-size:12px;white-space:nowrap;background:var(--surface);font-weight:600}
+  .gantt-bar{background:linear-gradient(90deg,var(--accent),var(--accent2));
+    border-radius:3px;height:18px;display:flex;align-items:center;justify-content:center;
+    font-size:9px;color:#fff;font-weight:700}
+
+  /* ── SOURCE BAR ── */
+  .source-bar{border-top:1px solid var(--border);margin-top:64px;padding:24px;
+    max-width:1060px;margin-left:auto;margin-right:auto;
+    display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  .source-label{font-size:11px;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.6px}
+  .source-tag{font-size:11px;background:var(--surface2);color:var(--muted);
+    padding:3px 10px;border-radius:4px;border:1px solid var(--border)}
+  .source-separator{color:var(--dim);margin:0 8px}
+
+  /* ── DIVIDER ── */
+  .divider{height:1px;background:var(--border);max-width:1060px;margin:0 auto 40px;padding:0 24px}
+
+  /* ── PROGRESS BARS ── */
+  .progress-wrap{display:flex;flex-direction:column;gap:12px}
+  .progress-item{display:flex;flex-direction:column;gap:4px}
+  .progress-header{display:flex;justify-content:space-between;font-size:12px}
+  .progress-label{color:var(--muted)}
+  .progress-val{color:var(--text);font-weight:600}
+  .progress-track{background:var(--surface2);border-radius:4px;height:8px;overflow:hidden}
+  .progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+  /* util */
+  .highlight{color:var(--accent);font-weight:700}
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tag{font-size:11px;background:var(--surface3);color:var(--muted);padding:3px 9px;border-radius:4px;border:1px solid var(--border)}
+
+  @media(max-width:640px){
+    .stats-row{grid-template-columns:repeat(2,1fr)}
+    .lifecycle{grid-template-columns:1fr;gap:8px}
+    .lc-stage::after{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-home">GARAMwiki</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-cat">🏢 사업 현안</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">에너지 인프라 AX 전환전략 — AI 설계 기술 검증 용역 종합 기획서 PoC PRD</span>
+  <a href="../index.html" class="nav-back">← 목록</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🏗️ 사업 현안 · 대외비 · v2.0</div>
+  <h1 class="hero-title">에너지 인프라 AX 전환전략<br>AI 설계 기술 검증 용역</h1>
+  <p class="hero-sub">국가철도공단 전철전력 설계 분야 — 종합 기획서 및 PoC PRD v2.0 (2026-03)</p>
+  <div class="hero-meta">
+    <div class="meta-chip">📅 용역기간: <span>12개월 (365일)</span></div>
+    <div class="meta-chip">💰 총 사업비: <span>약 4억 9,960만원</span></div>
+    <div class="meta-chip">🏛️ 발주처: <span>국가철도공단</span></div>
+    <div class="meta-chip">📋 보안등급: <span>대외비</span></div>
+    <div class="meta-chip">🤖 핵심 기술: <span>Ontology · GraphRAG · PINN</span></div>
+    <div class="meta-chip">📊 단계: <span>시범(Y1) → 확산(Y2~3) → 고도화(Y4~6)</span></div>
+  </div>
+  <div class="tag-row">
+    <span class="tag">에너지인프라 AX</span>
+    <span class="tag">전철전력 설계</span>
+    <span class="tag">GraphRAG</span>
+    <span class="tag">PINN</span>
+    <span class="tag">지식그래프</span>
+    <span class="tag">SCADA 연계</span>
+    <span class="tag">수량산출 자동화</span>
+    <span class="tag">PoC PRD</span>
+    <span class="tag">국가철도공단</span>
+  </div>
+</div>
+
+<!-- STATS ROW -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-label">1단계 효율 목표</div>
+    <div class="stat-value">20%</div>
+    <div class="stat-unit">설계 검토 시간 단축</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">오류 탐지율 목표</div>
+    <div class="stat-value">80%</div>
+    <div class="stat-unit">Recall (1단계 기준)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">QTO 자동화 효과</div>
+    <div class="stat-value">90%</div>
+    <div class="stat-unit">수작업 시간 절감</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">PINN 연산 속도</div>
+    <div class="stat-value">87×</div>
+    <div class="stat-unit">수치해석 대비 가속</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">최종 ROI 목표</div>
+    <div class="stat-value">300%</div>
+    <div class="stat-unit">3단계(Y4~6) 기준</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">인건비 비율</div>
+    <div class="stat-value">59.7%</div>
+    <div class="stat-unit">2.98억 (직접비)</div>
+  </div>
+</div>
+
+<!-- SECTION 1: 사업 개요 -->
+<div class="section">
+  <div class="section-title">사업 목적 — 3대 전략 목표</div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-icon">🗺️</div>
+      <div class="card-title">AX 전환전략 수립</div>
+      <div class="card-body">전철전력 설비 전 생애주기 AI 전환 중장기 로드맵 수립. 단계별 실행계획·소요예산 도출. AI 전환의 체계적 추진 기반 확보.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">AI 설계 검증 시범 구축</div>
+      <div class="card-body">대표 공종 대상 AI 기반 설계 자동화 체계 시범 구축. 설계 검토 시간 단축 및 오류 탐지율 향상의 기술적 타당성 검증. <span class="highlight">업무 효율 20% 이상 개선</span>.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔄</div>
+      <div class="card-title">데이터 환류 체계 확립</div>
+      <div class="card-body">SCADA 운영 데이터의 설계 환류 시나리오 수립. 수량-단가-품셈 정합성 검증 체계 고도화. 경험적 설계 → 데이터 기반 설계로 전환.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: 거시 환경 -->
+<div class="section">
+  <div class="section-title">거시 환경 분석</div>
+  <div class="grid-3">
+    <div class="env-card policy">
+      <div class="env-tag policy">정책 환경</div>
+      <div class="env-title">탄소중립 + AI 전환 예산</div>
+      <ul class="env-points">
+        <li>2050 탄소중립: 교통 부문 97.1% 감축 목표, 철도가 저탄소 교통 핵심 역할</li>
+        <li>2026년 예산안: 총 728조원 규모 AI 전환 예산 제시 → AX 가속 동력</li>
+        <li>철도건설규칙·철도안전법 체계 하에서 설계·시공·운영 전 단계 기술 혁신 추진</li>
+        <li>본 과업: 전철전력 분야 AI 선도 시범사업으로 위치</li>
+      </ul>
+    </div>
+    <div class="env-card tech">
+      <div class="env-tag tech">기술 환경</div>
+      <div class="env-title">RAG · 온톨로지 · PINN 성숙</div>
+      <ul class="env-points">
+        <li>2024~25: RAG 기술이 연구→산업 현장 적용 변곡점. Microsoft GraphRAG 오픈소스화</li>
+        <li>지식그래프 기반 RAG: 구조적 관계 추론 정확도 벡터 RAG 대비 유의미 향상(Ghosh & Mittal, 2025)</li>
+        <li>PINN: 수치해석 대비 최대 87배 빠른 연산으로 전력 계통 동적 상태 결정(Misyris et al.)</li>
+        <li>2019년 이후 PINN 관련 논문 수 급증. 에너지 3대 영역 적용 검증</li>
+      </ul>
+    </div>
+    <div class="env-card industry">
+      <div class="env-tag industry">산업 환경</div>
+      <div class="env-title">QTO 자동화 확산</div>
+      <ul class="env-points">
+        <li>BIM 기반 자동 QTO: 수작업 대비 최대 90% 시간 절감 보고</li>
+        <li>Civils.ai 실적: 38명 팀 12개월 운용 → 연간 2.8개월분 전일근무 절감</li>
+        <li>AI 에이전트 활용 QA 자동화가 새로운 산업 표준으로 부상</li>
+        <li>NLP 앙상블 모델: 수량산출서↔원가지수 자동 매칭 정확도 향상(Ngo et al., 2025)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: 구조적 문제 -->
+<div class="section">
+  <div class="section-title">전철전력 설계 업무의 구조적 문제 4가지</div>
+  <div class="problem-flow">
+    <div class="prob-item">
+      <div class="prob-num">1</div>
+      <div class="prob-label">데이터 단절</div>
+      <div class="prob-title">설계~운영 정보 고립</div>
+      <div class="prob-desc">CAD·Excel·HWP·SCADA가 각각 독립 운영. 단계 간 데이터 연속성 없음. 수작업 교차검증에 과도한 인력 투입.</div>
+    </div>
+    <div class="prob-item">
+      <div class="prob-num">2</div>
+      <div class="prob-label">인적 오류 내재</div>
+      <div class="prob-title">반복적 실수 구조</div>
+      <div class="prob-desc">mm↔m·EA↔SET 단위 환산 오류, 수량 중복 계상, 품셈 공종부호 부적용이 반복 발생. 검증 접점 다수 존재.</div>
+    </div>
+    <div class="prob-item">
+      <div class="prob-num">3</div>
+      <div class="prob-label">설계 환류 부재</div>
+      <div class="prob-title">운영 데이터 미활용</div>
+      <div class="prob-desc">SCADA의 실제 부하 데이터·가동률·고장 이력이 설계에 환류되지 않음. 경험적 안전계수 의존 → 과설계·과소설계 리스크.</div>
+    </div>
+    <div class="prob-item">
+      <div class="prob-num">4</div>
+      <div class="prob-label">검증 체계 한계</div>
+      <div class="prob-title">개인 역량 의존</div>
+      <div class="prob-desc">설계 검토가 숙련 전문가의 개인 역량에 크게 의존. 체계적 규칙 부재 → 검토 일관성·재현성 미확보.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: 데이터 생애주기 -->
+<div class="section">
+  <div class="section-title">전 생애주기 데이터 흐름 — 5단계 현황</div>
+  <div class="lifecycle">
+    <div class="lc-stage">
+      <div class="lc-num">01</div>
+      <div class="lc-name">설계</div>
+      <div class="lc-tool">CAD · Excel · HWP</div>
+      <div class="lc-issue"><span class="lc-dot"></span>시스템 간 데이터 비연동<br><span class="lc-dot"></span>수작업 교차검증 필요</div>
+    </div>
+    <div class="lc-stage">
+      <div class="lc-num">02</div>
+      <div class="lc-name">조달</div>
+      <div class="lc-tool">조달시스템 DB</div>
+      <div class="lc-issue"><span class="lc-dot"></span>설계 데이터 수동 매핑<br><span class="lc-dot"></span>규격 불일치 빈발</div>
+    </div>
+    <div class="lc-stage">
+      <div class="lc-num">03</div>
+      <div class="lc-name">시공</div>
+      <div class="lc-tool">MS Project · DWG</div>
+      <div class="lc-issue"><span class="lc-dot"></span>설계 변경 반영 지연<br><span class="lc-dot"></span>버전 관리 미흡</div>
+    </div>
+    <div class="lc-stage">
+      <div class="lc-num">04</div>
+      <div class="lc-name">운영</div>
+      <div class="lc-tool">SCADA · EMS</div>
+      <div class="lc-issue"><span class="lc-dot"></span>설계 환류 체계 부재<br><span class="lc-dot"></span>데이터 접근성 제한</div>
+    </div>
+    <div class="lc-stage">
+      <div class="lc-num">05</div>
+      <div class="lc-name">유지관리</div>
+      <div class="lc-tool">유지관리시스템</div>
+      <div class="lc-issue"><span class="lc-dot"></span>운영 데이터와 단절<br><span class="lc-dot"></span>예방보전 미흡</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: 핵심 AI 기술 -->
+<div class="section">
+  <div class="section-title">핵심 AI 기술 3종 — 유기적 결합 아키텍처</div>
+  <div class="tech-grid">
+    <div class="tech-card onto">
+      <div class="tech-badge">Ontology</div>
+      <div class="tech-title">온톨로지 기반 지식 DB</div>
+      <div class="tech-desc">OWL로 도메인 개념·속성·관계를 형식화. 자동 추론(Reasoning)과 논리적 일관성 검증 지원. HyDRA 프레임워크(2025)로 AI 에이전트 간 합의를 통해 자동 구축.</div>
+      <div class="tech-metrics">
+        <div class="tech-metric"><span class="label">핵심 클래스</span><span class="value">설비·자재·도면·수량·품셈·기준</span></div>
+        <div class="tech-metric"><span class="label">구축 방법</span><span class="value">Top-down + Bottom-up Hybrid</span></div>
+        <div class="tech-metric"><span class="label">구축 단계</span><span class="value">CQ정의 → 설계 → 인스턴스화 → 검증</span></div>
+        <div class="tech-metric"><span class="label">적용 근거</span><span class="value">Kaisera et al. (2025) HyDRA</span></div>
+      </div>
+    </div>
+    <div class="tech-card graph">
+      <div class="tech-badge">GraphRAG</div>
+      <div class="tech-title">지식그래프 기반 검색증강생성</div>
+      <div class="tech-desc">다단계 관계(Multi-hop) 추적으로 의미 연결 정보 종합 검색. 벡터 기반 RAG 대비 구조적 관계 추론 정확도 유의미 향상. Neo4j + ChromaDB 3중 구조.</div>
+      <div class="tech-metrics">
+        <div class="tech-metric"><span class="label">저장소</span><span class="value">Neo4j + ChromaDB + PostgreSQL</span></div>
+        <div class="tech-metric"><span class="label">질의 방식</span><span class="value">Cypher + 벡터 검색 동시 처리</span></div>
+        <div class="tech-metric"><span class="label">주요 시나리오</span><span class="value">규격검증·수량추적·오류영향분석</span></div>
+        <div class="tech-metric"><span class="label">적용 근거</span><span class="value">Ghosh & Mittal (2025) Frontiers AI</span></div>
+      </div>
+    </div>
+    <div class="tech-card pinn">
+      <div class="tech-badge">PINN</div>
+      <div class="tech-title">물리정보 인공신경망</div>
+      <div class="tech-desc">물리 법칙(PDE)을 손실함수에 통합. 제한된 데이터에서도 물리적으로 타당한 예측 수행. 전력 계통·배터리·재생에너지 3대 영역 검증 완료(2026 ScienceDirect 체계적 분석).</div>
+      <div class="tech-metrics">
+        <div class="tech-metric"><span class="label">연산 속도</span><span class="value">수치해석 대비 최대 87배 빠름</span></div>
+        <div class="tech-metric"><span class="label">적용 영역</span><span class="value">용량산정·부하예측·전압강하·RUL</span></div>
+        <div class="tech-metric"><span class="label">적용 단계</span><span class="value">2~3단계 (확산·고도화)</span></div>
+        <div class="tech-metric"><span class="label">적용 근거</span><span class="value">Misyris et al. (2019) arXiv</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px;border-left:3px solid var(--purple)">
+    <div class="card-title" style="color:var(--purple);margin-bottom:6px">⚡ 기술 간 연계 시너지</div>
+    <div class="card-body">온톨로지가 도메인 지식의 <strong>구조적 골격</strong>을 제공 → 지식그래프가 실제 설계 데이터를 <strong>인스턴스화</strong> → GraphRAG가 이 구조화된 지식을 <strong>LLM 추론에 활용</strong> → PINN이 물리 법칙에 근거한 <strong>수치적 검증</strong>으로 AI 추론의 물리적 타당성 보장. 텍스트 정보(온톨로지·GraphRAG)와 수치 정보(PINN)를 동시에 검증하는 <span class="highlight">다차원 설계 검증 체계</span> 실현.</div>
+  </div>
+</div>
+
+<!-- SECTION 6: 추진 로드맵 -->
+<div class="section">
+  <div class="section-title">3단계 추진 로드맵</div>
+  <div class="roadmap">
+    <div class="rm-card">
+      <div class="rm-phase p1">Phase 1 — 시범</div>
+      <div class="rm-title">기술 타당성 검증</div>
+      <div class="rm-period">Year 1 (12개월) | 약 4억 9,960만원</div>
+      <div class="rm-kpis">
+        <div class="rm-kpi"><span class="k-label">설계 검토 단축</span><span class="k-val p1">20%</span></div>
+        <div class="rm-kpi"><span class="k-label">오류 탐지율 Recall</span><span class="k-val p1">80%</span></div>
+        <div class="rm-kpi"><span class="k-label">정합성 탐지율</span><span class="k-val p1">85%</span></div>
+        <div class="rm-kpi"><span class="k-label">SUS 사용성 점수</span><span class="k-val p1">70점</span></div>
+        <div class="rm-kpi"><span class="k-label">SCADA 환류 항목</span><span class="k-val p1">3개</span></div>
+      </div>
+      <div class="rm-budget">핵심 산출물: PoC 알파·베타, 검증결과보고서, AX 마스터플랜</div>
+    </div>
+    <div class="rm-card">
+      <div class="rm-phase p2">Phase 2 — 확산</div>
+      <div class="rm-title">적용 범위 확대</div>
+      <div class="rm-period">Year 2~3 (2년) | 약 <strong style="color:var(--yellow)">8억원</strong> 추정</div>
+      <div class="rm-kpis">
+        <div class="rm-kpi"><span class="k-label">설계 검토 단축</span><span class="k-val p2">40%</span></div>
+        <div class="rm-kpi"><span class="k-label">오류 탐지율 Recall</span><span class="k-val p2">90%</span></div>
+        <div class="rm-kpi"><span class="k-label">전 공종 적용률</span><span class="k-val p2">70%+</span></div>
+        <div class="rm-kpi"><span class="k-label">SUS 사용성 점수</span><span class="k-val p2">78점</span></div>
+        <div class="rm-kpi"><span class="k-label">ROI</span><span class="k-val p2">150%</span></div>
+      </div>
+      <div class="rm-budget">전 공종 확대 + 설계-시공-운영 통합 플랫폼 + SCADA 본격 연계</div>
+    </div>
+    <div class="rm-card">
+      <div class="rm-phase p3">Phase 3 — 고도화</div>
+      <div class="rm-title">자율 설계 검증</div>
+      <div class="rm-period">Year 4~6 (3년) | 약 <strong style="color:var(--yellow)">12억원</strong> 추정</div>
+      <div class="rm-kpis">
+        <div class="rm-kpi"><span class="k-label">설계 검토 단축</span><span class="k-val p3">60%</span></div>
+        <div class="rm-kpi"><span class="k-label">오류 탐지율 Recall</span><span class="k-val p3">95%</span></div>
+        <div class="rm-kpi"><span class="k-label">설계 자동화율</span><span class="k-val p3">50%+</span></div>
+        <div class="rm-kpi"><span class="k-label">SUS 사용성 점수</span><span class="k-val p3">85점</span></div>
+        <div class="rm-kpi"><span class="k-label">ROI</span><span class="k-val p3">300%</span></div>
+      </div>
+      <div class="rm-budget">PINN 기반 물리 검증 통합 + 디지털 트윈 연계 + 실시간 설계 최적화</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: KPI 마스터 테이블 -->
+<div class="section">
+  <div class="section-title">성과 평가 프레임워크 — KPI 마스터표</div>
+  <div style="overflow-x:auto">
+    <table class="kpi-table">
+      <thead>
+        <tr>
+          <th>평가 영역</th>
+          <th>핵심 성과 지표 (KPI)</th>
+          <th>1단계 목표</th>
+          <th>2단계 목표</th>
+          <th>3단계 목표</th>
+          <th>측정 방법</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>설계 효율</td>
+          <td>설계 검토 소요 시간 단축률</td>
+          <td><span class="kpi-val y1">20%</span></td>
+          <td><span class="kpi-val y2">40%</span></td>
+          <td><span class="kpi-val y3">60%</span></td>
+          <td style="color:var(--muted)">동일 과업 Before/After 비교</td>
+        </tr>
+        <tr>
+          <td>오류 탐지</td>
+          <td>인적 오류 탐지율 (Recall)</td>
+          <td><span class="kpi-val y1">80%</span></td>
+          <td><span class="kpi-val y2">90%</span></td>
+          <td><span class="kpi-val y3">95%</span></td>
+          <td style="color:var(--muted)">기지 오류 샘플 기반</td>
+        </tr>
+        <tr>
+          <td>탐지 정밀도</td>
+          <td>오류 탐지 정밀도 (Precision)</td>
+          <td><span class="kpi-val y1">85%</span></td>
+          <td><span class="kpi-val y2">90%</span></td>
+          <td><span class="kpi-val y3">95%</span></td>
+          <td style="color:var(--muted)">False Positive율 측정</td>
+        </tr>
+        <tr>
+          <td>정합성</td>
+          <td>수량-단가-품셈 불일치 탐지율</td>
+          <td><span class="kpi-val y1">85%</span></td>
+          <td><span class="kpi-val y2">93%</span></td>
+          <td><span class="kpi-val y3">97%</span></td>
+          <td style="color:var(--muted)">교차 검증 결과 분석</td>
+        </tr>
+        <tr>
+          <td>사용성</td>
+          <td>현업 실무자 SUS 점수</td>
+          <td><span class="kpi-val y1">70점</span></td>
+          <td><span class="kpi-val y2">78점</span></td>
+          <td><span class="kpi-val y3">85점</span></td>
+          <td style="color:var(--muted)">표준 사용성 척도(10문항)</td>
+        </tr>
+        <tr>
+          <td>데이터 활용</td>
+          <td>SCADA 데이터 설계 환류 항목 수</td>
+          <td><span class="kpi-val y1">3개</span></td>
+          <td><span class="kpi-val y2">7개</span></td>
+          <td><span class="kpi-val y3">12개</span></td>
+          <td style="color:var(--muted)">활용 사례 건수</td>
+        </tr>
+        <tr>
+          <td>비용 효과</td>
+          <td>ROI (투자수익률)</td>
+          <td><span class="kpi-val y1">—</span></td>
+          <td><span class="kpi-val y2">150%</span></td>
+          <td><span class="kpi-val y3">300%</span></td>
+          <td style="color:var(--muted)">절감 비용 / 투자 비용</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 8: PoC 기능 요구사항 -->
+<div class="section">
+  <div class="section-title">PoC 기능 요구사항 (FR) — 6대 핵심 기능</div>
+  <div class="fr-grid">
+    <div class="fr-card p0">
+      <div class="fr-header">
+        <div class="fr-code">FR-01</div>
+        <div class="fr-priority p0">P0 Must-have</div>
+      </div>
+      <div class="fr-title">설계 문서 데이터 추출 엔진</div>
+      <div class="fr-desc">CAD 도면(DWG/DXF), 수량산출서(XLS), 시방서(HWP/PDF) 등 이질적 형식에서 핵심 데이터 자동 추출. 전체 시스템의 데이터 입력 계층.</div>
+      <div class="fr-stack">
+        <span class="fr-tag">ezdxf</span><span class="fr-tag">openpyxl</span><span class="fr-tag">Tesseract OCR</span><span class="fr-tag">CLOVA OCR</span><span class="fr-tag">Apache Tika</span><span class="fr-tag">LLM Few-shot</span>
+      </div>
+      <div class="fr-perf">목표: 인식률 90%+, 도면당 처리 3분 이내</div>
+    </div>
+    <div class="fr-card p0">
+      <div class="fr-header">
+        <div class="fr-code">FR-02</div>
+        <div class="fr-priority p0">P0 Must-have</div>
+      </div>
+      <div class="fr-title">자재 표준규격 자동 매칭 엔진</div>
+      <div class="fr-desc">추출된 자재 정보를 국가철도공단 자재구매 표준규격 DB와 자동 매칭. 정확·퍼지·의미 매칭 3단계 + 불일치 진단 + 대체 규격 추천.</div>
+      <div class="fr-stack">
+        <span class="fr-tag">편집 거리</span><span class="fr-tag">동의어 사전</span><span class="fr-tag">온톨로지 추론</span><span class="fr-tag">임베딩 유사도</span><span class="fr-tag">지식그래프</span>
+      </div>
+      <div class="fr-perf">목표: 퍼지 매칭 85%+, 의미 매칭 Recall 80%+</div>
+    </div>
+    <div class="fr-card p0">
+      <div class="fr-header">
+        <div class="fr-code">FR-03</div>
+        <div class="fr-priority p0">P0 Must-have</div>
+      </div>
+      <div class="fr-title">수량 정합성 검증 규칙 엔진</div>
+      <div class="fr-desc">도면↔수량산출서 수량 일치성 검증. 단위 환산 오류(mm↔m, EA↔SET), 누락·중복 계상, 여유율 적정성 자동 탐지. 6대 검증 규칙 유형.</div>
+      <div class="fr-stack">
+        <span class="fr-tag">Python 규칙엔진</span><span class="fr-tag">SymPy</span><span class="fr-tag">Pint(단위환산)</span><span class="fr-tag">ML 이상탐지</span>
+      </div>
+      <div class="fr-perf">목표: 수식 인식률 90%, 오류 탐지 F1 0.85+</div>
+    </div>
+    <div class="fr-card p1">
+      <div class="fr-header">
+        <div class="fr-code">FR-04</div>
+        <div class="fr-priority p1">P1 Should-have</div>
+      </div>
+      <div class="fr-title">표준품셈 공종부호 연계 검증</div>
+      <div class="fr-desc">수량산출서 공종명을 표준품셈(전기·통신 포함) 공종부호와 자동 매칭. 적용 조건 부합성 검증. 미연계 항목 식별·대체 품셈 추천.</div>
+      <div class="fr-stack">
+        <span class="fr-tag">GraphRAG 매칭</span><span class="fr-tag">NLP 유사도</span><span class="fr-tag">온톨로지 제약</span><span class="fr-tag">LLM 추론</span>
+      </div>
+      <div class="fr-perf">목표: 매칭 정확도 80%, 미연계 탐지율 90%</div>
+    </div>
+    <div class="fr-card p1">
+      <div class="fr-header">
+        <div class="fr-code">FR-05</div>
+        <div class="fr-priority p1">P1 Should-have</div>
+      </div>
+      <div class="fr-title">AI 검증 결과 대시보드</div>
+      <div class="fr-desc">적합·주의·부적합 3단계 판정 결과를 역할별(설계 담당자·검토자·감독자)로 시각화. 통계 분석, PDF/Excel 보고서 자동 생성.</div>
+      <div class="fr-stack">
+        <span class="fr-tag">Next.js</span><span class="fr-tag">React</span><span class="fr-tag">Chart.js</span><span class="fr-tag">PDFMake</span><span class="fr-tag">WebSocket</span>
+      </div>
+      <div class="fr-perf">목표: 대시보드 로딩 3초 이내</div>
+    </div>
+    <div class="fr-card p1">
+      <div class="fr-header">
+        <div class="fr-code">FR-06</div>
+        <div class="fr-priority p1">P1 Should-have</div>
+      </div>
+      <div class="fr-title">검증 판단 근거 자동 제시 (XAI)</div>
+      <div class="fr-desc">AI 판단 근거가 되는 원천 문서(도면·시방서·설계 기준)를 자동 추적·제시. 도면 영역 하이라이트, 판단 경로 그래프 시각화, 신뢰도 등급 표시.</div>
+      <div class="fr-stack">
+        <span class="fr-tag">GraphRAG 관계추적</span><span class="fr-tag">좌표 기반 매핑</span><span class="fr-tag">서브그래프 시각화</span>
+      </div>
+      <div class="fr-perf">과업지시서 '판단 근거 도면·시방서 자동 제시' 요건 직접 구현</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9: 4계층 아키텍처 -->
+<div class="section">
+  <div class="section-title">PoC 시스템 — 4계층 아키텍처</div>
+  <div class="arch-grid">
+    <div class="arch-card l1">
+      <div class="arch-layer">Layer 1 — 데이터 수집</div>
+      <div class="arch-name">문서 업로더 · OCR · 파서</div>
+      <div class="arch-stack">FastAPI · ezdxf · openpyxl · Tesseract · Tika</div>
+      <div class="arch-role">이질적 형식의 설계 문서를 구조화된 데이터로 변환. REST API 통신.</div>
+    </div>
+    <div class="arch-card l2">
+      <div class="arch-layer">Layer 2 — 지식 관리</div>
+      <div class="arch-name">온톨로지 · 지식그래프 DB · 벡터 DB</div>
+      <div class="arch-stack">Neo4j · Protégé · ChromaDB · PostgreSQL</div>
+      <div class="arch-role">도메인 지식의 구조화된 저장·검색·추론 기반 제공. Bolt/HTTP 통신.</div>
+    </div>
+    <div class="arch-card l3">
+      <div class="arch-layer">Layer 3 — AI 추론</div>
+      <div class="arch-name">GraphRAG · 규칙 엔진 · LLM · 매칭 엔진</div>
+      <div class="arch-stack">LangChain · LlamaIndex · SymPy · Pint · LLM API</div>
+      <div class="arch-role">구조적 검색·규칙 기반 검증·AI 추론을 통한 검증 실행. gRPC/REST.</div>
+    </div>
+    <div class="arch-card l4">
+      <div class="arch-layer">Layer 4 — UI</div>
+      <div class="arch-name">대시보드 · 검증 뷰 · 보고서 생성</div>
+      <div class="arch-stack">Next.js · React · Chart.js · PDFMake</div>
+      <div class="arch-role">사용자 역할에 맞는 시각화·상호작용 인터페이스 제공. WebSocket/REST.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 10: 사용자 페르소나 -->
+<div class="section">
+  <div class="section-title">사용자 페르소나 — 현업 3인</div>
+  <div class="persona-grid">
+    <div class="persona-card">
+      <div class="persona-name">👷 김설계</div>
+      <div class="persona-role">전철전력 설계 담당자</div>
+      <div class="persona-row"><span class="persona-key">경력</span><span class="persona-val">7년</span></div>
+      <div class="persona-row"><span class="persona-key">기술 수준</span><span class="persona-val">CAD/Excel 능숙, AI 초보</span></div>
+      <div class="persona-pain">😰 수량산출 시 교차검증에 과도한 시간 소요. 단순 실수에 대한 불안감 상존.</div>
+      <div class="persona-need">✅ 자동 검증으로 검토 부담 경감, 누락·오류 방지 도구 필요</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-name">🔍 박검토</div>
+      <div class="persona-role">설계 검토 책임자</div>
+      <div class="persona-row"><span class="persona-key">경력</span><span class="persona-val">15년</span></div>
+      <div class="persona-row"><span class="persona-key">기술 수준</span><span class="persona-val">도메인 전문가, 시스템 보통</span></div>
+      <div class="persona-pain">😰 검토 범위가 넓어 중요 오류를 놓칠 우려. 검토 근거 문서화가 번거로움.</div>
+      <div class="persona-need">✅ 체계적 검증 보고서, 우선순위 기반 검토 지원 필요</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-name">👔 이감독</div>
+      <div class="persona-role">과업 감독관</div>
+      <div class="persona-row"><span class="persona-key">경력</span><span class="persona-val">20년</span></div>
+      <div class="persona-row"><span class="persona-key">기술 수준</span><span class="persona-val">관리자 수준, 대시보드 선호</span></div>
+      <div class="persona-pain">😰 설계 품질 현황을 정량적으로 파악하기 어려움.</div>
+      <div class="persona-need">✅ 품질 지표 대시보드, 진행 현황 모니터링 도구 필요</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 11: SCADA 데이터 연계 -->
+<div class="section">
+  <div class="section-title">SCADA 설계 환류 — 데이터 연계 전략</div>
+  <div style="overflow-x:auto">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>데이터 항목</th>
+          <th>수집 주기</th>
+          <th>형식</th>
+          <th>설계 활용 시나리오</th>
+          <th>품질 기준</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--text);font-weight:600">피크 부하 전류</td>
+          <td>실시간(1초)/일간</td>
+          <td>시계열 DB</td>
+          <td>변압기 용량 산정 검증, 급전거리 최적화</td>
+          <td>정확도 ±2%, 결측률 0.5% 미만</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">전압 변동 프로파일</td>
+          <td>10분 평균/피크</td>
+          <td>시계열 DB</td>
+          <td>전압강하 설계 기준 검증, 보조급전소 배치</td>
+          <td>연속성 99.5%, 해상도 0.1kV</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">변전 설비 가동률</td>
+          <td>시간 단위 통계</td>
+          <td>관계형 DB</td>
+          <td>이중화 설계 기준 수립, 용량 여유도 산정</td>
+          <td>가용률 99.9%, 오차 ±0.1%</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">고장·경보 이력</td>
+          <td>이벤트 기반</td>
+          <td>로그 DB</td>
+          <td>설비 신뢰도 평가, 보호 협조 설계 검증</td>
+          <td>누락률 1% 미만</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">전력량 데이터</td>
+          <td>15분/시간/일간</td>
+          <td>시계열 DB</td>
+          <td>에너지 효율 설계, 회생제동 설계 최적화</td>
+          <td>계량 정확도 Class 0.5</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">환경 데이터</td>
+          <td>30분 간격</td>
+          <td>시계열 DB</td>
+          <td>설비 환경 조건 설계, 냉각 용량 산정</td>
+          <td>센서 교정 주기 연 1회</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 12: 예산 구조 -->
+<div class="section">
+  <div class="section-title">사업비 구조 — 총 499,604,942원</div>
+  <div class="budget-bars">
+    <div class="budget-row">
+      <div class="budget-label">인건비</div>
+      <div class="budget-bar-wrap">
+        <div class="budget-bar" style="width:59.7%;background:linear-gradient(90deg,var(--accent),var(--accent2))">59.7%</div>
+      </div>
+      <div class="budget-amt">2억 9,848만</div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-label">직접경비</div>
+      <div class="budget-bar-wrap">
+        <div class="budget-bar" style="width:10.8%;background:var(--blue)">10.8%</div>
+      </div>
+      <div class="budget-amt">5,400만</div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-label">간접비</div>
+      <div class="budget-bar-wrap">
+        <div class="budget-bar" style="width:12%;background:var(--purple)">12.0%</div>
+      </div>
+      <div class="budget-amt">5,992만</div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-label">이윤</div>
+      <div class="budget-bar-wrap">
+        <div class="budget-bar" style="width:8.4%;background:var(--green)">8.4%</div>
+      </div>
+      <div class="budget-amt">4,179만</div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-label">부가가치세</div>
+      <div class="budget-bar-wrap">
+        <div class="budget-bar" style="width:9.1%;background:var(--yellow)">9.1%</div>
+      </div>
+      <div class="budget-amt">4,542만</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:16px">
+    <div class="card" style="text-align:center">
+      <div class="stat-label">인건비 구성</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px">특급기술자 1인 · 고급기술자 2인<br>중급기술자 1인 · 초급기술자 1인</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="stat-label">직접경비 포함</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px">여비·전산처리·자문료<br>워크숍·인쇄·연구활동비</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="stat-label">보고 체계</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px">착수·월간·분기·중간·최종<br>총 5종 공식 보고</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 13: 구현 일정 (간트) -->
+<div class="section">
+  <div class="section-title">6단계 구현 일정 — 12개월 로드맵</div>
+  <div class="gantt-wrap">
+    <table class="gantt">
+      <thead>
+        <tr>
+          <th style="text-align:left;width:150px">단계</th>
+          <th>M1</th><th>M2</th><th>M3</th><th>M4</th><th>M5</th><th>M6</th>
+          <th>M7</th><th>M8</th><th>M9</th><th>M10</th><th>M11</th><th>M12</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>① 착수·분석</td>
+          <td><div class="gantt-bar">●</div></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td>② 기반 구축</td>
+          <td></td><td></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td>③ 핵심 기능</td>
+          <td></td><td></td><td></td><td></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td>④ 통합·시범</td>
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td>⑤ 개선·검증</td>
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td><div class="gantt-bar">●</div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>⑥ 교육·인계</td>
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          <td><div class="gantt-bar">●</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="font-size:11px;color:var(--dim);margin-top:8px">마일스톤: ①대표 공종 확정 ②파이프라인 E2E 동작 ③핵심 3기능 독립 동작 ④현업 5건+ 처리 완료 ⑤KPI 목표치 달성 ⑥교육 완료·최종 승인</div>
+</div>
+
+<!-- SECTION 14: 리스크 매트릭스 -->
+<div class="section">
+  <div class="section-title">리스크 관리 매트릭스 — 6대 리스크</div>
+  <div style="overflow-x:auto">
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>리스크</th>
+          <th>영향</th>
+          <th>확률</th>
+          <th>대응 전략</th>
+          <th>모니터링 지표</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="risk-id">R1</td>
+          <td style="color:var(--text)">설계 문서 비정형성 — 프로젝트별 양식·구조 차이</td>
+          <td><span class="severity-badge severity-high">상</span></td>
+          <td><span class="severity-badge severity-high">상</span></td>
+          <td>문서 유형별 파싱 템플릿 라이브러리 구축, 적응형 파서 개발</td>
+          <td>파싱 성공률 ≥ 90%</td>
+        </tr>
+        <tr>
+          <td class="risk-id">R2</td>
+          <td style="color:var(--text)">데이터 품질 부족 — OCR 오류, 불완전 문서</td>
+          <td><span class="severity-badge severity-high">상</span></td>
+          <td><span class="severity-badge severity-mid">중</span></td>
+          <td>전처리 파이프라인 강화, 품질 기준 사전 합의, 수동 보정 인터페이스</td>
+          <td>데이터 품질 점수 ≥ 0.85</td>
+        </tr>
+        <tr>
+          <td class="risk-id">R3</td>
+          <td style="color:var(--text)">현업 사용자 저항감 — 업무 프로세스 변경 부담</td>
+          <td><span class="severity-badge severity-mid">중</span></td>
+          <td><span class="severity-badge severity-mid">중</span></td>
+          <td>M2부터 조기 참여 유도, 단계적 도입, 챔피언 사용자 육성</td>
+          <td>SUS ≥ 70점</td>
+        </tr>
+        <tr>
+          <td class="risk-id">R4</td>
+          <td style="color:var(--text)">SCADA 연계 지연 — 접근 권한·데이터 형식 문제</td>
+          <td><span class="severity-badge severity-mid">중</span></td>
+          <td><span class="severity-badge severity-mid">중</span></td>
+          <td>Mock 데이터 기반 개발 선행, 연계 인터페이스 표준화, 조기 기술 협의(M1)</td>
+          <td>연계 API 가용성</td>
+        </tr>
+        <tr>
+          <td class="risk-id">R5</td>
+          <td style="color:var(--text)">LLM 환각(Hallucination) 위험 — 검증 오류 유발</td>
+          <td><span class="severity-badge severity-high">상</span></td>
+          <td><span class="severity-badge severity-mid">중</span></td>
+          <td>RAG 기반 근거 강제, 규칙 엔진↔LLM 교차 검증, 신뢰도 점수 필터링</td>
+          <td>환각 발생률 &lt; 5%</td>
+        </tr>
+        <tr>
+          <td class="risk-id">R6</td>
+          <td style="color:var(--text)">보안 사고 — 설계 문서 데이터 유출</td>
+          <td><span class="severity-badge severity-high">상</span></td>
+          <td><span class="severity-badge severity-low">하</span></td>
+          <td>공단 보안규정 준수(TLS 1.3 + AES-256 + RBAC), 보안 감사 정기 시행</td>
+          <td>보안 점검 통과율 100%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 15: 비기능 요구사항 -->
+<div class="section">
+  <div class="section-title">핵심 비기능 요구사항 (NFR)</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--red);margin-bottom:10px">🔐 보안 요구사항</div>
+      <div class="progress-wrap">
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">TLS 1.3 전 구간 암호화</span><span class="progress-val">NFR-01</span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">저장 데이터 AES-256 암호화</span><span class="progress-val">NFR-02</span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">RBAC 3단계 이상 접근 제어</span><span class="progress-val">NFR-03</span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">전 접근 이력 감사 로그 (1년+)</span><span class="progress-val">NFR-04</span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">인터넷 자료공유사이트 업로드 금지</span><span class="progress-val">NFR-05</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--blue);margin-bottom:10px">⚡ 성능·가용성 요구사항</div>
+      <div class="progress-wrap">
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">동시 사용자 10명 · 응답 지연 5초 이내</span><span class="progress-val">NFR-06</span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">단일 문서 처리 (A4 100p) 5분 이내</span><span class="progress-val">NFR-07</span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">대시보드 초기 로딩 3초 이내</span><span class="progress-val">NFR-08</span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">시스템 가용률 99.0%+ (업무 시간)</span><span class="progress-val">NFR-09</span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">DWG·DXF·XLS·XLSX·HWP·PDF 지원</span><span class="progress-val">NFR-10</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOURCE BAR -->
+<div class="source-bar">
+  <span class="source-label">출처</span>
+  <span class="source-tag">에너지인프라_AX_종합기획서_PoC_PRD_v2.0.docx</span>
+  <span class="source-separator">·</span>
+  <span class="source-tag">국가철도공단 (2026-03)</span>
+  <span class="source-separator">·</span>
+  <span class="source-tag">Ghosh & Mittal (2025) Frontiers AI</span>
+  <span class="source-separator">·</span>
+  <span class="source-tag">Misyris et al. (2019) arXiv:1911.03737</span>
+  <span class="source-separator">·</span>
+  <span class="source-tag">Kaisera et al. (2025) HyDRA arXiv:2507.15917</span>
+  <span class="source-separator">·</span>
+  <span class="source-tag">ScienceDirect Digital Twin (2025)</span>
+  <span class="source-separator">·</span>
+  <span class="source-tag">Ngo et al. (2025) JCEM</span>
+</div>
+
+</body>
+</html>

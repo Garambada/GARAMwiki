@@ -13,6 +13,7 @@
     --insight: #10b981; --insight-bg: rgba(16,185,129,0.08);
     --model: #a78bfa; --model-bg: rgba(167,139,250,0.08);
     --tech: #06b6d4;  --tech-bg: rgba(6,182,212,0.08);
+    --issue: #f97316; --issue-bg: rgba(249,115,22,0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text);
@@ -52,6 +53,7 @@
   .filter-btn[data-cat="인사이트"].active { background:var(--insight); border-color:var(--insight); }
   .filter-btn[data-cat="모델"].active     { background:var(--model); border-color:var(--model); }
   .filter-btn[data-cat="기술"].active     { background:var(--tech); border-color:var(--tech); }
+  .filter-btn[data-cat="사업현안"].active { background:var(--issue); border-color:var(--issue); }
   main { max-width:1200px; margin:0 auto; padding:28px 32px 60px; }
   .section { margin-bottom:40px; }
   .section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px;
@@ -71,6 +73,7 @@
   .card[data-cat="인사이트"]::before { background:var(--insight); }
   .card[data-cat="모델"]::before     { background:var(--model); }
   .card[data-cat="기술"]::before     { background:var(--tech); }
+  .card[data-cat="사업현안"]::before { background:var(--issue); }
   .card:hover { transform:translateY(-2px); border-color:rgba(88,166,255,0.3);
     box-shadow:0 8px 24px rgba(0,0,0,0.4); }
   .card[data-cat="비즈니스"]:hover { border-color:rgba(245,158,11,0.3); }
@@ -78,6 +81,7 @@
   .card[data-cat="인사이트"]:hover { border-color:rgba(16,185,129,0.3); }
   .card[data-cat="모델"]:hover     { border-color:rgba(167,139,250,0.3); }
   .card[data-cat="기술"]:hover     { border-color:rgba(6,182,212,0.3); }
+  .card[data-cat="사업현안"]:hover { border-color:rgba(249,115,22,0.3); }
   .card-meta { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
   .cat-badge { font-size:0.7rem; font-weight:700; padding:2px 8px;
     border-radius:10px; letter-spacing:0.3px; }
@@ -86,6 +90,7 @@
   .cat-badge.insight { background:var(--insight-bg); color:var(--insight); }
   .cat-badge.model   { background:var(--model-bg); color:var(--model); }
   .cat-badge.tech    { background:var(--tech-bg); color:var(--tech); }
+  .cat-badge.issue   { background:var(--issue-bg); color:var(--issue); }
   .card-date { font-size:0.72rem; color:var(--muted); margin-left:auto; }
   .card-title { font-size:0.95rem; font-weight:600; line-height:1.45;
     margin-bottom:8px; color:var(--text); }
@@ -121,7 +126,7 @@
       <input id="searchInput" type="text" placeholder="제목, 태그로 검색…" autocomplete="off">
     </div>
     <div class="header-stats">
-      <span class="stat-chip"><b id="totalCount">28</b> 아티클</span>
+      <span class="stat-chip"><b id="totalCount">32</b> 아티클</span>
       <span class="stat-chip">업데이트 <b>2026-05-22</b></span>
     </div>
   </div>
@@ -136,6 +141,7 @@
   <button class="filter-btn" data-cat="인사이트" onclick="filterCat(this)">💡 나의 인사이트</button>
   <button class="filter-btn" data-cat="모델" onclick="filterCat(this)">🔬 모델 트래커</button>
   <button class="filter-btn" data-cat="기술" onclick="filterCat(this)">🔩 심화 기술</button>
+  <button class="filter-btn" data-cat="사업현안" onclick="filterCat(this)">🏢 사업 현안</button>
 </div>
 
 <main>
@@ -382,7 +388,7 @@
     <div class="section-header">
       <div class="section-dot" style="background:var(--insight)"></div>
       <span class="section-title">💡 나의 인사이트</span>
-      <span class="section-count">6개</span>
+      <span class="section-count">7개</span>
     </div>
     <div class="cards-grid">
       <a class="card" data-cat="인사이트"
@@ -450,6 +456,17 @@
         <div class="card-tags"><span class="tag">AI 한계</span><span class="tag">시스템 사고</span><span class="tag">C-레벨 인사이트</span></div>
         <span class="card-arrow">→</span>
       </a>
+
+      <a class="card" data-cat="인사이트"
+         href="./06_나의_인사이트/2026-03_AI_10x레버리지_AX실행론_심층분석_인사이트.html">
+        <div class="card-meta">
+          <span class="cat-badge insight">인사이트</span>
+          <span class="card-date">2026-03</span>
+        </div>
+        <div class="card-title">AI 10x Leverage 두 방향성과<br>AX 실행론 심층 분석 (노정석·BFACTORY)</div>
+        <div class="card-tags"><span class="tag">AI 10x</span><span class="tag">AX 실행론</span><span class="tag">1/10x</span><span class="tag">임계점 이론</span><span class="tag">Pilot Purgatory</span></div>
+        <span class="card-arrow">→</span>
+      </a>
     </div>
   </section>
 
@@ -488,6 +505,48 @@
         </div>
         <div class="card-title">온톨로지 기반 AI vs 생성형 LLM<br>— 판단하는 AI의 아키텍처 해부</div>
         <div class="card-tags"><span class="tag">Ontology</span><span class="tag">Knowledge Graph</span><span class="tag">Neuro-Symbolic</span><span class="tag">Palantir-class</span><span class="tag">Sovereign AI</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section" id="sec-사업현안" data-cat="사업현안">
+    <div class="section-header">
+      <div class="section-dot" style="background:var(--issue)"></div>
+      <span class="section-title">🏢 사업 현안</span>
+      <span class="section-count">3개</span>
+    </div>
+    <div class="cards-grid">
+      <a class="card" data-cat="사업현안"
+         href="./07_사업_현안/2026-05_에너지인프라_AX_전환전략_PoC_PRD.html">
+        <div class="card-meta">
+          <span class="cat-badge issue">사업현안</span>
+          <span class="card-date">2026-05</span>
+        </div>
+        <div class="card-title">에너지 인프라 AX 전환전략 — AI 설계 기술 검증<br>용역 종합 기획서 PoC PRD (국가철도공단)</div>
+        <div class="card-tags"><span class="tag">GraphRAG</span><span class="tag">PINN</span><span class="tag">온톨로지</span><span class="tag">SCADA</span><span class="tag">전철전력 AX</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card" data-cat="사업현안"
+         href="./07_사업_현안/2026-05_레거시산업_AI혁신_FoundersStudio_컴퍼니빌더.html">
+        <div class="card-meta">
+          <span class="cat-badge issue">사업현안</span>
+          <span class="card-date">2026-05</span>
+        </div>
+        <div class="card-title">레거시 산업 AI 혁신 — AI-Native Solopreneur<br>기반 Founders Studio 컴퍼니 빌더 전략</div>
+        <div class="card-tags"><span class="tag">경량문명</span><span class="tag">Founders Studio</span><span class="tag">AI Growth Buyout</span><span class="tag">Solopreneur</span><span class="tag">LaaS</span></div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="card" data-cat="사업현안"
+         href="./07_사업_현안/2026-05_OctaPulse_수산양식_AI로보틱스_투자검토.html">
+        <div class="card-meta">
+          <span class="cat-badge issue">사업현안</span>
+          <span class="card-date">2026-05</span>
+        </div>
+        <div class="card-title">OctaPulse — 수산양식 AI 비전·로보틱스<br>투자 검토 보고서 (YC W26)</div>
+        <div class="card-tags"><span class="tag">Aquaculture</span><span class="tag">YC W26</span><span class="tag">Computer Vision</span><span class="tag">Hatchery QA</span><span class="tag">투자검토</span></div>
         <span class="card-arrow">→</span>
       </a>
     </div>

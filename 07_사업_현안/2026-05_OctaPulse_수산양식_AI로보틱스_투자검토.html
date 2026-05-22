@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OctaPulse 투자검토 — 수산양식 AI 비전·로보틱스 · 사업 현안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0c0e14;
+  --bg-card:   #13161f;
+  --bg-raise:  #1a1e2a;
+  --border:    #252836;
+  --border-hi: #353a50;
+  --text:      #e4e8f0;
+  --muted:     #7a8099;
+  --faint:     #3d4260;
+  --accent:    #f97316;   /* 사업현안 orange */
+  --accent-bg: rgba(249,115,22,0.08);
+  --accent-dim: rgba(249,115,22,0.25);
+  --green:     #22c55e;
+  --green-bg:  rgba(34,197,94,0.08);
+  --red:       #ef4444;
+  --red-bg:    rgba(239,68,68,0.08);
+  --blue:      #60a5fa;
+  --blue-bg:   rgba(96,165,250,0.08);
+  --purple:    #a78bfa;
+  --sans:      'IBM Plex Sans KR', system-ui, sans-serif;
+  --mono:      'JetBrains Mono', ui-monospace, monospace;
+  --serif:     'Fraunces', serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 10% 0%, rgba(249,115,22,0.05), transparent 40%),
+    radial-gradient(circle at 90% 100%, rgba(96,165,250,0.04), transparent 40%);
+  min-height: 100vh;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(12,14,20,0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 32px; height: 54px;
+  display: flex; align-items: center; gap: 16px;
+}
+.breadcrumb {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); display: flex; align-items: center; gap: 8px;
+}
+.breadcrumb a { color: var(--muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--text); }
+.breadcrumb .sep { color: var(--faint); }
+.breadcrumb .cur { color: var(--accent); }
+.nav-badge {
+  margin-left: auto;
+  font-family: var(--mono); font-size: 10px;
+  padding: 3px 10px; border-radius: 2px;
+  border: 1px solid var(--accent-dim);
+  color: var(--accent); letter-spacing: 0.08em;
+}
+
+/* ── HERO ── */
+.hero {
+  max-width: 1100px; margin: 0 auto;
+  padding: 60px 32px 40px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px;
+}
+.hero-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 600; line-height: 1.2;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+.hero h1 em { font-style: italic; color: var(--accent); font-weight: 400; }
+.hero-sub {
+  font-size: 15px; color: var(--muted); max-width: 680px;
+  line-height: 1.7; margin-bottom: 32px;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 20px;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+}
+.hero-meta span b { color: var(--text); }
+
+/* ── STATS ROW ── */
+.stats-row {
+  max-width: 1100px; margin: 0 auto;
+  padding: 28px 32px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px; background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat-box {
+  background: var(--bg-card);
+  padding: 20px 24px;
+}
+.stat-num {
+  font-family: var(--serif);
+  font-size: 32px; font-weight: 600;
+  color: var(--accent); line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-num.green { color: var(--green); }
+.stat-num.blue  { color: var(--blue); }
+.stat-label { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+/* ── LAYOUT ── */
+.body-wrap {
+  max-width: 1100px; margin: 0 auto;
+  padding: 48px 32px 80px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .body-wrap { grid-template-columns: 1fr; }
+  .sidebar { order: -1; }
+}
+
+/* ── SECTIONS ── */
+.section { margin-bottom: 44px; }
+.section-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 20px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.section-num {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--accent); letter-spacing: 0.1em;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: 20px; font-weight: 600;
+}
+.section p { color: var(--muted); margin-bottom: 14px; line-height: 1.75; }
+.section p b { color: var(--text); font-weight: 600; }
+.section p:last-child { margin-bottom: 0; }
+
+/* ── INFO CARDS ── */
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+.info-card-title {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px;
+}
+.info-card-body { font-size: 14px; color: var(--text); line-height: 1.65; }
+.info-card-body b { color: var(--accent); }
+.info-card.green { border-color: rgba(34,197,94,0.2); }
+.info-card.green .info-card-title { color: var(--green); }
+.info-card.red { border-color: rgba(239,68,68,0.2); }
+.info-card.red .info-card-title { color: var(--red); }
+.info-card.blue { border-color: rgba(96,165,250,0.2); }
+.info-card.blue .info-card-title { color: var(--blue); }
+.info-card.orange { border-color: rgba(249,115,22,0.2); }
+.info-card.orange .info-card-title { color: var(--accent); }
+
+/* ── TIMELINE / FLOW ── */
+.flow-list { list-style: none; }
+.flow-item {
+  display: flex; gap: 16px;
+  margin-bottom: 18px; position: relative;
+}
+.flow-item:not(:last-child)::after {
+  content: '';
+  position: absolute; left: 11px; top: 28px;
+  width: 1px; height: calc(100% - 4px);
+  background: var(--border);
+}
+.flow-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--bg-raise); border: 1px solid var(--border);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 9px; color: var(--accent);
+  margin-top: 2px; position: relative; z-index: 1;
+}
+.flow-content { flex: 1; }
+.flow-label {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  margin-bottom: 2px;
+}
+.flow-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+/* ── TABLE ── */
+.table-wrap { overflow-x: auto; margin: 20px 0; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px;
+}
+th {
+  background: var(--bg-raise);
+  padding: 10px 14px; text-align: left;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 11px 14px; border-bottom: 1px solid var(--border);
+  color: var(--muted); vertical-align: top; line-height: 1.5;
+}
+td:first-child { color: var(--text); font-weight: 500; }
+td b { color: var(--accent); font-weight: 600; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(249,115,22,0.03); }
+
+/* ── VERDICT BLOCK ── */
+.verdict {
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-dim);
+  border-radius: 10px;
+  padding: 24px 26px;
+  margin-bottom: 24px;
+}
+.verdict-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.verdict-body { font-size: 14px; color: var(--text); line-height: 1.7; }
+.verdict-body b { color: var(--accent); }
+
+/* ── CHECKLIST ── */
+.checklist { list-style: none; }
+.checklist li {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px; color: var(--muted);
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.checklist .icon.g { color: var(--green); }
+.checklist .icon.r { color: var(--red); }
+.checklist .icon.y { color: #eab308; }
+
+/* ── SIDEBAR ── */
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+.side-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.side-card-head {
+  padding: 10px 16px;
+  background: var(--bg-raise);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted);
+}
+.side-card-body { padding: 14px 16px; }
+.kv-row {
+  display: flex; justify-content: space-between;
+  padding: 7px 0; border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.kv-row:last-child { border-bottom: none; }
+.kv-row .k { color: var(--muted); }
+.kv-row .v { color: var(--text); font-weight: 500; text-align: right; }
+.kv-row .v.accent { color: var(--accent); }
+.kv-row .v.green  { color: var(--green); }
+
+/* ── TAG STRIP ── */
+.tag-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tag {
+  font-family: var(--mono); font-size: 10px;
+  padding: 3px 8px; border-radius: 3px;
+  background: var(--bg-raise); border: 1px solid var(--border);
+  color: var(--muted); letter-spacing: 0.06em;
+}
+.tag.hot { color: var(--accent); border-color: var(--accent-dim); }
+
+/* ── METER ── */
+.meter-wrap { margin: 8px 0; }
+.meter-label {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--muted); margin-bottom: 4px;
+}
+.meter-label .val { color: var(--text); font-weight: 600; }
+.meter-track {
+  height: 5px; background: var(--bg-raise);
+  border-radius: 3px; overflow: hidden;
+}
+.meter-fill { height: 100%; border-radius: 3px; }
+
+/* ── RISK MATRIX ── */
+.risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.risk-item {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 14px 16px;
+}
+.risk-label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.risk-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.risk-level {
+  display: inline-block; margin-bottom: 6px;
+  font-family: var(--mono); font-size: 9px;
+  padding: 2px 6px; border-radius: 2px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.risk-level.high { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+.risk-level.mid  { background: rgba(234,179,8,0.08); color: #eab308; border: 1px solid rgba(234,179,8,0.2); }
+.risk-level.low  { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+
+/* ── SOURCE BAR ── */
+.source-bar {
+  max-width: 1100px; margin: 0 auto;
+  padding: 20px 32px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono); font-size: 10px;
+  color: var(--faint); display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+}
+.source-bar a { color: var(--muted); text-decoration: none; }
+.source-bar a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .hero, .body-wrap, .source-bar { padding-left: 18px; padding-right: 18px; }
+  .stats-row { padding: 0; }
+  .risk-grid { grid-template-columns: 1fr; }
+  nav .nav-inner { padding: 0 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="breadcrumb">
+      <a href="../index.html">GARAMwiki</a>
+      <span class="sep">›</span>
+      <span>사업 현안</span>
+      <span class="sep">›</span>
+      <span class="cur">OctaPulse</span>
+    </div>
+    <div class="nav-badge">🏢 사업 현안</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag"><span class="hero-dot"></span>투자 검토 보고서 · 2026-05</div>
+  <h1>OctaPulse — 수산양식 AI 비전·로보틱스<br><em>검사 자동화로 양식장 운영 OS를 노린다</em></h1>
+  <p class="hero-sub">양식업 hatchery 품질검사의 수작업 병목을 AI 비전과 delta robotics로 대체하는 YCW26 스타트업. Riverence(북미 최대 trout 양식사)와의 6자리 연간 계약으로 상업적 검증 진입. 본 문서는 투자심사 관점에서 사업성·기술성·리스크·판단 기준을 정리한다.</p>
+  <div class="hero-meta">
+    <span>회사 <b>OctaPulse</b></span>
+    <span>설립 <b>2025</b></span>
+    <span>본사 <b>Pittsburgh, PA</b></span>
+    <span>배치 <b>YCombinator W26</b></span>
+    <span>창업자 <b>Paul L. Grech · Rohan Singh</b></span>
+    <span>소스 <b>OctaPulse.pdf (2026.05)</b></span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-box">
+    <div class="stat-num">&lt;30초</div>
+    <div class="stat-label">개체당 검사시간<br>(기존 5분 → 10× 단축)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num green">95%+</div>
+    <div class="stat-label">모델 정확도<br>(초기 파일럿 기준)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num blue">6자리</div>
+    <div class="stat-label">연간 계약 규모<br>(Riverence, USD)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">$300B</div>
+    <div class="stat-label">글로벌 양식업 시장<br>TAM</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num green">40만</div>
+    <div class="stat-label">중형 농장 코호트당<br>개체수</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body-wrap">
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- 1. 투자 개요 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <span class="section-title">투자 개요 — 왜 지금 이 회사인가</span>
+      </div>
+      <p>OctaPulse는 양식업(hatchery 및 land-based farm)에서 반복적으로 수행되는 <b>치어 선별, 기형 판별(deformity inspection), 품질 등급화</b> 작업을 AI 비전과 로보틱스로 자동화하는 초기 B2B 기업이다. 기존 인프라에 카메라와 모듈형 하드웨어를 결합해 현장 도입 장벽을 낮추는 접근을 취하고 있으며, 초기 파일럿에서 90~95% 수준의 정확도를 제시하고 있다.</p>
+      <p>투자 관점에서 OctaPulse의 핵심은 단순한 검사 자동화가 아니라, <b>양식장 운영의 병목을 데이터 기반 의사결정으로 전환</b>한다는 점이다. 검사의 표준화·속도 향상·품질 편차 감소가 동시에 발생하면 생산성 개선 효과가 직접적으로 매출과 원가 구조에 반영될 수 있다. 이것이 단순 검사장비 업체가 아닌 "양식장 운영 OS" 포지셔닝을 지향하는 이유다.</p>
+
+      <div class="verdict">
+        <div class="verdict-label">■ 투자 포지셔닝</div>
+        <div class="verdict-body"><b>초기 B2B AI/Robotics 투자 후보 — Conditional Positive.</b> 문제 정의가 명확하고, 상용 고객 traction이 존재하며, 기술이 실제 운영 효율로 연결되는 구조를 갖췄다. 단, "기술 가능성"보다 <b>"현장 재현성과 확장성"</b>이 핵심 판단 기준이다.</div>
+      </div>
+    </div>
+
+    <!-- 2. 문제 정의 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <span class="section-title">문제 정의 — 양식업의 구조적 병목</span>
+      </div>
+      <p>양식업에서 가장 중요한 품질관리 단계 중 하나는 개체별 <b>phenotyping과 deformity inspection</b>인데, 이 작업은 여전히 숙련 인력이 육안으로 수행하는 경우가 많다. 공개 자료에 따르면 이 공정이 개체당 약 5분 걸리며, 생산량이 커질수록 인건비와 처리 병목이 급격히 증가한다.</p>
+      <p>이 문제는 단순한 자동화 니즈를 넘어, <b>어떤 개체를 주요 feeding stage로 진입시킬지 결정하는 생산 핵심 의사결정</b>과 직결된다. 검사 속도와 정확도 개선은 feed waste 감소 → survival 개선 → yield 향상으로 이어지는 연쇄 임팩트를 갖는다. 중규모 농장 기준 한 코호트가 약 40만 마리에 달하고 그 중 절반이 등급 하락 요인을 가질 수 있다는 사실은 이 검사의 경제적 임팩트가 매우 크다는 것을 보여준다.</p>
+
+      <ul class="flow-list">
+        <li class="flow-item">
+          <div class="flow-dot">01</div>
+          <div class="flow-content">
+            <div class="flow-label">수작업 육안 검사 병목</div>
+            <div class="flow-desc">개체당 ~5분, 숙련 인력 의존 → 생산량 확대 시 비선형적 비용 급증</div>
+          </div>
+        </li>
+        <li class="flow-item">
+          <div class="flow-dot">02</div>
+          <div class="flow-content">
+            <div class="flow-label">품질 선별 정확도 편차</div>
+            <div class="flow-desc">검사자·컨디션·종 차이에 따른 판별 기준 불일치 → 데이터 자산화 불가</div>
+          </div>
+        </li>
+        <li class="flow-item">
+          <div class="flow-dot">03</div>
+          <div class="flow-content">
+            <div class="flow-label">Feeding stage 의사결정 지연</div>
+            <div class="flow-desc">부적합 개체 진입 → feed waste, 생존율 저하, yield 손실로 이어지는 연쇄 손실</div>
+          </div>
+        </li>
+        <li class="flow-item">
+          <div class="flow-dot">04</div>
+          <div class="flow-content">
+            <div class="flow-label">데이터 부재로 breeding 최적화 불가</div>
+            <div class="flow-desc">개체 단위 표현형 데이터가 없어 broodstock 선발·유전 개선 루프 단절</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 3. 제품과 기술 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <span class="section-title">제품과 기술 — 카메라에서 Delta Robot까지</span>
+      </div>
+      <p>OctaPulse의 제품은 <b>상용 카메라 + 컴퓨터 비전 + 모듈형 하드웨어 + delta robotics 통합</b>을 통해 fish inspection workflow를 자동화하는 구조다. 현재는 품질검사와 선별에 초점을 두고 있으며, 향후 breeding optimization과 health monitoring까지 확장 가능한 플랫폼을 지향한다.</p>
+
+      <div class="info-card blue">
+        <div class="info-card-title">📐 기술 스택</div>
+        <div class="info-card-body">
+          <b>Computer Vision</b> — broodstock phenotyping, juvenile deformity detection, weight estimation, grade classification<br><br>
+          <b>Data Flywheel</b> — 각 deployment가 labeled image 증가 → multi-species dataset 확장 → cross-species generalization 강화<br><br>
+          <b>Delta Robotics</b> — 자동 선별·분류 통합 (하드웨어 확장 로드맵)<br><br>
+          <b>Platform Vision</b> — 검사 → feeding → health monitoring → breeding optimization 순차 확장
+        </div>
+      </div>
+
+      <!-- Performance meters -->
+      <div style="margin: 20px 0;">
+        <div class="meter-wrap">
+          <div class="meter-label"><span>모델 정확도</span><span class="val">95%+</span></div>
+          <div class="meter-track"><div class="meter-fill" style="width:95%;background:var(--green);"></div></div>
+        </div>
+        <div class="meter-wrap" style="margin-top:12px;">
+          <div class="meter-label"><span>검사시간 단축률</span><span class="val">90%↓ (5min→30sec)</span></div>
+          <div class="meter-track"><div class="meter-fill" style="width:90%;background:var(--accent);"></div></div>
+        </div>
+        <div class="meter-wrap" style="margin-top:12px;">
+          <div class="meter-label"><span>현장 배포 안정성 (검증 필요)</span><span class="val">미공개</span></div>
+          <div class="meter-track"><div class="meter-fill" style="width:40%;background:var(--blue);"></div></div>
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:var(--muted);">기술적으로 단순한 모델 성능보다 <b>데이터 축적 구조</b>가 중요하다. 여러 종(trout, salmon, red drum, yellowtail 등)에서 확보한 데이터를 바탕으로 species generalization을 강화하고 있으며, 배포가 늘수록 모델 성능과 고객 락인 효과가 동시에 커지는 구조다.</p>
+    </div>
+
+    <!-- 4. 경쟁 환경 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <span class="section-title">경쟁 환경 — 좁고 깊은 니치의 포지셔닝</span>
+      </div>
+      <p>경쟁은 크게 세 축으로 구분된다. ① aquaculture computer vision 업체들 ② underwater ROV·stock monitoring 장비 기업들 ③ 대형 수산기업의 인하우스 솔루션. OctaPulse는 이 중 <b>hatchery QA/QC에 특화된 juvenile grading & deformity inspection</b>에 집중하는 차별 포지셔닝을 취한다.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>구분</th>
+              <th>OctaPulse</th>
+              <th>인접 경쟁군</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>주력 문제</td>
+              <td><b>치어·유어 품질검사, 기형 판별, phenotyping</b></td>
+              <td>수중 점검, cage inspection, biomass monitoring</td>
+            </tr>
+            <tr>
+              <td>기술 축</td>
+              <td>CV + modular hardware + robotics</td>
+              <td>ROV, underwater cameras, general analytics</td>
+            </tr>
+            <tr>
+              <td>대표 업체</td>
+              <td>OctaPulse (YCW26)</td>
+              <td>Aquabyte, Blueye Robotics, Qysea</td>
+            </tr>
+            <tr>
+              <td>도입 가치</td>
+              <td><b>검사시간 단축, 선별 정확도, 데이터 자산화</b></td>
+              <td>운영 모니터링, 구조물 점검, 생체량 추정</td>
+            </tr>
+            <tr>
+              <td>확장 경로</td>
+              <td>hatchery → feeding → health → processing</td>
+              <td>장비 활용 범위 넓지만 QA 특화 약함</td>
+            </tr>
+            <tr>
+              <td>반복 작업 빈도</td>
+              <td><b>높음 (매 코호트, 개체 단위)</b></td>
+              <td>중간 (장비 점검·모니터링 주기)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px;">OctaPulse는 수중 점검보다 <b>더 높은 빈도의 반복 작업</b>에 위치하며, ROI가 증명되면 빠른 확산이 가능한 포지션이다. 단, 대형 양식 기업이나 장비업체가 유사 기능을 내재화할 경우, <b>데이터 축적과 워크플로 통합 속도</b>로 차별성을 유지해야 한다.</p>
+    </div>
+
+    <!-- 5. 사업모델 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <span class="section-title">사업모델과 상업화 단계</span>
+      </div>
+      <p>현재 확인되는 매출 신호는 <b>유료 파트너십과 6자리(USD) 연간 계약</b>이다. PoC 단계를 넘어 상용 파일럿에서 도입 가치를 검증 중이라는 의미이며, 초기 B2B 딜 구조로는 긍정적이다.</p>
+
+      <div class="info-card orange">
+        <div class="info-card-title">💰 수익 구조 로드맵</div>
+        <div class="info-card-body">
+          <b>Phase 1 (현재)</b> — 하드웨어 설치 + 초기 계약금 / 유료 파일럿<br>
+          <b>Phase 2</b> — 구독형 소프트웨어 + 모델 업데이트 서비스 (Recurring)<br>
+          <b>Phase 3</b> — species dataset 확장 서비스 + 운영 플랫폼 (Multi-farm SaaS)<br>
+          <b>장기</b> — 양식장 운영 OS화 → feeding / health monitoring / breeding 통합 플랫폼
+        </div>
+      </div>
+
+      <p>양식장은 한 번 구축하면 워크플로 통합 비용이 크기 때문에, <b>고객 유지와 업셀링 가능성</b>이 비교적 높다. 하드웨어 마진만으로 평가하기보다 소프트웨어 구독 + 데이터 기반 고도화로 확장하는 전략이 합리적이다.</p>
+    </div>
+
+    <!-- 6. 투자 포인트 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <span class="section-title">투자 포인트 3가지</span>
+      </div>
+
+      <div class="info-card green">
+        <div class="info-card-title">✅ Bull Case #1 — 명확한 ROI 언어</div>
+        <div class="info-card-body">검사시간 5분 → 30초 미만, 정확도 95%+. 고객이 <b>즉시 계산 가능한 ROI 언어</b>로 세일즈가 가능하다. labor cost 절감 + throughput 개선은 양식장 P&L에 직접 반영된다.</div>
+      </div>
+
+      <div class="info-card green">
+        <div class="info-card-title">✅ Bull Case #2 — 북미 최대 trout 업체 레퍼런스</div>
+        <div class="info-card-body">Riverence와의 6자리 연간 계약은 PoC를 넘어 상업적 검증이다. <b>보수적인 양식업계에서 tier-1 레퍼런스</b>는 후속 고객 확보의 핵심 신호이며, 파이프라인 가속도를 만든다.</div>
+      </div>
+
+      <div class="info-card green">
+        <div class="info-card-title">✅ Bull Case #3 — 데이터 기반 진입장벽 구축 가능성</div>
+        <div class="info-card-body">실제 현장 데이터가 누적될수록 species별 일반화와 성능 개선이 가능해진다. <b>단순 장비 업체 → 운영 플랫폼</b>으로의 진화 경로가 명확하며, deployment 확대 = 모이트 확대 구조가 성립한다.</div>
+      </div>
+    </div>
+
+    <!-- 7. 리스크 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <span class="section-title">주요 리스크 매트릭스</span>
+      </div>
+
+      <div class="risk-grid">
+        <div class="risk-item">
+          <span class="risk-level high">HIGH</span>
+          <div class="risk-label">현장 배포 복잡성</div>
+          <div class="risk-desc">조도·수분·물 상태·개체 움직임 변수 → 데모 환경과 실운영 성능 격차 가능성. 모델 정확도보다 반복 배포 안정성이 핵심.</div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-level high">HIGH</span>
+          <div class="risk-label">고객 도입 사이클</div>
+          <div class="risk-desc">양식업은 보수적 산업. 기술 우수성만으로 빠른 대규모 확산이 보장되지 않는다. 의사결정 사이클 길고 검증 기간 소요.</div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-level mid">MID</span>
+          <div class="risk-label">Species 일반화 성능</div>
+          <div class="risk-desc">trout에서 검증된 모델이 salmon/red drum/yellowtail 등 다종에서 동일 성능을 내는지는 추가 검증 필요.</div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-level mid">MID</span>
+          <div class="risk-label">대형 업체 내재화 위험</div>
+          <div class="risk-desc">Mowi, Cermaq 같은 대형 수산기업이나 장비업체가 유사 기능을 인하우스 개발할 경우 경쟁 심화. 데이터 축적 속도가 방어선.</div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-level mid">MID</span>
+          <div class="risk-label">Gross Margin 구조</div>
+          <div class="risk-desc">하드웨어 의존 초기 단계에서는 margin이 낮을 수 있다. SaaS 전환 속도와 하드웨어 원가 절감이 중장기 수익성의 핵심 변수.</div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-level low">LOW</span>
+          <div class="risk-label">시장 실재성</div>
+          <div class="risk-desc">$300B 글로벌 양식업 시장은 실재하며, 검사 자동화 수요는 명확하다. 시장 존재 자체에 대한 리스크는 낮음.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. 투자 의견 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <span class="section-title">투자 의견 및 Due Diligence 체크리스트</span>
+      </div>
+
+      <div class="verdict">
+        <div class="verdict-label">■ 종합 의견</div>
+        <div class="verdict-body">OctaPulse는 초기 단계임에도 문제 정의 명확성, 상용 고객 검증, 데이터 기반 확장성 측면에서 유망한 <b>초기 B2B AI/Robotics 투자 후보</b>로 평가된다. 특히 오프라인 운영 최적화 여지가 큰 양식업에서 현장 통합형 솔루션은 단순 소프트웨어보다 더 큰 가치 창출이 가능하다.<br><br>현 단계에서 핵심 판단 기준은 <b>"보여준 성능"이 아니라 "지속적으로 반복 재현 가능한 성능"</b>이다.</div>
+      </div>
+
+      <ul class="checklist">
+        <li><span class="icon r">●</span><div><b>실제 매출 전환율</b> — 6자리 계약이 전체 계약 중 몇 % 파이프라인을 대표하는가</div></li>
+        <li><span class="icon r">●</span><div><b>설치당 단가와 Gross Margin</b> — 하드웨어 원가 구조와 SaaS 전환 타임라인</div></li>
+        <li><span class="icon r">●</span><div><b>Species별 성능 차이</b> — trout 외 어종에서의 정확도 재현성</div></li>
+        <li><span class="icon r">●</span><div><b>현장 유지보수 비용</b> — 운영 환경 변수에 따른 재보정·A/S 빈도</div></li>
+        <li><span class="icon y">●</span><div><b>반복 구매 가능성</b> — 계약 갱신율과 upsell 실적</div></li>
+        <li><span class="icon y">●</span><div><b>제품 확장 로드맵</b> — feeding·health monitoring 개발 타임라인과 자원 배분</div></li>
+        <li><span class="icon g">●</span><div><b>YC 네트워크 활용도</b> — 후속 고객 파이프라인에서 YC 효과 정량화</div></li>
+      </ul>
+    </div>
+
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="side-card">
+      <div class="side-card-head">회사 프로필</div>
+      <div class="side-card-body">
+        <div class="kv-row"><span class="k">회사명</span><span class="v">OctaPulse</span></div>
+        <div class="kv-row"><span class="k">설립</span><span class="v">2025</span></div>
+        <div class="kv-row"><span class="k">본사</span><span class="v">Pittsburgh, PA</span></div>
+        <div class="kv-row"><span class="k">배치</span><span class="v accent">YCombinator W26</span></div>
+        <div class="kv-row"><span class="k">창업자</span><span class="v">Paul Grech · Rohan Singh</span></div>
+        <div class="kv-row"><span class="k">웹사이트</span><span class="v"><a href="https://www.tryoctapulse.com" style="color:var(--accent);text-decoration:none;" target="_blank">tryoctapulse.com</a></span></div>
+        <div class="kv-row"><span class="k">주요 고객</span><span class="v green">Riverence</span></div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-head">핵심 KPI</div>
+      <div class="side-card-body">
+        <div class="kv-row"><span class="k">검사시간</span><span class="v green">5min → &lt;30sec</span></div>
+        <div class="kv-row"><span class="k">정확도</span><span class="v green">95%+</span></div>
+        <div class="kv-row"><span class="k">연간 계약</span><span class="v accent">6자리 USD</span></div>
+        <div class="kv-row"><span class="k">TAM</span><span class="v">$300B (양식업)</span></div>
+        <div class="kv-row"><span class="k">코호트 규모</span><span class="v">~40만 마리/farm</span></div>
+        <div class="kv-row"><span class="k">Stage</span><span class="v">상용 파일럿</span></div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-head">제품 로드맵</div>
+      <div class="side-card-body">
+        <div class="kv-row"><span class="k">✅ Now</span><span class="v">Deformity Inspection</span></div>
+        <div class="kv-row"><span class="k">✅ Now</span><span class="v">Juvenile Grading</span></div>
+        <div class="kv-row"><span class="k">🔄 Next</span><span class="v">Delta Robot 통합</span></div>
+        <div class="kv-row"><span class="k">⬜ Later</span><span class="v">Health Monitoring</span></div>
+        <div class="kv-row"><span class="k">⬜ Later</span><span class="v">Breeding Optimization</span></div>
+        <div class="kv-row"><span class="k">⬜ Later</span><span class="v">Processing Automation</span></div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-head">태그</div>
+      <div class="side-card-body">
+        <div class="tag-strip">
+          <span class="tag hot">Aquaculture</span>
+          <span class="tag hot">YC W26</span>
+          <span class="tag hot">Computer Vision</span>
+          <span class="tag">Robotics</span>
+          <span class="tag">Hatchery QA</span>
+          <span class="tag">B2B AI</span>
+          <span class="tag">Fish Tech</span>
+          <span class="tag">Deformity Inspection</span>
+          <span class="tag">Data Flywheel</span>
+          <span class="tag">투자검토</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-head">경쟁사</div>
+      <div class="side-card-body">
+        <div class="kv-row"><span class="k">직접</span><span class="v">Aquabyte</span></div>
+        <div class="kv-row"><span class="k">간접</span><span class="v">Blueye Robotics</span></div>
+        <div class="kv-row"><span class="k">간접</span><span class="v">Qysea</span></div>
+        <div class="kv-row"><span class="k">잠재</span><span class="v">대형 수산사 인하우스</span></div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- SOURCE BAR -->
+<div class="source-bar">
+  <span>출처</span>
+  <a href="https://www.ycombinator.com/launches/PUE-octapulse-building-the-autonomous-aquaculture-farms-of-the-future" target="_blank">YC Launch</a>
+  <a href="https://www.ycombinator.com/companies/octapulse" target="_blank">YC Company</a>
+  <a href="https://www.tryoctapulse.com" target="_blank">tryoctapulse.com</a>
+  <a href="https://www.oceanexchange.org/updates-from-2025-collegiate-winners/" target="_blank">Ocean Exchange 2025</a>
+  <a href="https://www.linkedin.com/company/tryoctapulse" target="_blank">LinkedIn</a>
+  <span style="margin-left:auto;">소스 문서: OctaPulse.pdf (2026.05) · GARAMwiki 사업현안</span>
+</div>
+
+</body>
+</html>
