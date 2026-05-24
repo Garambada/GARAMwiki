@@ -152,6 +152,10 @@ ARTICLE_META = {
         "title": "에너지 인프라 AX 전환전략 — AI 설계 기술 검증<br>용역 종합 기획서 PoC PRD (국가철도공단)",
         "tags":  ["GraphRAG", "PINN", "온톨로지", "SCADA", "전철전력 AX"],
     },
+    "2026-05_Enterprise_AX_사업운영전략_FS_WISE42.html": {
+        "title": "Enterprise AX 사업 운영 전략<br>Founders Studio × WISE42 — FDE 네트워크",
+        "tags":  ["FDE", "Palantir 모델", "크로스 도메인 플랫폼", "Micro Unit", "WISE42"],
+    },
     # 담론 등등
     "2026-05_스타벅스_탱크데이_규범윤리_정치철학_분석.html": {
         "title": "스타벅스 '탱크데이' 사건의<br>규범윤리학·정치철학적 분석",

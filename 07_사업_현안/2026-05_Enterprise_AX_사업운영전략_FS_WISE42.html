@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise AX 사업 운영 전략 — Founders Studio × WISE42 | GARAMwiki</title>
+<style>
+:root {
+  --bg: #0c0e14; --bg2: #131620; --bg3: #1a1e2e;
+  --border: rgba(255,255,255,0.07);
+  --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b;
+  --accent: #f97316; --accent-bg: rgba(249,115,22,0.08); --accent-glow: rgba(249,115,22,0.18);
+  --biz: #f59e0b; --trend: #3b82f6; --insight: #10b981;
+  --model: #a78bfa; --tech: #06b6d4; --discourse: #e879f9;
+  --radius: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;line-height:1.7;font-size:15px}
+a{color:var(--accent);text-decoration:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(12,14,20,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:6px;height:52px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-home{color:var(--muted);font-size:13px;white-space:nowrap;padding:4px 8px;border-radius:6px;transition:color .2s}
+.nav-home:hover{color:var(--accent)}
+.nav-sep{color:var(--dim);font-size:12px}
+.nav-link{color:var(--muted);font-size:12px;white-space:nowrap;padding:4px 10px;border-radius:6px;border:1px solid transparent;transition:all .2s}
+.nav-link:hover{color:var(--accent);border-color:rgba(249,115,22,0.3);background:var(--accent-bg)}
+
+/* HERO */
+.hero{max-width:1100px;margin:0 auto;padding:60px 24px 40px}
+.hero-badges{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid}
+.badge-issue{background:rgba(249,115,22,0.12);color:#f97316;border-color:rgba(249,115,22,0.3)}
+.badge-confidential{background:rgba(148,163,184,0.1);color:var(--muted);border-color:rgba(148,163,184,0.2)}
+.badge-v5{background:rgba(16,185,129,0.1);color:#10b981;border-color:rgba(16,185,129,0.25)}
+.hero h1{font-size:clamp(22px,4vw,34px);font-weight:800;line-height:1.2;margin-bottom:12px}
+.hero h1 span{color:var(--accent)}
+.hero-sub{color:var(--muted);font-size:15px;max-width:720px;line-height:1.6;margin-bottom:28px}
+.hero-meta{display:flex;gap:20px;flex-wrap:wrap}
+.meta-item{display:flex;align-items:center;gap:6px;color:var(--dim);font-size:13px}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* STATS */
+.stats-bar{max-width:1100px;margin:0 auto 48px;padding:0 24px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden;transition:border-color .2s}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+.stat-card:hover{border-color:rgba(249,115,22,0.25)}
+.stat-num{font-size:28px;font-weight:800;color:var(--accent);margin-bottom:4px;line-height:1}
+.stat-label{color:var(--muted);font-size:12px;line-height:1.4}
+
+/* MAIN */
+main{max-width:1100px;margin:0 auto;padding:0 24px 80px}
+section{margin-bottom:48px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.section-icon{width:36px;height:36px;border-radius:10px;background:var(--accent-bg);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.section-title{font-size:20px;font-weight:700}
+.section-num{color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.05em;margin-bottom:2px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;position:relative;overflow:hidden;transition:border-color .2s}
+.card:hover{border-color:rgba(249,115,22,0.2)}
+.card-accent{position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--accent)}
+.card h3{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--text)}
+.card h4{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)}
+.card p{color:var(--muted);font-size:14px;line-height:1.7}
+
+/* QUOTE */
+.quote{background:var(--accent-bg);border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:18px 20px;margin:16px 0}
+.quote p{color:var(--text);font-size:14px;line-height:1.8;font-style:italic}
+.quote-label{color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+
+/* TABLES */
+.tbl-wrap{overflow-x:auto;margin:16px 0;border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+thead tr{background:rgba(249,115,22,0.08)}
+th{text-align:left;padding:10px 14px;color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.04em;border-bottom:1px solid var(--border)}
+td{padding:10px 14px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(249,115,22,0.04);color:var(--text)}
+td strong{color:var(--text)}
+td em{color:var(--accent);font-style:normal;font-weight:600}
+
+/* KW PILLS */
+.kw-row{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.kw{background:var(--accent-bg);color:var(--accent);border:1px solid rgba(249,115,22,0.25);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600}
+
+/* GRID */
+.three-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:16px 0}
+.two-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin:16px 0}
+
+/* PHASE */
+.phase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:16px 0}
+.phase-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.phase-num{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.phase-title{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text)}
+.phase-period{font-size:12px;color:var(--dim);margin-bottom:12px}
+.phase-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.phase-list li{color:var(--muted);font-size:13px;padding-left:14px;position:relative;line-height:1.5}
+.phase-list li::before{content:'›';position:absolute;left:0;color:var(--accent)}
+
+/* HIGHLIGHT BOX */
+.highlight{background:linear-gradient(135deg,rgba(249,115,22,0.1),rgba(249,115,22,0.04));border:1px solid rgba(249,115,22,0.25);border-radius:var(--radius);padding:20px 24px;margin:20px 0}
+.highlight-title{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.highlight p{color:var(--text);font-size:14px;line-height:1.75}
+
+/* GAP BOX */
+.gap-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin:12px 0}
+.gap-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
+.gap-title span{color:var(--accent)}
+.gap-box p{color:var(--muted);font-size:13px;line-height:1.6}
+
+/* SCALE TABLE */
+.scale-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}
+.scale-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px}
+.scale-card .unit{font-size:13px;color:var(--dim);margin-bottom:4px}
+.scale-card .revenue{font-size:18px;font-weight:800;color:var(--accent);margin-bottom:4px}
+.scale-card .pos{font-size:12px;color:var(--muted)}
+
+/* CONCLUSION */
+.conclusion{background:linear-gradient(135deg,rgba(249,115,22,0.08),rgba(249,115,22,0.02));border:1px solid rgba(249,115,22,0.2);border-radius:16px;padding:32px}
+.conclusion h2{font-size:20px;font-weight:800;margin-bottom:16px}
+.conclusion-verdict{background:rgba(249,115,22,0.12);border-radius:10px;padding:16px 20px;margin:16px 0;text-align:center}
+.conclusion-verdict .verdict{font-size:18px;font-weight:800;color:var(--accent)}
+.cond-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.cond-list li{display:flex;gap:12px;color:var(--muted);font-size:14px;line-height:1.6}
+.cond-num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:32px 0}
+
+/* FOOTNOTE */
+.footnote{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-top:40px}
+.footnote-title{font-size:12px;font-weight:700;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.footnote-item{color:var(--dim);font-size:12px;margin-bottom:4px}
+
+/* MATURITY STARS */
+.stars{color:var(--accent);font-size:12px}
+.stars-dim{color:var(--dim);font-size:12px}
+
+@media(max-width:640px){
+  .hero{padding:40px 16px 28px}
+  .stats-bar,main{padding-left:16px;padding-right:16px}
+  table{min-width:420px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-home" href="../index.html">← GARAMwiki</a>
+    <span class="nav-sep">/</span>
+    <a class="nav-link" href="#exec">Executive Summary</a>
+    <a class="nav-link" href="#part1">Part 1 — FDE 시스템</a>
+    <a class="nav-link" href="#part2">Part 2 — 재부상</a>
+    <a class="nav-link" href="#part3">Part 3 — FS 전략</a>
+    <a class="nav-link" href="#part4">Part 4 — 플랫폼</a>
+    <a class="nav-link" href="#part5">Part 5 — 방법론</a>
+    <a class="nav-link" href="#part6">Part 6 — 구현</a>
+    <a class="nav-link" href="#part7">Part 7 — WISE42</a>
+    <a class="nav-link" href="#part8">Part 8 — 갭 분석</a>
+    <a class="nav-link" href="#part9">Part 9 — 로드맵</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badges">
+    <span class="badge badge-issue">🏢 사업 현안</span>
+    <span class="badge badge-v5">v5</span>
+    <span class="badge badge-confidential">🔒 Confidential</span>
+  </div>
+  <h1>Enterprise AX 사업 운영 전략<br><span>Founders Studio × WISE42</span></h1>
+  <div class="hero-sub">
+    Studio Cross Domain Platform × 도메인 FDE Micro Unit 네트워크 구현 전략 —
+    팔란티어 FDE 모델의 구조적 분석부터 크로스 도메인 플랫폼 설계, WISE42 앵커 도메인, 3단계 실행 로드맵까지.
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item"><div class="meta-dot"></div>2026년 5월</div>
+    <div class="meta-item"><div class="meta-dot"></div>Founders Studio | AI-Native Startup Builder</div>
+    <div class="meta-item"><div class="meta-dot"></div>WISE42 | Public Sector AX</div>
+    <div class="meta-item"><div class="meta-dot"></div>Strategic Analysis Report</div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">FDE</div>
+      <div class="stat-label">Forward Deployed Engineer<br>AI 배포의 새 표준</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">5,330</div>
+      <div class="stat-label">Indeed FDE 채용 공고<br>YoY +729% (2026.04)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">$55B+</div>
+      <div class="stat-label">Anthropic+OpenAI<br>FDE 전용 투자 규모</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">1~3인</div>
+      <div class="stat-label">Micro Unit 구성<br>팔란티어 5인 Pod 대체</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">9 Parts</div>
+      <div class="stat-label">전략 분석 구조<br>FDE → 플랫폼 → 로드맵</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- EXEC SUMMARY -->
+<section id="exec">
+  <div class="section-header">
+    <div class="section-icon">📋</div>
+    <div>
+      <div class="section-num">EXECUTIVE SUMMARY</div>
+      <div class="section-title">전략 개요</div>
+    </div>
+  </div>
+
+  <div class="quote">
+    <div class="quote-label">핵심 명제</div>
+    <p>팔란티어(Palantir)의 FDE(Forward Deployed Engineer) 모델은 엔터프라이즈 AI 배포의 패러다임을 근본적으로 바꾼 운영 철학이다. <strong>2026년 현재, Anthropic($15억 JV)과 OpenAI($40억 Deployment Company)가 동시에 FDE 모델을 채택하며,</strong> 이 모델은 AI 시대의 핵심 전략으로 재부상하고 있다.</p>
+  </div>
+
+  <div class="two-grid">
+    <div class="card">
+      <div class="card-accent"></div>
+      <h4>Founders Studio — 플랫폼 레이어</h4>
+      <p>AI-Native Startup Builder로서 크로스 도메인 플랫폼(방법론·도구·지식 자산)을 운영하며, 도메인별 Solopreneur/Micro Unit(1~3인)을 지속적으로 생성. AX Harness, Context Engineering, Pattern Vault, Deliverable Factory, Playbook System의 5대 구성 요소.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent"></div>
+      <h4>WISE42 — 앵커 도메인 FDE</h4>
+      <p>공공 인프라·철도·해양수산 AX를 수행하는 앵커(anchor) 도메인 FDE Micro Unit. 전체 모델의 검증 기준(Reference Implementation)을 제공하며, 크로스 도메인 플랫폼의 첫 번째 실전 검증자.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-title">핵심 프레임워크</div>
+    <p style="text-align:center;font-size:16px;color:var(--accent);font-weight:700;margin-bottom:8px">
+      Founders Studio (크로스 도메인 플랫폼) → N개 Micro Unit (도메인 FDE, 1~3인) → 공공·중소중견 AX 수행
+    </p>
+  </div>
+
+  <div class="kw-row">
+    <span class="kw">FDE 모델</span>
+    <span class="kw">크로스 도메인 플랫폼</span>
+    <span class="kw">Gravel→Highway 루프</span>
+    <span class="kw">Micro Unit 복제</span>
+    <span class="kw">공공기관 AX</span>
+    <span class="kw">WISE42</span>
+    <span class="kw">네트워크 효과</span>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>핵심 발견 (Key Findings)</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+      <div style="display:flex;gap:10px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">01</span><span style="color:var(--muted);font-size:14px">FDE 모델의 본질은 '서비스처럼 보이는 제품 개발 전략'이며, 컨설팅과는 근본적으로 다르다</span></div>
+      <div style="display:flex;gap:10px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">02</span><span style="color:var(--muted);font-size:14px">2026년 AI Agent 기술 성숙으로, 1~3인 Micro Unit이 팔란티어 5인 FDE Pod 기능을 수행할 수 있는 균형점에 도달</span></div>
+      <div style="display:flex;gap:10px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">03</span><span style="color:var(--muted);font-size:14px">Founders Studio 크로스 도메인 플랫폼이 각 Micro Unit의 한계 배포 비용을 지속 감소시키는 네트워크 효과 구조</span></div>
+      <div style="display:flex;gap:10px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">04</span><span style="color:var(--muted);font-size:14px">한국 공공·중소중견 섹터의 AI 전환 수요와 복잡성은 이 모델에 이상적인 환경을 제공</span></div>
+      <div style="display:flex;gap:10px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">05</span><span style="color:var(--muted);font-size:14px">핵심 변수: Micro Unit 복제 속도, 크로스 도메인 플랫폼 성숙도, 도메인 간 패턴 이전 효율</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART 1 -->
+<section id="part1">
+  <div class="section-header">
+    <div class="section-icon">🔬</div>
+    <div>
+      <div class="section-num">PART 1</div>
+      <div class="section-title">팔란티어 FDE 운영 시스템 심층 분석 — Reference Model</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-accent"></div>
+    <h3>1.1 FDE 모델의 기원과 철학</h3>
+    <p>팔란티어의 FDE 모델은 2000년대 초 정보기관 고객과의 협업에서 필요에 의해 탄생했다. 고객이 자신의 요구사항을 명확히 설명할 수 없고, 데이터를 공개적으로 공유할 수도 없는 환경에서, 엔지니어를 직접 현장에 파견하는 것이 유일한 해법이었다.</p>
+  </div>
+
+  <div class="quote">
+    <div class="quote-label">FDE 핵심 철학</div>
+    <p>제품 개발은 고객의 운영 현실에 몰입(immersion)할 때만 성공한다. 인터뷰, 사용 데이터, 분기별 리뷰 같은 간접적 방법으로는 기관의 일상적 워크플로를 이해할 수 없다.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>구분</th><th>Echo Team (전략)</th><th>Delta Team (개발)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>역할</strong></td><td>도메인 전문가, 현장 문제 발견</td><td>빠른 프로토타이핑, 코드 배포</td></tr>
+        <tr><td><strong>배경</strong></td><td>고객 산업 출신 (군사, 의료, 금융)</td><td>고도 기술력의 소프트웨어 엔지니어</td></tr>
+        <tr><td><strong>핵심 능력</strong></td><td>조직 정치, 워크플로 이해, 채택 장벽 파악</td><td>불완전한 환경에서 빠른 솔루션 구축</td></tr>
+        <tr><td><strong>성과 측정</strong></td><td>비즈니스 임팩트 (outcomes)</td><td>기술적 문제 해결 속도</td></tr>
+        <tr><td><strong>고객 관계</strong></td><td>장기적 관계 관리, 계정 담당</td><td>기술적 신뢰 구축</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:var(--dim);font-size:12px;margin:-8px 0 16px">* 하나의 FDE Pod는 4~5명으로 구성, Echo+Delta 역할 혼합, 수개월 현장 상주</p>
+
+  <div class="card">
+    <div class="card-accent"></div>
+    <h3>1.3 Gravel Road → Paved Highway 피드백 루프</h3>
+    <p style="margin-bottom:10px">팔란티어 FDE 모델의 가장 독창적 요소. FDE가 고객 현장에서 만든 초기 솔루션(비포장도로)은 의도적으로 불완전하지만 즉시 가치를 제공한다. 이 패턴이 반복되면, 코어 엔지니어링 팀이 제품 기능(고속도로)으로 표준화한다.</p>
+    <p style="color:var(--accent);font-size:13px"><strong>→ 72%의 FDE 모방 기업이 실패하는 이유:</strong> 이 피드백 루프를 구현하지 못했기 때문. FDE에게 코어 제품 로드맵에 대한 설계 권한(architectural authority)을 부여하지 않았다.</p>
+  </div>
+
+  <div class="two-grid" style="margin-top:16px">
+    <div>
+      <p style="color:var(--accent);font-size:13px;font-weight:700;margin-bottom:8px">강점</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>강점</th><th>전략적 의미</th></tr></thead>
+          <tbody>
+            <tr><td>정보 비대칭 해소</td><td>프로젝트 실패 원인 #1 원천 차단</td></tr>
+            <tr><td>제품-시장 피드백 속도</td><td>R&D 사이클 분기→주 단위 압축</td></tr>
+            <tr><td>경쟁 해자(Moat) 구축</td><td>고객 운영 데이터 독점적 이해 축적</td></tr>
+            <tr><td>인재 품질 필터</td><td>컨설팅 대비 높은 인재 밀도</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <p style="color:var(--dim);font-size:13px;font-weight:700;margin-bottom:8px">한계</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>한계</th><th>영향</th></tr></thead>
+          <tbody>
+            <tr><td>재정적 하한선</td><td>대규모 계약에서만 성립</td></tr>
+            <tr><td>확장성 병목</td><td>헤드카운트 비례 성장, 만성적 인력 부족</td></tr>
+            <tr><td>복제 불가능성</td><td>72% 모방 기업 실패</td></tr>
+            <tr><td>전문서비스 비율</td><td>PS 매출 18-20%, 마진 확장의 발목</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART 2 -->
+<section id="part2">
+  <div class="section-header">
+    <div class="section-icon">📡</div>
+    <div>
+      <div class="section-num">PART 2</div>
+      <div class="section-title">2026년 FDE 모델의 산업 재부상과 향후 전망</div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>시기</th><th>이벤트</th><th>전략적 의미</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>2024 초</td><td>OpenAI FDE 팀 공식 출범 (Colin Jarvis 리드)</td><td>AI 모델 기업이 배포 레이어에 직접 진출하는 첫 신호</td></tr>
+        <tr><td>2024~2025</td><td>Scale AI, Databricks, Salesforce FDE 모델 채택</td><td>엔터프라이즈 SW 기업 전반으로 FDE 모델 확산</td></tr>
+        <tr><td>2025.04</td><td>Indeed 기준 FDE 채용공고 643개</td><td>시장 형성 초기 — 전문 역할로 인식 시작</td></tr>
+        <tr><td>2026.03</td><td>Accenture × Microsoft FDE 프랙티스 출범</td><td>대형 컨설팅펌까지 FDE 채택, '수천 명' AI 엔지니어 배치</td></tr>
+        <tr><td>2026.05.06</td><td>ServiceNow × Accenture FDE 프로그램 발표</td><td>플랫폼 기업 + 컨설팅펌 합동 FDE Pod 모델 등장</td></tr>
+        <tr><td><em>2026.05</em></td><td><strong>Anthropic $15억 JV (Blackstone, Goldman, Apollo)</strong></td><td>AI 모델 기업의 FDE 전용 독립 법인 설립 — 깊이 우선</td></tr>
+        <tr><td><em>2026.05</em></td><td><strong>OpenAI $40억+ Deployment Company (TPG 리드)</strong></td><td>AI 모델 기업의 FDE 전용 독립 법인 설립 — 폭 우선</td></tr>
+        <tr><td>2026.04</td><td>Indeed 기준 FDE 채용공고 5,330개 (YoY 729%↑)</td><td>FDE가 AI 시대의 핵심 직군으로 확립</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight" style="margin:20px 0">
+    <div class="highlight-title">주목할 구조적 현상</div>
+    <p>Anthropic과 OpenAI 간 투자자 중복이 완전히 <strong>제로</strong>이다. 금융계가 AI 배포 모델에 대해 문자 그대로 두 진영으로 분리된 것이다. 이는 FDE 모델이 일시적 트렌드가 아닌 <strong>산업 구조의 근본적 전환</strong>임을 강력히 시사한다.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>구분</th><th>Anthropic JV</th><th>OpenAI Deployment Co.</th><th>Accenture × Microsoft</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>투자/규모</strong></td><td>$15억 JV</td><td>$40억+</td><td>수천 명 엔지니어 배치</td></tr>
+        <tr><td><strong>전략 유형</strong></td><td><em>깊이 우선 (depth-first)</em></td><td>폭 우선 (breadth-first)</td><td>규모 우선 (scale-first)</td></tr>
+        <tr><td><strong>타겟 섹터</strong></td><td>금융, 헬스케어 (포트폴리오 시작)</td><td>금융, 제조, 헬스케어 (범용)</td><td>전 산업 (기존 Accenture 고객)</td></tr>
+        <tr><td><strong>FDE 특징</strong></td><td>AI 모델 기업이 직접 배포, 모델-배포 통합 최적화</td><td>FDE가 제품 로드맵 영향, 'Deployment가 제품'</td><td>도메인 전문가 + AI 기술자, 변화관리·프로세스 재설계 통합</td></tr>
+        <tr><td><strong>WISE42 시사점</strong></td><td><em>한국 공공 섹터에서 동일한 깊이 우선 전략 적용</em></td><td>도메인별 Micro Unit이 폭 우선 확장을 대체</td><td>대형 컨설팅펌과의 차별화 포인트 명확화 필요</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>2.3 왜 지금 FDE가 폭발하는가? — 4가지 구조적 원인</h3>
+    <div class="tbl-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>구조적 원인</th><th>현상</th><th>데이터 근거</th></tr></thead>
+        <tbody>
+          <tr><td>① 배포 갭의 가시화</td><td>AI 모델 성능은 충분하지만 실제 비즈니스 임팩트 전환 실패</td><td>MIT NANDA: 엔터프라이즈 GenAI 파일럿 95%가 측정 가능한 비즈니스 임팩트 제로</td></tr>
+          <tr><td>② AI의 SaaS 모델 붕괴</td><td>AI 시스템은 전통 SaaS처럼 셀프서비스 온보딩 불가</td><td>Forrester 2026: 기업의 25%가 계획된 AI 지출을 2027로 이연</td></tr>
+          <tr><td>③ 토큰 경제학의 성숙</td><td>FDE 배포 → 토큰 소비 증가 → 고마진 반복 매출 구조 확립</td><td>Anthropic 인퍼런스 마진 70% (전년 38%→70%), ARR 6주마다 2배 성장</td></tr>
+          <tr><td>④ 팔란티어의 결과 증명</td><td>FDE 모델의 재무적 검증 완료</td><td>팔란티어 640% 수익률 (5년), Q1 2026 매출 85% YoY 성장</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="quote">
+    <div class="quote-label">FDE 경제학의 본질</div>
+    <p>높은 고객 획득 비용(High Acquisition Cost) + 매우 높은 유지율(Very High Retention) + 매우 높은 계약 가치(Very High Contract Value). FDE 팀이 고객 내부 데이터 파이프라인과 통합된 시스템을 구축하면, 고객의 전환 비용은 구독 해지가 아니라 '운영에 녹아든 전체 시스템의 재구축'이 된다.</p>
+  </div>
+
+  <div class="highlight" style="margin-top:16px">
+    <div class="highlight-title">전략적 윈도우 — 한국 시장</div>
+    <p>2026~2027년은 한국 시장에서 FDE형 AX 파트너의 포지셔닝을 확립하는 결정적 시기이다. 글로벌 컨설팅펌의 FDE 프랙티스가 한국에 본격 전개되기 전에 <strong>도메인 Lock-in을 확보</strong>하는 것이 Founders Studio/WISE42의 핵심 과업이다.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART 3 -->
+<section id="part3">
+  <div class="section-header">
+    <div class="section-icon">🏗️</div>
+    <div>
+      <div class="section-num">PART 3</div>
+      <div class="section-title">Founders Studio 기반 도메인 FDE 네트워크 전략</div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>구분</th><th>Founders Studio (플랫폼 레이어)</th><th>도메인 FDE Micro Unit (실행 레이어)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>정체성</strong></td><td>AI-Native Startup Builder, 크로스 도메인 플랫폼 운영자</td><td>도메인 전문 FDE 사업자 (상징적 Solopreneur)</td></tr>
+        <tr><td><strong>핵심 역할</strong></td><td>크로스 도메인 플랫폼 개발·운영, 운영 방법론 표준화, Micro Unit 지속 생성·육성</td><td>특정 도메인 AX 수행, 고객 현장 배포·운영, 도메인 IP 축적 → Studio로 환류</td></tr>
+        <tr><td><strong>팀 구성</strong></td><td>코어 2~3인 + AI Agent Stack</td><td>1~3인 Micro Unit + AI Agent Stack</td></tr>
+        <tr><td><strong>수익 모델</strong></td><td>플랫폼 라이선스 + GP/캐리 수익 + 크로스 도메인 컨설팅</td><td>프로젝트 매출 + 장기 운영 계약 + 도메인 IP 수익</td></tr>
+        <tr><td><strong>팔란티어 대응</strong></td><td>코어 엔지니어링 (Foundry/AIP)</td><td>FDE Pod (현장 배포)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin:16px 0">
+    <h3>3.2 Micro Unit 구성 유형 — Solo / Duo / Trio</h3>
+    <div class="tbl-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>구성 유형</th><th>인원</th><th>적용 상황</th><th>역할 분담</th></tr></thead>
+        <tbody>
+          <tr><td><em>Solo Mode</em></td><td>1인</td><td>초기 탐색, 소규모 프로젝트, 단일 파일럿</td><td>도메인 리드가 Echo+Delta 통합 수행, AI Agent가 테크/오퍼레이션 보조</td></tr>
+          <tr><td><em>Duo Mode</em></td><td>2인</td><td>중규모 AX 프로젝트, 복수 파일럿 병행</td><td>도메인 리드(Echo) + 테크 리드(Delta), AI Agent 오퍼레이션 보조</td></tr>
+          <tr><td><em>Trio Mode</em></td><td>3인</td><td>대형 공공기관 AX, 다수 부서 동시 수행</td><td>도메인 리드(Echo) + 테크 리드(Delta) + 오퍼레이션(브릿지), AI Agent Stack 풀 활용</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--dim);font-size:12px;margin-top:8px">* '공통 원칙': 어떤 모드에서든 도메인 리드(Solopreneur)의 오너십이 핵심. AI Agent Stack은 모든 모드에서 5~8인의 전통적 팀 기능을 보조.</p>
+  </div>
+
+  <div class="card">
+    <h3>3.3 팔란티어 FDE → Founders Studio 전체 매핑</h3>
+    <div class="tbl-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>팔란티어 구성요소</th><th>기능</th><th>Founders Studio 대응</th><th>성숙도</th></tr></thead>
+        <tbody>
+          <tr><td>Echo Team</td><td>도메인 전문, 문제 발견, 고객 관계 관리</td><td>도메인 리드(Solopreneur) + AI Deep Research</td><td><span class="stars">★★★★</span><span class="stars-dim">☆</span></td></tr>
+          <tr><td>Delta Team</td><td>빠른 프로토타이핑, Gravel Road 구축</td><td>테크 리드 + AI 코딩 에이전트</td><td><span class="stars">★★★</span><span class="stars-dim">☆☆</span></td></tr>
+          <tr><td>코어 엔지니어링</td><td>Gravel→Highway 표준화, 플랫폼 비전 유지</td><td>크로스 도메인 플랫폼, Pattern Vault, AX Harness</td><td><span class="stars">★★</span><span class="stars-dim">☆☆☆</span></td></tr>
+          <tr><td>4~5명 Pod</td><td>고객 현장 상주 팀, Echo+Delta 혼합</td><td>1~3인 Micro Unit + AI Agent Stack</td><td><span class="stars">★★★★</span><span class="stars-dim">☆</span></td></tr>
+          <tr><td>Foundry/AIP</td><td>멀티 도메인 플랫폼, 온톨로지 기반</td><td>크로스 도메인 플랫폼 5대 요소</td><td><span class="stars">★★</span><span class="stars-dim">☆☆☆</span></td></tr>
+          <tr><td>Gravel→Highway 루프</td><td>현장 → 제품 기능화 피드백 순환</td><td>현장 패턴 → Studio 표준화 → 다음 Unit 배포</td><td><span class="stars">★★★</span><span class="stars-dim">☆☆</span></td></tr>
+          <tr><td>'불편한 진실' 문화</td><td>고객에게 필요한 것을 원하는 것보다 우선</td><td>C-level 직접 접근 + Radical Candor 원칙</td><td><span class="stars">★★★★</span><span class="stars-dim">☆</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--accent);font-size:12px;margin-top:8px">→ 전체 평가: Micro Unit 레벨 성숙도는 높으나, Studio 레벨(코어 엔지니어링/플랫폼) 성숙도는 초기 단계 — Phase 1에서 집중 구축 필요</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART 4 -->
+<section id="part4">
+  <div class="section-header">
+    <div class="section-icon">⚙️</div>
+    <div>
+      <div class="section-num">PART 4</div>
+      <div class="section-title">크로스 도메인 플랫폼 — 상세 정의</div>
+    </div>
+  </div>
+
+  <div class="quote">
+    <div class="quote-label">플랫폼의 본질</div>
+    <p>크로스 도메인 플랫폼은 '소프트웨어 제품'이 아니라 '방법론 + 도구 + 지식 자산'의 통합 운영 체계이다. 코드베이스만큼이나 문서화된 방법론과 축적된 패턴이 플랫폼의 핵심 가치를 구성한다.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>구성 요소</th><th>정의</th><th>포함 내용</th><th>Micro Unit에 대한 가치</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><em>① AX Masterplan Harness Engine</em></td>
+          <td>고객 AX 전략 수립을 반자동화하는 프레임워크</td>
+          <td>4층 메타프롬프팅 구조, 산업별 전략 템플릿, Quick Win 식별 로직, C-level 보고서 자동 생성</td>
+          <td>신규 고객 진입 시 Discovery Sprint를 2주→3~5일로 압축</td>
+        </tr>
+        <tr>
+          <td><em>② Context Engineering Infrastructure</em></td>
+          <td>각 도메인의 지식을 AI가 활용 가능한 형태로 구조화</td>
+          <td>도메인별 RAG 파이프라인, MCP 서버 생태계, CLAUDE.md 표준 구조, 구조화된 메모리 시스템</td>
+          <td>도메인 전환 시 컨텍스트 구축 시간 70% 이상 단축</td>
+        </tr>
+        <tr>
+          <td><em>③ 패턴 라이브러리 (Pattern Vault)</em></td>
+          <td>현장 배포에서 추출한 재활용 가능 솔루션 카탈로그</td>
+          <td>도메인별 패턴 카드, Gravel Road 코드 스니펫, 실패/성공 사례 DB, 크로스 도메인 유사 패턴 맵핑</td>
+          <td>검증된 솔루션 재활용으로 배포 시간 40~60% 단축</td>
+        </tr>
+        <tr>
+          <td><em>④ 납품물 팩토리 (Deliverable Factory)</em></td>
+          <td>전략 문서, PRD, 보고서 등 고객 납품물 반자동 생산 체계</td>
+          <td>보고서/PRD/전략문서 템플릿, Claude Cowork 하니스, 시각화 자동 생성, 고객 브랜딩 자동 적용</td>
+          <td>문서 생산 시간 80% 이상 절감, 품질 표준화</td>
+        </tr>
+        <tr>
+          <td><em>⑤ Micro Unit Playbook System</em></td>
+          <td>새로운 Micro Unit의 생성과 온보딩을 체계화</td>
+          <td>Unit 생성 체크리스트, 도메인 진입 가이드, 첫 고객 획득 플레이북, 30/60/90일 마일스톤</td>
+          <td>새 Unit의 첫 납품까지 기간을 50% 이상 단축</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight" style="margin-top:20px">
+    <div class="highlight-title">핵심 메커니즘: 비선형적 가치 축적</div>
+    <p>Unit 수가 증가할수록 Pattern Vault가 풍부해지고, 새 Unit의 한계 배포 비용이 감소한다. 이것이 <strong>'3팀→5팀이 1팀→3팀보다 쉬운'</strong> 구조를 만든다.</p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>4.3 플랫폼 성숙도 로드맵</h3>
+    <div class="tbl-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>단계</th><th>기간</th><th>AX Harness</th><th>Pattern Vault</th><th>Playbook</th></tr></thead>
+        <tbody>
+          <tr><td><em>v0.5 Bootstrap</em></td><td>현재~2026 Q3</td><td>4층 메타프롬프팅, 수동 운영</td><td>비공식 수집, &lt;10개 패턴</td><td>WISE42 경험 기반 초안</td></tr>
+          <tr><td><em>v1.0 Foundation</em></td><td>2026 Q4~2027 Q1</td><td>자동 전략 생성, 산업별 분기</td><td>공식 카탈로그, 25개+ 패턴</td><td>검증된 Playbook v1</td></tr>
+          <tr><td><em>v2.0 Scale</em></td><td>2027 Q2~</td><td>AI 자율 전략 제안, 크로스 도메인 인사이트</td><td>크로스 도메인 유사 패턴 자동 매칭</td><td>자동화된 Unit 생성 파이프라인</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART 5 -->
+<section id="part5">
+  <div class="section-header">
+    <div class="section-icon">🔄</div>
+    <div>
+      <div class="section-num">PART 5</div>
+      <div class="section-title">운영 방법론 — Founders Studio Operating System</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>5.1 Layer 1: Micro Unit 생성 프로세스 (Studio → Unit)</h3>
+    <div class="tbl-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>단계</th><th>기간</th><th>활동</th><th>산출물</th></tr></thead>
+        <tbody>
+          <tr><td><em>Step 1 도메인 선정</em></td><td>2주</td><td>시장 규모·복잡성·AX 수요 분석, 기존 패턴 재활용 가능성 평가</td><td>도메인 진입 보고서, Go/No-Go 결정</td></tr>
+          <tr><td><em>Step 2 Unit 구성</em></td><td>2주</td><td>도메인 리드 확정, Unit 모드 결정 (Solo/Duo/Trio), AI Agent Stack 구성</td><td>Unit 구성 완료, 역할·책임 정의서</td></tr>
+          <tr><td><em>Step 3 도메인 부트캠프</em></td><td>2~4주</td><td>도메인 컨텍스트 구축, 타겟 고객 리스트업, 첫 고객 접근 전략</td><td>도메인 RAG DB v0, 고객 파이프라인, 첫 제안서</td></tr>
+          <tr><td><em>Step 4 첫 배포</em></td><td>4~8주</td><td>첫 고객 Discovery Sprint, Gravel Road 솔루션 구축, 첫 패턴 환류</td><td>첫 고객 납품, 첫 패턴 등록, Unit 자립 확인</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--accent);font-size:12px;margin-top:8px">핵심 KPI: Step 1→4 완료까지 10~16주. 두 번째 Unit부터 8~12주, 세 번째 Unit부터 6~10주 목표.</p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>5.2 Layer 2: 고객 AX 수행 프로세스 (Unit → 고객)</h3>
+    <div class="tbl-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Phase</th><th>기간</th><th>Unit 활동</th><th>플랫폼 활용</th><th>산출물</th></tr></thead>
+        <tbody>
+          <tr><td><em>Discovery Sprint</em></td><td>1~2주</td><td>현장 미팅 + AI 리서치, Top-5 비즈니스 아웃컴 식별, 고객 데이터로 데모 구축</td><td>AX Harness: 전략 자동 생성, Pattern Vault: 유사 사례 검색</td><td>AX 전략 초안, Quick Win 후보 리스트, 파일럿 데모</td></tr>
+          <tr><td><em>Gravel Road Build</em></td><td>3~6주</td><td>MVP 구축 (테크 리드 + AI), 실제 데이터 기반 파일럿, 경영진 설득</td><td>Pattern Vault: 코드 스니펫 재활용, Deliverable Factory: PRD 자동 생성</td><td>파일럿 시스템 v1, PRD/실행계획서, 경영진 브리핑</td></tr>
+          <tr><td><em>Value Proof</em></td><td>4~8주</td><td>파일럿 결과 측정, ROI 문서화, 확장 제안 + 장기 계약 전환</td><td>Deliverable Factory: ROI 보고서, AX Harness: 확장 전략 제안</td><td>ROI 보고서, 확장 제안서, 장기 계약</td></tr>
+          <tr><td><em>Pattern Harvest</em></td><td>상시</td><td>배포 결과에서 패턴 추출, 실패·성공 메타데이터 기록</td><td>Pattern Vault: 패턴 등록 + 태깅, Context Eng: RAG DB 업데이트</td><td>패턴 카드, 업데이트된 RAG DB, Playbook 기여</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>5.4 Layer 4: 거버넌스 및 품질 관리</h3>
+    <div class="tbl-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>거버넌스 요소</th><th>빈도</th><th>목적</th></tr></thead>
+        <tbody>
+          <tr><td>Weekly Unit Sync</td><td>주 1회</td><td>진행 상황 공유, 블로커 해소, 크로스 도메인 기회 식별</td></tr>
+          <tr><td>Monthly Pattern Review</td><td>월 1회</td><td>새 패턴 공유, 크로스 도메인 적용 논의, Pattern Vault 업데이트</td></tr>
+          <tr><td>Quarterly Platform Sprint</td><td>분기 1회</td><td>검증 패턴 → 플랫폼 정식 반영, 도구·템플릿 업그레이드</td></tr>
+          <tr><td>Unit Health Check</td><td>월 1회</td><td>Unit 재무·프로젝트·팀 상태 점검, 번아웃 사전 감지</td></tr>
+          <tr><td>Annual Strategy Sync</td><td>연 1회</td><td>도메인 포트폴리오 리밸런싱, 신규 도메인 진입 결정, 플랫폼 로드맵 수립</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART 6 -->
+<section id="part6">
+  <div class="section-header">
+    <div class="section-icon">🛠️</div>
+    <div>
+      <div class="section-num">PART 6</div>
+      <div class="section-title">크로스 도메인 플랫폼 구현 방안</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>6.1 구현 원칙: Just Enough Platform</h3>
+    <div class="tbl-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>원칙</th><th>정의</th><th>반(反)패턴</th></tr></thead>
+        <tbody>
+          <tr><td><em>Pull-based 개발</em></td><td>Micro Unit의 현장 요구가 플랫폼 기능을 정의한다</td><td>기능 목록을 먼저 만들고 구현한 후 Unit에 배포하는 Push-based 접근</td></tr>
+          <tr><td><em>80/20 자동화</em></td><td>반복 업무의 80%만 자동화, 나머지 20%는 인간 판단에 남겨둠</td><td>100% 자동화를 목표로 개발 기간이 길어지고 실제 배포가 지연</td></tr>
+          <tr><td><em>외부 플랫폼 레버리지</em></td><td>자체 구축 범위 최소화, Upstage Solar·Claude·MCP 등 외부 기술 최대 활용</td><td>모든 것을 자체 구축하여 개발 리소스 분산</td></tr>
+          <tr><td><em>패턴 우선 제품화</em></td><td>3개 이상 도메인에서 검증된 패턴만 플랫폼에 정식 반영</td><td>한 고객의 요구로 플랫폼에 기능 추가하여 복잡성만 증가</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>6.3 구현 우선순위 매트릭스</h3>
+    <div class="tbl-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>우선순위</th><th>구현 항목</th><th>임팩트</th><th>구현 난이도</th><th>Phase 1 목표</th></tr></thead>
+        <tbody>
+          <tr><td><em>P0 (즉시)</em></td><td>AX Harness 산업별 분기, Pattern Vault 표준 스키마, CLAUDE.md 표준 구조</td><td><span class="stars">★★★★★</span></td><td><span class="stars">★★</span><span class="stars-dim">☆☆☆</span></td><td>WISE42 실전 검증 + 두 번째 Unit 적용</td></tr>
+          <tr><td><em>P1 (Q3 2026)</em></td><td>RAG 파이프라인 자동화, 납품물 템플릿 3종, 패턴 등록 워크플로</td><td><span class="stars">★★★★</span><span class="stars-dim">☆</span></td><td><span class="stars">★★★</span><span class="stars-dim">☆☆</span></td><td>WISE42 효율 30%↑, 프로세스 표준화</td></tr>
+          <tr><td><em>P2 (Q4 2026)</em></td><td>MCP 서버 팩토리, Quick Win 자동 스코어링, 온보딩 파이프라인</td><td><span class="stars">★★★</span><span class="stars-dim">☆☆</span></td><td><span class="stars">★★★★</span><span class="stars-dim">☆</span></td><td>두 번째 Unit 온보딩 시간 50% 단축</td></tr>
+          <tr><td><em>P3 (2027 Q1~)</em></td><td>크로스 도메인 패턴 매칭, 시각화 자동 생성, Playbook 자기 진화</td><td><span class="stars">★★★★★</span></td><td><span class="stars">★★★★★</span></td><td>3개+ Unit 운영 시 비선형 가치 시작</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="highlight" style="margin-top:16px">
+    <div class="highlight-title">구현의 핵심 기준</div>
+    <p>모든 구현은 <strong>'두 번째 Micro Unit이 첫 번째보다 빠르게 첫 납품을 완료할 수 있는가?'</strong>라는 단일 질문으로 검증된다. 이 질문에 Yes로 답할 수 없는 기능은 구현 대상이 아니다.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART 7 -->
+<section id="part7">
+  <div class="section-header">
+    <div class="section-icon">⚓</div>
+    <div>
+      <div class="section-num">PART 7</div>
+      <div class="section-title">WISE42 — 앵커 도메인 FDE Micro Unit</div>
+    </div>
+  </div>
+
+  <div class="two-grid">
+    <div class="card">
+      <div class="card-accent"></div>
+      <h4>WISE42 현황</h4>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+        <div style="display:flex;gap:10px;font-size:13px"><span style="color:var(--dim);min-width:90px">도메인 영역</span><span style="color:var(--text)">공공 인프라 — 철도(KRNA, KORAIL), 해양수산(FIPA, 광양항)</span></div>
+        <div style="display:flex;gap:10px;font-size:13px"><span style="color:var(--dim);min-width:90px">Unit 구성</span><span style="color:var(--text)">Trio Mode (도메인 리드 + 테크 리드 + 오퍼레이션) + AI Agent Stack</span></div>
+        <div style="display:flex;gap:10px;font-size:13px"><span style="color:var(--dim);min-width:90px">핵심 역량</span><span style="color:var(--text)">C-level 직접 접근 + AX Masterplan Harness + 공공기관 도메인 전문성</span></div>
+        <div style="display:flex;gap:10px;font-size:13px"><span style="color:var(--dim);min-width:90px">현재 진행</span><span style="color:var(--text)">KRNA 전기철도 5개 Quick Win 파일럿, FIPA 6개 사업 수직 AX 전략</span></div>
+        <div style="display:flex;gap:10px;font-size:13px"><span style="color:var(--dim);min-width:90px">파트너 생태계</span><span style="color:var(--text)">Upstage Premier Partner 포지셔닝, 데이터센터 인프라 딜</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-accent"></div>
+      <h4>WISE42가 검증하는 핵심 가설</h4>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+        <div style="font-size:13px;color:var(--muted)"><span style="color:var(--accent);font-weight:700">가설 1.</span> 1~3인 Micro Unit이 팔란티어 5인 Pod와 동등한 산출물을 만들 수 있는가? <br><span style="color:var(--dim)">→ 진행 중, 초기 지표 긍정적</span></div>
+        <div style="font-size:13px;color:var(--muted)"><span style="color:var(--accent);font-weight:700">가설 2.</span> Studio 크로스 도메인 플랫폼이 Unit의 한계 비용을 실질적으로 낮추는가? <br><span style="color:var(--dim)">→ 2026 Q4 검증 예정</span></div>
+        <div style="font-size:13px;color:var(--muted)"><span style="color:var(--accent);font-weight:700">가설 3.</span> 공공기관에서 Micro Unit 모델이 대형 컨설팅펌 대비 신뢰를 확보할 수 있는가? <br><span style="color:var(--dim)">→ 검증 중, C-level 접근 확인</span></div>
+        <div style="font-size:13px;color:var(--muted)"><span style="color:var(--accent);font-weight:700">가설 4.</span> Gravel→Highway 패턴 루프가 Studio-Unit 간에 실제 작동하는가? <br><span style="color:var(--dim)">→ 패턴 수집 단계</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART 8 -->
+<section id="part8">
+  <div class="section-header">
+    <div class="section-icon">🔍</div>
+    <div>
+      <div class="section-num">PART 8</div>
+      <div class="section-title">실현 가능성 및 갭 분석</div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>평가 차원</th><th>팔란티어 FDE</th><th>Founders Studio Model</th><th>가능성</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>도메인 전문성</td><td>Echo 팀 (산업 출신)</td><td>도메인 리드 + AI 보조</td><td><span class="stars">★★★★</span><span class="stars-dim">☆</span> 높음</td></tr>
+        <tr><td>기술 실행력</td><td>Delta 팀 (4~5명)</td><td>테크 리드 + AI 에이전트</td><td><span class="stars">★★★</span><span class="stars-dim">☆☆</span> 중간</td></tr>
+        <tr><td>패턴 표준화</td><td>코어 엔지니어링 팀</td><td>크로스 도메인 플랫폼</td><td><span class="stars">★★★★</span><span class="stars-dim">☆</span> 높음</td></tr>
+        <tr><td>확장성</td><td>헤드카운트 비례 (병목)</td><td>Unit 복제 (Studio 지원)</td><td><span class="stars">★★★★★</span> 매우 높음</td></tr>
+        <tr><td>비용 효율성</td><td>대규모 계약 필수</td><td>중소 규모도 수익 가능</td><td><span class="stars">★★★★★</span> 매우 높음</td></tr>
+        <tr><td>플랫폼 성숙도</td><td>Foundry/AIP (20년 축적)</td><td>v0.5 (초기 단계)</td><td><span class="stars">★★</span><span class="stars-dim">☆☆☆</span> 낮음</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px;margin-top:20px">
+    <div class="gap-box">
+      <div class="gap-title"><span>Gap 1</span> — Micro Unit 대역폭 한계</div>
+      <p>1~3인의 동시 프로젝트 수행 능력에 물리적 한계. <strong>완화:</strong> 코호트 구조로 피크 부하 분산. AI 자동화로 반복 업무 80%+ 제거. 동시 활성 고객 3개 이내. Unit 모드 유연 전환(Solo↔Duo↔Trio).</p>
+    </div>
+    <div class="gap-box">
+      <div class="gap-title"><span>Gap 2</span> — 크로스 도메인 플랫폼 미성숙</div>
+      <p>현재 v0.5 단계로 팔란티어 Foundry/AIP 대비 격차 큼. <strong>완화:</strong> Upstage Solar 등 외부 플랫폼 레버리지. 'Just Enough Platform' 철학. WISE42 현장 패턴이 요구사항을 정의하는 Pull-based 개발.</p>
+    </div>
+    <div class="gap-box">
+      <div class="gap-title"><span>Gap 3</span> — Unit 복제 메커니즘 미검증</div>
+      <p>두 번째 Unit 성공 복제 실적 없음. <strong>완화:</strong> 2026 Q4 두 번째 Unit 시범 생성. WISE42 온보딩 역공학 → Playbook 문서화. 복제 성공 지표 명확 정의.</p>
+    </div>
+    <div class="gap-box">
+      <div class="gap-title"><span>Gap 4</span> — 조직 정치 및 신뢰 구축 속도</div>
+      <p>Micro Unit이 대형 컨설팅펌 대비 신뢰 확보에 시간 소요. <strong>완화:</strong> C-level 직접 접근으로 중간 관리층 정치 우회. Quick Win 중심 빠른 가시적 성과. Upstage 등 파트너 브랜드 레버리지.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART 9 -->
+<section id="part9">
+  <div class="section-header">
+    <div class="section-icon">🗺️</div>
+    <div>
+      <div class="section-num">PART 9</div>
+      <div class="section-title">실행 로드맵</div>
+    </div>
+  </div>
+
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="phase-num">Phase 1</div>
+      <div class="phase-title">Anchor Validation</div>
+      <div class="phase-period">2026 Q3</div>
+      <ul class="phase-list">
+        <li>KRNA 파일럿 실행 완료</li>
+        <li>AX Harness v2 구축</li>
+        <li>패턴 DB 초기 구축</li>
+        <li>크로스 도메인 플랫폼 v0.5 정의</li>
+        <li>활성 Unit: 1 (WISE42)</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 2</div>
+      <div class="phase-title">First Replication</div>
+      <div class="phase-period">2026 Q4 ~ 2027 Q1</div>
+      <ul class="phase-list">
+        <li>두 번째 Unit 온보딩 (제조/에너지 or 금융)</li>
+        <li>Upstage 파트너십 공식화</li>
+        <li>패턴 재활용 테스트</li>
+        <li>플랫폼 v1.0 출시</li>
+        <li>활성 Unit: 2~3</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 3</div>
+      <div class="phase-title">Network Scale</div>
+      <div class="phase-period">2027 Q2 ~</div>
+      <ul class="phase-list">
+        <li>3~5개 도메인 FDE Unit 운영</li>
+        <li>플랫폼 v2.0 (자동화 극대화)</li>
+        <li>프리랜서/파트너 FDE 네트워크</li>
+        <li>중소중견기업 섹터 확장</li>
+        <li>활성 Unit: 5~8</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:20px">
+    <table>
+      <thead>
+        <tr><th>측정 지표</th><th>Phase 1</th><th>Phase 2</th><th>Phase 3</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>활성 도메인 FDE Unit 수</td><td>1 (WISE42)</td><td>2~3</td><td>5~8</td></tr>
+        <tr><td>활성 고객 수 (전체)</td><td>3개</td><td>6~8개</td><td>15~20개</td></tr>
+        <tr><td>파일럿 → 본사업 전환율</td><td>50%</td><td>70%</td><td>85%</td></tr>
+        <tr><td>패턴 템플릿 수</td><td>10개</td><td>25개</td><td>50+개</td></tr>
+        <tr><td>새 Unit 온보딩→첫 납품</td><td>기준선 설정</td><td>30% 단축</td><td>60% 단축</td></tr>
+        <tr><td>Unit당 평균 계약 규모</td><td>₩5천만</td><td>₩1억</td><td>₩2억+</td></tr>
+        <tr><td>플랫폼 패턴 재활용률</td><td>—</td><td>40%</td><td>70%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="scale-grid" style="margin-top:20px">
+    <div class="scale-card">
+      <div class="unit">1 Unit (현재)</div>
+      <div class="revenue">₩3~5억</div>
+      <div class="pos">단일 AX 사업자<br>방법론 수준 (v0.5)</div>
+    </div>
+    <div class="scale-card">
+      <div class="unit">3 Units</div>
+      <div class="revenue">₩10~15억</div>
+      <div class="pos">도메인 특화 AI 에이전시<br>재활용 템플릿+도구 (v1)</div>
+    </div>
+    <div class="scale-card">
+      <div class="unit">5 Units</div>
+      <div class="revenue">₩25~40억</div>
+      <div class="pos">AI AX 플랫폼 기업<br>크로스 도메인 데이터 레이어 (v2)</div>
+    </div>
+    <div class="scale-card">
+      <div class="unit">8~10 Units</div>
+      <div class="revenue">₩60~100억</div>
+      <div class="pos">한국의 팔란티어 (초기)<br>산업별 AI 배포 OS</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONCLUSION -->
+<section id="conclusion">
+  <div class="conclusion">
+    <h2>Conclusion: 전략적 판단</h2>
+    <p style="color:var(--muted);font-size:14px;line-height:1.75;margin-bottom:16px">
+      팔란티어의 FDE 모델은 엔터프라이즈 AI 배포의 '검증된 정답'으로 부상했으며, 2026년 Anthropic과 OpenAI의 대규모 투자가 이를 증명한다. 그러나 팔란티어 모델에는 구조적 한계가 있다 — 헤드카운트 비례 성장, 대규모 계약 하한선, 72%의 모방 실패율.
+    </p>
+    <div class="conclusion-verdict">
+      <div style="color:var(--muted);font-size:12px;margin-bottom:6px">전략적 결론</div>
+      <div class="verdict">실현 가능하며, 조건부로 확장 가능하다</div>
+      <div style="color:var(--dim);font-size:12px;margin-top:4px">(Feasible and Conditionally Scalable)</div>
+    </div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:12px">세 가지 필수 조건이 충족될 때 이 모델은 성공한다:</p>
+    <ul class="cond-list">
+      <li>
+        <div class="cond-num">1</div>
+        <span>WISE42가 앵커 Unit으로서 크로스 도메인 플랫폼의 각 구성 요소를 실전 검증한다</span>
+      </li>
+      <li>
+        <div class="cond-num">2</div>
+        <span>크로스 도메인 플랫폼이 두 번째 Unit의 온보딩 비용을 실질적으로 낮춘다 (30% 이상)</span>
+      </li>
+      <li>
+        <div class="cond-num">3</div>
+        <span>패턴 순환(Gravel→Highway) 메커니즘이 도메인 간 실제 작동하여 비선형적 가치를 창출한다</span>
+      </li>
+    </ul>
+    <div class="quote" style="margin-top:20px">
+      <div class="quote-label">궁극적 비전</div>
+      <p>Founders Studio가 도메인 FDE Micro Unit을 지속적으로 생성하는 <strong>'Factory of Domain FDEs'</strong>가 되는 것이다. 각 Solopreneur/Micro Unit은 자신의 도메인에서 '작은 팔란티어'로 기능하고, 크로스 도메인 플랫폼이 이들을 연결하는 공유 지능(Shared Intelligence)을 제공한다. 이것이 '한국의 팔란티어'를 실현하는 경로이다.</p>
+    </div>
+  </div>
+</section>
+
+<div class="footnote">
+  <div class="footnote-title">Reference</div>
+  <div class="footnote-item">• Founders Studio × WISE42 — FS_Enterprise AX 사업 운영 전략_v5.docx (2026년 5월, Confidential)</div>
+  <div class="footnote-item">• Palantir Technologies — FDE Model, Foundry/AIP Platform Architecture</div>
+  <div class="footnote-item">• Mandalore Partners (2026.02) — Venture Studio as Asset-Backed Asset Class</div>
+  <div class="footnote-item">• Presta Ventures (2026.01) — Post-SaaS Investing in the Agentic Era</div>
+  <div class="footnote-item">• MIT NANDA — Enterprise GenAI Pilot Impact Study</div>
+  <div class="footnote-item">• Forrester Research (2026) — Enterprise AI Spending Forecast</div>
+  <div class="footnote-item">• Indeed Hiring Lab — FDE Job Posting Trend Analysis (2025.04 → 2026.04)</div>
+</div>
+
+</main>
+</body>
+</html>
