@@ -21,6 +21,10 @@ from datetime import date
 # ───────────────────────────────────────────────
 ARTICLE_META = {
     # 비즈니스 인텔리전스
+    "2026-02_FDE_Definitive_Guide_Vinoo_Ganesh.html": {
+        "title": "The Definitive Guide to Forward Deployed Engineering<br>— Vinoo Ganesh (Next Play Newsletter)",
+        "tags":  ["FDE", "Palantir", "Project Frontline", "Customer Outcomes", "Enterprise AI Deployment"],
+    },
     "2025-12_Sapphire_2026_AI_10예측.html": {
         "title": "Sapphire Ventures — 2026 AI<br>10대 예측: 엔터프라이즈·인프라·혁신",
         "tags":  ["$1T IPO", "$50B M&A", "에너지 제약", "오픈소스 모델", "로보틱스"],

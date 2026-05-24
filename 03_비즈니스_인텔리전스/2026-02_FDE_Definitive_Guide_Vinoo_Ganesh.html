@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Definitive Guide to Forward Deployed Engineering — Vinoo Ganesh | GARAMwiki</title>
+<style>
+:root {
+  --bg: #0c0e14; --bg2: #131620; --bg3: #1a1e2e;
+  --border: rgba(255,255,255,0.07);
+  --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b;
+  --accent: #f59e0b; --accent-bg: rgba(245,158,11,0.08); --accent-glow: rgba(245,158,11,0.18);
+  --radius: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;line-height:1.75;font-size:15px}
+a{color:var(--accent);text-decoration:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(12,14,20,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:6px;height:52px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-home{color:var(--muted);font-size:13px;white-space:nowrap;padding:4px 8px;border-radius:6px}
+.nav-home:hover{color:var(--accent)}
+.nav-sep{color:var(--dim);font-size:12px}
+.nav-link{color:var(--muted);font-size:12px;white-space:nowrap;padding:4px 10px;border-radius:6px;border:1px solid transparent;transition:all .2s}
+.nav-link:hover{color:var(--accent);border-color:rgba(245,158,11,0.3);background:var(--accent-bg)}
+
+/* HERO */
+.hero{max-width:1060px;margin:0 auto;padding:60px 24px 40px}
+.hero-badges{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid}
+.badge-biz{background:rgba(245,158,11,0.12);color:#f59e0b;border-color:rgba(245,158,11,0.3)}
+.badge-src{background:rgba(148,163,184,0.08);color:var(--muted);border-color:rgba(148,163,184,0.2)}
+.hero h1{font-size:clamp(22px,4vw,36px);font-weight:800;line-height:1.2;margin-bottom:12px}
+.hero h1 span{color:var(--accent)}
+.hero-sub{color:var(--muted);font-size:15px;max-width:740px;line-height:1.65;margin-bottom:28px}
+.hero-meta{display:flex;gap:20px;flex-wrap:wrap}
+.meta-item{display:flex;align-items:center;gap:6px;color:var(--dim);font-size:13px}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+/* STATS */
+.stats-bar{max-width:1060px;margin:0 auto 48px;padding:0 24px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+.stat-card:hover{border-color:rgba(245,158,11,0.25)}
+.stat-num{font-size:26px;font-weight:800;color:var(--accent);line-height:1;margin-bottom:4px}
+.stat-label{color:var(--muted);font-size:12px;line-height:1.4}
+
+/* MAIN */
+main{max-width:1060px;margin:0 auto;padding:0 24px 80px}
+section{margin-bottom:52px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.section-icon{width:36px;height:36px;border-radius:10px;background:var(--accent-bg);border:1px solid rgba(245,158,11,0.25);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.section-num{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:2px;text-transform:uppercase}
+.section-title{font-size:20px;font-weight:700}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:14px;position:relative;overflow:hidden;transition:border-color .2s}
+.card:hover{border-color:rgba(245,158,11,0.2)}
+.card-accent{position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--accent)}
+.card h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.card p{color:var(--muted);font-size:14px;line-height:1.75}
+
+/* QUOTE */
+.quote{background:var(--accent-bg);border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:18px 22px;margin:16px 0}
+.quote-label{color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.quote p{color:var(--text);font-size:14px;line-height:1.8;font-style:italic}
+
+/* HIGHLIGHT */
+.highlight{background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(245,158,11,0.03));border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius);padding:22px 26px;margin:20px 0}
+.highlight-title{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:.07em}
+.highlight p{color:var(--text);font-size:14px;line-height:1.75}
+
+/* STORY BOX */
+.story-box{background:var(--bg3);border:1px solid rgba(245,158,11,0.15);border-radius:var(--radius);padding:24px;margin:16px 0;position:relative}
+.story-box::before{content:'📖';position:absolute;top:16px;right:18px;font-size:18px;opacity:.4}
+.story-box h4{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:10px}
+.story-box p{color:var(--muted);font-size:14px;line-height:1.75;margin-bottom:10px}
+.story-box p:last-child{margin-bottom:0}
+
+/* TRAITS GRID */
+.traits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin:16px 0}
+.trait-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.trait-num{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.trait-title{font-size:15px;font-weight:700;margin-bottom:10px}
+.trait-body{color:var(--muted);font-size:13px;line-height:1.7}
+.trait-story{background:rgba(245,158,11,0.07);border-radius:8px;padding:10px 12px;margin-top:10px;font-size:12px;color:var(--dim);line-height:1.6;font-style:italic}
+
+/* NO LIST */
+.no-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:16px 0}
+.no-card{background:var(--bg3);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:16px 18px}
+.no-card h4{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.no-card p{font-size:13px;color:var(--dim);line-height:1.6}
+
+/* PLAYBOOK */
+.playbook-steps{display:flex;flex-direction:column;gap:14px;margin:16px 0}
+.step{display:flex;gap:16px}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#1a1000;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-body{}
+.step-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.step-text{color:var(--muted);font-size:13px;line-height:1.7}
+
+/* INTERVIEW QA */
+.qa-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin:12px 0}
+.qa-q{font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px}
+.qa-bad{background:rgba(239,68,68,0.06);border-left:2px solid rgba(239,68,68,0.4);border-radius:0 6px 6px 0;padding:8px 12px;margin-bottom:8px;font-size:13px;color:#f87171}
+.qa-good{background:rgba(16,185,129,0.06);border-left:2px solid rgba(16,185,129,0.4);border-radius:0 6px 6px 0;padding:8px 12px;font-size:13px;color:#34d399;line-height:1.6}
+.qa-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+
+/* CAREER PATH */
+.career-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:16px 0}
+.career-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.career-period{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.career-title{font-size:14px;font-weight:700;margin-bottom:10px}
+.career-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.career-list li{color:var(--muted);font-size:13px;padding-left:14px;position:relative;line-height:1.5}
+.career-list li::before{content:'›';position:absolute;left:0;color:var(--accent)}
+
+/* TECH SKILLS */
+.skill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:16px 0}
+.skill-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.skill-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.skill-desc{font-size:12px;color:var(--dim);line-height:1.5}
+
+/* KW PILLS */
+.kw-row{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.kw{background:var(--accent-bg);color:var(--accent);border:1px solid rgba(245,158,11,0.25);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600}
+
+/* TWO COL */
+.two-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:16px 0}
+
+/* FLYWHEEL */
+.flywheel{display:flex;justify-content:center;gap:0;flex-wrap:wrap;margin:20px 0;align-items:center}
+.fw-item{background:var(--accent-bg);border:1px solid rgba(245,158,11,0.25);border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;color:var(--accent);text-align:center}
+.fw-arrow{color:var(--accent);font-size:16px;padding:0 8px;display:flex;align-items:center}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:32px 0}
+
+/* WARN BOX */
+.warn-box{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius);padding:16px 20px;margin:12px 0}
+.warn-box p{color:#fca5a5;font-size:13px;line-height:1.65}
+.warn-title{font-size:12px;font-weight:700;color:#f87171;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+
+/* SOURCE */
+.source-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-top:40px}
+.source-title{font-size:11px;font-weight:700;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.source-link{color:var(--accent);font-size:13px}
+
+@media(max-width:640px){
+  .hero,.stats-bar,main{padding-left:16px;padding-right:16px}
+  .hero{padding-top:36px;padding-bottom:24px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-home" href="../index.html">← GARAMwiki</a>
+    <span class="nav-sep">/</span>
+    <a class="nav-link" href="#bottom-line">Bottom Line</a>
+    <a class="nav-link" href="#jacket">Grey Jacket</a>
+    <a class="nav-link" href="#why-works">Why It Works</a>
+    <a class="nav-link" href="#frontline">Project Frontline</a>
+    <a class="nav-link" href="#traits">6 Traits</a>
+    <a class="nav-link" href="#not-for-you">Not For You</a>
+    <a class="nav-link" href="#playbook">Playbook</a>
+    <a class="nav-link" href="#career">Career Path</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badges">
+    <span class="badge badge-biz">📊 비즈니스 인텔리전스</span>
+    <span class="badge badge-src">Next Play Newsletter</span>
+    <span class="badge badge-src">Vinoo Ganesh</span>
+  </div>
+  <h1>The Definitive Guide to<br><span>Forward Deployed Engineering</span></h1>
+  <div class="hero-sub">
+    팔란티어에서 250명 이상의 엔지니어를 FDE로 전환한 Project Frontline 설계자 Vinoo Ganesh의 FDE 완전 해설 —
+    FDE의 본질, 팔란티어의 내부 작동 방식, 되어야 할 사람과 아닌 사람, 그리고 직접 만드는 실전 플레이북.
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item"><div class="meta-dot"></div>2026년 2월 5일</div>
+    <div class="meta-item"><div class="meta-dot"></div>Vinoo Ganesh (CEO, Kepler.ai · ex-Palantir · ex-Citadel)</div>
+    <div class="meta-item"><div class="meta-dot"></div>Next Play Newsletter (nextplayso.substack.com)</div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">250+</div>
+      <div class="stat-label">Project Frontline<br>수료 엔지니어 수</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">$275B</div>
+      <div class="stat-label">팔란티어 시가총액<br>(FDE 모델로 달성)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">$1.1B+</div>
+      <div class="stat-label">팔란티어 상위 20개<br>고객 연간 매출</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">6 Traits</div>
+      <div class="stat-label">최고의 FDE를<br>만드는 핵심 자질</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">90일</div>
+      <div class="stat-label">FDE 첫 배포<br>실전 플레이북</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- BOTTOM LINE -->
+<section id="bottom-line">
+  <div class="section-header">
+    <div class="section-icon">💡</div>
+    <div>
+      <div class="section-num">The Bottom Line</div>
+      <div class="section-title">FDE란 무엇인가 — 핵심 명제</div>
+    </div>
+  </div>
+
+  <div class="quote">
+    <div class="quote-label">핵심 정의</div>
+    <p>An FDE is a software engineer who <strong>owns customer outcomes</strong>. Not customer relationships, not customer satisfaction scores, but outcomes: the actual results the customer is trying to achieve with the software.</p>
+  </div>
+
+  <div class="two-grid">
+    <div class="card">
+      <div class="card-accent"></div>
+      <h3>FDE vs 다른 역할의 차이</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+        <div style="display:flex;gap:12px;font-size:13px"><span style="color:var(--dim);min-width:110px">Sales Engineer</span><span style="color:var(--muted)">딜을 클로즈하는 것이 목표</span></div>
+        <div style="display:flex;gap:12px;font-size:13px"><span style="color:var(--dim);min-width:110px">Solutions Architect</span><span style="color:var(--muted)">제품이 고객 환경에 어떻게 맞는지 설계</span></div>
+        <div style="display:flex;gap:12px;font-size:13px"><span style="color:var(--accent);font-weight:700;min-width:110px">FDE</span><span style="color:var(--text);font-weight:600">고객이 실제로 이기는 것을 보장</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-accent"></div>
+      <h3>핵심 역설: FDE는 채용하는 게 아니라 키운다</h3>
+      <p>전통적인 엔지니어링 직무는 엔지니어를 고객 현실로부터 차단하도록 설계되어 있다. 코드를 짜고, 출시하고, 다음 티켓으로 이동. 당신은 고객의 의존감을 느끼지 못하고, 엉성한 실제 데이터와 충돌하는 상황을 보지 못하고, 사람의 눈을 보며 설명해야 하는 상황을 겪지 못한다. 그래서 이 스킬셋을 채용으로 확보할 수 없다. <strong>성장시켜야 한다.</strong></p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-title">지금 FDE가 폭발하는 3가지 구조적 이유</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+      <div style="display:flex;gap:12px"><span style="color:var(--accent);font-weight:800;font-size:14px;flex-shrink:0">①</span><div><strong style="color:var(--text)">AI가 배포를 더 어렵게 만들고 있다</strong><br><span style="color:var(--muted);font-size:13px">LLM에는 파인튜닝, 프롬프트 엔지니어링, 평가, 지속적 조정이 필요하다. 담장 너머로 던져서 고객이 알아서 하도록 할 수 없다. AI가 주니어 엔지니어가 하던 많은 것을 할 수 있게 되면, 가치 있는 엔지니어는 AI가 할 수 없는 것을 하는 사람 — 고객과 함께 앉아서, 실제 문제를 이해하고, 결과를 소유하는 사람이다.</span></div></div>
+      <div style="display:flex;gap:12px"><span style="color:var(--accent);font-weight:800;font-size:14px;flex-shrink:0">②</span><div><strong style="color:var(--text)">방산·국방 테크의 폭발적 성장</strong><br><span style="color:var(--muted);font-size:13px">Anduril, Palantir, Shield AI 등이 배포 실패를 용납할 수 없는 군·정부 고객을 위한 소프트웨어를 구축하고 있다. 헬프데스크로는 지원이 불가능한 현장에서 엔지니어가 필요하다.</span></div></div>
+      <div style="display:flex;gap:12px"><span style="color:var(--accent);font-weight:800;font-size:14px;flex-shrink:0">③</span><div><strong style="color:var(--text)">기업 구매자들이 더 스마트해지고 있다</strong><br><span style="color:var(--muted);font-size:13px">수십 년의 선반 소프트웨어(shelfware) 이후, 기업들이 구현 보장을 요구하기 시작했다. 현장에 엔지니어를 두고 배포를 소유하는 벤더가 이긴다.</span></div></div>
+    </div>
+  </div>
+
+  <div class="kw-row">
+    <span class="kw">Forward Deployed Engineer</span>
+    <span class="kw">Customer Outcomes</span>
+    <span class="kw">Palantir</span>
+    <span class="kw">Enterprise AI Deployment</span>
+    <span class="kw">Shelfware Problem</span>
+    <span class="kw">Defense Tech</span>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- THE GREY JACKET + TRANSFORMATION -->
+<section id="jacket">
+  <div class="section-header">
+    <div class="section-icon">🧥</div>
+    <div>
+      <div class="section-num">The Grey Track Jacket</div>
+      <div class="section-title">팔란티어의 FDE 전환 철학 — 변형이란 무엇인가</div>
+    </div>
+  </div>
+
+  <div class="story-box">
+    <h4>The Grey Jacket Mythology</h4>
+    <p>팔란티어에서는 모든 사람이 검은색 트랙 재킷을 받았다. 표준 지급품이었다. 그러나 살 수도, 요청할 수도 없는 또 다른 재킷이 있었다 — 회색 재킷.</p>
+    <p>이 재킷의 신화는, 수년간의 현장 경험을 통해 검은색 재킷이 바래서 회색이 된 것이라는 이야기였다. 당신이 충분히 많은 배포를 거치고, 충분히 어려운 현장 작업을 통과해서, 검은색이 타버려 회색이 됐다는 것이다.</p>
+    <p>Brian Schimpf(현 Anduril CEO)가 이 재킷을 수여했다. Vinoo가 자신의 재킷을 받았을 때, 그는 자랑스러움이나 성취감을 느끼지 못했다. 그는 무게를 느꼈다 — 야근, 실패한 시스템, 무언가가 잘못됐을 때 그에게 의존했던 고객들. 재킷은 트로피가 아니었다. 그것은 당신이 무언가를 통과했고, 그 무언가가 당신을 변화시켰다는 인정이었다.</p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Cassandra 1970년 사건 — 현장 몰입 없이 구축한 결과</h3>
+    <p style="margin-bottom:12px">팔란티어에는 Phoenix라는 제품이 있었다. 깔끔한 아키텍처, 탄탄한 코드, 좋은 테스트 커버리지. 그러나 현장에서 실패를 목격했다.</p>
+    <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:16px 18px;font-size:13px;color:var(--muted);line-height:1.7">
+      <strong style="color:#f87171;display:block;margin-bottom:6px">시스템 아키텍처의 치명적 가정</strong>
+      시스템은 데이터 통합에 의존했다. 새 데이터가 들어오면 Apache Cassandra에서 키스페이스를 생성. 자동 삭제를 위해 10분 단위로 키스페이스를 만들도록 설계했다. 나름 영리한 트릭이라고 생각했다.<br><br>
+      그런데 <strong style="color:#f87171">나쁜 데이터</strong>가 들어왔다. 정확하게는, 데이터가 아예 없었다. 날짜 열이 비어있었다. 시스템은 이것을 epoch 값 — <strong style="color:#f87171">1970년 1월 1일</strong>로 해석했다. 그리고 설계한 대로 정확히 작동했다: 1970년 1월 1일부터 2013년 10월 7일까지 모든 키스페이스를 생성했다.<br><br>
+      결과: <strong style="color:#f87171">230만 개의 키스페이스</strong>. Cassandra는 column family당 약 5MB가 필요하다. 시작에만 <strong style="color:#f87171">14 테라바이트의 RAM</strong>이 필요했다. 시스템은 시작 시 OOM으로 죽었다.
+    </div>
+    <p style="margin-top:12px;font-size:13px;color:var(--dim)">교훈: 우리는 이 시스템이 실제로 처리할 데이터를 한 번도 본 적이 없었다. 새벽 2시에 쓰레기 데이터가 들어왔을 때 그 방에 있어본 적이 없었다. 고객의 눈을 보며 왜 그들이 의존하던 시스템이 응답하지 않는지 설명해야 했던 적이 없었다.</p>
+  </div>
+
+  <div class="quote">
+    <div class="quote-label">FDE 전환의 본질</div>
+    <p>The gap between what we were building and what users actually needed wasn't a small gap. It was a <strong>chasm</strong>. What this role really asks of you isn't skills to develop, certifications to get, or keywords for your resume. It asks for a transformation in how you think about building software.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHY IT WORKS -->
+<section id="why-works">
+  <div class="section-header">
+    <div class="section-icon">⚙️</div>
+    <div>
+      <div class="section-num">Why This Model Works</div>
+      <div class="section-title">FDE 비즈니스 모델의 작동 원리</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-accent"></div>
+    <h3>더 나은 소프트웨어가 아닌, 실제로 사용되는 소프트웨어</h3>
+    <p>엔터프라이즈 소프트웨어의 실패는 기술적 작동 여부 때문이 아니다. 제대로 배포되지 않고, 구성되지 않고, 도입되지 않고, 고객의 워크플로에 통합되지 않았기 때문이다. 업계의 더러운 비밀은 상당 비율의 엔터프라이즈 소프트웨어 구매가 선반 소프트웨어(shelfware)로 끝난다는 것이다.</p>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-title">FDE 플라이휠</div>
+    <div class="flywheel" style="margin:12px 0 0">
+      <div class="fw-item">배포된 소프트웨어</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-item">피드백 생성</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-item">제품 개선</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-item">더 쉬운 배포</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-item">더 많은 고객</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-item">더 많은 피드백</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>팔란티어의 $1.1억 비밀</h3>
+    <p>팔란티어는 상위 20개 고객에서만 연간 $11억 이상의 매출을 올린다. 이것은 소프트웨어가 경쟁사보다 약간 더 낫기 때문이 아니다. <strong style="color:var(--accent)">팔란티어 엔지니어들이 전통적인 엔터프라이즈 소프트웨어 벤더들이 하지 않는 방식으로 고객의 결과를 소유하기 때문이다.</strong></p>
+  </div>
+
+  <div class="story-box" style="margin-top:16px">
+    <h4>현장에서 태어난 제품 — Pipeline Monitoring Tool</h4>
+    <p>팔란티어 배포 현장에서 매일 50개 이상의 데이터 파이프라인이 실행되고 있었고, 모니터링이 악몽 같았다. 이 고통을 직접 경험한 몇몇 엔지니어들이 파이프라인 모니터링 도구를 만들어 여러 사이트에 배포했다. PM이 시켰기 때문이 아니었다. <strong>그들이 그 문제를 직접 느꼈기 때문이었다.</strong></p>
+    <p>그것이 FDE의 장점이다: 스펙이 아닌 경험에서 구축하는 엔지니어들.</p>
+  </div>
+
+  <div class="quote">
+    <div class="quote-label">정정(Correction), 트렌드가 아니다</div>
+    <p>오랫동안 소프트웨어 산업은 규모 있는 구축을 위해 최적화하면서, 배포 복잡성을 고객에게 떠넘기고 엔지니어링을 해결해야 할 비즈니스 문제로부터 분리시켰다. 지금 이기고 있는 회사들은 <strong>구축과 배포의 전체 루프를 소유하는 회사들이다.</strong> 팔란티어는 이것을 20년 전에 파악하고 비판을 받았다. "확장 불가능하다", "그냥 컨설턴트다", "진짜 소프트웨어 회사가 아니다." 이제 모두가 이 모델을 복사하려 하고 있다.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECT FRONTLINE -->
+<section id="frontline">
+  <div class="section-header">
+    <div class="section-icon">🏭</div>
+    <div>
+      <div class="section-num">Project Frontline</div>
+      <div class="section-title">FDE를 공장처럼 만든 프로그램 — 내부 구조</div>
+    </div>
+  </div>
+
+  <div class="two-grid">
+    <div class="card">
+      <div class="card-accent"></div>
+      <h3>프로그램의 탄생 배경</h3>
+      <p>팔란티어에는 두 조직이 서로를 이해하지 못했다. 제품 개발(PD)은 소프트웨어를 만들고, 비즈니스 개발(BD, FDE 포함)은 고객 앞에 갖다놓는 역할이었다. PD는 BD가 기술적 엄격함이 부족하다고 봤다. BD는 PD가 긴박감이 없다고 봤다. 배포는 고통스러웠고, 때로는 며칠에서 몇 주가 걸렸다.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent"></div>
+      <h3>핵심 인사이트: 1마일 걷기를 문자 그대로</h3>
+      <p>누군가를 이해하는 가장 좋은 방법은 그들의 신발을 신고 1마일을 걷는 것이다. Frontline은 이것을 문자 그대로 만들었다. 소프트웨어 엔지니어들이 정식으로 제품 개발을 시작하기 전에 현장에서 FDE 로테이션을 거쳤다. 소프트웨어가 실제로 어떻게 사용되는지, 배포의 고통을 느끼고, 우리가 구축한 것과 고객이 필요한 것 사이의 간극을 이해한 후, 돌아와서 다르게 구축했다.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>프로그램 설계 — 배운 것들</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+      <div style="display:flex;gap:12px"><div style="color:var(--accent);font-weight:700;font-size:13px;min-width:16px">✓</div><div style="color:var(--muted);font-size:13px;line-height:1.6"><strong style="color:var(--text)">멘토링 구조:</strong> 모든 Frontliner는 경험자 멘토를 배정받았다. 소프트웨어 구축에서 배포로 이동하는 방향 상실을 헤쳐나갈 수 있도록 안내했다.</div></div>
+      <div style="display:flex;gap:12px"><div style="color:var(--accent);font-weight:700;font-size:13px;min-width:16px">✓</div><div style="color:var(--muted);font-size:13px;line-height:1.6"><strong style="color:var(--text)">조기 피드백 루프:</strong> 누군가가 어려움을 겪고 있을 때 조기에 포착하고, 무언가가 작동하지 않을 때 빠르게 파악하기 위한 피드백 구조를 만들었다.</div></div>
+      <div style="display:flex;gap:12px"><div style="color:var(--dim);font-weight:700;font-size:13px;min-width:16px">✗</div><div style="color:var(--muted);font-size:13px;line-height:1.6"><strong style="color:var(--text)">6개월 타임라인의 실패:</strong> 리소스 압박으로 로테이션이 1년까지 늘어나 엔지니어들이 갇혔다고 느꼈다. 기존 FDE와 로테이터 간의 문화적 충돌도 있었다.</div></div>
+      <div style="display:flex;gap:12px"><div style="color:var(--accent);font-weight:700;font-size:13px;min-width:16px">✓</div><div style="color:var(--muted);font-size:13px;line-height:1.6"><strong style="color:var(--text)">미래 작업과의 정렬 (핵심 발견):</strong> 파이프라인 모니터링 도구를 만들 사람을, 파이프라인 모니터링이 문제인 배포에 보냈다. <strong>구축자가 되기 전에 사용자가 되었다.</strong> 이것이 변혁적이었다. 나중에 고칠 문제의 고통을 경험했을 때, 무언가가 클릭됐다.</div></div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-title">Frontline Alumni — 지금 어디 있나</div>
+    <p>250명 이상의 엔지니어가 Frontline을 수료했다. 졸업생들은 현재 <strong>OpenAI, xAI, Helsing, Anduril, Hex</strong> 등 중요한 것들을 만드는 회사에 있다. Bill Ward(공동 리드)는 Northslope Technologies를, Jesse Rickard는 Fourth Age를 창업했다 — 둘 다 FDE as a Service 회사다.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 6 TRAITS -->
+<section id="traits">
+  <div class="section-header">
+    <div class="section-icon">⭐</div>
+    <div>
+      <div class="section-num">What Makes Someone Great</div>
+      <div class="section-title">최고의 FDE를 만드는 6가지 자질</div>
+    </div>
+  </div>
+
+  <div class="traits-grid">
+    <div class="trait-card">
+      <div class="trait-num">Trait 01</div>
+      <div class="trait-title">고객 세계에 대한 끊임없는 호기심</div>
+      <div class="trait-body">훌륭한 FDE는 고객의 비즈니스를 충분히 이해해서, 고객이 포기했거나 아직 명확히 표현하지 못한 문제를 표면화한다. 구축자가 되기 전에 사용자가 된다.</div>
+      <div class="trait-story">💡 분석가가 매일 45분을 세 시스템에서 데이터를 수동 다운로드해 Excel에 합치는 것을 발견했다. 그녀는 2년간 이것을 해왔고 자동화를 요청할 생각조차 못했다. 그녀가 도착할 때 받은 편지함에 파이프라인이 처리해서 넣어뒀다.</div>
+    </div>
+
+    <div class="trait-card">
+      <div class="trait-num">Trait 02</div>
+      <div class="trait-title">상황에 맞게 엔지니어링을 조율하는 능력</div>
+      <div class="trait-body">언제 견고한 시스템을 구축하고, 언제 그냥 작동하는 스크립트를 작성할지 안다. 양방향 실패 모두 경험해야 한다.</div>
+      <div class="trait-story">⚠️ 실패 1: 레코드 중복 제거 요청에 퍼지 매칭, 신뢰도 점수, 검토 인터페이스가 있는 완전한 엔진을 2주에 걸쳐 구축했다. 실제로 필요한 것은 한 번 실행할 SQL 쿼리였다. 과엔지니어링 10배. vinoo.groovy라는 "임시" 삭제 스크립트는 18개월 동안 프로덕션에서 실행됐다.</div>
+    </div>
+
+    <div class="trait-card">
+      <div class="trait-num">Trait 03</div>
+      <div class="trait-title">여러 청중을 아우르는 커뮤니케이션</div>
+      <div class="trait-body">복잡한 시스템을 세부 사항에 관심 없는 경영진에게 설명하고, 정확히 어떻게 작동하는지 알아야 하는 기술적 상대와 깊게 들어갈 수 있다.</div>
+      <div class="trait-story">💬 마이그레이션이 3주가 아닌 3개월 걸리는 이유를 설명할 때 — CTO에게: "데이터에 15년 치 누적 엣지 케이스가 있어서 분기 이사회 보고에 위험합니다." 엔지니어링 리드에게: "12개 테이블에 걸쳐 847개 열이 있고, 기존 ETL의 묵시적 타입 강제 변환을 보존해야 합니다."</div>
+    </div>
+
+    <div class="trait-card">
+      <div class="trait-num">Trait 04</div>
+      <div class="trait-title">무언가가 망가졌을 때 침착함 유지</div>
+      <div class="trait-body">무언가는 반드시 망가진다. 침착함은 성격이 아닌 준비와 반복에서 온다. 자발적으로 고압 상황에 자신을 놓아라.</div>
+      <div class="trait-story">🔴 고객 CEO가 이사회에 데모를 하던 중 제품이 충돌했다. 전화가 왔다. 고객 IT 담당자를 통해 서비스를 재시작하도록 안내했다 (그 주 초에 근본 원인을 진단했기 때문에 작동할 것을 알았다). 데모는 4분 만에 복구됐다. CEO는 엔지니어가 전화에 있었다는 사실을 몰랐다.</div>
+    </div>
+
+    <div class="trait-card">
+      <div class="trait-num">Trait 05</div>
+      <div class="trait-title">권한 없이 결과를 소유하는 능력</div>
+      <div class="trait-body">가장 어려운 스킬. 보고 받지 않는 팀에서 무언가가 필요할 때, 무엇이 아닌 왜를 설명하는 요청을 배워라.</div>
+      <div class="trait-story">🎯 제품 팀이 주요 고객 차단 버그를 우선순위로 두게 하려면: "이 버그 우선 처리해주세요"는 효과 없다. "이 고객은 연간 매출 $400만이고 6주 후 갱신이다. 임원 스폰서에게 이 버그가 최우선 불만이라고 했다. 고객과 직접 통화를 연결해 드릴 수도 있다"가 2일 만에 수정을 받았다.</div>
+    </div>
+
+    <div class="trait-card">
+      <div class="trait-num">Trait 06</div>
+      <div class="trait-title">효과적으로 반박하는 능력</div>
+      <div class="trait-body">단순히 고객이 요청하는 것을 그냥 하지 않는다. 실제 필요를 이해하고 올바른 해결책을 찾는다. 반박은 거절이 아니라 진짜 필요를 이해하는 것이다.</div>
+      <div class="trait-story">✋ 고객이 1개월 걸리는 커스텀 기능을 요청했다. "왜" 필요한지 2일 동안 이해하니, 구성 변경으로 기존 제품에서 해결 가능했다. 그들은 1달 기다리는 것보다 그날 바로 얻은 해결책에 더 만족했다.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- NOT FOR YOU -->
+<section id="not-for-you">
+  <div class="section-header">
+    <div class="section-icon">🚫</div>
+    <div>
+      <div class="section-num">Why You Might NOT Want This</div>
+      <div class="section-title">FDE가 맞지 않는 사람들</div>
+    </div>
+  </div>
+
+  <div class="no-grid">
+    <div class="no-card">
+      <h4>깊은 집중 시간이 필요한 사람</h4>
+      <p>FDE 작업은 인터럽트 중심이다. 고객이 긴급 상황을 만들고 배포가 예상치 못한 문제를 만난다. 캘린더는 카오스처럼 보인다.</p>
+    </div>
+    <div class="no-card">
+      <h4>모호함이 마비를 일으키는 사람</h4>
+      <p>FDE는 불완전한 정보로 끊임없이 운영된다. 요구사항은 불명확하고, 우선순위는 바뀌고, 옳은지 모르는 채 결정해야 한다.</p>
+    </div>
+    <div class="no-card">
+      <h4>기술적 전문성을 깊게 파고 싶은 사람</h4>
+      <p>FDE는 필요에 의해 제너럴리스트다. 많은 것에 대해 많이 배우지만, 어느 것에도 세계 전문가가 되지 못한다. 분산 시스템이나 ML의 최고가 되고 싶다면 순수 엔지니어링이 더 나은 경로다.</p>
+    </div>
+    <div class="no-card">
+      <h4>고객 불만을 개인적으로 받아들이는 사람</h4>
+      <p>고객들은 당신 탓이 아닌 것에도 불만을 갖고 당신을 비난한다. 이것이 개인적으로 느껴진다면 번아웃으로 이어진다.</p>
+    </div>
+    <div class="no-card">
+      <h4>경계를 설정하지 못하는 사람</h4>
+      <p>FDE 작업은 모든 가용 시간을 채우도록 확장된다. '아니오'라고 말하지 못하면 번아웃으로 자신을 죽이게 된다.</p>
+    </div>
+  </div>
+
+  <div class="highlight" style="margin-top:4px">
+    <div class="highlight-title">Note</div>
+    <p>이것들은 약점이 아니다. 단지 FDE에 맞지 않는 특성일 뿐이다. 이런 특성을 가진 사람들을 위한 훌륭한 엔지니어링 역할은 많다.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PLAYBOOK -->
+<section id="playbook">
+  <div class="section-header">
+    <div class="section-icon">📋</div>
+    <div>
+      <div class="section-num">The Playbook</div>
+      <div class="section-title">현장 노출을 직접 만드는 실전 플레이북</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Phase 1 — 현장 노출 만들기 (6개월)</h3>
+    <div class="playbook-steps" style="margin-top:12px">
+      <div class="step">
+        <div class="step-num">W1</div>
+        <div class="step-body">
+          <div class="step-title">Week 1~2: 고객 콜에 참여하라</div>
+          <div class="step-text">PM이나 CS 리드에게 이 메시지를 보내라: <em style="color:var(--accent)">"I want to understand our customers better so I can build more robust features. Can I sit in on 2-3 customer calls over the next few weeks? I'll be on mute, just observing."</em> 콜에서 기능 요청이 아닌 이것들을 메모하라: 이 사람의 하루는 어떤가? 이 콜 전후에 무엇을 했나? 명시적으로 불평하지 않지만 좌절하는 것은 무엇인가? 어떤 우회책을 쓰고 있나?</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">W3</div>
+        <div class="step-body">
+          <div class="step-title">Week 3~4: 지원이나 구현팀 섀도잉</div>
+          <div class="step-text">고객 에스컬레이션이나 구현을 담당하는 사람을 찾아 3일 섀도잉을 요청하라. 문제가 어떻게 진단되는지 관찰하라. 고객이 잘못됐다고 말하는 것과 실제로 잘못된 것 사이의 간극에 주목하라. 어느 부분이 가장 많은 혼란을 일으키는지 파악하라.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">M2</div>
+        <div class="step-body">
+          <div class="step-title">Month 2: 에스컬레이션을 직접 소유하라</div>
+          <div class="step-text">고객 이슈가 들어올 때 엔드투엔드로 소유하겠다고 자원하라. 버그 수정만이 아니라, 고객과 대화하고, 임팩트를 이해하고, 타임라인을 커뮤니케이션하고, 수정을 배포하고, 해결을 확인하라. 이것이 전체 루프다. 불편할 것이다. 수개월의 일반 개발 작업보다 이 하나의 경험에서 더 많이 배울 것이다.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">M3</div>
+        <div class="step-body">
+          <div class="step-title">Month 3: 고객 현장 방문 (또는 딥다이브 리모트 세션)</div>
+          <div class="step-text">방문이 가능하다면 사이트 방문에 참여하라. 안 된다면 고객이 데모나 훈련이 아닌 실제 업무를 수행하는 2시간 화면 공유 세션을 요청하라. 하루 안에 수정할 수 있는 하나의 페인포인트를 찾아라. 그리고 주 내에 수정하고 출시하라. 그들에게 당신이 했다고 알려라. 이것이 신뢰와 호의를 쌓는다.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">M6</div>
+        <div class="step-body">
+          <div class="step-title">Month 4~6: 피드백 루프 구축</div>
+          <div class="step-text">"What I've Learned From Customers"라는 문서를 만들고 매주 업데이트하라. 제품팀과 공유하라. 특정 인용구, 특정 워크플로, 특정 페인포인트를 포함하라. 이 문서는 당신을 대체 불가능하게 만들 것이다. FDE 인터뷰를 위한 준비도 된다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>FDE가 알아야 할 기술 스킬</h3>
+    <div class="skill-grid" style="margin-top:12px">
+      <div class="skill-card">
+        <div class="skill-name">SQL</div>
+        <div class="skill-desc">JOIN, GROUP BY + HAVING, 윈도우 함수, CTE, 서브쿼리. 목표: 카테고리별 두 번째 높은 값을 Google 없이 찾는 쿼리 작성. 데이터가 객관적 지표.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">커맨드라인 & Linux</div>
+        <div class="skill-desc">파일시스템 탐색, 로그 읽기(grep, awk, tail -f), 프로세스(ps, top, kill), 네트워킹(curl, netstat). "inode 부족"이 무엇인지 알아야 함. OverTheWire Bandit.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">컨테이너</div>
+        <div class="skill-desc">Docker가 하는 것, 컨테이너와 VM의 차이, 로그가 어디로 가는지. Kubernetes가 하이레벨에서 하는 것. Docker 시작 가이드.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">네트워킹</div>
+        <div class="skill-desc">DNS, HTTP 상태 코드, TLS/SSL 기본, ping은 되지만 연결 안 될 때 디버깅. Julia Evans' zines.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Python 스크립팅</div>
+        <div class="skill-desc">CSV 읽기, 데이터 변환, 저장. API 호출, 페이지네이션 처리. 데이터베이스 연결. 빠르게. Automate the Boring Stuff.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">데이터 품질</div>
+        <div class="skill-desc">타임존 불일치, 인코딩 이슈, 예상치 못한 null이 무슨 일을 일으키는지. 카산드라 1970년 사건이 데이터 품질 이슈다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>인터뷰 Q&A — 실제로 묻는 것들</h3>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+      <div class="qa-box">
+        <div class="qa-q">"어려운 고객과 함께 했던 경험을 말해주세요"</div>
+        <div class="qa-bad">
+          <div class="qa-label">❌ Bad</div>
+          "고객이 무리한 요구를 했지만 침착하게 결국 수긍시켰습니다."
+        </div>
+        <div class="qa-good">
+          <div class="qa-label">✅ Good</div>
+          "고객이 화가 났고, 솔직히 그들은 화낼 권리가 있었습니다. 우리 제품이 그들의 데이터를 잃었으니까요. 먼저 우리가 실수했음을 인정하는 것으로 시작했습니다, 변명 없이. 그런 다음 정확히 무슨 일이 일어났는지, 데이터를 복구하기 위해 무엇을 하고 있는지, 다시는 일어나지 않도록 무엇을 하고 있는지 설명했습니다. 또한 내 휴대전화 번호를 드리고 다른 문제가 생기면 직접 전화하라고 했습니다. 2주가 걸렸지만 결국 계약을 갱신했습니다."
+        </div>
+      </div>
+      <div class="qa-box">
+        <div class="qa-q">"프로덕션에서 무언가가 망가졌던 경험을 말해주세요"</div>
+        <div class="qa-bad">
+          <div class="qa-label">❌ Bad</div>
+          "서비스가 다운됐고 수정했습니다."
+        </div>
+        <div class="qa-good">
+          <div class="qa-label">✅ Good</div>
+          "온콜 중에 메인 API가 500 오류를 반환하기 시작했습니다. 먼저 모니터링을 확인해 범위를 파악했습니다: 30%의 요청, 전부는 아님. 새 코드는 아닐 가능성이 높다는 뜻. 오류 로그는 데이터베이스 연결 타임아웃을 보여줬습니다. DB CPU 100%. 슬로우 쿼리 로그는 그날 아침 출시한 기능의 5000만 행 풀 테이블 스캔을 보여줬습니다. 기능을 비활성화하고, API를 수정한 후 팀과 인덱스를 추가했습니다. 45분 전체. 다음날 대형 테이블에 쿼리 검토를 구현했습니다."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>첫 90일 — 단계별 가이드</h3>
+    <div class="playbook-steps" style="margin-top:12px">
+      <div class="step">
+        <div class="step-num" style="background:rgba(245,158,11,0.3);color:var(--accent);border:1px solid rgba(245,158,11,0.4)">30</div>
+        <div class="step-body">
+          <div class="step-title">Days 1~30: 배워라</div>
+          <div class="step-text">컨텍스트를 흡수하라. 모든 사람을 만나라. 모든 문서를 읽어라. 모든 콜을 섀도잉하라. 용어집을 만들어라. 매일 배운 세 가지를 적어라. <strong>아직 가치를 더하려 하지 마라.</strong> 가장 흔한 실패 모드는 환경을 이해하기 전에 의견을 갖고 뛰어드는 엔지니어들이다.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(245,158,11,0.5);color:#1a1000;font-weight:800">60</div>
+        <div class="step-body">
+          <div class="step-title">Days 31~60: 첫 번째 승리를 찾아라</div>
+          <div class="step-text">완전히 소유할 수 있는 하나의 작은 것. 수동 작업을 자동화하는 스크립트. 고객을 괴롭혀온 버그 수정. 스프레드시트를 대체하는 대시보드. 명확한 전과 후가 있는 무언가. 출시하라. 사람들에게 알려라.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:var(--accent);color:#1a1000;font-weight:800">90</div>
+        <div class="step-body">
+          <div class="step-title">Days 61~90: 의견을 형성하기 시작하라</div>
+          <div class="step-text">이제 컨텍스트와 신뢰도가 생겼다. 더 어려운 문제에 참여하라. 해결책을 제안하라. 겸손하라 — 3개월이면 아직 초보자다. 하지만 컨텍스트가 있는 초보자다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <p style="color:var(--accent);font-size:13px;font-weight:700;margin-bottom:8px">피해야 할 함정</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;font-size:13px"><span style="color:var(--dim);min-width:100px">과엔지니어링</span><span style="color:var(--muted)">bash 스크립트가 필요한 문제에 3주를 "견고하고 확장 가능한" 솔루션 구축에 쓰지 마라. 고객은 금요일까지 답을 원한다.</span></div>
+        <div style="display:flex;gap:10px;font-size:13px"><span style="color:var(--dim);min-width:100px">코드로 후퇴</span><span style="color:var(--muted)">회의가 긴장되면 노트북 뒤에 숨으려는 본능이 있다. 하지 마라. 현재에 머물러라.</span></div>
+        <div style="display:flex;gap:10px;font-size:13px"><span style="color:var(--dim);min-width:100px">과약속</span><span style="color:var(--muted)">화요일에 완료하고 수요일을 말하는 것이 월요일을 말하고 수요일에 완료하는 것보다 낫다.</span></div>
+        <div style="display:flex;gap:10px;font-size:13px"><span style="color:var(--dim);min-width:100px">잘못된 문제 해결</span><span style="color:var(--muted)">"당신이 달성하려는 것이 무엇인가?"는 FDE 툴킷에서 가장 중요한 질문이다.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CAREER PATH -->
+<section id="career">
+  <div class="section-header">
+    <div class="section-icon">🗺️</div>
+    <div>
+      <div class="section-num">The Career Path</div>
+      <div class="section-title">FDE 커리어 경로와 리소스</div>
+    </div>
+  </div>
+
+  <div class="career-grid">
+    <div class="career-card">
+      <div class="career-period">Year 1</div>
+      <div class="career-title">배움 — 배포 및 관계 구축</div>
+      <ul class="career-list">
+        <li>컨텍스트 흡수, 관계 구축, 판단력 개발</li>
+        <li>개별 고객 문제 처리</li>
+        <li>성공 기준: 고객이 신뢰, 팀이 인사이트에 의존, 실제 차이를 만든 것들을 출시</li>
+      </ul>
+    </div>
+    <div class="career-card">
+      <div class="career-period">Year 2~3</div>
+      <div class="career-title">리드 — 고객 관계와 팀 리딩</div>
+      <ul class="career-list">
+        <li>더 큰 고객 관계 소유 또는 소규모 팀 리딩</li>
+        <li>우선순위 결정, 새 FDE 멘토링</li>
+        <li>성공 기준: 어려운 고객 관계 전환, 제품 로드맵에 영향, 모르는 것이 생기면 찾아오는 사람</li>
+      </ul>
+    </div>
+    <div class="career-card">
+      <div class="career-period">Year 4+</div>
+      <div class="career-title">곱하기 — 도메인 전문가 또는 창업</div>
+      <ul class="career-list">
+        <li>깊이(도메인 전문가) 또는 넓이(FDE 조직 리딩, 제품 리더십, 창업)</li>
+        <li>많은 FDE가 기술 스킬 + 고객 이해를 갖춰 창업자가 됨</li>
+        <li>Frontline 동문: AI 회사 창업자, 상장사 제품 책임자, 방산 엔지니어링 리더</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>FDE 채용 기업 & 읽어야 할 것들</h3>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:12px">
+      <div>
+        <p style="color:var(--accent);font-size:12px;font-weight:700;margin-bottom:8px">FDE 채용 기업</p>
+        <div class="kw-row" style="margin:0">
+          <span class="kw">Palantir</span>
+          <span class="kw">Anduril</span>
+          <span class="kw">OpenAI</span>
+          <span class="kw">Anthropic</span>
+          <span class="kw">Scale AI</span>
+          <span class="kw">Helsing</span>
+          <span class="kw">Hex</span>
+          <span class="kw">Databricks</span>
+          <span class="kw">W&B</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+      <p style="color:var(--accent);font-size:12px;font-weight:700;margin-bottom:4px">읽어야 할 것들</p>
+      <div style="font-size:13px;color:var(--muted)">📄 팔란티어 S-1 공시 파일 (배포 방법론 섹션)</div>
+      <div style="font-size:13px;color:var(--muted)">✍️ Shyam Sankar 블로그 — shyamsankar.com (팔란티어 CTO)</div>
+      <div style="font-size:13px;color:var(--muted)">📚 "The Mom Test" by Rob Fitzpatrick — 고객에게 진짜 필요한 것을 물어보는 법</div>
+      <div style="font-size:13px;color:var(--muted)">📘 Julia Evans' zines — 네트워킹, Linux 실용 지식</div>
+    </div>
+  </div>
+
+  <div class="quote">
+    <div class="quote-label">The Grey Jacket의 진짜 의미</div>
+    <p>The grey track jacket was just a symbol. What it represented was something deeper: the transformation that happens when you stop building software in a vacuum and start building it for real people, with real problems, in the real world.<br><br>
+    <strong>The field is where the real education happens. Everything else is just preparation.</strong></p>
+  </div>
+</section>
+
+<div class="source-bar">
+  <div class="source-title">원문 출처</div>
+  <a class="source-link" href="https://nextplayso.substack.com/p/the-definitive-guide-to-forward-deployed" target="_blank">
+    Vinoo Ganesh, "The Definitive Guide to Forward Deployed Engineering" — Next Play Newsletter (2026.02.05)
+  </a>
+  <div style="color:var(--dim);font-size:12px;margin-top:6px">Vinoo Ganesh: CEO &amp; Co-Founder at Kepler (kepler.ai). Formerly @ Palantir (Project Frontline 설계) &amp; Citadel.</div>
+</div>
+
+</main>
+</body>
+</html>
