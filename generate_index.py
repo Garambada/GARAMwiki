@@ -71,6 +71,10 @@ ARTICLE_META = {
         "tags":  ["Claude for SMB", "유통 채널 전쟁", "버티컬 AI", "GTM", "신뢰 설계"],
     },
     # 트렌드 인텔리전스
+    "2026-05_KPMG_Venture_Pulse_Q1_2026_Global.html": {
+        "title": "KPMG Venture Pulse Q1 2026<br>— 글로벌 VC 투자 역대 최고 $3,309억, AI 메가딜 집중",
+        "tags":  ["KPMG Venture Pulse", "글로벌 VC", "OpenAI $122B", "AI 메가딜", "방산 테크"],
+    },
     "2026-05_Google_Gemini_AI레이스역전.html": {
         "title": "Google Gemini, AI 레이스 역전<br>— 9억 사용자, 유일한 흑자 AI",
         "tags":  ["Google I/O 2026", "Gemini 3.5", "Gemini Spark", "월드모델"],
