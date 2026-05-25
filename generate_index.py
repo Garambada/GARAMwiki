@@ -134,6 +134,10 @@ ARTICLE_META = {
         "tags":  ["Watts & Wafers", "Orbital Compute", "TSMC", "Blackwell", "SaaS Death Trap"],
     },
     # 나의 인사이트
+    "2026-02_Venture_Studio_Asset_Class_Mandalore.html": {
+        "title": "벤처 스튜디오, 새로운 자산 클래스로의 진화<br>— Mandalore Partners 2026 자산 기반 모델 분석",
+        "tags":  ["벤처스튜디오", "자산 클래스", "Dual-Layer", "자산 기반 모델", "기관투자"],
+    },
     "경량문명_나의인사이트.html": {
         "title": "경량문명의 도래와 기업의 미래<br>— 초개인화 AI 시대 대응 전략",
         "tags":  ["경량문명", "AX", "거래비용이론", "1인기업", "솔로프리너"],
