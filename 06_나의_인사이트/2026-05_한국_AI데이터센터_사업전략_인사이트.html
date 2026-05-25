@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국 AI 데이터센터 사업전략 | GARAMwiki 나의 인사이트</title>
+<style>
+  :root {
+    --bg:      #0f1117;
+    --card:    #1a1d27;
+    --card2:   #1e2130;
+    --border:  #2a2d3a;
+    --text:    #e2e8f0;
+    --muted:   #8892a4;
+    --acc:     #3b82f6;   /* 전략 블루 */
+    --acc2:    #60a5fa;
+    --green:   #10b981;
+    --yellow:  #f59e0b;
+    --red:     #ef4444;
+    --orange:  #f97316;
+    --purple:  #8b5cf6;
+    --teal:    #14b8a6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', -apple-system, 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: rgba(15,17,23,.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: .7rem 2rem;
+    position: sticky; top: 0; z-index: 99;
+    display: flex; align-items: center; gap: .4rem;
+    font-size: .8rem; color: var(--muted);
+    flex-wrap: wrap;
+  }
+  nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  nav a:hover { color: var(--text); }
+  nav .sep { opacity: .4; }
+  nav .cur { color: var(--acc2); font-weight: 700; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 3.5rem 2rem 2rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: rgba(59,130,246,.12);
+    border: 1px solid rgba(59,130,246,.3);
+    color: var(--acc2);
+    border-radius: 999px;
+    padding: .3rem 1rem;
+    font-size: .75rem; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: .8rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 40%, #93c5fd 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: .95rem; color: var(--muted);
+    max-width: 720px; margin-bottom: 2rem;
+  }
+  .hero-sub strong { color: var(--text); }
+
+  .hero-meta {
+    display: flex; gap: 1.2rem; flex-wrap: wrap;
+    font-size: .78rem; color: var(--muted);
+  }
+  .hero-meta span { display: flex; align-items: center; gap: .3rem; }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    max-width: 1100px; margin: 0 auto 2.5rem;
+    padding: 0 2rem;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    text-align: center;
+    transition: transform .15s;
+  }
+  .stat-box:hover { transform: translateY(-2px); }
+  .stat-num { font-size: 1.7rem; font-weight: 800; line-height: 1; margin-bottom: .3rem; }
+  .stat-lbl { font-size: .72rem; color: var(--muted); }
+  .c-blue   { color: var(--acc2); }
+  .c-green  { color: var(--green); }
+  .c-yellow { color: var(--yellow); }
+  .c-orange { color: var(--orange); }
+  .c-red    { color: var(--red); }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+  .section-title {
+    font-size: 1.05rem; font-weight: 800;
+    color: var(--text);
+    display: flex; align-items: center; gap: .6rem;
+    margin: 2.4rem 0 1rem;
+    padding-bottom: .6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title .icon { font-size: 1.2rem; }
+
+  /* ── CARDS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  @media (max-width: 800px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 801px) and (max-width: 1000px) {
+    .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    transition: transform .15s, box-shadow .15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.4); }
+
+  .card-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
+  .a-blue   { background: linear-gradient(90deg, var(--acc), var(--acc2)); }
+  .a-green  { background: linear-gradient(90deg, #059669, var(--green)); }
+  .a-yellow { background: linear-gradient(90deg, #d97706, var(--yellow)); }
+  .a-red    { background: linear-gradient(90deg, #dc2626, var(--red)); }
+  .a-orange { background: linear-gradient(90deg, #ea580c, var(--orange)); }
+  .a-purple { background: linear-gradient(90deg, #7c3aed, var(--purple)); }
+  .a-teal   { background: linear-gradient(90deg, #0d9488, var(--teal)); }
+
+  .card h3 { font-size: .9rem; font-weight: 700; margin-bottom: .6rem; color: var(--text); }
+  .card p  { font-size: .82rem; color: var(--muted); line-height: 1.65; }
+  .card ul { padding-left: 1.1rem; }
+  .card ul li { font-size: .82rem; color: var(--muted); margin-bottom: .25rem; }
+  .card ul li strong { color: var(--text); }
+
+  /* ── PESTLE ROW ── */
+  .pestle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 700px) { .pestle-grid { grid-template-columns: 1fr; } }
+  @media (min-width: 701px) and (max-width: 900px) { .pestle-grid { grid-template-columns: repeat(2,1fr); } }
+
+  /* ── SWOT ── */
+  .swot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+  @media (max-width: 600px) { .swot-grid { grid-template-columns: 1fr; } }
+
+  .swot-s { border-color: rgba(16,185,129,.4) !important; }
+  .swot-w { border-color: rgba(239,68,68,.4) !important; }
+  .swot-o { border-color: rgba(59,130,246,.4) !important; }
+  .swot-t { border-color: rgba(245,158,11,.4) !important; }
+
+  /* ── CHALLENGE LIST ── */
+  .challenge-item {
+    display: flex; gap: 1rem; align-items: flex-start;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 10px;
+    transition: transform .15s;
+  }
+  .challenge-item:hover { transform: translateX(3px); }
+  .ch-num {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem; font-weight: 800;
+  }
+  .ch-body h4 { font-size: .88rem; font-weight: 700; margin-bottom: .25rem; }
+  .ch-body p  { font-size: .8rem; color: var(--muted); }
+
+  /* ── ROADMAP ── */
+  .roadmap {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  @media (max-width: 700px) { .roadmap { grid-template-columns: 1fr; } }
+
+  .rm-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.3rem;
+    position: relative;
+  }
+  .rm-phase {
+    font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+  .rm-title { font-size: .95rem; font-weight: 700; margin-bottom: .8rem; }
+  .rm-items { list-style: none; padding: 0; }
+  .rm-items li {
+    font-size: .8rem; color: var(--muted);
+    padding: .3rem 0 .3rem .9rem;
+    border-left: 2px solid var(--border);
+    margin-bottom: .4rem;
+    transition: border-color .2s;
+  }
+  .rm-card:hover .rm-items li { border-color: var(--acc); }
+
+  /* ── INSIGHT BOX (나의 인사이트 핵심) ── */
+  .insight-section {
+    background: linear-gradient(135deg, rgba(59,130,246,.06) 0%, rgba(139,92,246,.06) 100%);
+    border: 1px solid rgba(59,130,246,.25);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 2.4rem;
+  }
+  .insight-header {
+    display: flex; align-items: center; gap: .8rem;
+    margin-bottom: 1.5rem;
+  }
+  .insight-header h2 {
+    font-size: 1.15rem; font-weight: 800;
+    background: linear-gradient(90deg, var(--acc2), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .insight-card {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 12px;
+  }
+  .insight-card h4 {
+    font-size: .9rem; font-weight: 700;
+    color: var(--acc2);
+    margin-bottom: .5rem;
+    display: flex; align-items: center; gap: .4rem;
+  }
+  .insight-card p, .insight-card li {
+    font-size: .83rem; color: #b8c4d4; line-height: 1.7;
+  }
+  .insight-card ul { padding-left: 1.1rem; }
+  .insight-card ul li { margin-bottom: .3rem; }
+
+  /* ── ACTION PRIORITY ── */
+  .action-list { list-style: none; padding: 0; }
+  .action-list li {
+    display: flex; gap: .8rem; align-items: flex-start;
+    padding: .75rem 0;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+  .action-list li:last-child { border: none; }
+  .action-num {
+    min-width: 26px; height: 26px;
+    background: rgba(59,130,246,.2);
+    border: 1px solid rgba(59,130,246,.4);
+    color: var(--acc2);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .75rem; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .action-text { font-size: .83rem; color: #b8c4d4; line-height: 1.6; }
+  .action-text strong { color: var(--text); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: .75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    font-size: .7rem; font-weight: 700;
+    padding: .2rem .7rem;
+    border-radius: 999px;
+    margin-right: .3rem; margin-bottom: .3rem;
+  }
+  .tag-blue   { background: rgba(59,130,246,.15);  color: var(--acc2);   border: 1px solid rgba(59,130,246,.3); }
+  .tag-green  { background: rgba(16,185,129,.15);  color: var(--green);  border: 1px solid rgba(16,185,129,.3); }
+  .tag-red    { background: rgba(239,68,68,.15);   color: var(--red);    border: 1px solid rgba(239,68,68,.3); }
+  .tag-yellow { background: rgba(245,158,11,.15);  color: var(--yellow); border: 1px solid rgba(245,158,11,.3); }
+
+  .highlight { color: var(--acc2); font-weight: 700; }
+  .hl-green  { color: var(--green); font-weight: 700; }
+  .hl-yellow { color: var(--yellow); font-weight: 700; }
+  .hl-red    { color: var(--red); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../🏠_홈.md">🏠 GARAMwiki</a>
+  <span class="sep">/</span>
+  <a href="./README.md">📔 나의 인사이트</a>
+  <span class="sep">/</span>
+  <span class="cur">한국 AI 데이터센터 사업전략</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📔 나의 인사이트 · 사업 전략</div>
+  <h1>대한민국 AI 데이터센터<br>사업 환경 분석 및 수행 전략</h1>
+  <p class="hero-sub">
+    생성형 AI 붐이 만든 <strong>2026~2028년 토지 선점 전쟁</strong>. 전력 계약이 곧 사업권인 시장에서
+    C-레벨이 지금 당장 움직여야 할 이유와 방향을 정리했다.
+  </p>
+  <div class="hero-meta">
+    <span>📅 2026-05-25</span>
+    <span>·</span>
+    <span>🏷 사업전략 · AI인프라 · 데이터센터</span>
+    <span>·</span>
+    <span>📊 심층 리서치 + C-레벨 관점 보완</span>
+  </div>
+</div>
+
+<!-- STAT ROW -->
+<div class="stat-row">
+  <div class="stat-box">
+    <div class="stat-num c-blue">$219B</div>
+    <div class="stat-lbl">2033년 AI DC 시장 (USD)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num c-green">29.6%</div>
+    <div class="stat-lbl">AI DC CAGR</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num c-yellow">65조</div>
+    <div class="stat-lbl">정부·민간 투자 2024~27 (원)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num c-orange">7조</div>
+    <div class="stat-lbl">SK·AWS 울산 단일 프로젝트 (원)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num c-red">50%</div>
+    <div class="stat-lbl">프로젝트 지연률 (NIMBY)</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 1. 시장 개요 -->
+  <div class="section-title"><span class="icon">📈</span> 시장 개요 및 성장 동인</div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-accent a-blue"></div>
+      <h3>현재 시장 규모</h3>
+      <p>2025년 기준 AI DC <span class="highlight">USD 2.79억~5억</span>, 전체 DC USD 5억. 서울 중심 <strong>58개+</strong> colocation 운영 중. AI-ready 고밀도 시설로의 전환이 급격히 가속 중.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent a-green"></div>
+      <h3>2033년 전망</h3>
+      <p>AI DC <span class="hl-green">USD 219억 (CAGR 29.6%)</span>. 전체 DC USD 162억 (2031, CAGR 21.5%). 아시아 최대 AI 인프라 허브 잠재력 보유.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent a-yellow"></div>
+      <h3>핵심 성장 동인</h3>
+      <ul>
+        <li><strong>HBM 90%</strong> — 삼성·SK하이닉스 글로벌 점유율 → AI 수요 폭발</li>
+        <li><strong>Hyperscaler</strong> — AWS, Microsoft, Google, OpenAI 대규모 투자</li>
+        <li><strong>국가전략</strong> — 이재명 정부 '세계 최강 AI 인프라' 선언</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2. PESTLE -->
+  <div class="section-title"><span class="icon">🌐</span> PESTLE 환경 분석</div>
+  <div class="pestle-grid">
+    <div class="card">
+      <div class="card-accent a-blue"></div>
+      <h3>🏛 Political — 강력한 정책 지원</h3>
+      <ul>
+        <li>AI 기본법 2026 시행 → <strong>국가전략시설</strong> 지정</li>
+        <li>GPU 13,000개+ 확보 (Naver·NHN·Kakao)</li>
+        <li>비수도권 <strong>전력설비부담금 50% 할인</strong></li>
+        <li>Special Act 추진: 인허가 간소화·세제 혜택</li>
+        <li class="hl-red">⚠ NIMBY 심화 → 수도권 지연 다수</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-accent a-green"></div>
+      <h3>💰 Economic — 고성장·고투자</h3>
+      <ul>
+        <li>SK·AWS 울산 103MW, 60,000 GPU, 7조원</li>
+        <li>OpenAI + 삼성·SK (전남·포항)</li>
+        <li>정부·민간 <strong>65조원</strong> 2024~2027</li>
+        <li class="hl-yellow">⚠ 산업용 전기요금 높음 → 경쟁력 약화</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-accent a-orange"></div>
+      <h3>👥 Social — 수용성 vs 갈등</h3>
+      <ul>
+        <li>5G·반도체 강국 → <strong>기술 수용성 높음</strong></li>
+        <li>AI DC 1개 = 5만 가구 전력 소비</li>
+        <li class="hl-red">⚠ 전자파·소음·열섬·전력 과소비 민원</li>
+        <li>지역 경제 활성화 vs. 주민 생활 불편 갈등</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-accent a-teal"></div>
+      <h3>⚙️ Technological — 기술 선도</h3>
+      <ul>
+        <li>삼성·SK 반도체 생태계, 액체 냉각 기술</li>
+        <li><strong>70kW/rack 이상</strong> → Liquid/Immersion 필수</li>
+        <li>Green DC Certification 제도 운영</li>
+        <li>GPU 공급망 외부 의존도 리스크</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-accent a-purple"></div>
+      <h3>⚖️ Legal — 제도 정비 중</h3>
+      <ul>
+        <li>AI 기본법: 고영향 AI 규제 + 인프라 지원</li>
+        <li>전력계통 영향평가 <strong>의무화</strong></li>
+        <li>분산에너지 활성화 특별법</li>
+        <li>데이터센터 Tier III 표준 준수 요건</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-accent a-green"></div>
+      <h3>🌱 Environmental — 탄소중립 압박</h3>
+      <ul>
+        <li>재생에너지 PPA 조달 필요성 증가</li>
+        <li>Waste Heat Recovery·해수 냉각 도입 기회</li>
+        <li>DC 전력 급증 → 국가 전력망 부담 가중</li>
+        <li>ESG 인증이 입지 확보의 경쟁 조건</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. SWOT -->
+  <div class="section-title"><span class="icon">⚖️</span> SWOT 분석</div>
+  <div class="swot-grid">
+    <div class="card swot-s">
+      <div class="card-accent a-green"></div>
+      <h3>💪 Strength</h3>
+      <ul>
+        <li>삼성·SK 반도체 생태계 (HBM 90%)</li>
+        <li>강력한 정부 지원·세제 혜택</li>
+        <li>5G·네트워크 인프라 성숙</li>
+        <li>AI·기술 수용성 높은 시장</li>
+      </ul>
+    </div>
+    <div class="card swot-w">
+      <div class="card-accent a-red"></div>
+      <h3>😟 Weakness</h3>
+      <ul>
+        <li>수도권 전력·부지 부족</li>
+        <li>NIMBY로 인허가 지연 상시적</li>
+        <li>높은 산업용 전기요금</li>
+        <li>AI 인프라 전문인력 부족</li>
+      </ul>
+    </div>
+    <div class="card swot-o">
+      <div class="card-accent a-blue"></div>
+      <h3>🚀 Opportunity</h3>
+      <ul>
+        <li>아시아 AI 허브 도약 (vs 싱가포르·도쿄)</li>
+        <li>Hyperscaler 아태 거점 수요 급증</li>
+        <li>특별법 제정으로 인허가 간소화 예정</li>
+        <li>냉각·효율 기술 수출 기회</li>
+      </ul>
+    </div>
+    <div class="card swot-t">
+      <div class="card-accent a-yellow"></div>
+      <h3>⚠️ Threat</h3>
+      <ul>
+        <li>전력망 과부하 — 국가 그리드 리스크</li>
+        <li>미국·중국·동남아 대규모 경쟁 투자</li>
+        <li>글로벌 GPU 공급망 불안정</li>
+        <li>규제 변화 속도와 투자 타임라인 불일치</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. 도전과제 -->
+  <div class="section-title"><span class="icon">🚧</span> 핵심 도전과제 5가지</div>
+
+  <div class="challenge-item">
+    <div class="ch-num" style="background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)">1</div>
+    <div class="ch-body">
+      <h4>⚡ 전력 공급 제약</h4>
+      <p>수도권 전력 집중도 82%. AI DC 1개 = 5만 가구 전력 소비. KEPCO 수도권 공급 제한이 사실상 사업 진입 장벽으로 작동 중.</p>
+    </div>
+  </div>
+  <div class="challenge-item">
+    <div class="ch-num" style="background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3)">2</div>
+    <div class="ch-body">
+      <h4>🏘 NIMBY 및 인허가</h4>
+      <p>프로젝트 50% 지연. 전자파·소음·열섬 우려로 주민 반대 조직화. 인허가 소요 기간이 투자 ROI의 핵심 변수.</p>
+    </div>
+  </div>
+  <div class="challenge-item">
+    <div class="ch-num" style="background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.3)">3</div>
+    <div class="ch-body">
+      <h4>💸 비용 및 지속가능성</h4>
+      <p>고전력·냉각 비용 + 재생에너지 조달 어려움. 탄소중립 인증 없이 글로벌 hyperscaler 계약 확보 점점 어려워지는 추세.</p>
+    </div>
+  </div>
+  <div class="challenge-item">
+    <div class="ch-num" style="background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3)">4</div>
+    <div class="ch-body">
+      <h4>👨‍💻 인력 부족</h4>
+      <p>DC 운영·AI 인프라 전문인력 수요 급증 vs 공급 부족. 특히 Liquid Cooling 운영, GPU 클러스터 관리 전문가 희소.</p>
+    </div>
+  </div>
+  <div class="challenge-item">
+    <div class="ch-num" style="background:rgba(20,184,166,.15);color:var(--teal);border:1px solid rgba(20,184,166,.3)">5</div>
+    <div class="ch-body">
+      <h4>🌏 글로벌 경쟁</h4>
+      <p>미국·중국·동남아(말레이시아·인니)의 대규모 AI DC 투자. 비용 경쟁력 약화 시 외국 hyperscaler가 한국 대신 대안 거점 선택 가능.</p>
+    </div>
+  </div>
+
+  <!-- 5. 전략 -->
+  <div class="section-title"><span class="icon">🎯</span> 수행 전략 4축</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-accent a-blue"></div>
+      <h3>🗺 입지 전략 — 지방 분산 클러스터</h3>
+      <ul>
+        <li><strong>울산</strong>: LNG·산업 인프라, SK·AWS 벤치마크</li>
+        <li><strong>전남</strong>: 3GW 대규모 재생에너지 프로젝트 인접</li>
+        <li><strong>경북·부산</strong>: 항만 물류·해저 케이블 네트워크</li>
+        <li>산업단지·발전소 인접 → 전력 안정성 우선 확보</li>
+        <li>5G Edge + 마이크로 DC 결합 모델</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-accent a-teal"></div>
+      <h3>⚙️ 기술·인프라 전략</h3>
+      <ul>
+        <li>Liquid/Immersion Cooling 설계 필수 (70kW/rack 이상)</li>
+        <li>100MW+ hyperscale 캠퍼스 규모의 경제</li>
+        <li>재생에너지 PPA 계약 + Waste Heat Recovery</li>
+        <li>Green Certification 선취득 → 글로벌 계약 조건 충족</li>
+        <li>Hyperscaler JV + HBM 공급망 수직 연계</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-accent a-yellow"></div>
+      <h3>🏦 정책·금융 전략</h3>
+      <ul>
+        <li>세액공제·지방 인센티브 (전력부담금 50% 할인) 선점</li>
+        <li>PF: BlackRock 등 글로벌 인프라 펀드 유치</li>
+        <li>NIMBY 대응: 지역 이익 공유 구조 + ESG 기여 정량화</li>
+        <li>Special Act 인허가 간소화 타이밍에 착공 일정 맞춤</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-accent a-purple"></div>
+      <h3>💼 비즈니스 모델</h3>
+      <ul>
+        <li><strong>Colocation + GPUaaS</strong>: SKT 모델, GPU 임대 서비스</li>
+        <li><strong>Hybrid Cloud</strong>: 국내 기업·SME 저지연 서비스</li>
+        <li><strong>아태 허브</strong>: 해외 hyperscaler 워크로드 유치</li>
+        <li>벤치마크: SK·AWS 울산 — 그룹사 총동원 + 지방정부 협력</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6. 로드맵 -->
+  <div class="section-title"><span class="icon">🗓</span> 단계별 실행 로드맵</div>
+  <div class="roadmap">
+    <div class="rm-card" style="border-top:3px solid var(--green)">
+      <div class="rm-phase" style="color:var(--green)">단기 · 1~2년</div>
+      <div class="rm-title">기반 확보 & AI Zone</div>
+      <ul class="rm-items">
+        <li>기존 시설 AI-ready 업그레이드</li>
+        <li>소규모 GPU 클러스터 AI Zone 구축</li>
+        <li>정부 지원 사업 참여 (GPU 확보)</li>
+        <li>후보 지역 3~5곳 전력 사전 협상</li>
+        <li>Special Act 타임라인 모니터링</li>
+      </ul>
+    </div>
+    <div class="rm-card" style="border-top:3px solid var(--yellow)">
+      <div class="rm-phase" style="color:var(--yellow)">중기 · 3~5년</div>
+      <div class="rm-title">100MW+ 대형 프로젝트</div>
+      <ul class="rm-items">
+        <li>울산式 모델 복제·착공</li>
+        <li>Hyperscaler 1곳 이상 LOI/MOU 확보</li>
+        <li>재생에너지 PPA 계약 체결</li>
+        <li>GPUaaS 서비스 상용화</li>
+        <li>인력 양성 프로그램 구축</li>
+      </ul>
+    </div>
+    <div class="rm-card" style="border-top:3px solid var(--acc2)">
+      <div class="rm-phase" style="color:var(--acc2)">장기 · 5년+</div>
+      <div class="rm-title">1GW급 국가 AI 캠퍼스</div>
+      <ul class="rm-items">
+        <li>1GW급 국가 AI 캠퍼스 완공</li>
+        <li>탄소중립 인증 글로벌 리더십</li>
+        <li>아시아-태평양 AI 허브 포지셔닝</li>
+        <li>냉각·효율 기술 해외 수출</li>
+        <li>DC 운영 자동화 AI 플랫폼화</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7. 나의 인사이트 -->
+  <div class="insight-section">
+    <div class="insight-header">
+      <span style="font-size:1.5rem">🔍</span>
+      <h2>나의 인사이트 — C-레벨 관점</h2>
+    </div>
+
+    <div class="insight-card">
+      <h4>⏰ 왜 지금이 진입 적기인가</h4>
+      <p>
+        2026~2028년은 한국 AI 데이터센터의 <strong style="color:var(--acc2)">"토지 선점 전쟁"</strong> 구간이다.
+        Hyperscaler들이 이미 들어왔고, 전력망 인프라 구축에 3~5년이 걸린다는 사실은
+        지금 행동하는 플레이어에게만 기회를 준다.
+        <strong style="color:#f87171">2년 후엔 진입 장벽이 완전히 높아진다.</strong>
+        타이밍이 기술이나 자본보다 더 결정적인 변수다.
+      </p>
+    </div>
+
+    <div class="insight-card">
+      <h4>⚡ 핵심 해자: 전력 계약이 곧 사업권</h4>
+      <p>
+        전력 공급 계약(KEPCO) + 산업용 부지 확보 = 이 시장의 실질적 라이선스다.
+        기술이나 자본보다 <strong style="color:var(--yellow)">전력 계약이 먼저다.</strong>
+        NIMBY를 극복하는 플레이어가 곧 시장을 지배한다.
+        전력 확보가 선행되지 않은 DC 투자 계획은 사실상 공허하다.
+      </p>
+    </div>
+
+    <div class="insight-card">
+      <h4>🎯 포지셔닝 전략: 직접 경쟁 vs 생태계 편승</h4>
+      <ul>
+        <li><strong>직접 경쟁 (Tier-1 hyperscale)</strong>: 자본·전력·부지를 동시에 확보할 수 있는 대기업만 현실적. 중견 이하는 진입 자체가 불가능에 가깝다.</li>
+        <li><strong>생태계 편승 (스타트업·중견 적합)</strong>: GPUaaS 레이어, 쿨링 솔루션, DC 운영 자동화, ESG 인증 컨설팅 등 B2B 서비스로 기존 DC에 붙는 전략이 훨씬 현실적이고 ROI가 빠르다. 이 레이어가 지금 공백 구간이다.</li>
+      </ul>
+    </div>
+
+    <div class="insight-card">
+      <h4>🏘 NIMBY = 진짜 경쟁 해자</h4>
+      <p>
+        기술 차별화보다 <strong style="color:var(--green)">지역 설득 능력</strong>이 희귀 자원이다.
+        ESG 기여(일자리, 지역 전력 공급, 열에너지 재활용)를 정량화해서
+        지자체·주민과 이익 공유 구조를 만드는 회사가 부지 선점에서 이긴다.
+        이것은 기술 문제가 아니라 거버넌스·커뮤니케이션 문제다.
+        이 역량을 가진 팀이 드물다.
+      </p>
+    </div>
+
+    <div class="insight-card">
+      <h4>✅ 단기 행동 우선순위</h4>
+      <ul class="action-list">
+        <li>
+          <span class="action-num">1</span>
+          <span class="action-text"><strong>비수도권 3~5개 후보지 전력 가능 용량 사전 조사</strong> — KEPCO 접촉, 산업단지 연계 가능 여부 파악. 이 정보 자체가 경쟁 자산.</span>
+        </li>
+        <li>
+          <span class="action-num">2</span>
+          <span class="action-text"><strong>Special Act 제정 타임라인 모니터링</strong> — 인허가 간소화 시점 = 착공 최적 타이밍. 법 제정 즉시 움직일 수 있도록 사전 준비 필수.</span>
+        </li>
+        <li>
+          <span class="action-num">3</span>
+          <span class="action-text"><strong>Hyperscaler 1곳 이상 LOI 또는 MOU 사전 확보</strong> — 수요 리스크 헷지. LOI가 있는 곳은 금융 조달도 유리하다.</span>
+        </li>
+        <li>
+          <span class="action-num">4</span>
+          <span class="action-text"><strong>냉각·전력 효율 스타트업 파이프라인 구축</strong> — M&A 또는 JV 후보 발굴. 이 기술이 없으면 hyperscaler 계약 조건 충족 불가.</span>
+        </li>
+      </ul>
+    </div>
+
+    <div style="margin-top:1rem; padding:1rem; background:rgba(255,255,255,.02); border-radius:8px; border-left:3px solid var(--purple);">
+      <p style="font-size:.8rem; color:var(--muted); font-style:italic;">
+        이 인사이트는 나의 C-레벨 판단을 기록한 것이며, 이후 실행 결과에 따라 계속 업데이트한다.
+        틀린 판단이 있다면 그 자체가 학습이다. — 2026-05-25
+      </p>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  GARAMwiki · 나의 인사이트 · 대한민국 AI 데이터센터 사업전략 · 2026-05-25
+</footer>
+
+</body>
+</html>

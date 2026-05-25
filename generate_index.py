@@ -21,6 +21,10 @@ from datetime import date
 # ───────────────────────────────────────────────
 ARTICLE_META = {
     # 비즈니스 인텔리전스
+    "2026-05_Korea_AI_DataCenter_Business_Strategy.html": {
+        "title": "대한민국 AI 데이터센터 사업 환경 분석<br>및 수행 전략 2026 — PESTLE·SWOT·법적 환경",
+        "tags":  ["AI 데이터센터", "AIDC 특별법", "AI 기본법", "비수도권 특구", "GPUaaS"],
+    },
     "2026-02_FDE_Definitive_Guide_Vinoo_Ganesh.html": {
         "title": "The Definitive Guide to Forward Deployed Engineering<br>— Vinoo Ganesh (Next Play Newsletter)",
         "tags":  ["FDE", "Palantir", "Project Frontline", "Customer Outcomes", "Enterprise AI Deployment"],
