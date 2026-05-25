@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>미국과 중국이 은밀하게 논의하는 첨단기술 질서 — 백서인 | GARAMwiki</title>
+  <style>
+    :root {
+      --bg: #0c0e14;
+      --surface: #141720;
+      --card: #1a1e2e;
+      --border: #252a3d;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #e879f9;
+      --accent-dim: rgba(232,121,249,0.10);
+      --accent-mid: rgba(232,121,249,0.22);
+      --blue: #3b82f6;
+      --blue-dim: rgba(59,130,246,0.10);
+      --red: #ef4444;
+      --red-dim: rgba(239,68,68,0.10);
+      --amber: #f59e0b;
+      --amber-dim: rgba(245,158,11,0.10);
+      --green: #10b981;
+      --green-dim: rgba(16,185,129,0.10);
+      --cyan: #06b6d4;
+      --cyan-dim: rgba(6,182,212,0.10);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, 'Apple SD Gothic Neo', sans-serif;
+      line-height: 1.8;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(12,14,20,0.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-brand { font-size: 1rem; font-weight: 700; color: var(--accent); text-decoration: none; }
+    .nav-meta { font-size: 0.78rem; color: var(--muted); }
+
+    /* HERO */
+    .hero-wrap {
+      background: linear-gradient(135deg, #170b1a 0%, #0c0e14 55%, #0e0e18 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero { max-width: 960px; margin: 0 auto; padding: 4rem 2rem 3rem; }
+    .cat-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--accent-dim); border: 1px solid var(--accent);
+      color: var(--accent); font-size: 0.72rem; font-weight: 700;
+      padding: 0.25rem 0.75rem; border-radius: 20px; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.55rem, 3.8vw, 2.3rem);
+      font-weight: 800; line-height: 1.25; color: #fff; margin-bottom: 0.75rem;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero-sub { font-size: 0.97rem; color: var(--muted); margin-bottom: 2rem; max-width: 700px; }
+    .hero-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.78rem; color: var(--muted); }
+    .hero-meta span { display: flex; align-items: center; gap: 0.3rem; }
+    .hero-meta a { color: var(--accent); text-decoration: none; }
+    .hero-meta a:hover { text-decoration: underline; }
+
+    /* STATS */
+    .stats-strip { background: var(--surface); border-bottom: 1px solid var(--border); }
+    .stats-inner {
+      max-width: 960px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    }
+    .stat { padding: 1.2rem 1rem; border-right: 1px solid var(--border); text-align: center; }
+    .stat:last-child { border-right: none; }
+    .stat-num { font-size: 1.45rem; font-weight: 800; color: var(--accent); display: block; line-height: 1.2; }
+    .stat-label { font-size: 0.67rem; color: var(--muted); margin-top: 0.2rem; line-height: 1.4; }
+
+    /* LAYOUT */
+    .content {
+      max-width: 960px; margin: 0 auto; padding: 3rem 2rem;
+      display: grid; grid-template-columns: 1fr 230px; gap: 2.5rem; align-items: start;
+    }
+    @media (max-width: 700px) { .content { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
+    /* SIDEBAR */
+    .sidebar { position: sticky; top: 70px; }
+    .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+    .toc-title { font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+    .toc a { display: block; font-size: 0.79rem; color: var(--muted); text-decoration: none; padding: 0.28rem 0.75rem; border-left: 2px solid transparent; transition: all 0.15s; }
+    .toc a:hover { color: var(--accent); border-left-color: var(--accent); }
+
+    /* SECTIONS */
+    section { margin-bottom: 3rem; }
+    section h2 { font-size: 1.15rem; font-weight: 700; color: #fff; border-left: 3px solid var(--accent); padding-left: 0.9rem; margin-bottom: 1.25rem; }
+    section h3 { font-size: 0.97rem; font-weight: 700; color: var(--accent); margin: 1.5rem 0 0.75rem; }
+    p { margin-bottom: 1rem; font-size: 0.92rem; color: var(--text); }
+
+    /* BOTTOM LINE */
+    .bottom-line {
+      background: var(--accent-dim); border: 1px solid var(--accent); border-left: 4px solid var(--accent);
+      border-radius: 10px; padding: 1.5rem 1.75rem; margin-bottom: 2.5rem;
+    }
+    .bl-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); margin-bottom: 0.6rem; }
+    .bl-text { font-size: 0.94rem; color: var(--text); line-height: 1.85; }
+    .bl-text strong { color: var(--accent); }
+
+    /* CONTEXT BOX */
+    .context-box {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2rem;
+      font-size: 0.88rem; color: var(--muted); line-height: 1.8;
+    }
+    .context-box strong { color: var(--text); }
+
+    /* QUESTION CARDS — 4대 의제 */
+    .q-list { display: flex; flex-direction: column; gap: 1.25rem; margin: 1.25rem 0; }
+    .q-item {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .q-header {
+      display: flex; align-items: center; gap: 0.85rem;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .q-num {
+      min-width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.82rem; font-weight: 800; flex-shrink: 0;
+    }
+    .q-num.n1 { background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent); }
+    .q-num.n2 { background: var(--blue-dim); border: 1px solid var(--blue); color: var(--blue); }
+    .q-num.n3 { background: var(--amber-dim); border: 1px solid var(--amber); color: var(--amber); }
+    .q-num.n4 { background: var(--green-dim); border: 1px solid var(--green); color: var(--green); }
+    .q-title { font-size: 0.95rem; font-weight: 700; color: #fff; }
+    .q-body { padding: 1.1rem 1.25rem; font-size: 0.85rem; color: var(--muted); line-height: 1.8; }
+    .q-body strong { color: var(--text); }
+    .q-body .key-line {
+      margin-top: 0.85rem; padding: 0.7rem 1rem;
+      border-radius: 6px; font-size: 0.82rem; font-weight: 600;
+      border-left: 3px solid;
+    }
+    .q-item.q1 .key-line { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+    .q-item.q2 .key-line { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+    .q-item.q3 .key-line { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+    .q-item.q4 .key-line { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+
+    /* QUOTE */
+    .quote {
+      background: var(--surface); border-left: 3px solid var(--accent);
+      padding: 1.25rem 1.5rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0;
+      font-size: 0.92rem; color: var(--muted); font-style: italic;
+    }
+    .quote strong { color: var(--text); font-style: normal; }
+    .quote-attr { font-size: 0.74rem; margin-top: 0.5rem; color: var(--muted); font-style: normal; display: block; }
+
+    /* KEY FIGURES */
+    .figure-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.85rem; margin: 1.25rem 0; }
+    .figure-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem; text-align: center;
+    }
+    .fig-name { font-size: 0.88rem; font-weight: 700; color: #fff; margin-bottom: 0.2rem; }
+    .fig-role { font-size: 0.72rem; color: var(--muted); }
+    .fig-company { font-size: 0.75rem; color: var(--accent); margin-top: 0.3rem; font-weight: 600; }
+
+    /* NPT BOX */
+    .npt-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 4px solid var(--muted);
+      border-radius: 0 8px 8px 0; padding: 1.25rem 1.5rem; margin: 1.5rem 0;
+    }
+    .npt-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 0.5rem; }
+    .npt-text { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+    .npt-text strong { color: var(--text); }
+
+    /* COMPARE TABLE */
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin: 1.25rem 0; }
+    thead tr { background: var(--surface); }
+    th { text-align: left; padding: 0.7rem 1rem; color: var(--accent); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--border); }
+    td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:hover td { background: var(--surface); }
+    .td-us { color: var(--blue); font-weight: 700; }
+    .td-cn { color: var(--red); font-weight: 700; }
+    .td-kr { color: var(--accent); font-weight: 700; }
+
+    /* KOREA IMPLICATIONS */
+    .korea-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+    .korea-item {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.1rem;
+      border-top: 3px solid var(--accent);
+    }
+    .ki-icon { font-size: 1.35rem; margin-bottom: 0.35rem; }
+    .ki-title { font-size: 0.86rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+    .ki-text { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* TAG */
+    .tag { display: inline-block; background: var(--card); border: 1px solid var(--border); color: var(--muted); font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 12px; margin: 0.2rem 0.2rem 0 0; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-size: 0.77rem; color: var(--muted); }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="../index.html">⬡ GARAMwiki</a>
+  <span class="nav-meta">💬 담론 등등 &nbsp;·&nbsp; 2026-05-25</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero-wrap">
+  <div class="hero">
+    <div class="cat-badge">💬 담론 등등</div>
+    <h1>미국과 중국이 <span>은밀하게 논의</span>하는<br>첨단기술 질서</h1>
+    <p class="hero-sub">
+      2026년 5월 13일 미·중 정상회담. 머스크·팀 쿡·젠슨 황이 트럼프의 뒤를 따랐지만
+      공식 발표문은 공허했다. 이들이 말하지 않은 4개의 의제가 새로운 글로벌 기술 질서를 설계하고 있다.
+    </p>
+    <div class="hero-meta">
+      <span>✍️ 백서인 (한양대 교수)</span>
+      <span>📰 <a href="https://www.joongang.co.kr/article/25430978" target="_blank">중앙일보 2026.05.25</a></span>
+      <span>📍 베이징 현지 기고</span>
+      <span>🏷 미·중 기술패권 · AI 거버넌스 · 기술주권</span>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat">
+      <span class="stat-num">2026.5.13</span>
+      <div class="stat-label">미·중 정상회담<br>베이징</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">3명</span>
+      <div class="stat-label">머스크·팀쿡·젠슨황<br>경제사절단 동행</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">3회</span>
+      <div class="stat-label">연내 예정<br>추가 미·중 회담</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">30%</span>
+      <div class="stat-label">글로벌 신약후보<br>중국 출처 비율</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">40%</span>
+      <div class="stat-label">세계 신규 임상시험<br>중국에서 진행</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">4개</span>
+      <div class="stat-label">말하지 않은<br>핵심 의제</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+  <main>
+
+    <!-- BOTTOM LINE -->
+    <div class="bottom-line">
+      <div class="bl-label">⚡ Bottom Line</div>
+      <div class="bl-text">
+        미·중 정상회담의 공식 발표문은 공허했지만, 그 빈칸이 오히려 본질이다.
+        두 나라는 지금 <strong>프런티어 AI·통신·에너지·바이오 4개 영역에서 새로운 글로벌 기술 질서를 은밀하게 설계</strong>하고 있다.
+        AI 거버넌스가 새로운 NPT(핵확산금지조약)가 될 수 있다는 경고는 한국에게 직접적 위협이다.
+        <strong>"프런티어 AI를 가진 국가 vs 그렇지 않은 국가"</strong>라는 새로운 경계선이 그어질 때,
+        우리의 자리는 지금 준비하지 않으면 미·중이 설계한 질서 안에서 타인에 의해 결정된다.
+      </div>
+    </div>
+
+    <!-- S1: 배경 -->
+    <section id="s1">
+      <h2>① 배경 — 화려한 경제사절단, 공허한 발표문</h2>
+
+      <div class="context-box">
+        <strong>2026년 5월 13일, 베이징.</strong>
+        트럼프 대통령의 방중은 9년 만이었다. 그의 바로 뒤를 따른 것은 국무장관도 재무장관도 아닌
+        <strong>일론 머스크(테슬라), 팀 쿡(애플), 젠슨 황(엔비디아)</strong>이었다.
+        기술 패권의 상징적 인물들이 총출동한 역대급 경제사절단.
+        그러나 미·중 양측 공식 발표문을 비교하면 불일치가 선명하다 —
+        트럼프가 선언한 "보잉 200대 구매 합의"와 "희토류 공급 우려 해소"는 중국 발표문에 없었다.
+        H200 중국 판매 승인, AI 거버넌스와 안전 — 이렇다 할 합의가 없었다.
+        <strong>이들이 말하지 않은 것이 곧 진짜 의제다.</strong>
+      </div>
+
+      <h3>동행한 3인 — 미·중 기술 협상의 실질 플레이어</h3>
+      <div class="figure-grid">
+        <div class="figure-card">
+          <div style="font-size:2rem;margin-bottom:0.4rem;">🚀</div>
+          <div class="fig-name">일론 머스크</div>
+          <div class="fig-company">Tesla / xAI</div>
+          <div class="fig-role">휴머노이드 로봇 양산<br>중국 공급망 절대 의존</div>
+        </div>
+        <div class="figure-card">
+          <div style="font-size:2rem;margin-bottom:0.4rem;">🍎</div>
+          <div class="fig-name">팀 쿡</div>
+          <div class="fig-company">Apple</div>
+          <div class="fig-role">최대 생산 거점 중국<br>공급망 재편 vs 유지 기로</div>
+        </div>
+        <div class="figure-card">
+          <div style="font-size:2rem;margin-bottom:0.4rem;">⚡</div>
+          <div class="fig-name">젠슨 황</div>
+          <div class="fig-company">NVIDIA</div>
+          <div class="fig-role">H200 중국 수출 승인<br>가장 뜨거운 미결 의제</div>
+        </div>
+      </div>
+
+      <div class="quote">
+        <strong>"뜨거운 감자였던 H200 중국 판매 승인, 인공지능(AI) 거버넌스와 안전도 이렇다 할 합의가 없었다.
+        우리 언론의 관심은 미·중 양국의 위상 변화였지만, 필자는 이들이 말하지 않은 새로운 첨단기술 의제에 더 큰 관심이 간다."</strong>
+        <span class="quote-attr">— 백서인, 한양대 교수 / 중앙일보 2026.05.25</span>
+      </div>
+    </section>
+
+    <hr class="divider"/>
+
+    <!-- S2: 4대 의제 -->
+    <section id="s2">
+      <h2>② 말하지 않은 4개의 의제 — 새로운 기술 질서의 설계도</h2>
+
+      <div class="q-list">
+
+        <!-- Q1: AI 거버넌스 NPT -->
+        <div class="q-item q1">
+          <div class="q-header">
+            <div class="q-num n1">①</div>
+            <div class="q-title">AI 통제 규칙 — 새로운 NPT가 될 것인가</div>
+          </div>
+          <div class="q-body">
+            <p>
+              트럼프는 귀국길 기내에서 <strong>"AI 가드레일(통제 규칙)에서도 함께 뭔가 할 수 있을 것 같다"</strong>고 언급했다.
+              회담 직후 중국 외교부는 미·중이 AI 관련 대화를 재개할 것이라 발표했다.
+            </p>
+            <p>
+              미·중 양국은 치열한 경쟁 속에서도 자국 빅테크의 성장을 제약할 수 있는 규제에는
+              일관되게 공통의 거부감을 표현해 왔다. AI 양강이 주도하는 AI 거버넌스 논의가 본격화되면,
+              "가장 앞선 기술력을 현실에 많이 적용해보는 것이 인류 발전에 이롭다"는 논리가 힘을 얻을 것이다.
+            </p>
+            <p>
+              결과는? <strong>프런티어 AI를 보유한 국가와 그렇지 않은 국가 사이에 새로운 기술주권의 경계선</strong>이
+              선명하게 그어진다.
+            </p>
+            <div class="key-line">
+              NPT 논리의 재현 — "이미 핵을 가진 나라는 기득권을 유지하되, 나머지 국가들은 절대 개발하지 말라."
+              AI판 NPT가 현실화되면, 한국은 비핵보유국의 위치에 서게 된다.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2: 사이버 + 피지컬 연결 -->
+        <div class="q-item q2">
+          <div class="q-header">
+            <div class="q-num n2">②</div>
+            <div class="q-title">미국의 사이버 시스템 + 중국의 피지컬 시스템 — 결국 연결될까</div>
+          </div>
+          <div class="q-body">
+            <p>
+              지난 9년간 미국과 세계 주요국은 전방위적 공급망 조정을 추진했다 — 미국에 공장을 짓고,
+              제3국으로 기지를 이동하고, 중국 의존도를 낮추는 데 막대한 비용을 쏟았다.
+              <strong>그 결과는 기대에 미치지 못했다.</strong>
+            </p>
+            <p>
+              자율주행·전기차·휴머노이드 로봇 등 첨단 산업에 가까울수록, 오히려
+              <strong>중국의 하드웨어 생태계의 경쟁력이 빛을 보고 있다.</strong>
+              테슬라와 피규어의 휴머노이드를 수십만 대 양산할 수 있는 공급망은 중국이 보유하고 있다.
+            </p>
+            <p>
+              이미 수많은 미국 빅테크·VC·대학이 <strong>선전(深圳)에 머물며 Lab → Fab → Home 경로</strong>로
+              현지 데이터를 활용해 제품화하는 시도를 하고 있다.
+            </p>
+            <div class="key-line">
+              미국의 소프트웨어·AI 역량 + 중국의 하드웨어·제조 생태계 — 이 결합이 사실상 진행 중이다.
+              디커플링 선언 이면에서 리커플링이 실질적으로 작동하고 있다.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q3: 풀스텍 인프라 빅딜 -->
+        <div class="q-item q3">
+          <div class="q-header">
+            <div class="q-num n3">③</div>
+            <div class="q-title">풀스텍(Full-Stack) 인프라 빅딜 — 미·중 간 통신+에너지 대교환</div>
+          </div>
+          <div class="q-body">
+            <p>
+              AI가 삶 곳곳에 스며들기 위한 핵심은 인프라다. 통신과 에너지가 양대 축이다.
+            </p>
+            <p>
+              <strong>중국이 이미 확보한 것:</strong> 세계 최고의 칩 간 초고속 광통신 기술, 데이터센터 간 광전송 기술.
+              배터리·ESS·친환경에너지 기술에서 압도적 경쟁력.
+            </p>
+            <p>
+              <strong>미국이 뒤처진 것:</strong> 통신 인프라와 에너지 기술 — 이미 회복하기 어려운 격차.
+            </p>
+            <p>
+              만약 중국이 <strong>미·중 투자 협력 위원회를 통해 대규모 대미 투자와 기술 이전을 선제적으로 제안</strong>한다면
+              미국이 거절할 수 있을까?
+            </p>
+            <div class="key-line">
+              시나리오: 중국 본토 데이터센터의 잉여 토큰 → 미국 수출 / 미국 빅테크 데이터센터의 친환경에너지 기술 → 중국 제공.
+              기술 보완성이 새로운 상호의존의 축이 된다.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q4: 바이오 디커플링 -->
+        <div class="q-item q4">
+          <div class="q-header">
+            <div class="q-num n4">④</div>
+            <div class="q-title">미·중 바이오 디커플링 — 선언과 현실의 간극</div>
+          </div>
+          <div class="q-body">
+            <p>
+              트럼프 행정부는 지난해 12월 <strong>바이오보안법</strong>에 서명하며
+              중국 바이오 기업의 기술·제품·서비스 사용 금지를 예고했다.
+              그러나 현실은 정반대 방향을 가리킨다.
+            </p>
+            <p>
+              <strong>글로벌 대형 제약사 신약후보 물질의 30%</strong>가 중국에서 나오고,
+              <strong>세계 신규 임상시험의 40%</strong>가 중국에서 이루어지고 있다.
+              중국 기업·연구소·대학들은 바이오에 AI를 적극 결합하며
+              세계에서 가장 역동적인 바이오 혁신의 테스트베드가 되고 있다.
+            </p>
+            <p>
+              베이징·상하이·장수성 외국자본 R&amp;D 센터 대다수가 미국과 유럽의 바이오 제약기업이다.
+              이는 중국 바이오산업의 잠재력을 외면하기 어렵다는 방증이다.
+            </p>
+            <div class="key-line">
+              미국의 바이오보안법이 2028년 실행 단계에서 자국 바이오기업을 또 다른 엔비디아로 만들 것인지,
+              아니면 현실의 벽에 막혀 공허한 선언으로 끝날 것인지 지켜볼 필요가 있다.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="divider"/>
+
+    <!-- S3: 미·중 기술 포지션 비교 -->
+    <section id="s3">
+      <h2>③ 미·중 기술 포지션 비교표</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>영역</th>
+            <th>🇺🇸 미국 강점</th>
+            <th>🇨🇳 중국 강점</th>
+            <th>현재 구도</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>AI / LLM</strong></td>
+            <td class="td-us">파운데이션 모델, 소프트웨어, 생태계</td>
+            <td class="td-cn">응용 확산 속도, 데이터 규모</td>
+            <td>미국 선도, 격차 축소 중</td>
+          </tr>
+          <tr>
+            <td><strong>반도체</strong></td>
+            <td class="td-us">설계(팹리스), NVIDIA GPU</td>
+            <td class="td-cn">HBM 후발, 국산화 맹추격</td>
+            <td>미국 우위 / 수출 통제 전쟁</td>
+          </tr>
+          <tr>
+            <td><strong>하드웨어·제조</strong></td>
+            <td class="td-us">설계·R&amp;D</td>
+            <td class="td-cn">휴머노이드·EV·드론 양산 생태계</td>
+            <td><strong>중국 압도적 우위</strong></td>
+          </tr>
+          <tr>
+            <td><strong>통신 인프라</strong></td>
+            <td class="td-us">6G 표준 경쟁 중</td>
+            <td class="td-cn">칩 간 광통신, DC 간 광전송</td>
+            <td><strong>중국 선도, 미국 회복 어려움</strong></td>
+          </tr>
+          <tr>
+            <td><strong>에너지·배터리</strong></td>
+            <td class="td-us">자본·정책 지원</td>
+            <td class="td-cn">배터리·ESS·친환경에너지 압도</td>
+            <td><strong>중국 압도적 우위</strong></td>
+          </tr>
+          <tr>
+            <td><strong>바이오</strong></td>
+            <td class="td-us">제약사 R&amp;D 역량, 규제 체계</td>
+            <td class="td-cn">임상시험 40%, 신약후보 30%, AI+바이오</td>
+            <td>상호 의존 심화 / 디커플링 시도 중</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr class="divider"/>
+
+    <!-- S4: 한국 함의 -->
+    <section id="s4">
+      <h2>④ 한국의 전략적 함의 — 설계에 참여할 것인가, 배정받을 것인가</h2>
+
+      <p>
+        저자 백서인 교수의 핵심 경고는 명확하다: <strong>"우리의 기술주권 강화는 특정 국가와의 철저한 단절 또는 줄서기에서 나오는 것이 아니다."</strong>
+        냉철한 판단과 분석, 그리고 유연하고 전략적인 실행이 전제되어야 한다.
+      </p>
+
+      <div class="korea-grid">
+        <div class="korea-item">
+          <div class="ki-icon">⚖️</div>
+          <div class="ki-title">AI NPT 시나리오 대비</div>
+          <div class="ki-text">프런티어 AI 보유국이 기술 기득권을 고착화할 때, 한국은 어디에 서 있는가. 지금이 AI 주권 확보의 마지막 윈도우일 수 있다.</div>
+        </div>
+        <div class="korea-item">
+          <div class="ki-icon">🔄</div>
+          <div class="ki-title">리·디커플링 이중 대비</div>
+          <div class="ki-text">미·중이 동시에 리커플링과 디커플링을 진행 중이다. 한국은 어느 한쪽에 올인하지 말고, 양쪽 시나리오 모두에 대한 포지션을 확보해야 한다.</div>
+        </div>
+        <div class="korea-item">
+          <div class="ki-icon">🏭</div>
+          <div class="ki-title">하드웨어 생태계 전략</div>
+          <div class="ki-text">중국의 피지컬 시스템 강점은 현실이다. 한국의 반도체·배터리·제조 역량을 미·중 사이의 '없어서는 안 될 레이어'로 포지셔닝해야 한다.</div>
+        </div>
+        <div class="korea-item">
+          <div class="ki-icon">🧬</div>
+          <div class="ki-title">바이오 주권 시나리오</div>
+          <div class="ki-text">미국 바이오보안법 + 중국 임상 기반 약화 시, 한국이 대안 임상·R&amp;D 거점으로 부상할 가능성이 있다. 지금이 포지셔닝 시점.</div>
+        </div>
+        <div class="korea-item">
+          <div class="ki-icon">🌐</div>
+          <div class="ki-title">기술 외교 다층화</div>
+          <div class="ki-text">관세·투자 협상이 아니라 AI 거버넌스·인프라·바이오 등 기술 의제 중심의 외교 레이어를 독자적으로 구축해야 한다.</div>
+        </div>
+        <div class="korea-item">
+          <div class="ki-icon">⏰</div>
+          <div class="ki-title">타이밍 — 3회 회담이 변곡점</div>
+          <div class="ki-text">연내 3차례 미·중 추가 회담에서 기술 레드라인이 설정된다. 이 과정을 수동적으로 관찰하면, 우리 자리는 타인이 결정한다.</div>
+        </div>
+      </div>
+
+      <div class="quote">
+        <strong>"미국과 중국이 어디까지 어떤 형태로 리커플링될 것이며, 그때 우리는 어디에 어떤 형태로 위치할 것인지에 대한 답안을 지금 준비하지 않으면, 그들이 설계한 새로운 기술 질서 안에서 우리의 자리는 다른 누군가에 의해 결정된다."</strong>
+        <span class="quote-attr">— 백서인, 한양대 교수</span>
+      </div>
+    </section>
+
+    <hr class="divider"/>
+
+    <!-- NPT 개념 박스 -->
+    <div class="npt-box">
+      <div class="npt-label">📋 개념 — 핵확산금지조약 (NPT)</div>
+      <div class="npt-text">
+        <strong>NPT(Nuclear Non-Proliferation Treaty)</strong>: 미국과 소련의 주도로 1970년 발효된 국제 안보조약.
+        미국·러시아·영국·프랑스·중국 기존 5개국 외에 다른 국가의 핵 보유를 금지해 기득권을 고착화했다.
+        우리나라는 1975년 비핵보유국 지위를 가진 정식 비준국이 됐다.
+        원자력의 평화적 이용 권리를 보장받는 대신 IAEA의 상시 사찰을 받는 등 조약상 의무가 있다.
+        <br><br>
+        <strong>AI판 NPT 시사점</strong>: "이미 프런티어 AI를 보유한 나라는 기득권을 유지하되,
+        나머지 국가들은 개발 경쟁에서 배제한다"는 논리가 글로벌 AI 거버넌스에 적용될 경우,
+        그 구조적 결과는 NPT와 동일하다 — 기술 기득권의 영구화.
+      </div>
+    </div>
+
+    <!-- KEYWORDS -->
+    <div style="margin-top:2rem;">
+      <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:0.5rem;">키워드</div>
+      <span class="tag">미·중 정상회담</span>
+      <span class="tag">AI 거버넌스</span>
+      <span class="tag">NPT 유추</span>
+      <span class="tag">기술주권</span>
+      <span class="tag">리커플링</span>
+      <span class="tag">디커플링</span>
+      <span class="tag">풀스텍 인프라</span>
+      <span class="tag">바이오보안법</span>
+      <span class="tag">프런티어 AI</span>
+      <span class="tag">젠슨 황</span>
+      <span class="tag">머스크</span>
+      <span class="tag">팀 쿡</span>
+      <span class="tag">H200</span>
+      <span class="tag">백서인</span>
+      <span class="tag">한양대</span>
+    </div>
+
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="toc">
+      <div class="toc-title">목차</div>
+      <a href="#s1">① 배경 — 공허한 발표문</a>
+      <a href="#s2">② 말하지 않은 4개 의제</a>
+      <a href="#s3">③ 미·중 기술 포지션</a>
+      <a href="#s4">④ 한국 전략적 함의</a>
+    </div>
+
+    <div class="toc" style="margin-top:1rem;">
+      <div class="toc-title">4대 의제</div>
+      <div style="font-size:0.78rem;color:var(--muted);line-height:1.9;padding:0 0.25rem;">
+        <div style="color:var(--accent);">① AI 거버넌스 NPT화</div>
+        <div style="color:var(--blue);">② 사이버+피지컬 연결</div>
+        <div style="color:var(--amber);">③ 풀스텍 인프라 빅딜</div>
+        <div style="color:var(--green);">④ 바이오 디커플링</div>
+      </div>
+    </div>
+
+    <div class="toc" style="margin-top:1rem;">
+      <div class="toc-title">원문 정보</div>
+      <div style="font-size:0.75rem;color:var(--muted);line-height:1.7;padding:0 0.25rem;">
+        백서인 한양대 교수<br>
+        중앙일보 2026.05.25<br>
+        <a href="https://www.joongang.co.kr/article/25430978" target="_blank" style="color:var(--accent);">원문 보기 →</a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <p>GARAMwiki &nbsp;·&nbsp; 담론 등등 카테고리 &nbsp;·&nbsp;
+    출처: <a href="https://www.joongang.co.kr/article/25430978" target="_blank">백서인 교수, 중앙일보 (2026.05.25)</a>
+  </p>
+  <p style="margin-top:0.5rem;">⬡ <a href="../index.html">GARAMwiki 홈으로</a></p>
+</footer>
+
+</body>
+</html>
