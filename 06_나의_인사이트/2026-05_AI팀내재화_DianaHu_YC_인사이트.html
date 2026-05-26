@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI팀 내재화 — Diana Hu YC | GARAMwiki 나의 인사이트</title>
+<style>
+  :root {
+    --bg:      #0f1117;
+    --card:    #1a1d27;
+    --card2:   #1e2130;
+    --border:  #2a2d3a;
+    --text:    #e2e8f0;
+    --muted:   #8892a4;
+    --acc:     #10b981;   /* 인사이트 그린 */
+    --acc2:    #34d399;
+    --blue:    #3b82f6;
+    --purple:  #8b5cf6;
+    --yellow:  #f59e0b;
+    --red:     #ef4444;
+    --orange:  #f97316;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Segoe UI', -apple-system, 'Noto Sans KR', sans-serif;
+    font-size: 15px; line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    background: rgba(15,17,23,.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: .7rem 2rem; position: sticky; top: 0; z-index: 99;
+    display: flex; align-items: center; gap: .4rem;
+    font-size: .8rem; color: var(--muted); flex-wrap: wrap;
+  }
+  nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  nav a:hover { color: var(--text); }
+  nav .sep { opacity: .4; }
+  nav .cur { color: var(--acc2); font-weight: 700; }
+
+  /* HERO */
+  .hero { padding: 3.5rem 2rem 2rem; max-width: 960px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.3);
+    color: var(--acc2); border-radius: 999px;
+    padding: .3rem 1rem; font-size: .75rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.6rem, 3.5vw, 2.3rem); font-weight: 800;
+    line-height: 1.25; margin-bottom: .8rem;
+    background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-sub { font-size: .95rem; color: var(--muted); max-width: 700px; margin-bottom: 1.5rem; }
+  .hero-sub strong { color: var(--text); }
+  .hero-meta { display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: .78rem; color: var(--muted); margin-bottom: .5rem; }
+  .hero-meta span { display: flex; align-items: center; gap: .3rem; }
+  .source-link {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.2);
+    color: var(--acc); border-radius: 8px; padding: .5rem 1rem;
+    font-size: .8rem; text-decoration: none; transition: all .15s; margin-top: .8rem;
+  }
+  .source-link:hover { background: rgba(16,185,129,.15); color: var(--acc2); }
+
+  /* QUOTE BANNER */
+  .quote-banner {
+    max-width: 960px; margin: 0 auto 0; padding: 0 2rem 2rem;
+  }
+  .big-quote {
+    background: linear-gradient(135deg, rgba(16,185,129,.08) 0%, rgba(59,130,246,.08) 100%);
+    border: 1px solid rgba(16,185,129,.2);
+    border-left: 4px solid var(--acc);
+    border-radius: 12px; padding: 1.5rem 2rem;
+    font-size: 1.1rem; font-weight: 600; line-height: 1.6; color: var(--acc2);
+  }
+  .big-quote span { color: var(--text); font-size: .85rem; font-weight: 400; display: block; margin-top: .5rem; color: var(--muted); }
+
+  /* CONTAINER */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+  .section-title {
+    font-size: 1.05rem; font-weight: 800; color: var(--text);
+    display: flex; align-items: center; gap: .6rem;
+    margin: 2.4rem 0 1rem;
+    padding-bottom: .6rem; border-bottom: 1px solid var(--border);
+  }
+
+  /* CONCEPT CARDS */
+  .concept-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem 1.8rem; margin-bottom: 14px;
+    position: relative; overflow: hidden; transition: transform .15s, box-shadow .15s;
+  }
+  .concept-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.4); }
+  .concept-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px; border-radius: 12px 0 0 12px;
+  }
+  .cc-green::before  { background: linear-gradient(180deg, #10b981, #34d399); }
+  .cc-red::before    { background: linear-gradient(180deg, #ef4444, #f87171); }
+  .cc-blue::before   { background: linear-gradient(180deg, #3b82f6, #60a5fa); }
+  .cc-purple::before { background: linear-gradient(180deg, #8b5cf6, #a78bfa); }
+  .cc-yellow::before { background: linear-gradient(180deg, #f59e0b, #fbbf24); }
+
+  .concept-title {
+    font-size: .95rem; font-weight: 800; margin-bottom: .8rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .concept-body { font-size: .85rem; color: var(--muted); line-height: 1.75; }
+  .concept-body strong { color: var(--text); }
+  .concept-body ul { padding-left: 1.1rem; margin-top: .5rem; }
+  .concept-body ul li { margin-bottom: .35rem; }
+
+  /* COMPARE TABLE */
+  .compare-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;
+  }
+  @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+
+  .compare-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.3rem 1.5rem;
+  }
+  .compare-box.bad  { border-color: rgba(239,68,68,.3); }
+  .compare-box.good { border-color: rgba(16,185,129,.3); }
+  .compare-label {
+    font-size: .72rem; font-weight: 800; letter-spacing: .08em;
+    text-transform: uppercase; margin-bottom: .8rem;
+    padding: .3rem .8rem; border-radius: 999px; display: inline-block;
+  }
+  .bad  .compare-label { background: rgba(239,68,68,.12); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
+  .good .compare-label { background: rgba(16,185,129,.12); color: var(--acc2); border: 1px solid rgba(16,185,129,.3); }
+  .compare-box h4 { font-size: .9rem; font-weight: 700; margin-bottom: .6rem; }
+  .compare-box ul { padding-left: 1rem; }
+  .compare-box li { font-size: .82rem; color: var(--muted); margin-bottom: .3rem; }
+  .compare-box li strong { color: var(--text); }
+
+  /* ORG STRUCTURE */
+  .org-diagram {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; text-align: center; margin-bottom: 14px;
+  }
+  .org-diagram h4 { font-size: .85rem; font-weight: 800; color: var(--muted); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: .08em; }
+  .org-box {
+    display: inline-block; padding: .6rem 1.4rem; border-radius: 8px;
+    font-size: .85rem; font-weight: 700; margin: .3rem;
+  }
+  .ob-gray   { background: rgba(255,255,255,.06); border: 1px solid var(--border); color: var(--muted); }
+  .ob-green  { background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.3); color: var(--acc2); }
+  .ob-purple { background: rgba(139,92,246,.12); border: 1px solid rgba(139,92,246,.3); color: #a78bfa; }
+  .ob-blue   { background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.3); color: #60a5fa; }
+  .org-arrow { color: var(--muted); font-size: 1.1rem; display: block; margin: .2rem 0; }
+  .org-divider { border: none; border-top: 1px dashed var(--border); margin: 1.5rem 0; }
+  .org-row { display: flex; justify-content: center; align-items: center; gap: .5rem; flex-wrap: wrap; }
+
+  /* TOKEN STAT */
+  .token-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px;
+  }
+  @media (max-width: 640px) { .token-row { grid-template-columns: 1fr; } }
+  .token-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.3rem; text-align: center;
+    transition: transform .15s;
+  }
+  .token-box:hover { transform: translateY(-2px); }
+  .token-num { font-size: 1.6rem; font-weight: 800; margin-bottom: .3rem; }
+  .token-lbl { font-size: .75rem; color: var(--muted); line-height: 1.4; }
+
+  /* INSIGHT SECTION */
+  .insight-wrap {
+    background: linear-gradient(135deg, rgba(16,185,129,.05) 0%, rgba(139,92,246,.05) 100%);
+    border: 1px solid rgba(16,185,129,.2); border-radius: 16px;
+    padding: 2rem; margin-top: 2.4rem;
+  }
+  .insight-header { display: flex; align-items: center; gap: .8rem; margin-bottom: 1.5rem; }
+  .insight-header h2 {
+    font-size: 1.1rem; font-weight: 800;
+    background: linear-gradient(90deg, var(--acc2), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .insight-card {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 12px;
+  }
+  .insight-card h4 {
+    font-size: .9rem; font-weight: 700; color: var(--acc2);
+    margin-bottom: .5rem; display: flex; align-items: center; gap: .4rem;
+  }
+  .insight-card p, .insight-card li { font-size: .83rem; color: #b8c4d4; line-height: 1.75; }
+  .insight-card ul { padding-left: 1.1rem; }
+  .insight-card ul li { margin-bottom: .3rem; }
+
+  /* ACTION LIST */
+  .action-list { list-style: none; padding: 0; }
+  .action-list li {
+    display: flex; gap: .8rem; align-items: flex-start;
+    padding: .75rem 0; border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+  .action-list li:last-child { border: none; }
+  .action-num {
+    min-width: 26px; height: 26px;
+    background: rgba(16,185,129,.15); border: 1px solid rgba(16,185,129,.3);
+    color: var(--acc2); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .75rem; font-weight: 800; flex-shrink: 0;
+  }
+  .action-text { font-size: .83rem; color: #b8c4d4; line-height: 1.65; }
+  .action-text strong { color: var(--text); }
+
+  /* CALLOUT */
+  .callout {
+    background: rgba(245,158,11,.06); border: 1px solid rgba(245,158,11,.25);
+    border-left: 4px solid var(--yellow); border-radius: 10px;
+    padding: 1rem 1.2rem; font-size: .83rem; color: #b8c4d4; line-height: 1.7;
+    margin-top: 12px;
+  }
+  .callout strong { color: var(--yellow); }
+
+  /* TAG */
+  .tag {
+    display: inline-block; font-size: .7rem; font-weight: 700;
+    padding: .2rem .7rem; border-radius: 999px; margin-right: .3rem; margin-bottom: .3rem;
+  }
+  .tag-green  { background: rgba(16,185,129,.12); color: var(--acc2); border: 1px solid rgba(16,185,129,.3); }
+  .tag-blue   { background: rgba(59,130,246,.12); color: #60a5fa; border: 1px solid rgba(59,130,246,.3); }
+  .tag-purple { background: rgba(139,92,246,.12); color: #a78bfa; border: 1px solid rgba(139,92,246,.3); }
+
+  footer {
+    text-align: center; padding: 2rem;
+    font-size: .75rem; color: var(--muted);
+    border-top: 1px solid var(--border); margin-top: 3rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../🏠_홈.md">🏠 GARAMwiki</a>
+  <span class="sep">/</span>
+  <a href="./README.md">📔 나의 인사이트</a>
+  <span class="sep">/</span>
+  <span class="cur">AI팀 내재화 — Diana Hu YC</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📔 나의 인사이트 · AI 조직론</div>
+  <h1>AI를 팀원 각자 쓰는 팀<br>vs 뼛속까지 내재화한 팀</h1>
+  <p class="hero-sub">
+    YC Group Partner <strong>Diana Hu</strong>의 핵심 주장 —
+    AI는 새로운 Excel이 아니다. AI는 새로운 <strong>운영 체제(OS)</strong>다.
+    이 인식의 차이가 다음 10년 승자를 가른다.
+  </p>
+  <div class="hero-meta">
+    <span>📅 2026-05-26</span>
+    <span>·</span>
+    <span>🎬 사다리게임 채널 (원본: YC Startup School)</span>
+    <span>·</span>
+    <span>⏱ 20분</span>
+  </div>
+  <div>
+    <span class="tag tag-green">#AI조직</span>
+    <span class="tag tag-blue">#팀빌딩</span>
+    <span class="tag tag-purple">#AI도입</span>
+    <span class="tag tag-green">#AInativeteam</span>
+    <span class="tag tag-blue">#PO</span>
+    <span class="tag tag-purple">#오퍼레이터</span>
+  </div>
+  <a class="source-link" href="https://youtu.be/Qu4X0auqnqA" target="_blank">
+    ▶ 영상 보기 (사다리게임)
+  </a>
+  <a class="source-link" href="https://www.youtube.com/watch?v=EN7frwQIbKc" target="_blank" style="margin-left:.5rem;">
+    ▶ 원본 강연 (YC · Diana Hu)
+  </a>
+</div>
+
+<!-- BIG QUOTE -->
+<div class="quote-banner">
+  <div class="big-quote">
+    "AI는 새로운 Excel이 아니다. AI는 새로운 <em>운영 체제(Operating System)</em>다."
+    <span>— Diana Hu, Y Combinator Group Partner</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 핵심 개념 1: Open vs Closed -->
+  <div class="section-title"><span>🔄</span> 핵심 개념 1 — Open-Loop vs Closed-Loop</div>
+
+  <div class="compare-grid">
+    <div class="compare-box bad">
+      <div class="compare-label">❌ Open-Loop — 대부분의 팀 현재</div>
+      <h4>팀원 각자 AI를 쓰는 팀</h4>
+      <ul>
+        <li>결정 → 실행 → <strong>인간이 수동 해석</strong></li>
+        <li>정보가 파편화, 위로 올라갈수록 손실</li>
+        <li>AI를 쓰되 <strong>각자 도구로만 활용</strong></li>
+        <li>시스템이 학습하지 않음</li>
+        <li>직원이 떠나면 아무것도 남지 않음</li>
+        <li>개선이 느리고 주관적</li>
+      </ul>
+    </div>
+    <div class="compare-box good">
+      <div class="compare-label">✅ Closed-Loop — AI-native 조직</div>
+      <h4>뼛속까지 내재화한 팀</h4>
+      <ul>
+        <li>모든 행동이 <strong>구조화된 데이터</strong> 생성</li>
+        <li>AI 에이전트가 지속적으로 읽고 분석</li>
+        <li><strong>시스템 자체가 학습</strong>하고 개선</li>
+        <li>피드백 루프가 자동화</li>
+        <li>직원이 떠나도 지식이 시스템에 남음</li>
+        <li>조직이 학습하는 <strong>유기체</strong>가 됨</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Closed-Loop 실천법 -->
+  <div class="concept-card cc-green">
+    <div class="concept-title">🛠 Closed-Loop 조직 만들기 — 실천 4단계</div>
+    <div class="concept-body">
+      <ul>
+        <li><strong>모든 회의 AI 노트테이커 기록</strong> — 비구조화된 대화를 구조화된 데이터로 전환</li>
+        <li><strong>DM·이메일 최소화</strong> — 구조화된 채널(슬랙 스레드, 노션 등)로 이동. AI가 읽을 수 있는 형태 유지</li>
+        <li><strong>One-shot 내부 대시보드 구축</strong> — 매출·영업·개발·채용 각 영역별, AI가 실시간 질의할 수 있는 형태로</li>
+        <li><strong>조직을 "Queryable"하게 만들기</strong> — 의사결정, 실행, 결과가 모두 AI가 접근 가능한 데이터로 존재</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 핵심 개념 2: 조직 구조 -->
+  <div class="section-title"><span>🏗</span> 핵심 개념 2 — 계층에서 인텔리전스로</div>
+
+  <div class="org-diagram">
+    <h4>기존 계층형 조직</h4>
+    <div class="org-row"><span class="org-box ob-gray">C-Level</span></div>
+    <span class="org-arrow">↕</span>
+    <div class="org-row"><span class="org-box ob-gray" style="opacity:.6">Middle Management<br><small style="font-weight:400;font-size:.7rem">정보 압축·라우팅 역할 → AI로 대체 가능</small></span></div>
+    <span class="org-arrow">↕</span>
+    <div class="org-row"><span class="org-box ob-gray">Individual Contributors</span></div>
+
+    <hr class="org-divider">
+
+    <h4>AI-native 3요소 조직</h4>
+    <div class="org-row">
+      <span class="org-box ob-green">Individual Contributors<br><small style="font-weight:400;font-size:.7rem">실제 빌더·오퍼레이터</small></span>
+    </div>
+    <span class="org-arrow">↕</span>
+    <div class="org-row">
+      <span class="org-box ob-purple">The Model<br><small style="font-weight:400;font-size:.7rem">AI 인텔리전스 레이어</small></span>
+    </div>
+    <span class="org-arrow">↕</span>
+    <div class="org-row">
+      <span class="org-box ob-blue">The Interfaces<br><small style="font-weight:400;font-size:.7rem">인간-AI 접점</small></span>
+    </div>
+  </div>
+
+  <div class="concept-card cc-purple">
+    <div class="concept-title">💡 Jack Dorsey 인용 — "From Hierarchy to Intelligence"</div>
+    <div class="concept-body">
+      <p>전통적 미들 매니지먼트의 존재 이유는 단 하나: <strong>인간의 정보 처리 대역폭 한계</strong>를 메우기 위해서였다.</p>
+      <p style="margin-top:.6rem;">AI가 정보 라우팅을 담당하면 → 미들 레이어가 불필요해진다.<br>
+      훨씬 flat하고 빠른 조직이 가능해진다.<br>
+      <strong>지금 우리 조직에서 "정보를 위아래로 전달"하는 것이 주요 역할인 사람이 누구인지 파악하라.</strong></p>
+    </div>
+  </div>
+
+  <!-- 핵심 개념 3: Token -->
+  <div class="section-title"><span>🔥</span> 핵심 개념 3 — Burn Tokens, Not Headcount</div>
+
+  <div class="token-row">
+    <div class="token-box">
+      <div class="token-num" style="color:var(--acc2)">1,000x</div>
+      <div class="token-lbl">AI 1인의 생산성<br>vs Google 엔지니어</div>
+    </div>
+    <div class="token-box">
+      <div class="token-num" style="color:var(--yellow)">API 비용</div>
+      <div class="token-lbl">불편할 정도로 높지 않다면<br>충분히 안 쓰는 것</div>
+    </div>
+    <div class="token-box">
+      <div class="token-num" style="color:var(--purple)">Lean팀</div>
+      <div class="token-lbl">기하급수적 성장<br>적은 인원으로 가능</div>
+    </div>
+  </div>
+
+  <div class="concept-card cc-yellow">
+    <div class="concept-title">💰 새로운 비용 관점 — API 비용 = 채용 비용</div>
+    <div class="concept-body">
+      <p>사람을 더 고용하는 대신 <strong>AI 도구와 플랫폼에 투자</strong>하라.<br>
+      API 비용이 얼마나 나오는지를 <strong>조직 AI화의 진척도 지표</strong>로 삼아라.<br>
+      비용이 낮다면 → 충분히 쓰지 않고 있다는 신호다.</p>
+      <blockquote style="margin-top:.8rem; padding:.6rem 1rem; background:rgba(245,158,11,.08); border-left:3px solid var(--yellow); border-radius:6px; font-style:italic; color:var(--yellow);">
+        "If your API bill doesn't make you uncomfortable, you're not doing enough."<br>
+        <span style="font-size:.75rem; font-weight:400; color:var(--muted);">— Diana Hu</span>
+      </blockquote>
+    </div>
+  </div>
+
+  <!-- 나의 인사이트 -->
+  <div class="insight-wrap">
+    <div class="insight-header">
+      <span style="font-size:1.5rem">🔍</span>
+      <h2>나의 인사이트 — C-레벨 관점</h2>
+    </div>
+
+    <div class="insight-card">
+      <h4>🎯 도구 vs 시스템 — 왜 이 구분이 결정적인가</h4>
+      <p>
+        "팀원 각자 쓰는 AI"와 "뼛속까지 내재화된 AI"의 차이는 <strong style="color:var(--text)">도구 vs 시스템</strong>의 차이다.
+      </p>
+      <p style="margin-top:.6rem;">
+        <strong style="color:var(--red)">도구로 쓰는 팀:</strong> ChatGPT로 초안 쓰고, Notion AI로 요약하고 끝.<br>
+        → 개인 생산성은 올라가지만 <strong style="color:var(--red)">조직이 학습하지 않음.</strong><br>
+        → 그 직원이 떠나면 아무것도 남지 않음.
+      </p>
+      <p style="margin-top:.6rem;">
+        <strong style="color:var(--acc2)">시스템으로 내재화한 팀:</strong> 모든 결정과 실행이 데이터를 남기고, AI가 읽고, 다음 결정을 더 잘 하게 됨.<br>
+        → <strong style="color:var(--acc2)">조직 자체가 학습하는 유기체</strong>가 됨.<br>
+        → 직원이 떠나도 시스템에 지식이 남음.
+      </p>
+    </div>
+
+    <div class="insight-card">
+      <h4>🔎 "Queryable 조직"이 핵심 해자</h4>
+      <p>Diana Hu의 가장 날카로운 통찰: <strong style="color:var(--text)">조직을 queryable하게 만들라.</strong></p>
+      <p style="margin-top:.5rem;">Queryable = AI가 언제든 질의해서 답을 얻을 수 있는 상태.</p>
+      <ul style="margin-top:.5rem;">
+        <li>의사결정의 기록 — <strong style="color:var(--text)">왜</strong> 이 결정을 했는가</li>
+        <li>실행의 기록 — <strong style="color:var(--text)">무엇을 어떻게</strong> 했는가</li>
+        <li>결과의 기록 — <strong style="color:var(--text)">어떤 결과</strong>가 나왔는가</li>
+      </ul>
+      <p style="margin-top:.6rem;">이 3가지가 구조화된 데이터로 축적되면, AI가 패턴을 찾고 다음 행동을 제안한다. 이것이 closed-loop 조직의 실체다.</p>
+    </div>
+
+    <div class="insight-card">
+      <h4>⚡ Incumbent의 구조적 약점 = 스타트업의 기회</h4>
+      <p>기존 대기업이 closed-loop 모델을 retrofit할 때 <strong style="color:var(--text)">수년치 프로세스 부채(process debt)</strong>를 끌고 다닌다.</p>
+      <p style="margin-top:.6rem;">스타트업이 처음부터 closed-loop으로 설계하면 → 시리즈 A 스타트업이 10분의 1 인원으로 대기업의 2배 속도로 실행 가능.</p>
+      <p style="margin-top:.5rem;"><strong style="color:var(--acc2)">이것이 지금 이 순간 스타트업에게 열려있는 가장 큰 비대칭 기회다.</strong></p>
+    </div>
+
+    <div class="insight-card">
+      <h4>✅ 즉시 적용할 우선순위 4가지</h4>
+      <ul class="action-list">
+        <li>
+          <span class="action-num">1</span>
+          <span class="action-text"><strong>컨텍스트 데이터 전략 설계</strong> — "기록 없는 행동"을 조직에서 없애기. 모든 미팅·결정·실행을 구조화된 형태로 기록하는 시스템부터 시작.</span>
+        </li>
+        <li>
+          <span class="action-num">2</span>
+          <span class="action-text"><strong>미들 레이어 감사</strong> — 지금 우리 조직에서 "정보를 위아래로 전달"이 주요 역할인 사람 파악. 그 역할을 AI로 대체 가능한지 검토.</span>
+        </li>
+        <li>
+          <span class="action-num">3</span>
+          <span class="action-text"><strong>API 비용을 조직 AI화 지표로 설정</strong> — 월별 API 비용 추이가 AI 내재화 진척도. 비용이 낮으면 충분히 안 쓰고 있다는 신호.</span>
+        </li>
+        <li>
+          <span class="action-num">4</span>
+          <span class="action-text"><strong>One-shot 대시보드 구축</strong> — 영업·마케팅·개발·채용 핵심 지표를 AI가 실시간 읽을 수 있는 형태로 통합. 인간이 보는 대시보드가 아니라 AI가 읽는 대시보드.</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <strong>핵심 한 줄:</strong> AI를 도구로 쓰는 조직은 생산성을 얻고, AI를 시스템으로 내재화한 조직은 <strong>복리로 성장하는 지능을 얻는다.</strong> 그 차이가 3~5년 후 생존을 가른다.
+    </div>
+
+    <div style="margin-top:1rem; padding:1rem; background:rgba(255,255,255,.02); border-radius:8px; border-left:3px solid var(--purple);">
+      <p style="font-size:.8rem; color:var(--muted); font-style:italic;">
+        이 인사이트는 나의 C-레벨 판단을 기록한 것이다. — 2026-05-26
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  GARAMwiki · 나의 인사이트 · AI팀 내재화 (Diana Hu YC) · 2026-05-26
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paperclip — AI 에이전트 오케스트레이션 플랫폼 심층 분석 | GARAMwiki</title>
+<style>
+:root{
+  --bg:#0c0e14;--surface:#13161f;--surface2:#1a1e2a;--surface3:#222736;
+  --border:#2a2f3d;--text:#e2e8f0;--muted:#8892a4;--accent:#06b6d4;
+  --accent2:#0891b2;--accent-dim:rgba(6,182,212,.12);
+  --green:#10b981;--purple:#a78bfa;--amber:#f59e0b;--red:#ef4444;--pink:#e879f9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;font-size:15px;line-height:1.7}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(12,14,20,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px}
+nav .logo{font-weight:700;font-size:17px;color:var(--accent);letter-spacing:-.3px}
+nav .sep{color:var(--border);font-size:20px}
+nav .cat{font-size:13px;color:var(--muted)}
+nav .back{margin-left:auto;font-size:13px;color:var(--muted);border:1px solid var(--border);padding:4px 12px;border-radius:6px;transition:.2s}
+nav .back:hover{color:var(--text);border-color:var(--accent)}
+
+.hero{padding:56px 24px 40px;max-width:1100px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-dim);border:1px solid var(--accent);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--accent);font-weight:600;margin-bottom:20px}
+.hero h1{font-size:clamp(24px,4vw,38px);font-weight:800;line-height:1.2;letter-spacing:-.5px;margin-bottom:12px}
+.hero h1 span{color:var(--accent)}
+.hero .sub{color:var(--muted);font-size:15px;margin-bottom:28px;max-width:700px}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;font-size:12px}
+.meta-chip{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;color:var(--muted)}
+.meta-chip strong{color:var(--text)}
+
+.stats-strip{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 24px}
+.stats-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:24px;text-align:center}
+.stat-num{font-size:28px;font-weight:800;color:var(--accent);line-height:1}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:4px}
+
+.layout{max-width:1100px;margin:0 auto;padding:40px 24px;display:grid;grid-template-columns:1fr 220px;gap:40px;align-items:start}
+@media(max-width:768px){.layout{grid-template-columns:1fr}}
+
+.toc{position:sticky;top:68px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.toc h3{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px}
+.toc a{display:block;font-size:13px;color:var(--muted);padding:5px 0;border-left:2px solid transparent;padding-left:10px;transition:.2s}
+.toc a:hover{color:var(--accent);border-left-color:var(--accent);text-decoration:none}
+
+section{margin-bottom:48px}
+.section-tag{display:inline-block;background:var(--accent-dim);color:var(--accent);font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+h2{font-size:22px;font-weight:700;letter-spacing:-.3px;margin-bottom:16px}
+h3{font-size:16px;font-weight:600;margin-bottom:10px;color:var(--text)}
+p{color:#c5cdd9;margin-bottom:14px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:16px}
+.card-sm{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.card-icon{font-size:26px;margin-bottom:10px}
+.card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ORG CHART */
+.org-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin:20px 0}
+.org-level{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.org-connector{text-align:center;color:var(--accent);font-size:16px;margin-bottom:6px}
+.org-node{background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center;min-width:100px}
+.org-node.highlight{border-color:var(--accent);background:var(--accent-dim)}
+.org-role{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.org-name{font-size:13px;font-weight:700;color:var(--text)}
+.org-agent{font-size:11px;color:var(--accent);margin-top:2px}
+
+/* GOAL TREE */
+.goal-tree{display:flex;flex-direction:column;gap:2px;margin:16px 0}
+.goal-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:var(--surface2);border-left:3px solid transparent}
+.goal-row.lvl0{border-left-color:var(--accent);font-weight:700;font-size:14px}
+.goal-row.lvl1{margin-left:24px;border-left-color:var(--purple);font-size:13px}
+.goal-row.lvl2{margin-left:48px;border-left-color:var(--amber);font-size:13px}
+.goal-row.lvl3{margin-left:72px;border-left-color:var(--green);font-size:12px;color:var(--muted)}
+.goal-icon{font-size:14px;flex-shrink:0}
+
+/* HEARTBEAT VIZ */
+.heartbeat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+@media(max-width:600px){.heartbeat-grid{grid-template-columns:1fr}}
+.hb-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.hb-title{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px}
+.hb-freq{font-size:11px;color:var(--muted);margin-bottom:12px}
+.hb-task{font-size:12px;color:#c5cdd9;padding:4px 0;border-bottom:1px solid var(--border)}
+.hb-task:last-child{border-bottom:none}
+
+/* BUDGET TABLE */
+.budget-table{width:100%;border-collapse:collapse;margin:16px 0}
+.budget-table th{background:var(--surface3);color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.budget-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.budget-table tr:hover td{background:var(--surface2)}
+.budget-bar-wrap{flex:1;background:var(--surface3);border-radius:3px;height:8px;width:120px;display:inline-block;vertical-align:middle;margin-left:8px}
+.budget-bar{height:100%;border-radius:3px}
+
+/* TAGS */
+.tag-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.tag{display:inline-block;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600}
+.tag-cyan{background:rgba(6,182,212,.15);color:#22d3ee;border:1px solid rgba(6,182,212,.3)}
+.tag-green{background:rgba(16,185,129,.15);color:#10b981;border:1px solid rgba(16,185,129,.3)}
+.tag-purple{background:rgba(167,139,250,.15);color:#a78bfa;border:1px solid rgba(167,139,250,.3)}
+.tag-amber{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.3)}
+.tag-red{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.tag-pink{background:rgba(232,121,249,.15);color:#e879f9;border:1px solid rgba(232,121,249,.3)}
+
+/* COMPARISON TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0}
+.tbl th{background:var(--surface3);color:var(--muted);font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.5px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:#c5cdd9;vertical-align:top}
+.tbl tr:hover td{background:var(--surface2)}
+
+/* PRO/CON GRID */
+.procon-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+@media(max-width:600px){.procon-grid{grid-template-columns:1fr}}
+.procon-col{border-radius:10px;padding:18px}
+.procon-pro{background:#071a12;border:1px solid var(--green)}
+.procon-con{background:#1a0e0e;border:1px solid var(--red)}
+.procon-head{font-size:13px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.procon-pro .procon-head{color:var(--green)}
+.procon-con .procon-head{color:var(--red)}
+.procon-item{display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:#c5cdd9;align-items:flex-start}
+.procon-pro .procon-item::before{content:'✓';color:var(--green);flex-shrink:0;font-weight:700}
+.procon-con .procon-item::before{content:'✗';color:var(--red);flex-shrink:0;font-weight:700}
+
+/* QUOTE */
+.quote-block{border-left:3px solid var(--accent);background:var(--accent-dim);border-radius:0 10px 10px 0;padding:16px 20px;margin:20px 0}
+.quote-block p{color:var(--text);font-style:italic;margin:0}
+.quote-block .quote-attr{font-size:12px;color:var(--muted);margin-top:8px;font-style:normal}
+
+/* INSTALL BOX */
+.install-box{background:#051215;border:1px solid var(--accent);border-radius:10px;padding:20px;margin:16px 0}
+.install-title{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.install-cmd{font-family:'SF Mono','Fira Code',monospace;font-size:14px;color:#67e8f9;word-break:break-all}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0;margin:20px 0}
+.tl-item{display:flex;gap:16px;padding-bottom:24px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--border)}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:30px;height:30px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;color:#000;font-weight:700;z-index:1}
+.tl-content{flex:1;padding-top:4px}
+.tl-date{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.tl-title{font-size:14px;font-weight:700;color:var(--text);margin:4px 0}
+.tl-desc{font-size:13px;color:var(--muted)}
+
+/* STARS CHART */
+.stars-bar{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.star-row{display:flex;align-items:center;gap:12px}
+.star-lbl{font-size:12px;color:var(--muted);width:80px;text-align:right;flex-shrink:0}
+.star-bg{flex:1;background:var(--surface3);border-radius:4px;height:20px;overflow:hidden}
+.star-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:700;color:#fff}
+.star-val{font-size:12px;color:var(--muted);width:80px;flex-shrink:0}
+
+/* INSIGHT */
+.insight-card{background:linear-gradient(135deg,#051518 0%,#0c1a28 100%);border:1px solid var(--accent);border-radius:14px;padding:28px;margin:24px 0}
+.insight-header{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.insight-icon{font-size:24px}
+.insight-title{font-size:16px;font-weight:700;color:var(--accent)}
+.insight-items{display:flex;flex-direction:column;gap:14px}
+.insight-item{display:flex;gap:14px;align-items:flex-start}
+.insight-num{background:var(--accent);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:2px}
+.insight-body{font-size:14px;color:#c5cdd9;line-height:1.6}
+.insight-body strong{color:var(--text)}
+
+/* FUTURE PHASES */
+.phase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:20px 0}
+.phase-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px;border-top:3px solid var(--accent)}
+.phase-num{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.phase-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px}
+.phase-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">GARAMwiki</span>
+  <span class="sep">/</span>
+  <span class="cat">🔩 심화 기술</span>
+  <a href="../index.html" class="back">← 인덱스</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🔩 심화 기술 · 오픈소스 · 2026-03 출시</div>
+  <h1>📎 <span>Paperclip</span><br>AI 에이전트 오케스트레이션 플랫폼</h1>
+  <p class="sub">에이전트를 만드는 도구가 아니라 에이전트들로 '회사'를 운영하는 컨트롤 플레인. 조직도·예산·거버넌스·목표 정렬을 하나의 셀프호스팅 플랫폼으로 구현한 오픈소스 프로젝트.</p>
+  <div class="meta-row">
+    <span class="meta-chip"><strong>출시</strong> 2026-03-04</span>
+    <span class="meta-chip"><strong>라이선스</strong> MIT 오픈소스</span>
+    <span class="meta-chip"><strong>스택</strong> Node.js + React + PostgreSQL</span>
+    <span class="meta-chip"><strong>GitHub</strong> paperclipai/paperclip</span>
+    <span class="meta-chip"><strong>공식 사이트</strong> paperclip.ing</span>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div><div class="stat-num">53K+</div><div class="stat-lbl">GitHub Stars (출시 6주)</div></div>
+    <div><div class="stat-num">6.4K+</div><div class="stat-lbl">GitHub Forks</div></div>
+    <div><div class="stat-num">MIT</div><div class="stat-lbl">라이선스</div></div>
+    <div><div class="stat-num">1cmd</div><div class="stat-lbl">설치 명령어 수</div></div>
+    <div><div class="stat-num">∞</div><div class="stat-lbl">지원 에이전트 (BYOA)</div></div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+<main>
+
+<!-- 1. 개념 -->
+<section id="concept">
+  <div class="section-tag">Core Concept</div>
+  <h2>Paperclip란 무엇인가 — "에이전트의 회사 OS"</h2>
+
+  <p>Paperclip은 AI 에이전트를 <strong>만드는</strong> 도구가 아니다. 이미 존재하는 에이전트들(Claude, Codex, OpenClaw, Cursor, Hermes 등)을 <strong>조직화하고 운영하는 컨트롤 플레인</strong>이다. 핵심 은유는 단순하면서도 강력하다: <strong>당신은 이사회(Board of Directors), AI 에이전트들은 임직원</strong>.</p>
+
+  <div class="quote-block">
+    <p>"OpenClaw is an employee. Paperclip is the company."</p>
+    <div class="quote-attr">— @resolvervicky (X/Twitter, 2026)</div>
+  </div>
+
+  <div class="quote-block">
+    <p>"The framing here is what makes this interesting. Not 'here is an AI tool.' CEO hires a Coder. You approve it. The mental model is a company you are running, not a tool you are using. The shift from 'I am prompting an AI' to 'I am managing a team' changes how you think about what is possible."</p>
+    <div class="quote-attr">— @yashns1 (X/Twitter, 2026)</div>
+  </div>
+
+  <p>2026년은 "AI 에이전트의 해"가 아니라 <strong>"AI 회사의 해"</strong>다. 단일 에이전트 툴링에서 멀티-에이전트 조직 운영으로의 패러다임 전환을 Paperclip이 오픈소스로 구현했다. BYOA(Bring Your Own Agent) 철학 — 어떤 에이전트 런타임도 연결 가능하며, Paperclip은 그 위에서 조직 구조, 예산, 감사 추적을 담당한다.</p>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <div class="card-icon">🏢</div>
+      <div class="card-title">에이전트 오케스트레이터</div>
+      <div class="card-desc">에이전트를 만들지 않는다. Claude, Codex, OpenClaw 등 기존 에이전트를 조직화한다. "프레임워크"가 아니라 "앱".</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Zero-Human Company</div>
+      <div class="card-desc">CEO부터 엔지니어까지 모든 역할을 AI 에이전트로 채운다. 인간은 이사회 역할만. 완전 자율 운영을 목표.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🔒</div>
+      <div class="card-title">거버넌스 내재화</div>
+      <div class="card-desc">에이전트가 에이전트를 고용할 수 없다. 전략 실행은 이사회 승인 필요. 예산 초과 시 자동 일시정지.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🔓</div>
+      <div class="card-title">MIT 오픈소스</div>
+      <div class="card-desc">셀프호스팅. 외부 계정 불필요. npx 한 줄로 설치. 코드 100% 감사 가능. 포크·기여 환영.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 아키텍처 -->
+<section id="architecture">
+  <div class="section-tag">Architecture</div>
+  <h2>기술 아키텍처</h2>
+
+  <p>Node.js 서버 + React 대시보드 + PostgreSQL의 단순한 3-레이어 구조. 단일 프로세스가 모든 것을 처리한다.</p>
+
+  <div class="install-box">
+    <div class="install-title">설치 — 단 하나의 명령어</div>
+    <div class="install-cmd">$ npx paperclipai onboard --yes</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <div class="card-title">🖥️ Node.js 백엔드</div>
+      <div class="card-desc">에이전트 스케줄링, 하트비트, 태스크 체크아웃, 예산 추적, 감사 로그를 담당하는 단일 Node.js 프로세스.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-title">⚛️ React 대시보드</div>
+      <div class="card-desc">Linear급 UX 품질. 조직도 시각화, 태스크 티켓, 비용 트래킹, 에이전트 승인 UI를 웹 대시보드로 제공.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-title">🐘 PostgreSQL</div>
+      <div class="card-desc">로컬 실행 시 임베디드 Postgres 자동 설치. 프로덕션 배포 시 외부 Postgres 연결. 불변 감사 로그(append-only) 저장.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-title">📝 SKILL.md 컨텍스트</div>
+      <div class="card-desc">에이전트가 Paperclip 워크플로와 프로젝트 컨텍스트를 런타임에 학습. 재훈련 없이 조직 맥락 자동 파악.</div>
+    </div>
+  </div>
+
+  <!-- ORG CHART -->
+  <div class="org-box">
+    <h3 style="text-align:center;color:var(--accent);margin-bottom:20px">📎 에이전트 조직도 예시</h3>
+    <div class="org-level">
+      <div class="org-node highlight">
+        <div class="org-role">Board (Human)</div>
+        <div class="org-name">이사회</div>
+        <div class="org-agent">👤 You</div>
+      </div>
+    </div>
+    <div class="org-connector">↓</div>
+    <div class="org-level">
+      <div class="org-node">
+        <div class="org-role">CEO</div>
+        <div class="org-name">최고경영자</div>
+        <div class="org-agent">Hermes</div>
+      </div>
+    </div>
+    <div class="org-connector">↓</div>
+    <div class="org-level">
+      <div class="org-node">
+        <div class="org-role">CMO</div>
+        <div class="org-name">마케팅</div>
+        <div class="org-agent">OpenClaw</div>
+      </div>
+      <div class="org-node">
+        <div class="org-role">CTO</div>
+        <div class="org-name">기술</div>
+        <div class="org-agent">Codex</div>
+      </div>
+      <div class="org-node">
+        <div class="org-role">COO</div>
+        <div class="org-name">운영</div>
+        <div class="org-agent">Claude</div>
+      </div>
+    </div>
+    <div class="org-connector">↓</div>
+    <div class="org-level">
+      <div class="org-node">
+        <div class="org-role">Frontend Eng</div>
+        <div class="org-name">프론트엔드</div>
+        <div class="org-agent">Cursor</div>
+      </div>
+      <div class="org-node">
+        <div class="org-role">Backend Eng</div>
+        <div class="org-name">백엔드</div>
+        <div class="org-agent">Claude</div>
+      </div>
+      <div class="org-node">
+        <div class="org-role">SEO Analyst</div>
+        <div class="org-name">SEO</div>
+        <div class="org-agent">Gemini</div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:16px">이사회 → CEO → C-레벨 → 실무 에이전트. 모든 보고 라인·예산·권한이 명확히 정의됨.</p>
+  </div>
+</section>
+
+<!-- 3. 핵심 기능 -->
+<section id="features">
+  <div class="section-tag">Core Features</div>
+  <h2>6가지 핵심 기능</h2>
+
+  <!-- Goal Alignment -->
+  <div class="card" style="margin-bottom:20px">
+    <h3>🎯 1. 목표 정렬 (Goal Alignment)</h3>
+    <p>모든 태스크가 회사 미션까지 소급되는 <strong>완전한 목표 계보(Goal Ancestry)</strong>. 에이전트는 언제나 "왜 이걸 하는가"를 알 수 있다.</p>
+    <div class="goal-tree">
+      <div class="goal-row lvl0"><div class="goal-icon">◎</div><div><strong>Mission</strong> — AI 노트앱으로 $1M ARR 달성</div></div>
+      <div class="goal-row lvl1"><div class="goal-icon">◉</div><div><strong>Project Goal</strong> — 협업 기능 출시</div></div>
+      <div class="goal-row lvl2"><div class="goal-icon">○</div><div><strong>Agent Goal</strong> — 실시간 동기화 구현</div></div>
+      <div class="goal-row lvl3"><div class="goal-icon">•</div><div><strong>Task</strong> — 문서 업데이트용 WebSocket 핸들러 작성</div></div>
+    </div>
+  </div>
+
+  <!-- Heartbeats -->
+  <div class="card" style="margin-bottom:20px">
+    <h3>💓 2. 하트비트 스케줄링 (Heartbeat System)</h3>
+    <p>에이전트는 처음부터 재시작하지 않는다. <strong>하트비트마다 같은 태스크 컨텍스트를 이어서 작업</strong>. 위임은 조직도 위아래로 자동 흐른다.</p>
+    <div class="heartbeat-grid">
+      <div class="hb-card">
+        <div class="hb-title">📝 Copywriter Agent</div>
+        <div class="hb-freq">매 4시간마다 실행</div>
+        <div class="hb-task">블로그 초안 작성</div>
+        <div class="hb-task">카피 편집</div>
+        <div class="hb-task">뉴스레터 작성</div>
+        <div class="hb-task">소셜 캡션 제작</div>
+        <div class="hb-task">배치 발행</div>
+      </div>
+      <div class="hb-card">
+        <div class="hb-title">📊 SEO Analyst Agent</div>
+        <div class="hb-freq">매 8시간마다 실행</div>
+        <div class="hb-task">사이트 크롤링 감사</div>
+        <div class="hb-task">키워드 리서치</div>
+        <div class="hb-task">순위 추적</div>
+        <div class="hb-task">링크 빌딩 리포트</div>
+      </div>
+      <div class="hb-card">
+        <div class="hb-title">📱 Social Manager Agent</div>
+        <div class="hb-freq">매 12시간마다 실행</div>
+        <div class="hb-task">게시물 스케줄링</div>
+        <div class="hb-task">댓글 대응</div>
+        <div class="hb-task">분석 리뷰</div>
+        <div class="hb-task" style="color:var(--amber)">⚠ 브랜드 언급 급증 대응</div>
+      </div>
+      <div class="hb-card">
+        <div class="hb-title">⚡ 이벤트 기반 트리거</div>
+        <div class="hb-freq">즉시 실행 (비동기)</div>
+        <div class="hb-task">태스크 배정 알림</div>
+        <div class="hb-task">@멘션 호출</div>
+        <div class="hb-task">크로스팀 위임 요청</div>
+        <div class="hb-task">긴급 승인 요청</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Budget -->
+  <div class="card" style="margin-bottom:20px">
+    <h3>💰 3. 예산 제어 (Cost Control)</h3>
+    <p>에이전트당 월별 예산 설정. 80% 도달 시 소프트 경고, 100% 시 <strong>자동 일시정지</strong>. 초과 비용 없음. 이사회가 언제든 한도 재설정 가능.</p>
+    <table class="budget-table">
+      <tr><th>에이전트</th><th>역할</th><th>예산</th><th>사용량</th><th>상태</th></tr>
+      <tr>
+        <td><strong>Hermes</strong></td><td>CEO</td><td>$60/월</td>
+        <td><span>$48</span><span class="budget-bar-wrap"><span class="budget-bar" style="width:80%;background:var(--amber)"></span></span></td>
+        <td><span class="tag tag-amber" style="font-size:11px">⚠ 80%</span></td>
+      </tr>
+      <tr>
+        <td><strong>Codex</strong></td><td>CTO</td><td>$50/월</td>
+        <td><span>$22</span><span class="budget-bar-wrap"><span class="budget-bar" style="width:44%;background:var(--green)"></span></span></td>
+        <td><span class="tag tag-green" style="font-size:11px">✓ 정상</span></td>
+      </tr>
+      <tr>
+        <td><strong>OpenClaw</strong></td><td>CMO</td><td>$40/월</td>
+        <td><span>$40</span><span class="budget-bar-wrap"><span class="budget-bar" style="width:100%;background:var(--red)"></span></span></td>
+        <td><span class="tag tag-red" style="font-size:11px">⛔ 일시정지</span></td>
+      </tr>
+      <tr>
+        <td><strong>Claude</strong></td><td>COO</td><td>$30/월</td>
+        <td><span>$12</span><span class="budget-bar-wrap"><span class="budget-bar" style="width:40%;background:var(--green)"></span></span></td>
+        <td><span class="tag tag-green" style="font-size:11px">✓ 정상</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Ticket System -->
+  <div class="card" style="margin-bottom:20px">
+    <h3>🎫 4. 티켓 시스템 & 감사 로그 (Audit Trail)</h3>
+    <p>모든 대화·결정·도구 호출이 추적된다. <strong>불변 감사 로그(Append-only)</strong>. 수정·삭제 불가. 완전한 책임 소재. 에이전트가 왜 그 결정을 했는지 도구 호출 단위로 재현 가능.</p>
+    <div class="tag-wrap">
+      <span class="tag tag-cyan">구조화 티켓</span>
+      <span class="tag tag-cyan">전체 도구 호출 트레이스</span>
+      <span class="tag tag-cyan">불변 감사 로그</span>
+      <span class="tag tag-cyan">API 요청 기록</span>
+      <span class="tag tag-cyan">의사결정 포인트 로그</span>
+    </div>
+  </div>
+
+  <!-- Governance -->
+  <div class="card" style="margin-bottom:20px">
+    <h3>🏛️ 5. 거버넌스 (Board-Level Control)</h3>
+    <p>자율성은 기본값이 아니라 이사회가 부여하는 특권이다. 에이전트 채용·전략 실행·예산 변경 모두 이사회 승인 필요.</p>
+    <div class="card-grid">
+      <div class="card-sm">
+        <div class="card-title">✅ 승인 게이트</div>
+        <div class="card-desc">에이전트 신규 채용, 전략 변경, 주요 배포 모두 인간 이사회의 명시적 승인 필요.</div>
+      </div>
+      <div class="card-sm">
+        <div class="card-title">🔄 설정 버전 관리</div>
+        <div class="card-desc">모든 설정 변경이 버전화. 잘못된 변경 즉시 롤백 가능. 프로덕션 사고 예방.</div>
+      </div>
+      <div class="card-sm">
+        <div class="card-title">⏸️ 즉각 제어</div>
+        <div class="card-desc">어떤 에이전트든 언제든지 일시정지·재개·재배정·해고 가능. 실시간 개입 권한.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BYOA -->
+  <div class="card">
+    <h3>🔌 6. BYOA — 에이전트 무관 설계</h3>
+    <p>하트비트 신호를 받을 수 있다면 어떤 것이든 채용 가능. 에이전트 런타임에 종속되지 않는다.</p>
+    <div class="tag-wrap">
+      <span class="tag tag-cyan">Claude (Anthropic)</span>
+      <span class="tag tag-cyan">OpenAI Codex</span>
+      <span class="tag tag-cyan">Google Gemini</span>
+      <span class="tag tag-cyan">Cursor</span>
+      <span class="tag tag-cyan">Hermes (Nous Research)</span>
+      <span class="tag tag-cyan">OpenClaw</span>
+      <span class="tag tag-purple">Pi</span>
+      <span class="tag tag-purple">OpenCode</span>
+      <span class="tag tag-amber">Python 스크립트</span>
+      <span class="tag tag-amber">Bash 명령</span>
+      <span class="tag tag-amber">HTTP 웹훅</span>
+    </div>
+  </div>
+</section>
+
+<!-- 4. 장단점 -->
+<section id="procon">
+  <div class="section-tag">Pros & Cons</div>
+  <h2>장점과 단점 분석</h2>
+
+  <div class="procon-grid">
+    <div class="procon-col procon-pro">
+      <div class="procon-head">✅ 장점 (Strengths)</div>
+      <div class="procon-item">패러다임 혁신 — "도구"가 아닌 "조직"으로 AI를 프레이밍. 에이전트 관리 방식의 근본적 재정의.</div>
+      <div class="procon-item">에이전트 무관 설계(BYOA) — 특정 LLM·런타임에 종속 없음. 기존 에이전트 재사용.</div>
+      <div class="procon-item">내장 거버넌스 — 비용 제어·감사 로그·승인 게이트가 코어에 내재. 별도 구현 불필요.</div>
+      <div class="procon-item">Linear급 UX — 기술 도구 중 최고 수준의 디자인·사용성. 비개발자도 조작 가능.</div>
+      <div class="procon-item">MIT 완전 오픈소스 — 셀프호스팅·감사·포크 가능. 데이터 주권 완전 확보.</div>
+      <div class="procon-item">단일 명령어 설치 — npx 한 줄. 데이터베이스 자동 설정. 온보딩 마찰 최소화.</div>
+      <div class="procon-item">멀티 컴퍼니 지원 — 단일 배포로 여러 "회사" 운영. 완전한 데이터 격리.</div>
+      <div class="procon-item">목표 계보 추적 — 모든 태스크가 회사 미션까지 소급. 에이전트가 "왜"를 항상 인식.</div>
+    </div>
+    <div class="procon-col procon-con">
+      <div class="procon-head">✗ 단점 (Weaknesses)</div>
+      <div class="procon-item">초기 단계 성숙도 — 출시 2026년 3월. 프로덕션 검증 사례 부족. 핵심 기능 아직 개발 중.</div>
+      <div class="procon-item">파일 기반 메모리 한계 — PARA 기반 파일 메모리는 단일 머신 한정. 분산 배포 시 확장성 문제.</div>
+      <div class="procon-item">Node.js 전용 — Python 에코시스템 중심 AI 개발자에게 진입 장벽. Python 클라이언트 부재.</div>
+      <div class="procon-item">하트비트 레이턴시 — 스케줄 기반 실행으로 실시간 이벤트 처리에 구조적 지연 발생 가능.</div>
+      <div class="procon-item">복잡성 오버헤드 — 에이전트 2~3개의 단순 작업엔 과도한 구조. CrewAI 등이 더 적합.</div>
+      <div class="procon-item">티켓 시스템 고정 — 외부 티켓 시스템(Asana, Jira) 연동이 아직 로드맵 단계.</div>
+      <div class="procon-item">거버넌스 = 인간 의존 — 완전 자율 운영을 목표로 하나 현재는 인간 승인 게이트가 필수.</div>
+      <div class="procon-item">제한적 에이전트 내장 통찰 — 에이전트 내부 상태·실패 원인 디버깅 도구 미흡.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 경쟁 비교 -->
+<section id="comparison">
+  <div class="section-tag">Competitive Landscape</div>
+  <h2>경쟁 프레임워크 비교</h2>
+
+  <table class="tbl">
+    <tr>
+      <th>항목</th>
+      <th>📎 Paperclip</th>
+      <th>CrewAI</th>
+      <th>LangGraph</th>
+      <th>AutoGen</th>
+      <th>n8n/Zapier</th>
+    </tr>
+    <tr>
+      <td><strong>핵심 역할</strong></td>
+      <td>에이전트 오케스트레이터(조직 OS)</td>
+      <td>에이전트 빌더(롤 기반)</td>
+      <td>워크플로 엔진(그래프 기반)</td>
+      <td>대화형 멀티에이전트</td>
+      <td>워크플로 자동화</td>
+    </tr>
+    <tr>
+      <td><strong>에이전트 독립성</strong></td>
+      <td><span class="tag tag-green">완전 BYOA</span></td>
+      <td><span class="tag tag-amber">자체 에이전트 빌드</span></td>
+      <td><span class="tag tag-amber">코드 중심</span></td>
+      <td><span class="tag tag-amber">MS 에코시스템</span></td>
+      <td><span class="tag tag-red">워크플로 노드</span></td>
+    </tr>
+    <tr>
+      <td><strong>내장 거버넌스</strong></td>
+      <td><span class="tag tag-green">예산+승인+감사</span></td>
+      <td><span class="tag tag-red">없음</span></td>
+      <td><span class="tag tag-red">없음</span></td>
+      <td><span class="tag tag-red">없음</span></td>
+      <td><span class="tag tag-amber">제한적</span></td>
+    </tr>
+    <tr>
+      <td><strong>UI/UX</strong></td>
+      <td><span class="tag tag-green">React 대시보드 (Linear급)</span></td>
+      <td><span class="tag tag-amber">코드 중심</span></td>
+      <td><span class="tag tag-red">개발자 전용</span></td>
+      <td><span class="tag tag-amber">기본 UI</span></td>
+      <td><span class="tag tag-green">노코드 UI</span></td>
+    </tr>
+    <tr>
+      <td><strong>비용 제어</strong></td>
+      <td><span class="tag tag-green">에이전트별 월 예산</span></td>
+      <td><span class="tag tag-red">외부 구현 필요</span></td>
+      <td><span class="tag tag-red">외부 구현 필요</span></td>
+      <td><span class="tag tag-red">외부 구현 필요</span></td>
+      <td><span class="tag tag-amber">부분적</span></td>
+    </tr>
+    <tr>
+      <td><strong>장기 기억</strong></td>
+      <td><span class="tag tag-amber">파일 기반 (단일머신)</span></td>
+      <td><span class="tag tag-amber">외부 DB 필요</span></td>
+      <td><span class="tag tag-amber">외부 저장소</span></td>
+      <td><span class="tag tag-red">제한적</span></td>
+      <td><span class="tag tag-red">없음</span></td>
+    </tr>
+    <tr>
+      <td><strong>설치 복잡도</strong></td>
+      <td><span class="tag tag-green">npx 한 줄</span></td>
+      <td><span class="tag tag-amber">pip + 설정</span></td>
+      <td><span class="tag tag-red">코드 파이프라인</span></td>
+      <td><span class="tag tag-amber">pip + 설정</span></td>
+      <td><span class="tag tag-green">Docker</span></td>
+    </tr>
+    <tr>
+      <td><strong>적합 규모</strong></td>
+      <td>10+ 에이전트 조직</td>
+      <td>3~10 에이전트 팀</td>
+      <td>복잡 커스텀 워크플로</td>
+      <td>대화형 협업</td>
+      <td>반복 자동화</td>
+    </tr>
+  </table>
+
+  <div class="quote-block">
+    <p>"에이전트 2~3개의 빠른 프로토타입이라면 CrewAI가 더 낫다. 10개 이상의 에이전트가 실제 조직처럼 협업해야 한다면 Paperclip이 유일한 선택이다."</p>
+    <div class="quote-attr">— Best Multi-Agent Frameworks in 2026, gurusup.com</div>
+  </div>
+</section>
+
+<!-- 6. 한계 및 리스크 -->
+<section id="limits">
+  <div class="section-tag">Limitations & Risks</div>
+  <h2>현재 한계 및 주요 리스크</h2>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <div class="card-icon">🗄️</div>
+      <div class="card-title">확장성 병목 — 파일 메모리</div>
+      <div class="card-desc">PARA 기반 파일 메모리 시스템은 단일 머신에서만 안정적. 분산 클라우드 배포·동시 에이전트 확장 시 공유 메모리 아키텍처 재설계 필요.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🧪</div>
+      <div class="card-title">프로덕션 검증 부족</div>
+      <div class="card-desc">2026년 3월 출시. GitHub 스타는 많지만 실제 프로덕션 운영 성공 사례가 공개적으로 부족. v0.x 단계의 불안정성 리스크.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🔗</div>
+      <div class="card-title">외부 도구 통합 제한</div>
+      <div class="card-desc">Jira·Asana·Linear 같은 기존 티켓 시스템 연동이 로드맵에만 존재. 현재는 Paperclip 내부 티켓 시스템만 사용 가능.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">실시간 처리 한계</div>
+      <div class="card-desc">하트비트(스케줄) 기반 실행이 기본. 밀리초 단위 실시간 반응이 필요한 용도에는 구조적으로 부적합.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">에이전트 내부 가시성</div>
+      <div class="card-desc">에이전트가 왜 실패했는지, 내부적으로 어떤 결정을 내렸는지에 대한 디버깅·관찰 도구가 미성숙.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🔒</div>
+      <div class="card-title">보안 모델 초기 단계</div>
+      <div class="card-desc">에이전트 간 권한 격리, 민감 정보 처리, API 키 관리 등 엔터프라이즈 보안 요구사항 대응이 아직 불완전.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 현재 단계 -->
+<section id="status">
+  <div class="section-tag">Current Status</div>
+  <h2>현재 단계 — 성장 속도의 역설</h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot">1</div>
+      <div class="tl-content">
+        <div class="tl-date">2026년 3월 4일</div>
+        <div class="tl-title">공식 출시</div>
+        <div class="tl-desc">GitHub 오픈소스 공개. MIT 라이선스. npx paperclipai onboard 공개.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">2</div>
+      <div class="tl-content">
+        <div class="tl-date">3주 후</div>
+        <div class="tl-title">GitHub Star 30,000 돌파</div>
+        <div class="tl-desc">AI/오픈소스 커뮤니티에서 폭발적 반응. 트위터·미디엄·Reddit 바이럴.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">3</div>
+      <div class="tl-content">
+        <div class="tl-date">4월 2026</div>
+        <div class="tl-title">Star 42,000+ / Fork 6,400+</div>
+        <div class="tl-desc">커뮤니티 기여자 급증. 다양한 에이전트 어댑터·익스텐션 개발 시작.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">4</div>
+      <div class="tl-content">
+        <div class="tl-date">6주 후</div>
+        <div class="tl-title">Star 53,000+ — 현재</div>
+        <div class="tl-desc">Contabo VPS 배포 가이드, 딥다이브 아티클 다수. 엔터프라이즈 관심 증가.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 스타 성장 차트 -->
+  <div class="card" style="margin-top:20px">
+    <h3>🌟 GitHub Star 성장 속도 비교 (출시 6주 기준)</h3>
+    <div class="stars-bar">
+      <div class="star-row">
+        <span class="star-lbl">Paperclip</span>
+        <div class="star-bg"><div class="star-fill" style="width:100%;background:var(--accent)">53K+ stars</div></div>
+        <span class="star-val">53,000+</span>
+      </div>
+      <div class="star-row">
+        <span class="star-lbl">CrewAI</span>
+        <div class="star-bg"><div class="star-fill" style="width:70%;background:var(--purple)">~37K (6주)</div></div>
+        <span class="star-val">~37,000</span>
+      </div>
+      <div class="star-row">
+        <span class="star-lbl">AutoGen</span>
+        <div class="star-bg"><div class="star-fill" style="width:55%;background:var(--amber)">~29K (6주)</div></div>
+        <span class="star-val">~29,000</span>
+      </div>
+      <div class="star-row">
+        <span class="star-lbl">LangGraph</span>
+        <div class="star-bg"><div class="star-fill" style="width:45%;background:var(--green)">~24K (6주)</div></div>
+        <span class="star-val">~24,000</span>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px">Paperclip의 초기 성장 속도는 동세대 에이전트 프레임워크 대비 유례없는 수준. 단, GitHub 스타 ≠ 프로덕션 채택.</p>
+  </div>
+</section>
+
+<!-- 8. 향후 전망 -->
+<section id="outlook">
+  <div class="section-tag">Future Outlook</div>
+  <h2>향후 전망 — 3단계 진화 시나리오</h2>
+
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="phase-num">Phase 1 — 2026 H2</div>
+      <div class="phase-title">기반 강화</div>
+      <div class="phase-desc">외부 티켓 시스템 연동(Jira/Linear), 분산 메모리 아키텍처, 에이전트 마켓플레이스 베타, 엔터프라이즈 보안 강화.</div>
+    </div>
+    <div class="phase-card" style="border-top-color:var(--purple)">
+      <div class="phase-num">Phase 2 — 2027</div>
+      <div class="phase-title">클라우드 관리형 옵션</div>
+      <div class="phase-desc">셀프호스팅 외 클라우드 관리형 버전 출시 예상. 에이전트-as-a-Service, 팀/기업 플랜, 고급 분석 대시보드.</div>
+    </div>
+    <div class="phase-card" style="border-top-color:var(--amber)">
+      <div class="phase-num">Phase 3 — 2027+</div>
+      <div class="phase-title">에이전트 경제의 인프라</div>
+      <div class="phase-desc">에이전트-to-에이전트 거래, 에이전트 스킬 마켓플레이스, 멀티 조직 연합, AI 회사 간 계약 자동화.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>⚠️ 핵심 리스크 시나리오</h3>
+    <div class="card-grid">
+      <div class="card-sm">
+        <div class="card-title" style="color:var(--red)">AWS/Azure 진입</div>
+        <div class="card-desc">클라우드 대기업이 관리형 에이전트 오케스트레이터를 출시하면 셀프호스팅 Paperclip의 시장이 압박받을 수 있음.</div>
+      </div>
+      <div class="card-sm">
+        <div class="card-title" style="color:var(--red)">에이전트 런타임 수직 통합</div>
+        <div class="card-desc">Anthropic·OpenAI가 자체 오케스트레이션 레이어를 강화하면 BYOA 가치가 희석될 리스크.</div>
+      </div>
+      <div class="card-sm">
+        <div class="card-title" style="color:var(--amber)">오픈소스 fork 경쟁</div>
+        <div class="card-desc">MIT 라이선스의 역설 — 성공할수록 대기업이 포크하여 상용화. 핵심 개발팀의 지속성이 관건.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. GARAMbada 인사이트 -->
+<section id="insight">
+  <div class="section-tag">GARAMbada 인사이트</div>
+  <h2>Company Builder 관점 — Founders Studio에의 함의</h2>
+
+  <div class="insight-card">
+    <div class="insight-header">
+      <div class="insight-icon">🎯</div>
+      <div class="insight-title">Paperclip이 Founders Studio 모델에 시사하는 것</div>
+    </div>
+    <div class="insight-items">
+      <div class="insight-item">
+        <div class="insight-num">1</div>
+        <div class="insight-body"><strong>Zero-Human Company = 스튜디오 운영 모델의 혁신</strong><br>Paperclip의 "에이전트 조직도"는 Founders Studio가 포트폴리오사를 운영하는 방식에 직접 적용 가능하다. 초기 법인 설립 후 <strong>Paperclip으로 에이전트 팀을 구성하면, PMF 탐색 비용을 극적으로 낮출 수 있다.</strong> 개발·마케팅·운영 에이전트를 월 $200 예산으로 운영하는 "에이전트 스타트업" 실험이 현실화된다.</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">2</div>
+        <div class="insight-body"><strong>이사회 모델 = Founders Studio의 거버넌스와 동형</strong><br>Paperclip의 Board-of-Directors 모델은 Founders Studio가 포트폴리오사에 대해 갖는 거버넌스 구조와 정확히 대응된다. <strong>Founders Studio가 Paperclip 이사회 역할을 맡고, 에이전트 팀이 초기 비즈니스를 자율 운영</strong>하는 구조는 스튜디오의 레버리지를 극대화한다.</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">3</div>
+        <div class="insight-body"><strong>에이전트 예산 관리 = VC 포트폴리오 관리의 미시 버전</strong><br>에이전트당 월 예산·소진율·ROI를 추적하는 Paperclip의 비용 제어 시스템은 <strong>투자 포트폴리오 관리와 동일한 논리</strong>다. 어떤 에이전트(기능)가 비용 대비 가치를 창출하는지 데이터로 판단하는 AI Native 운영 철학.</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">4</div>
+        <div class="insight-body"><strong>현재 단계에서의 실용적 활용 전략</strong><br>프로덕션 핵심 비즈니스에는 아직 이르다. 대신 <strong>내부 운영 자동화 실험</strong>(리서치 에이전트, 콘텐츠 에이전트, 데이터 수집 에이전트)부터 시작하는 것이 현실적이다. GARAMwiki 자동화에 적용하면 즉각적인 가치를 확인할 수 있다.</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">5</div>
+        <div class="insight-body"><strong>오픈소스 커뮤니티 기여 = 에이전트 생태계 포지셔닝</strong><br>Paperclip에 기여하거나, 특정 버티컬 어댑터를 개발하는 것은 <strong>에이전트 오케스트레이션 생태계에서의 사전 포지셔닝</strong>이다. 이 기술이 2~3년 내 기업 운영의 표준이 될 때, 초기 기여자는 유의미한 위치를 선점하게 된다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. 결론 -->
+<section id="conclusion">
+  <div class="section-tag">Conclusion</div>
+  <h2>결론 — "에이전트를 쓰는 회사"에서 "에이전트로 된 회사"로</h2>
+
+  <div class="quote-block">
+    <p>Paperclip이 보여주는 것은 단순한 도구가 아니다. AI가 단순 보조에서 조직의 구성원으로 격상되는 패러다임 전환의 인프라다. 지금은 초기 단계지만, 이 방향은 돌이킬 수 없다.</p>
+    <div class="quote-attr">— GARAMbada 분석, 2026.05</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <div class="card-icon">🚀</div>
+      <div class="card-title">지금 당장</div>
+      <div class="card-desc">내부 운영 자동화 실험. 리서치·콘텐츠·데이터 에이전트 팀 구성. 비핵심 업무부터 검증.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">👀</div>
+      <div class="card-title">주시할 지점</div>
+      <div class="card-desc">외부 티켓 연동, 분산 메모리, 엔터프라이즈 보안 업데이트. v1.0 릴리즈 타이밍.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">📌</div>
+      <div class="card-title">핵심 판단</div>
+      <div class="card-desc">크리에이티브·리서치 에이전트 팀엔 지금도 실용적. 핵심 비즈니스 적용은 6~12개월 후 재평가.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🌐</div>
+      <div class="card-title">큰 그림</div>
+      <div class="card-desc">2년 내 "AI 에이전트 조직도"는 기업 운영의 표준이 될 것. 지금이 학습 곡선을 쌓을 타이밍.</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- SIDEBAR TOC -->
+<aside>
+  <nav class="toc">
+    <h3>목차</h3>
+    <a href="#concept">핵심 개념</a>
+    <a href="#architecture">기술 아키텍처</a>
+    <a href="#features">핵심 기능 6가지</a>
+    <a href="#procon">장단점 분석</a>
+    <a href="#comparison">경쟁 비교</a>
+    <a href="#limits">한계 및 리스크</a>
+    <a href="#status">현재 단계</a>
+    <a href="#outlook">향후 전망</a>
+    <a href="#insight">GARAMbada 인사이트</a>
+    <a href="#conclusion">결론</a>
+  </nav>
+</aside>
+</div>
+
+<footer style="background:var(--surface);border-top:1px solid var(--border);padding:24px;text-align:center;font-size:12px;color:var(--muted);margin-top:40px">
+  GARAMwiki · 개인 지식 베이스 · 최종 업데이트 2026-05 · <a href="../index.html">인덱스로 돌아가기</a>
+</footer>
+
+</body>
+</html>

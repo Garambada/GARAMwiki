@@ -185,6 +185,10 @@ ARTICLE_META = {
         "tags":  ["5·18", "칸트·밀·샌델", "시장의 도덕적 한계", "상품화", "공동체주의"],
     },
     # 심화 기술
+    "2026-05_Paperclip_AI_Agent_Orchestration_Platform.html": {
+        "title": "📎 Paperclip — AI 에이전트 오케스트레이션 플랫폼<br>Zero-Human Company 구현 심층 분석",
+        "tags":  ["Paperclip", "에이전트 오케스트레이션", "Zero-Human Company", "BYOA", "오픈소스"],
+    },
     "ontology-vs-genai-wiki.html": {
         "title": "온톨로지 기반 AI vs 생성형 LLM<br>— 판단하는 AI의 아키텍처 해부",
         "tags":  ["Ontology", "Knowledge Graph", "Neuro-Symbolic", "Palantir-class", "Sovereign AI"],
