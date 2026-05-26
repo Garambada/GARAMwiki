@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI실행시대 의도만 남는다 — 김서준 | GARAMwiki</title>
+<style>
+  :root {
+    --bg:     #0f1117;
+    --card:   #1a1d27;
+    --card2:  #1e2130;
+    --border: #2a2d3a;
+    --text:   #e2e8f0;
+    --muted:  #8892a4;
+    --acc:    #a78bfa;   /* 퍼플 — 철학·담론 톤 */
+    --acc2:   #c4b5fd;
+    --green:  #10b981;
+    --blue:   #3b82f6;
+    --yellow: #f59e0b;
+    --red:    #ef4444;
+    --orange: #f97316;
+    --teal:   #14b8a6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, 'Noto Sans KR', sans-serif; font-size: 15px; line-height: 1.7; }
+
+  /* NAV */
+  nav { background: rgba(15,17,23,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: .7rem 2rem; position: sticky; top: 0; z-index: 99; display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--muted); flex-wrap: wrap; }
+  nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  nav a:hover { color: var(--text); }
+  nav .sep { opacity: .4; }
+  nav .cur { color: var(--acc2); font-weight: 700; }
+
+  /* HERO */
+  .hero { padding: 3.5rem 2rem 1.5rem; max-width: 1000px; margin: 0 auto; }
+  .hero-badge { display: inline-flex; align-items: center; gap: .4rem; background: rgba(167,139,250,.12); border: 1px solid rgba(167,139,250,.3); color: var(--acc2); border-radius: 999px; padding: .3rem 1rem; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1.2rem; }
+  .hero h1 { font-size: clamp(1.5rem, 3.5vw, 2.3rem); font-weight: 800; line-height: 1.2; margin-bottom: .8rem; background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 50%, #e0e7ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { font-size: .95rem; color: var(--muted); max-width: 700px; margin-bottom: 1.2rem; }
+  .hero-sub strong { color: var(--text); }
+  .hero-meta { display: flex; gap: 1rem; flex-wrap: wrap; font-size: .78rem; color: var(--muted); margin-bottom: 1rem; }
+  .source-link { display: inline-flex; align-items: center; gap: .5rem; background: rgba(167,139,250,.08); border: 1px solid rgba(167,139,250,.2); color: var(--acc); border-radius: 8px; padding: .5rem 1rem; font-size: .8rem; text-decoration: none; transition: all .15s; margin-right: .5rem; }
+  .source-link:hover { background: rgba(167,139,250,.15); color: var(--acc2); }
+
+  /* TAG */
+  .tag { display: inline-block; font-size: .7rem; font-weight: 700; padding: .2rem .7rem; border-radius: 999px; margin-right: .3rem; margin-bottom: .3rem; }
+  .t-purple { background: rgba(167,139,250,.12); color: var(--acc2); border: 1px solid rgba(167,139,250,.3); }
+  .t-teal   { background: rgba(20,184,166,.12);  color: var(--teal);  border: 1px solid rgba(20,184,166,.3); }
+  .t-blue   { background: rgba(59,130,246,.12);  color: #60a5fa;      border: 1px solid rgba(59,130,246,.3); }
+  .t-yellow { background: rgba(245,158,11,.12);  color: var(--yellow);border: 1px solid rgba(245,158,11,.3); }
+
+  /* BIG QUOTE */
+  .quote-wrap { max-width: 1000px; margin: 0 auto; padding: 0 2rem 2rem; }
+  .big-quote { background: linear-gradient(135deg, rgba(167,139,250,.08), rgba(59,130,246,.06)); border: 1px solid rgba(167,139,250,.25); border-left: 4px solid var(--acc); border-radius: 12px; padding: 1.6rem 2rem; font-size: 1.1rem; font-weight: 700; color: var(--acc2); line-height: 1.6; }
+  .big-quote span { display: block; font-size: .82rem; font-weight: 400; color: var(--muted); margin-top: .5rem; }
+
+  /* CONTAINER */
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+  .section-title { font-size: 1.05rem; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: .6rem; margin: 2.5rem 0 1rem; padding-bottom: .6rem; border-bottom: 1px solid var(--border); }
+
+  /* PART HEADER */
+  .part-header { background: linear-gradient(135deg, rgba(167,139,250,.08), rgba(59,130,246,.05)); border: 1px solid rgba(167,139,250,.2); border-radius: 10px; padding: .8rem 1.2rem; margin: 1.5rem 0 .8rem; display: flex; align-items: center; gap: .8rem; }
+  .part-icon { font-size: 1.3rem; }
+  .part-title { font-size: .92rem; font-weight: 800; color: var(--acc2); }
+  .part-range { font-size: .75rem; color: var(--muted); margin-left: auto; }
+
+  /* CHAPTER CARDS */
+  .chapter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 4px; }
+  @media (max-width: 680px) { .chapter-grid { grid-template-columns: 1fr; } }
+
+  .ch-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.3rem; transition: transform .14s, box-shadow .14s; position: relative; overflow: hidden; }
+  .ch-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,.4); border-color: #3a3d4a; }
+  .ch-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .cc-p::before { background: linear-gradient(180deg, #a78bfa, #c4b5fd); }
+  .cc-g::before { background: linear-gradient(180deg, #10b981, #34d399); }
+  .cc-b::before { background: linear-gradient(180deg, #3b82f6, #60a5fa); }
+  .cc-t::before { background: linear-gradient(180deg, #14b8a6, #2dd4bf); }
+  .cc-y::before { background: linear-gradient(180deg, #f59e0b, #fbbf24); }
+  .cc-o::before { background: linear-gradient(180deg, #f97316, #fb923c); }
+
+  .ch-time { font-size: .68rem; font-weight: 700; color: var(--muted); margin-bottom: .35rem; font-family: monospace; }
+  .ch-title { font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: .45rem; line-height: 1.35; }
+  .ch-desc { font-size: .8rem; color: var(--muted); line-height: 1.65; }
+  .ch-desc strong { color: #cdd9e5; }
+  .ch-desc em { color: var(--acc2); font-style: normal; font-weight: 600; }
+
+  /* KEY CONCEPT BOXES */
+  .concept-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 14px; }
+  .concept-box h3 { font-size: .9rem; font-weight: 800; margin-bottom: .6rem; display: flex; align-items: center; gap: .5rem; }
+  .concept-box p, .concept-box li { font-size: .83rem; color: var(--muted); line-height: 1.72; }
+  .concept-box ul { padding-left: 1.1rem; }
+  .concept-box li { margin-bottom: .3rem; }
+  .concept-box li strong { color: var(--text); }
+
+  /* INSIGHT SECTION */
+  .insight-wrap { background: linear-gradient(135deg, rgba(167,139,250,.06), rgba(20,184,166,.04)); border: 1px solid rgba(167,139,250,.2); border-radius: 16px; padding: 2rem; margin-top: 2.4rem; }
+  .insight-header { display: flex; align-items: center; gap: .8rem; margin-bottom: 1.5rem; }
+  .insight-header h2 { font-size: 1.1rem; font-weight: 800; background: linear-gradient(90deg, var(--acc2), var(--teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  .insight-card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07); border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 12px; }
+  .insight-card h4 { font-size: .9rem; font-weight: 700; color: var(--acc2); margin-bottom: .5rem; display: flex; align-items: center; gap: .4rem; }
+  .insight-card p, .insight-card li { font-size: .83rem; color: #b8c4d4; line-height: 1.75; }
+  .insight-card ul { padding-left: 1.1rem; }
+  .insight-card li { margin-bottom: .3rem; }
+
+  .action-list { list-style: none; padding: 0; }
+  .action-list li { display: flex; gap: .8rem; align-items: flex-start; padding: .75rem 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+  .action-list li:last-child { border: none; }
+  .action-num { min-width: 26px; height: 26px; background: rgba(167,139,250,.15); border: 1px solid rgba(167,139,250,.3); color: var(--acc2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 800; flex-shrink: 0; }
+  .action-text { font-size: .83rem; color: #b8c4d4; line-height: 1.65; }
+  .action-text strong { color: var(--text); }
+
+  .callout { background: rgba(167,139,250,.07); border: 1px solid rgba(167,139,250,.2); border-left: 4px solid var(--acc); border-radius: 10px; padding: 1rem 1.2rem; font-size: .84rem; color: #c4b5fd; line-height: 1.7; margin-top: 12px; }
+
+  footer { text-align: center; padding: 2rem; font-size: .75rem; color: var(--muted); border-top: 1px solid var(--border); margin-top: 3rem; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../🏠_홈.md">🏠 GARAMwiki</a>
+  <span class="sep">/</span>
+  <a href="./README.md">📔 나의 인사이트</a>
+  <span class="sep">/</span>
+  <span class="cur">AI실행시대·의도만남는다 — 김서준</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📔 나의 인사이트 · AI조직론 · 담론</div>
+  <h1>AI가 실행하는 시대,<br>인간에게 남는 건 '의도'</h1>
+  <p class="hero-sub">
+    <strong>노정석 × 김서준(Hashed 대표)</strong> 1시간 27분 대담.
+    AI가 실행을 전담할 때 C-레벨에게 남는 것: <strong>의도 설계 능력, 취향, 깊은 관계.</strong>
+  </p>
+  <div class="hero-meta">
+    <span>📅 2026-05-26</span>
+    <span>·</span>
+    <span>🎬 노정석 채널 EP 98</span>
+    <span>·</span>
+    <span>⏱ 1시간 27분</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <span class="tag t-purple">#AI조직론</span>
+    <span class="tag t-teal">#에이전트</span>
+    <span class="tag t-blue">#바이브코딩</span>
+    <span class="tag t-yellow">#크립토×AI</span>
+    <span class="tag t-purple">#담론</span>
+  </div>
+  <a class="source-link" href="https://youtu.be/Wx0C42-S5z4" target="_blank">▶ 영상 보기</a>
+</div>
+
+<!-- BIG QUOTE -->
+<div class="quote-wrap">
+  <div class="big-quote">
+    "AI가 실행을 담당하는 시대에, 인간에게 남는 것은 단 하나 — <em>의도(Intent)</em>다."
+    <span>— 김서준, Hashed 대표 (EP 98, 2026-05-26)</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- PART 1 -->
+  <div class="section-title"><span>📺</span> 챕터별 핵심 정리 (24개 챕터)</div>
+
+  <div class="part-header">
+    <span class="part-icon">🎯</span>
+    <span class="part-title">PART 1 — 의도와 에이전틱 조직</span>
+    <span class="part-range">0:00 ~ 12:35</span>
+  </div>
+
+  <div class="chapter-grid">
+    <div class="ch-card cc-p">
+      <div class="ch-time">0:00</div>
+      <div class="ch-title">의도만 남는 시대와 에이전틱 조직</div>
+      <div class="ch-desc">AI가 실행을 전담하면 인간의 역할은 <em>'무엇을 왜 하려는가'</em>라는 의도 설정으로 좁혀진다. 에이전틱 조직 = 의도를 중심으로 AI가 실행하는 구조.</div>
+    </div>
+    <div class="ch-card cc-b">
+      <div class="ch-time">2:28</div>
+      <div class="ch-title">Karpathy의 바이브 코딩 vs 코파일럿의 차이</div>
+      <div class="ch-desc"><strong>코파일럿</strong> = 기존 워크플로우에 AI를 도구로 붙임.<br><strong>바이브 코딩</strong> = 의도를 말하면 AI가 전체 구현. 핵심 차이: 내가 코드를 이해하며 쓰느냐 vs 결과만 보느냐.</div>
+    </div>
+    <div class="ch-card cc-t">
+      <div class="ch-time">4:08</div>
+      <div class="ch-title">AI 검색 전환 신호 — AEO · GEO</div>
+      <div class="ch-desc">전통 검색 → AI 검색(GPTO 등)으로 정보 유통 구조 변화. <em>AEO(Answer Engine Optimization)</em>, <em>GEO(Generative Engine Optimization)</em>가 SEO를 대체하기 시작.</div>
+    </div>
+    <div class="ch-card cc-p">
+      <div class="ch-time">4:42</div>
+      <div class="ch-title">Balaji의 Network State · Network School</div>
+      <div class="ch-desc">물리적 국가/학교 → 온라인 커뮤니티 기반으로. 공유 가치관을 가진 사람들이 디지털에서 먼저 모이고 점점 물리적 존재감을 확보해가는 모델.</div>
+    </div>
+    <div class="ch-card cc-g">
+      <div class="ch-time">9:37</div>
+      <div class="ch-title">랭킹 권력의 탈중앙화</div>
+      <div class="ch-desc">구글이 쥐고 있던 정보 랭킹 권력이 AI 시대에 분산될 가능성. <em>누가 AI 검색의 '답변 소스'가 되느냐</em>가 새로운 권력 지형을 결정.</div>
+    </div>
+    <div class="ch-card cc-t">
+      <div class="ch-time">10:16</div>
+      <div class="ch-title">스테이블코인 기반 콘텐츠 보상 생태계</div>
+      <div class="ch-desc">크리에이터·기여자에게 스테이블코인으로 즉시 보상. 플랫폼 중간 착취 없이 가치를 직접 분배하는 모델로 콘텐츠 생태계 재설계.</div>
+    </div>
+  </div>
+
+  <!-- PART 2 -->
+  <div class="part-header">
+    <span class="part-icon">🛠</span>
+    <span class="part-title">PART 2 — 바이브 코딩과 1인 빌딩</span>
+    <span class="part-range">12:36 ~ 29:49</span>
+  </div>
+
+  <div class="chapter-grid">
+    <div class="ch-card cc-g">
+      <div class="ch-time">12:36</div>
+      <div class="ch-title">비개발자 1인 빌딩 — '딸깍 모먼트'</div>
+      <div class="ch-desc">코딩 모르는 사람도 AI로 프로덕트 제작 가능. <em>'딸깍 모먼트'</em> = AI가 처음으로 내 의도대로 작동하는 순간 경험. 이 경험 이후 세계관이 바뀐다.</div>
+    </div>
+    <div class="ch-card cc-b">
+      <div class="ch-time">13:23</div>
+      <div class="ch-title">Gemini 3 · Opus 4.5 이후의 퀀텀 점프</div>
+      <div class="ch-desc">최신 모델들의 성능 도약이 비개발자 빌딩을 현실로 만든 결정적 계기. 모델 품질 임계점 돌파 = 창업 민주화의 시작.</div>
+    </div>
+    <div class="ch-card cc-y">
+      <div class="ch-time">14:45</div>
+      <div class="ch-title">이더리움 밸류에이션 대시보드 — 4시간 제작</div>
+      <div class="ch-desc">김서준이 직접 바이브 코딩으로 <strong>4시간 만에</strong> 이더리움 밸류에이션 대시보드 제작. 이전엔 개발자 고용 + 몇 주가 필요했던 작업.</div>
+    </div>
+    <div class="ch-card cc-y">
+      <div class="ch-time">19:00</div>
+      <div class="ch-title">비행기에서 만든 아부다비 여행 플랫폼</div>
+      <div class="ch-desc">비행기 안에서 아부다비 여행 플랫폼을 바이브 코딩으로 제작. <em>"생각의 속도 = 실행의 속도"</em> — 이것이 새로운 창업의 공식.</div>
+    </div>
+    <div class="ch-card cc-o">
+      <div class="ch-time">21:30</div>
+      <div class="ch-title">바이브 코딩 시대의 VC 위기</div>
+      <div class="ch-desc">개발팀 고용 자금 필요성 급감 → VC 투자 패러다임 위기. 새로운 창업자 = <strong>도메인 전문지식 + AI 실행력</strong>. VC가 줄 수 있는 가치가 자본 이외의 것으로 이동.</div>
+    </div>
+    <div class="ch-card cc-p">
+      <div class="ch-time">24:01</div>
+      <div class="ch-title">해시드가 줄 수 있는 세 가지 가치</div>
+      <div class="ch-desc">AI가 대체할 수 없는 VC의 가치: <strong>멘토십 + 신뢰 네트워크 + 피어(동료).</strong> 자본·기술보다 관계와 신뢰가 차별점이 되는 시대.</div>
+    </div>
+  </div>
+
+  <!-- PART 3 -->
+  <div class="part-header">
+    <span class="part-icon">🎓</span>
+    <span class="part-title">PART 3 — AI 네이티브 탤런트와 교육 재설계</span>
+    <span class="part-range">29:50 ~ 57:10</span>
+  </div>
+
+  <div class="chapter-grid">
+    <div class="ch-card cc-p">
+      <div class="ch-time">29:50</div>
+      <div class="ch-title">AI 네이티브 탤런트의 정의</div>
+      <div class="ch-desc">단순히 AI 도구를 잘 쓰는 사람이 아님. <em>"꿈꾸는 사람"</em> — 가능성의 경계를 스스로 설정하지 않고, AI로 실현 가능한 것을 상상하는 사람. 기술보다 <strong>상상력과 의도 설정 능력</strong>이 핵심.</div>
+    </div>
+    <div class="ch-card cc-b">
+      <div class="ch-time">33:33</div>
+      <div class="ch-title">대학 시스템의 언번들링</div>
+      <div class="ch-desc">대학 기능 분해: 학습 / 네트워킹 / 신호(학위) / 경험. AI가 학습 비용을 0으로 수렴시키면 대학의 가치는 네트워킹·신호로만 남는다. <strong>커뮤니티 기반 학습</strong>이 대안으로 부상.</div>
+    </div>
+    <div class="ch-card cc-t">
+      <div class="ch-time">47:11</div>
+      <div class="ch-title">에이전트 신원·평판 표준 — ERC-8004</div>
+      <div class="ch-desc">AI 에이전트가 대신 행동하는 시대에 <em>"이 에이전트가 누구의 것인가"</em> 문제. ERC-8004: 에이전트의 신원과 평판을 블록체인에 기록하는 표준. 에이전트 경제의 신원 인프라.</div>
+    </div>
+    <div class="ch-card cc-g">
+      <div class="ch-time">53:23</div>
+      <div class="ch-title">끝까지 남는 영역 — 취향·인스퍼레이션 경제</div>
+      <div class="ch-desc">AI가 대체하지 못하는 영역: <strong>취향(Taste)</strong>과 <strong>영감(Inspiration)</strong>. "무엇이 좋은가"를 판단하는 취향은 인간의 고유 영역. 이를 중심으로 한 인스퍼레이션 경제가 성장.</div>
+    </div>
+  </div>
+
+  <!-- PART 4 -->
+  <div class="part-header">
+    <span class="part-icon">🌐</span>
+    <span class="part-title">PART 4 — 에이전트 인프라와 마무리</span>
+    <span class="part-range">58:28 ~ 1:27:00</span>
+  </div>
+
+  <div class="chapter-grid">
+    <div class="ch-card cc-t">
+      <div class="ch-time">58:28</div>
+      <div class="ch-title">TCG 카드 펀드 — IP 공동 소유</div>
+      <div class="ch-desc">트레이딩 카드 게임(TCG) IP를 펀드로 소유하는 실험적 모델. 커뮤니티가 IP를 공동 소유하고 가치를 나누는 구조.</div>
+    </div>
+    <div class="ch-card cc-b">
+      <div class="ch-time">1:08:13</div>
+      <div class="ch-title">에이전트 생태계 인프라 — 4대 레이어</div>
+      <div class="ch-desc">Hashed 투자 관점 핵심 인프라: <strong>결제</strong>(에이전트 간 스테이블코인) · <strong>신원</strong>(ERC-8004) · <strong>MCP</strong>(에이전트-서비스 연결) · <strong>퍼블릭 블록체인</strong>(신뢰 레이어).</div>
+    </div>
+    <div class="ch-card cc-g">
+      <div class="ch-time">1:16:46</div>
+      <div class="ch-title">AI 시대의 교육 재설계와 인간다움</div>
+      <div class="ch-desc">AI가 지식 전달을 담당하면 교육에서 남는 것은 <strong>인간다움의 배양</strong>. 관계·맥락·경험 중심의 교육 재설계 필요.</div>
+    </div>
+    <div class="ch-card cc-p">
+      <div class="ch-time">1:25:32</div>
+      <div class="ch-title">마무리 — 관계의 깊이와 의도가 있는 시간</div>
+      <div class="ch-desc">AI가 모든 실행을 맡아도, 인간이 투자해야 할 것: <em>깊은 관계</em>와 <em>의도 있는 시간</em>. 바쁨이 미덕이 아닌 시대 — <strong>"무엇에 의도를 쓸 것인가"</strong>가 핵심 질문.</div>
+    </div>
+  </div>
+
+  <!-- 핵심 구조 요약 -->
+  <div class="section-title"><span>🗺</span> 핵심 구조 — 3대 전환</div>
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
+    <div class="concept-box" style="border-color:rgba(167,139,250,.3)">
+      <h3 style="color:var(--acc2)">🧠 실행 → 의도</h3>
+      <p>AI가 실행을 담당하면 인간에게 남는 건 <strong>의도 설계 능력</strong>. C-레벨의 가치가 '실행력'에서 '방향 설정력'으로 이동.</p>
+    </div>
+    <div class="concept-box" style="border-color:rgba(20,184,166,.3)">
+      <h3 style="color:var(--teal)">🛠 기술 → 취향</h3>
+      <p>바이브 코딩으로 기술 장벽이 무너지면 차별점은 <strong>취향(Taste)</strong>. 무엇이 좋은가를 판단하는 능력이 경쟁력.</p>
+    </div>
+    <div class="concept-box" style="border-color:rgba(59,130,246,.3)">
+      <h3 style="color:#60a5fa">🌐 계층 → 커뮤니티</h3>
+      <p>대학·VC·기업의 계층 구조가 해체되고 <strong>가치 기반 커뮤니티</strong>가 새로운 조직 단위로. Network School, Network State.</p>
+    </div>
+  </div>
+  @media (max-width: 680px) { }
+
+  <!-- 나의 인사이트 -->
+  <div class="insight-wrap">
+    <div class="insight-header">
+      <span style="font-size:1.5rem">🔍</span>
+      <h2>나의 인사이트 — C-레벨 관점</h2>
+    </div>
+
+    <div class="insight-card">
+      <h4>🎯 "의도"가 새로운 경쟁력</h4>
+      <p>김서준의 핵심 명제를 내 언어로 번역하면: <strong style="color:var(--text)">AI 시대 C-레벨의 가치는 '실행 능력'에서 '의도 설계 능력'으로 완전히 이동한다.</strong></p>
+      <p style="margin-top:.6rem;">실행은 AI가 한다. 그러면 남는 것은 — Why + What(무엇을 왜), Direction(방향), Taste(무엇이 좋은가). 이 세 가지는 아직 인간의 영역이고, 이것이 C-레벨의 핵심 역할이 되어야 한다.</p>
+    </div>
+
+    <div class="insight-card">
+      <h4>🛠 바이브 코딩 = 창업 문턱의 붕괴 (기회이자 위협)</h4>
+      <p>"비행기에서 아부다비 여행 플랫폼을 만들었다"는 일화가 핵심을 담고 있다.</p>
+      <ul style="margin-top:.5rem;">
+        <li><strong>기회:</strong> 우리 조직의 도메인 전문가들이 AI로 직접 내부 도구를 만들 수 있다.</li>
+        <li><strong>위협:</strong> 경쟁 진입 장벽이 무너진다. 기존 소프트웨어 비즈니스 해자가 약해진다.</li>
+      </ul>
+    </div>
+
+    <div class="insight-card">
+      <h4>💼 VC 위기 논리 = 모든 B2B 서비스의 재설계 필요</h4>
+      <p>바이브 코딩 시대에 VC 자본 가치가 줄어든다는 인식은 VC만의 문제가 아니다. 모든 B2B 서비스 제공자에게 동일하게 적용된다.</p>
+      <p style="margin-top:.5rem;"><strong style="color:var(--text)">"우리가 줄 수 있는 가치가 자본/기술 이외에 무엇인가?"</strong><br>해시드의 답: 멘토십 + 신뢰 네트워크 + 피어(동료). 이 세 가지는 AI가 대체할 수 없는 가치다.</p>
+    </div>
+
+    <div class="insight-card">
+      <h4>🌐 ERC-8004 = 에이전트 경제의 신호탄</h4>
+      <p>에이전트가 대신 행동하는 시대에 신원·평판 인프라가 결정적이 된다. ERC-8004는 아직 초기 표준이지만, 이 개념 자체가 중요한 신호다.</p>
+      <p style="margin-top:.5rem;"><strong style="color:var(--text)">에이전트 경제가 성숙하면 "어떤 에이전트를 신뢰할 것인가"가 비즈니스 핵심 문제.</strong> 결제·신원·MCP 인프라를 선점하는 플레이어가 에이전트 시대의 게이트키퍼가 된다.</p>
+    </div>
+
+    <div class="insight-card">
+      <h4>✨ 취향(Taste)이 마지막 해자</h4>
+      <p>"끝까지 남는 영역: 취향과 영감" — C-레벨이 계속 갈고닦아야 할 영역이다. AI는 평균을 잘한다. 탁월한 취향을 가진 사람이 AI를 지휘하면 평균 이상의 결과를 계속 뽑아낼 수 있다.</p>
+      <p style="margin-top:.5rem;"><strong style="color:var(--acc2)">취향 = 무엇이 좋은지 판단하는 능력 = AI 시대의 핵심 역량.</strong></p>
+    </div>
+
+    <div class="insight-card">
+      <h4>✅ 단기 행동 우선순위</h4>
+      <ul class="action-list">
+        <li>
+          <span class="action-num">1</span>
+          <span class="action-text"><strong>'의도 설계' 역량에 시간 투자</strong> — C-레벨 시간의 상당 부분을 "무엇을 왜"에 쓰는 구조 만들기. 실행에서 손을 떼는 연습을 의도적으로 설계.</span>
+        </li>
+        <li>
+          <span class="action-num">2</span>
+          <span class="action-text"><strong>도메인 전문가 + 바이브 코딩 파일럿</strong> — 개발자 없이 도메인 전문가가 AI로 내부 도구를 만드는 실험 진행. '딸깍 모먼트' 경험이 조직 전체를 바꾼다.</span>
+        </li>
+        <li>
+          <span class="action-num">3</span>
+          <span class="action-text"><strong>AI 대체 불가 가치 재정의</strong> — 우리 사업에서 AI가 줄 수 없는 것: 관계, 신뢰, 취향, 커뮤니티. 이것 중심으로 포지셔닝 재설계.</span>
+        </li>
+        <li>
+          <span class="action-num">4</span>
+          <span class="action-text"><strong>에이전트 인프라 동향 추적</strong> — MCP, ERC-8004, 에이전트 결제 표준이 어떻게 수렴하는지 6개월 단위 모니터링. 선점 기회 탐색.</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <strong>핵심 한 줄:</strong> AI가 실행을 맡는 시대에 C-레벨에게 남는 것은 의도·취향·관계. 이 세 가지를 갈고닦는 것이 앞으로의 리더십 투자다.
+    </div>
+
+    <div style="margin-top:1rem; padding:1rem; background:rgba(255,255,255,.02); border-radius:8px; border-left:3px solid var(--acc);">
+      <p style="font-size:.8rem; color:var(--muted); font-style:italic;">이 인사이트는 나의 C-레벨 판단을 기록한 것이다. — 2026-05-26</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  GARAMwiki · 나의 인사이트 · AI실행시대·의도만남는다 (김서준 Hashed) · 2026-05-26
+</footer>
+
+</body>
+</html>

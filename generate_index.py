@@ -58,6 +58,10 @@ ARTICLE_META = {
         "tags":  ["YCombinator", "로보틱스", "휴머노이드", "방위드론", "데이터인프라"],
     },
     # 나의 인사이트
+    "2026-05_AI_Frontier_EP98_의도가_남는_시대_김서준_Hashed.html": {
+        "title": "AI Frontier EP98 — AI가 실행하는 시대, 인간에게 남는 건 '의도'<br>(Hashed 김서준 대표 × 노정석)",
+        "tags":  ["AI Frontier", "김서준", "Hashed", "의도", "바이브 코딩", "VC 위기"],
+    },
     "2026-05_Hermes_Agent_분석_NousResearch.html": {
         "title": "Hermes Agent — The Agent That Grows With You<br>Nous Research 오픈소스 자율 AI 에이전트 분석",
         "tags":  ["Hermes Agent", "Nous Research", "SKILL.md", "Closed Learning Loop", "오픈소스 에이전트"],

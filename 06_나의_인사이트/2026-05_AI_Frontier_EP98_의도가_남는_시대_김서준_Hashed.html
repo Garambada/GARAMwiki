@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Frontier EP98 — AI가 실행하는 시대, 인간에게 남는 건 '의도' | GARAMwiki</title>
+<style>
+:root{
+  --bg:#0c0e14;--surface:#13161f;--surface2:#1a1e2a;--surface3:#222736;
+  --border:#2a2f3d;--text:#e2e8f0;--muted:#8892a4;--accent:#10b981;
+  --accent2:#059669;--accent-dim:rgba(16,185,129,.12);
+  --blue:#3b82f6;--purple:#a78bfa;--amber:#f59e0b;--red:#ef4444;--cyan:#06b6d4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;font-size:15px;line-height:1.7}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(12,14,20,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px}
+nav .logo{font-weight:700;font-size:17px;color:var(--accent);letter-spacing:-.3px}
+nav .sep{color:var(--border);font-size:20px}
+nav .cat{font-size:13px;color:var(--muted)}
+nav .back{margin-left:auto;font-size:13px;color:var(--muted);border:1px solid var(--border);padding:4px 12px;border-radius:6px;transition:.2s}
+nav .back:hover{color:var(--text);border-color:var(--accent)}
+
+.hero{padding:56px 24px 40px;max-width:1100px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-dim);border:1px solid var(--accent);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--accent);font-weight:600;margin-bottom:20px}
+.hero h1{font-size:clamp(22px,4vw,36px);font-weight:800;line-height:1.2;letter-spacing:-.5px;margin-bottom:12px}
+.hero h1 span{color:var(--accent)}
+.hero .sub{color:var(--muted);font-size:15px;margin-bottom:28px;max-width:700px}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;font-size:12px}
+.meta-chip{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;color:var(--muted)}
+.meta-chip strong{color:var(--text)}
+
+.stats-strip{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 24px}
+.stats-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:24px;text-align:center}
+.stat-num{font-size:26px;font-weight:800;color:var(--accent);line-height:1}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:4px}
+
+.layout{max-width:1100px;margin:0 auto;padding:40px 24px;display:grid;grid-template-columns:1fr 220px;gap:40px;align-items:start}
+@media(max-width:768px){.layout{grid-template-columns:1fr}}
+
+.toc{position:sticky;top:68px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.toc h3{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px}
+.toc a{display:block;font-size:13px;color:var(--muted);padding:5px 0;border-left:2px solid transparent;padding-left:10px;transition:.2s}
+.toc a:hover{color:var(--accent);border-left-color:var(--accent);text-decoration:none}
+
+section{margin-bottom:48px}
+.section-tag{display:inline-block;background:var(--accent-dim);color:var(--accent);font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+h2{font-size:22px;font-weight:700;letter-spacing:-.3px;margin-bottom:16px}
+h3{font-size:16px;font-weight:600;margin-bottom:10px;color:var(--text)}
+p{color:#c5cdd9;margin-bottom:14px}
+
+/* QUOTE */
+.quote-block{border-left:3px solid var(--accent);background:var(--accent-dim);border-radius:0 10px 10px 0;padding:16px 20px;margin:16px 0}
+.quote-block p{color:var(--text);font-style:italic;margin:0;line-height:1.7}
+.quote-block .attr{font-size:12px;color:var(--muted);margin-top:8px;font-style:normal;font-weight:600}
+
+.quote-blue{border-left-color:var(--blue);background:rgba(59,130,246,.08)}
+.quote-purple{border-left-color:var(--purple);background:rgba(167,139,250,.08)}
+.quote-amber{border-left-color:var(--amber);background:rgba(245,158,11,.08)}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:16px}
+.card-sm{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.card-icon{font-size:26px;margin-bottom:10px}
+.card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* CHAPTER LIST */
+.chapter-list{display:flex;flex-direction:column;gap:0}
+.chapter-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.chapter-item:last-child{border-bottom:none}
+.chapter-time{font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:var(--accent);width:48px;flex-shrink:0;padding-top:2px}
+.chapter-title{font-size:13px;color:#c5cdd9;line-height:1.5}
+
+/* SPEAKER BADGE */
+.speaker-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.speaker{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px}
+.speaker-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-green{background:var(--accent)}
+.dot-blue{background:var(--blue)}
+.dot-purple{background:var(--purple)}
+
+/* TAGS */
+.tag-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.tag{display:inline-block;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600}
+.tag-green{background:rgba(16,185,129,.15);color:#10b981;border:1px solid rgba(16,185,129,.3)}
+.tag-blue{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.3)}
+.tag-purple{background:rgba(167,139,250,.15);color:#a78bfa;border:1px solid rgba(167,139,250,.3)}
+.tag-amber{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.3)}
+.tag-cyan{background:rgba(6,182,212,.15);color:#22d3ee;border:1px solid rgba(6,182,212,.3)}
+
+/* BIG CONCEPT BOX */
+.concept-box{background:linear-gradient(135deg,#0a1a12 0%,#0c1420 100%);border:1px solid var(--accent);border-radius:16px;padding:32px;margin:24px 0;text-align:center}
+.concept-title{font-size:28px;font-weight:800;color:var(--accent);line-height:1.2;margin-bottom:12px}
+.concept-desc{font-size:16px;color:#c5cdd9;max-width:600px;margin:0 auto}
+
+/* TRIANGLE DIAGRAM */
+.triangle-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;margin:20px 0}
+.triangle-title{text-align:center;font-size:15px;font-weight:700;color:var(--accent);margin-bottom:24px}
+.triangle-items{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tri-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.tri-icon{font-size:28px;margin-bottom:8px}
+.tri-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
+.tri-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* BEFORE/AFTER */
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+@media(max-width:600px){.ba-grid{grid-template-columns:1fr}}
+.ba-col{border-radius:10px;padding:18px}
+.ba-before{background:#0a0f1a;border:1px solid var(--border)}
+.ba-after{background:#0a1a12;border:1px solid var(--accent)}
+.ba-head{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.ba-before .ba-head{color:var(--muted)}
+.ba-after .ba-head{color:var(--accent)}
+.ba-item{display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:#c5cdd9;align-items:flex-start;line-height:1.5}
+.ba-before .ba-item::before{content:'→';color:var(--muted);flex-shrink:0}
+.ba-after .ba-item::before{content:'✓';color:var(--accent);flex-shrink:0;font-weight:700}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0}
+.tbl th{background:var(--surface3);color:var(--muted);font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.5px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:#c5cdd9;vertical-align:top}
+.tbl tr:hover td{background:var(--surface2)}
+
+/* INSIGHT */
+.insight-card{background:linear-gradient(135deg,#0d2318 0%,#0c1a28 100%);border:1px solid var(--accent);border-radius:14px;padding:28px;margin:24px 0}
+.insight-header{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.insight-icon{font-size:24px}
+.insight-title{font-size:16px;font-weight:700;color:var(--accent)}
+.insight-items{display:flex;flex-direction:column;gap:14px}
+.insight-item{display:flex;gap:14px;align-items:flex-start}
+.insight-num{background:var(--accent);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:2px}
+.insight-body{font-size:14px;color:#c5cdd9;line-height:1.6}
+.insight-body strong{color:var(--text)}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0;margin:20px 0}
+.tl-item{display:flex;gap:16px;padding-bottom:20px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--border)}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:30px;height:30px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:#000;font-weight:700;z-index:1}
+.tl-content{flex:1;padding-top:4px}
+.tl-date{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.tl-title{font-size:14px;font-weight:700;color:var(--text);margin:4px 0}
+.tl-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">GARAMwiki</span>
+  <span class="sep">/</span>
+  <span class="cat">💡 나의 인사이트</span>
+  <a href="../index.html" class="back">← 인덱스</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">💡 나의 인사이트 · AI Frontier EP 98 · 2026-05-26</div>
+  <h1>AI가 실행하는 시대,<br>인간에게 남는 건 <span>'의도'</span></h1>
+  <p class="sub">Hashed 김서준 대표 × 노정석 · 최승준 (AI Frontier) — 에이전트가 실행을 전담하는 시대, 인간의 역할이 '의도(Intent)'로 수렴하는 이유. 새로운 창업자 종의 등장, VC 모델의 해체, 대학의 언번들링, 그리고 에이전트 신원 경제까지.</p>
+  <div class="meta-row">
+    <span class="meta-chip"><strong>출처</strong> AI Frontier EP 98</span>
+    <span class="meta-chip"><strong>날짜</strong> 2026-05-26</span>
+    <span class="meta-chip"><strong>길이</strong> 1:27:58</span>
+    <span class="meta-chip"><strong>채널</strong> youtube.com/@chester_roh</span>
+    <span class="meta-chip"><strong>사이트</strong> aifrontier.kr/ko/episodes/ep98</span>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div><div class="stat-num">4시간</div><div class="stat-lbl">이더리움 대시보드 제작 시간</div></div>
+    <div><div class="stat-num">6개월</div><div class="stat-lbl">김서준의 바이브코딩 역사</div></div>
+    <div><div class="stat-num">20→1,000</div><div class="stat-lbl">Hashed 20명의 목표 퍼포먼스</div></div>
+    <div><div class="stat-num">ERC-8004</div><div class="stat-lbl">에이전트 신원 표준 프로토콜</div></div>
+    <div><div class="stat-num">의도</div><div class="stat-lbl">AI 시대 인간에게 남는 것</div></div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+<main>
+
+<!-- 출연진 -->
+<section id="overview">
+  <div class="section-tag">Overview</div>
+  <h2>에피소드 개요</h2>
+
+  <div class="speaker-row">
+    <div class="speaker"><div class="speaker-dot dot-green"></div><strong>노정석</strong> — AI Frontier 호스트, Founders Studio</div>
+    <div class="speaker"><div class="speaker-dot dot-blue"></div><strong>최승준</strong> — AI Frontier 호스트</div>
+    <div class="speaker"><div class="speaker-dot dot-purple"></div><strong>김서준</strong> — Hashed 대표, 게스트</div>
+  </div>
+
+  <p>해시드 김서준 대표가 AI 프론티어에 출연해 <strong>AI·에이전트 시대가 바꿀 인간의 역할</strong>을 깊이 있게 풀어놓았다. 실행은 AI가 대신하고 사람에게는 의도만 남는 세상, 새로운 창업가의 등장, VC·대학·회사라는 전통적 개념의 해체, 그리고 에이전트 이코노미 인프라로서의 블록체인까지 1시간 28분을 달렸다.</p>
+
+  <div class="concept-box">
+    <div class="concept-title">"의도를 가지고 100시간을<br>고민한 사람이 이긴다"</div>
+    <div class="concept-desc">의도 없이 1만 시간을 고민했던 사람들보다, 의도를 가지고 100시간을 고민한 사람이 아웃퍼포밍할 수 있는 환경이 됐다. — 김서준</div>
+  </div>
+
+  <!-- 챕터 목록 -->
+  <div class="card">
+    <h3>📑 챕터 구성 (1:27:58)</h3>
+    <div class="chapter-list">
+      <div class="chapter-item"><span class="chapter-time">0:00</span><span class="chapter-title">오프닝: 의도만 남는 시대와 에이전틱 조직</span></div>
+      <div class="chapter-item"><span class="chapter-time">2:28</span><span class="chapter-title">Karpathy의 바이브 코딩 vs 코파일럿의 차이</span></div>
+      <div class="chapter-item"><span class="chapter-time">4:08</span><span class="chapter-title">Across·GPTO로 본 AI 검색 전환의 신호 (AEO/GEO)</span></div>
+      <div class="chapter-item"><span class="chapter-time">4:42</span><span class="chapter-title">Balaji Srinivasan의 Network State와 Network School</span></div>
+      <div class="chapter-item"><span class="chapter-time">7:07</span><span class="chapter-title">AI 검색 랭킹 역공학과 정보 유통의 탈중앙화</span></div>
+      <div class="chapter-item"><span class="chapter-time">10:16</span><span class="chapter-title">스테이블코인 기반 보상으로 만드는 콘텐츠 생태계</span></div>
+      <div class="chapter-item"><span class="chapter-time">12:36</span><span class="chapter-title">비개발자 1인 빌딩과 바이브 코딩의 딸깍 모먼트</span></div>
+      <div class="chapter-item"><span class="chapter-time">14:45</span><span class="chapter-title">이더리움 밸류에이션 대시보드 4시간 제작 경험</span></div>
+      <div class="chapter-item"><span class="chapter-time">19:00</span><span class="chapter-title">비행기에서 만든 아부다비 여행 플랫폼 — 생각의 속도로 실행</span></div>
+      <div class="chapter-item"><span class="chapter-time">21:30</span><span class="chapter-title">바이브 코딩 시대의 VC 위기와 새로운 창업자 유형</span></div>
+      <div class="chapter-item"><span class="chapter-time">24:01</span><span class="chapter-title">해시드가 줄 수 있는 세 가지 가치 — 멘토십·신뢰 네트워크·피어</span></div>
+      <div class="chapter-item"><span class="chapter-time">29:50</span><span class="chapter-title">AI 네이티브 탤런트의 정의와 꿈꾸는 사람들의 조건</span></div>
+      <div class="chapter-item"><span class="chapter-time">33:33</span><span class="chapter-title">대학 시스템의 언번들링과 커뮤니티 기반 학습</span></div>
+      <div class="chapter-item"><span class="chapter-time">47:11</span><span class="chapter-title">에이전트 시대의 신원·평판 표준과 ERC-8004</span></div>
+      <div class="chapter-item"><span class="chapter-time">53:23</span><span class="chapter-title">끝까지 남는 영역 — 취향·인스퍼레이션 경제</span></div>
+      <div class="chapter-item"><span class="chapter-time">58:28</span><span class="chapter-title">TCG 카드 펀드와 IP를 소유하는 새로운 방식</span></div>
+      <div class="chapter-item"><span class="chapter-time">68:13</span><span class="chapter-title">에이전트 생태계 인프라 — 결제·신원·MCP·퍼블릭 블록체인 투자</span></div>
+      <div class="chapter-item"><span class="chapter-time">85:32</span><span class="chapter-title">마무리: 관계의 깊이와 의도가 있는 시간</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 1. 핵심 테제 -->
+<section id="thesis">
+  <div class="section-tag">Core Thesis</div>
+  <h2>핵심 테제 — "의도만 남는 시대"</h2>
+
+  <div class="quote-block">
+    <p>"한 5년 뒤, 10년 뒤에 우리의 삶을 생각했을 때 저는 거의 의도만 남는다고 생각하거든요. 대기업에서 일하는 사람들은 위에서 내려오는 의도에 따라서 대부분 실행을 하고 있죠. 의도가 굉장히 한정적이거든요."</p>
+    <div class="attr">— 김서준 (Hashed 대표)</div>
+  </div>
+
+  <p>김서준이 그리는 미래의 핵심 구조는 단순하다. <strong>실행(Execution)은 에이전트가 담당하고, 인간에게는 의도(Intent)만 남는다.</strong> 이것은 단순한 자동화 이야기가 아니라, 인간의 역할이 근본적으로 재정의되는 패러다임 전환이다.</p>
+
+  <div class="ba-grid">
+    <div class="ba-col ba-before">
+      <div class="ba-head">지금까지의 구조</div>
+      <div class="ba-item">대기업: 정해진 의도 아래 실행 담당</div>
+      <div class="ba-item">스타트업: 의도 공간이 좀 더 넓음</div>
+      <div class="ba-item">1만 시간의 법칙 — 반복 실행이 전문성</div>
+      <div class="ba-item">팀원 = 실행 주체</div>
+      <div class="ba-item">가치 창출 = 시간 × 인원</div>
+    </div>
+    <div class="ba-col ba-after">
+      <div class="ba-head">에이전틱 네이티브 구조</div>
+      <div class="ba-item">에이전트 100개씩 가진 1인 회사</div>
+      <div class="ba-item">의도의 공간이 무한히 넓어짐</div>
+      <div class="ba-item">의도 있는 100시간 > 의도 없는 1만 시간</div>
+      <div class="ba-item">팀원 = 에이전트 / 인간 = 판단·책임</div>
+      <div class="ba-item">가치 창출 = 의도의 품질</div>
+    </div>
+  </div>
+
+  <div class="quote-block quote-blue">
+    <p>"극단적으로 에이전틱 네이티브한 회사로 가면, 각자가 온전한 자기 영역을 다 커버하는 의도를 가지고 팀원들이 아니라 에이전트를 100개씩 가지고 운영하는 회사가 되어버리는 거죠. 남는 거는 판단의 밀도, 판단의 정확성, 그다음에 판단에 따르는 책임만을 사람이 이제 지게 되는 거고."</p>
+    <div class="attr">— 김서준</div>
+  </div>
+</section>
+
+<!-- 2. 딸깍 모먼트 -->
+<section id="click-moment">
+  <div class="section-tag">The Click Moment</div>
+  <h2>딸깍 모먼트 — 4시간 만에 만든 이더리움 대시보드</h2>
+
+  <p>김서준의 바이브 코딩 전환점은 구체적이다. 2025년 11월 중순, Gemini 3 출시 직후 Opus 4.5를 처음 쓴 날 경험한 두 개의 사건이 그의 세계관을 바꿨다.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot">1</div>
+      <div class="tl-content">
+        <div class="tl-date">2025년 11월 중순 — Gemini 3 출시</div>
+        <div class="tl-title">재홍 대표(GPTO) 목격</div>
+        <div class="tl-desc">10년 전까지 개발 비전공자였던 이재홍 대표가 AI 검색 랭킹 역공학 서비스를 혼자 만들어 운영 중인 것을 목격. "완전 비개발자가 기술적인 문제를 풀면서 혼자 모든 걸 다 하면서 돈까지 벌기 시작한 걸 보고서 큰일 났다."</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">2</div>
+      <div class="tl-content">
+        <div class="tl-date">Opus 4.5 출시 첫날</div>
+        <div class="tl-title">이더리움 밸류에이션 대시보드 — 4시간</div>
+        <div class="tl-desc">30개 이더리움 지표를 나열 → "이것들 데이터 찾고 그래프로 그려봐" → 화장실 다녀옴 → 30개 중 20개가 실시간 라이브 데이터로 멀쩡히 작동하는 HTML 파일 생성. "어디서 찾아오라고 얘기도 안 했는데, LLM이 그냥 알아서 바이낸스·코인마켓캡에서 찾아왔어요."</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">3</div>
+      <div class="tl-content">
+        <div class="tl-date">4시간 후</div>
+        <div class="tl-title">8개 밸류에이션 방법론 대시보드 → Kaito 글로벌 1등</div>
+        <div class="tl-desc">나머지 API 연결하고 자본시장 밸류에이션 공식 8개를 넣어 대시보드 완성. 트위터 게시 후 블록체인 랭킹 플랫폼 Kaito에서 전 세계 1등 달성. "몇 년 전부터 만들어보고 싶었지만 퀀트·개발자 두세 명에 두어 달이 필요하다고 생각했는데, 4시간에 됐다."</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">4</div>
+      <div class="tl-content">
+        <div class="tl-date">연말 아부다비 출장 비행기 안</div>
+        <div class="tl-title">트립어드바이저를 넘는 아부다비 여행 앱</div>
+        <div class="tl-desc">에티하드 비행기 스크린의 엉망인 아부다비 관광 사이트를 보고 비행기 안에서 제작. 101개 베뉴 크롤링 → 구글 리뷰 분석 → LLM 자연어 분석 → 카테고리별 별점 → 지도 연동. 에티하드 회장에게 "짠"하고 보여줌. "트립어드바이저보다 더 좋은 UX와 데이터가 있는 플랫폼을 비행기에서 만들었다."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    <p>"생각하는 속도로 이제 실행이 진짜 되는구나. 제가 컴퓨터공학과에 가게 만들었던 책 이름이 빌 게이츠가 썼던 '생각의 속도'였는데, 그거는 그냥 생각하고 끝이었는데 생각하는 속도로 이제 실행이 진짜 되는 구나."</p>
+    <div class="attr">— 김서준 (아부다비 여행 앱을 만든 뒤)</div>
+  </div>
+</section>
+
+<!-- 3. VC 위기와 새로운 창업자 -->
+<section id="vc-crisis">
+  <div class="section-tag">VC Crisis</div>
+  <h2>VC의 위기와 새로운 창업자 '종(種)'</h2>
+
+  <p>이더리움 대시보드 4시간 완성 후 김서준이 아부다비에서 싱가포르 심사역을 긴급 호출한 이유는 하나였다: <strong>"큰일 났다, 이제 VC 진짜 망한 것 같다."</strong></p>
+
+  <div class="quote-block quote-amber">
+    <p>"소프트웨어 스타트업 기준에서 보통 펀딩받으러 올 때 가장 큰 비중은 개발자 월급이거든요. 근데 안 그래도 재홍 대표를 통해서 이런 거 봤는데, 저도 직접 해보니까 이제 바이브 코딩할 수 있는 사람 한 명이 적어도 초기 단계는 다 건너뛰겠구나. 초기 단계 건너뛰고 돈까지 벌기 시작하면 VC한테 이제 안 찾아오겠네."</p>
+    <div class="attr">— 김서준</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <div class="card-icon">🦕</div>
+      <div class="card-title">기존 창업자 공식</div>
+      <div class="card-desc">창업자 → 백엔드·프론트·iOS·안드로이드·디자이너·마케터 팀 구성 → 마일스톤 → 펀딩. 개발팀 월급이 펀딩의 이유.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🦋</div>
+      <div class="card-title">새로운 창업자 종</div>
+      <div class="card-desc">1인 + 에이전트 100개. 혼자 모든 것 제작. 초기 단계 전체를 건너뜀. 수익 발생 후에도 VC 불필요. "펀딩 안 받아도 되는데요?"</div>
+    </div>
+  </div>
+
+  <!-- 해시드의 3가지 가치 -->
+  <div class="triangle-wrap">
+    <div class="triangle-title">해시드가 AI 네이티브 창업자에게 줄 수 있는 3가지 가치</div>
+    <div class="triangle-items">
+      <div class="tri-item">
+        <div class="tri-icon">🎓</div>
+        <div class="tri-title">멘토십</div>
+        <div class="tri-desc">바이브 코딩과 에이전트 생태계를 직접 경험하는 투자자. 같은 언어로 대화할 수 있는 눈높이. 심사역 전원 바이브 코딩 입문 의무화.</div>
+      </div>
+      <div class="tri-item">
+        <div class="tri-icon">🌐</div>
+        <div class="tri-title">신뢰 숏컷 (글로벌 네트워크)</div>
+        <div class="tri-desc">"눈에 보이는 건 다 오픈소스"인 시대, B2B의 본질은 연결. 에티하드 회장, 글로벌 웹3 네트워크. 1인 빌더가 가닿을 수 없는 이해관계자를 연결.</div>
+      </div>
+      <div class="tri-item">
+        <div class="tri-icon">👥</div>
+        <div class="tri-title">피어 그룹 (커뮤니티)</div>
+        <div class="tri-desc">에이전틱 빌딩에 빠진 사람들은 "다른 사람들과 대화를 못 하는 병"에 걸림. AI 우울·FOMO를 공유하고 자극을 나눌 수 있는 동료. 기숙사 명문대의 진짜 가치는 피어에서 옴.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. AI 네이티브 탤런트 -->
+<section id="ai-native">
+  <div class="section-tag">AI-Native Talent</div>
+  <h2>AI 네이티브 탤런트 — "꿈꾸는 사람들의 세상"</h2>
+
+  <div class="quote-block">
+    <p>"저는 꿈꾸는 사람들의 세상이 온 것 같아요. 예전에는 좀 뜬구름이었지만, 구체적으로 뜬구름을 잡던 사람들. 그 사람들이 이런저런 얘기를 해도 실행할 수 있는 도구가 없었는데, 이제 생각의 속도로 실행을 할 수 있게 됐잖아요."</p>
+    <div class="attr">— 김서준</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <div class="card-icon">💭</div>
+      <div class="card-title">의도를 가지고 움직이는 사람</div>
+      <div class="card-desc">하루하루가 의도로 차 있는 사람. No가 없는 사람. "뭐든지 거의 할 수 있게 됐으니까 못할 게 뭐야"라는 마인드.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🚫</div>
+      <div class="card-title">전문 영역의 벽이 무너짐</div>
+      <div class="card-desc">우버: 택시 비전공자. 에어비앤비: 호텔 비전공자. 페이팔: 금융 비전공자. 이 패턴이 AI로 극단적으로 가속화. 크로스 섹터 전문성의 벽 전체가 낮아짐.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🏫</div>
+      <div class="card-title">새로운 탤런트의 출신</div>
+      <div class="card-desc">개발 특성화고(선린, 한세정보고 등) 출신이 폭발적으로 등장. 깃허브 레포·스타 수가 학위보다 중요한 증거가 된 세상. 전통 제도권의 아웃사이더들이 주인공.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">😰</div>
+      <div class="card-title">흥분 30% + 불안·공포 70%</div>
+      <div class="card-desc">"나는 이제 쓸모 없어지나?" "AI에게 다 뺏기기 전에 뭘 만들어 놔야 되나?" 에이전틱 빌딩에 몰입한 사람들의 공통 감정 구조.</div>
+    </div>
+  </div>
+
+  <div class="quote-block quote-purple">
+    <p>"인류 역사에 드디어 인간보다 많은 영역에서 우월한 새로운 종이 등장했다, 우리랑 같이 사는. AI 도구를 잘 쓴다는 걸 넘어서서 이들을 하나의 주체적인 동등한 종으로서 보면서 나의 생산성을 늘리고 나의 삶을 바꿀 수 있을지를 액티브하게 고민하면서 의도를 가지고 하루하루를 발전시켜 나가는 사람들이 제가 생각하는 AI 네이티브."</p>
+    <div class="attr">— 김서준</div>
+  </div>
+</section>
+
+<!-- 5. 대학 언번들링 -->
+<section id="unbundling">
+  <div class="section-tag">University Unbundling</div>
+  <h2>대학 시스템의 언번들링</h2>
+
+  <p>김서준이 보는 대학의 3가지 기능이 모두 분리되고 있다. 그리고 흥미롭게도, 이것이 해시드가 창업자에게 주려는 3가지 가치와 정확히 겹친다.</p>
+
+  <table class="tbl">
+    <tr>
+      <th>대학의 기능</th>
+      <th>기존 방식</th>
+      <th>새로운 대안</th>
+    </tr>
+    <tr>
+      <td><strong>①선발</strong></td>
+      <td>수능 점수 → 학교 브랜드</td>
+      <td>GitHub 레포 · 스타 수 · 밋업 발표 이력</td>
+    </tr>
+    <tr>
+      <td><strong>②교육</strong></td>
+      <td>커리큘럼 → 강의 → 시험</td>
+      <td>Opus 4.5와 대화 → 스탠퍼드 CS 강의도 이미 불필요</td>
+    </tr>
+    <tr>
+      <td><strong>③커뮤니티</strong></td>
+      <td>같은 분반·과의 수동적 관계</td>
+      <td>의도를 가지고 참여하는 밋업·오픈 커뮤니티</td>
+    </tr>
+  </table>
+
+  <div class="quote-block">
+    <p>"오히려 개방형 커뮤니티에서 활동하고, 밋업을 가고, 거기서 네트워킹을 하고, 발표를 하는 것은 100% 의도를 가지고 하는 것들이잖아요. 의도를 가지고 만들어지는 커뮤니티가 오히려 그냥 학교에서 같은 분반, 같은 과 친구보다 더 강력한 커뮤니티로 만들어지는 과정이 제 눈에는 좀 보였거든요."</p>
+    <div class="attr">— 김서준</div>
+  </div>
+
+  <div class="card">
+    <h3>YC = 새로운 대학 포지션</h3>
+    <p style="font-size:13px;color:var(--muted)">노정석: "미국에서 Y Combinator이 전 대학의 위치를 가져가고 있다는 생각이 들거든요. 저희 애도 다 힘겹게 명문대에 보내놨는데 딱 그 브랜드 정도만 필요하다는 생각을 하고 1학년, 2학년 때부터 Y Combinator 배치에 들어가려고 정말 목을 메요. 거기 들어가서 학교를 합법적으로 부모의 압박 없이 그만둘 수 있도록 하는 트랙이 요새 애들의 유행이더라고요."</p>
+    <p style="font-size:13px;color:var(--muted)">김서준: "해시드도 그런 포지션이 됐으면 좋겠다. 상징은 중요하잖아요. 나 그냥 대학 그만뒀어가 아니라, 해시드로부터 인정받고 그들의 생태계와 커뮤니티에서 지원받는 개발자로서 '이제 학교 그만두고 이런 걸 할 거야'라고 만들어주는 상징은 의미가 있다."</p>
+  </div>
+</section>
+
+<!-- 6. AEO/GEO와 AI 검색 -->
+<section id="aeo-geo">
+  <div class="section-tag">AEO / GEO</div>
+  <h2>AI 검색 시대의 AEO·GEO — 랭킹 권력의 탈중앙화</h2>
+
+  <p>이재홍 대표(GPTO/Across)의 사례는 AEO(AI Engine Optimization)와 GEO(Generative Engine Optimization)의 실전 구현이다. 그의 방법론: <strong>LLM이 웹 검색 시 어떤 쿼리를 날리는지 역공학(리버스 엔지니어링)해서 그 길목에 최적화된 콘텐츠를 배치.</strong></p>
+
+  <div class="quote-block">
+    <p>"헨젤과 그레텔처럼 LLM이 쫓아올 만한 길목에다가 쿠키를 계속 깔아놓는 거죠."</p>
+    <div class="attr">— 김서준, AEO 방법론 설명</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <div class="card-icon">🔍</div>
+      <div class="card-title">기존 SEO의 위기</div>
+      <div class="card-desc">구글 검색 → AI 검색으로 트래픽 이동. AI는 최대 5개만 추천. 5위 밖이면 선택 기회 없음. 인터넷 최대 산업인 SEO 광고 시장 전체가 흔들림.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">LLM 랭킹 역공학</div>
+      <div class="card-desc">LLM별로 웹 서치 시 선호 패턴이 다름. "왜 이걸 찾았어? 뭘로 검색했어?"로 역프롬프팅. 쿼리 패턴 파악 후 거기 맞는 콘텐츠 최적화.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">⛓️</div>
+      <div class="card-title">정보 유통 탈중앙화</div>
+      <div class="card-desc">현재 AI 랭킹 = 미국 미디어 재벌이 세팅한 진실. 스테이블코인 보상으로 일반인이 콘텐츠 만들면서 랭킹에 기여하는 탈중앙화 생태계 구상.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 에이전트 신원 / ERC-8004 -->
+<section id="agent-identity">
+  <div class="section-tag">Agent Identity</div>
+  <h2>에이전트 신원·평판 표준 — ERC-8004</h2>
+
+  <p>에이전트 이코노미가 현실화되면, 에이전트도 법인처럼 신원·평판·책임 체계가 필요하다. 이것이 블록체인이 AI와 교차하는 지점이다.</p>
+
+  <div class="quote-block quote-purple">
+    <p>"주식회사와 법인이라는 개념의 시초가 네덜란드 동인도 회사에서 시작됐잖아요. 1604년. 400년 된 개념인데. 마찬가지로 에이전트 자체도 그런 기반이 생겨야 되는데, 에이전트는 디지털 네이티브하게 생겼기 때문에 신원, 평판, 그런 것들을 쌓기 위한 프로토콜의 표준들이 논의가 되고 있어요."</p>
+    <div class="attr">— 김서준</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <div class="card-icon">🆔</div>
+      <div class="card-title">ERC-8004 — 에이전트 출생 등록</div>
+      <div class="card-desc">이더리움 기반 NFT 표준으로 에이전트 신원 등록. 사람이 출생 등록하듯, 에이전트 생성 시 온체인에 기록. 에이전트 고유 신원 확보.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">⭐</div>
+      <div class="card-title">에이전트 평판 시스템</div>
+      <div class="card-desc">아마존 리뷰처럼, 에이전트가 해온 일의 이력과 평가를 불변 기록. "구매 기록 얼마나 있고 리뷰가 4.7인지 4.3인지" 확인 후 신뢰 결정.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">📜</div>
+      <div class="card-title">스마트 컨트랙트 행동 규범</div>
+      <div class="card-desc">에이전트의 동작 방식을 스마트 컨트랙트로 정의·공개. 중앙 서버에서 바꿀 수 없는 불변 감사 로그. 퍼블릭 블록체인이 현재로선 유일한 신뢰 인프라.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">💼</div>
+      <div class="card-title">법인격과의 유사성</div>
+      <div class="card-desc">법인도 내 것이지만 법인 돈 마음대로 쓰면 처벌. 에이전트도 독자적 인격체로서 권한·책임 체계 필요. 민간이 국가보다 먼저 표준 만드는 이유: 돈이 되기 때문.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Network State -->
+<section id="network-state">
+  <div class="section-tag">Network State</div>
+  <h2>Balaji의 Network State — 국가도 언번들링된다</h2>
+
+  <p>에이전트 신원 경제의 배경 사상으로 김서준이 소개한 Balaji Srinivasan의 <strong>Network State 개념</strong>은 국가를 플랫폼으로 재정의한다.</p>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <div class="card-icon">🌍</div>
+      <div class="card-title">기존 국가 모델</div>
+      <div class="card-desc">국적 = 선천적 획득. 국가의 힘 = 국방·하드 인프라 등 하드 파워. 국적 변경이 극히 어렵고 고정적.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">🔗</div>
+      <div class="card-title">Network State 모델</div>
+      <div class="card-desc">국적 = 멤버십. 이념·신념·가치관 공유 온라인 커뮤니티 → 물리 공간 획득 순서. 말레이시아 정부가 땅을 제공, Network School 운영 중.</div>
+    </div>
+    <div class="card-sm">
+      <div class="card-icon">📲</div>
+      <div class="card-title">현실: 기업 플리핑</div>
+      <div class="card-desc">국가를 플랫폼처럼 선택하는 현실. 한국 스타트업의 해외 법인 설립 급증. 더 나은 규제·과세·시장 환경을 찾아 이동. 이미 국가의 멤버십화가 진행 중.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. Hashed 전략 변화 -->
+<section id="hashed-strategy">
+  <div class="section-tag">Hashed Strategy</div>
+  <h2>Hashed의 전략 변화 — "20명이 1,000명의 퍼포먼스를"</h2>
+
+  <div class="quote-block">
+    <p>"저희 회사가 이제 20명짜리 투자사인데 연내 연말에는 1,000명 정도의 기업이 만들어내는 퍼포먼스를 지향한다는 글을 한 번 쓴 적이 있어요. 지금 하고 있는 일을 다음 달에 반복하면 안 된다. 반복이라는 업무는 이제 에이전트를 잘 세팅하면 할 수 있는 일이기 때문에."</p>
+    <div class="attr">— 김서준 (Hashed 내부 운영 원칙)</div>
+  </div>
+
+  <div class="card">
+    <h3>에이전트 기반 VC 운영의 논리</h3>
+    <div class="card-grid" style="margin-top:12px">
+      <div class="card-sm">
+        <div class="card-title">반복 업무 → 에이전트</div>
+        <div class="card-desc">재무 자료 정리, 포트폴리오 체크인, 리포트 작성 등 반복 업무를 에이전트로 이관. "이번 달에 한 거 다음 달에 반복하면 안 된다."</div>
+      </div>
+      <div class="card-sm">
+        <div class="card-title">복리 구조의 레버리지</div>
+        <div class="card-desc">반복 업무 에이전트화 → 새 업무 공간 확보 → 한 사람이 두 사람, 세 사람어치 → 한 번 더 복제되면 여섯 사람. 20명 → 1,000명 퍼포먼스.</div>
+      </div>
+      <div class="card-sm">
+        <div class="card-title">심사역 전원 바이브 코딩</div>
+        <div class="card-desc">AI 네이티브 창업자들과 "같은 언어"로 대화하기 위해 심사역 포함 전 팀원 바이브 코딩 의무화. 투자자가 먼저 체험해야 평가 가능.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. GARAMbada 인사이트 -->
+<section id="insight">
+  <div class="section-tag">GARAMbada 인사이트</div>
+  <h2>Founders Studio 관점 — 이 대화가 시사하는 것</h2>
+
+  <div class="insight-card">
+    <div class="insight-header">
+      <div class="insight-icon">🎯</div>
+      <div class="insight-title">김서준의 프레임이 Founders Studio에 주는 신호</div>
+    </div>
+    <div class="insight-items">
+      <div class="insight-item">
+        <div class="insight-num">1</div>
+        <div class="insight-body"><strong>"의도 = 새로운 핵심 역량"이라는 프레임의 실용적 의미</strong><br>Founders Studio의 C-레벨은 이미 "의도를 설계하는 사람"이어야 한다. 전략 기획·포트폴리오 심사·파트너십 제안 등 모든 고도 판단 업무는 의도의 영역. <strong>반복 실무를 빠르게 에이전트화할수록 의도에 집중하는 시간이 늘어난다.</strong> 김서준의 "반복하는 일을 다음 달에 하면 안 된다"는 원칙은 Founders Studio에도 즉시 적용 가능한 운영 원칙이다.</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">2</div>
+        <div class="insight-body"><strong>새로운 창업자 종 = 스튜디오 모델의 타겟 재정의</strong><br>기존 스튜디오 모델은 팀과 자원을 지원하는 것이 가치였다. 그러나 1인 + 에이전트 100개 시대에는 <strong>팀·자원 지원의 가치가 줄어들고, 해시드가 제시한 3가지(멘토십·네트워크·피어)가 핵심 가치</strong>가 된다. Founders Studio가 "스튜디오"인 이유를 이 관점으로 재정의해야 한다.</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">3</div>
+        <div class="insight-body"><strong>대학 언번들링 × 에이전트 시대 = 새로운 인재 풀의 부상</strong><br>특성화고 출신, 커뮤니티 빌더, 밋업 발표자 등 전통 제도권 밖의 인재가 실력 있는 AI 네이티브로 부상하고 있다. <strong>Founders Studio의 인재 발굴 기준을 학력·경력에서 "의도의 밀도"와 "바이브 코딩 실행력"으로 바꿔야 한다.</strong> GPTO 이재홍 대표가 완벽한 레퍼런스다.</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">4</div>
+        <div class="insight-body"><strong>블록체인 × 에이전트 인프라 — 해시드의 포지셔닝이 맞다</strong><br>ERC-8004, 스테이블코인 결제, 에이전트 신원 표준은 모두 에이전트 이코노미의 핵심 인프라가 될 기술들이다. 해시드는 웹3 전문성을 AI 에이전트 인프라 투자로 전환하는 타이밍을 잘 잡고 있다. <strong>Founders Studio도 에이전트 결제·신원 레이어를 사업 기회로 관심을 가져야 할 시점.</strong></div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">5</div>
+        <div class="insight-body"><strong>"흥분 30% + 불안 70%" — 이것이 지금 올바른 감각이다</strong><br>김서준이 솔직하게 공유한 감정 구조: 엄청난 기회와 동시에 "나는 이제 쓸모 없어지나?"라는 불안. <strong>이 불안을 솔직하게 인정하고 에이전트와 함께 성장하는 조직이 살아남는다.</strong> Founders Studio가 AI 도구를 "쓰는 조직"에서 "함께 성장하는 조직"으로 전환하는 것이 가장 중요한 2026년 과제다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. 핵심 키워드 -->
+<section id="keywords">
+  <div class="section-tag">Key Keywords</div>
+  <h2>이 대화의 핵심 키워드</h2>
+
+  <div class="tag-wrap">
+    <span class="tag tag-green">의도(Intent)</span>
+    <span class="tag tag-green">바이브 코딩</span>
+    <span class="tag tag-green">딸깍 모먼트</span>
+    <span class="tag tag-green">생각의 속도로 실행</span>
+    <span class="tag tag-green">꿈꾸는 사람들</span>
+    <span class="tag tag-blue">AEO / GEO</span>
+    <span class="tag tag-blue">AI 검색 랭킹 역공학</span>
+    <span class="tag tag-blue">GPTO / Across</span>
+    <span class="tag tag-blue">1인 빌딩</span>
+    <span class="tag tag-purple">ERC-8004</span>
+    <span class="tag tag-purple">Network State</span>
+    <span class="tag tag-purple">Network School (Balaji)</span>
+    <span class="tag tag-purple">에이전트 신원·평판</span>
+    <span class="tag tag-amber">대학 언번들링</span>
+    <span class="tag tag-amber">선발·교육·커뮤니티 분리</span>
+    <span class="tag tag-amber">특성화고 탤런트</span>
+    <span class="tag tag-amber">VC 위기</span>
+    <span class="tag tag-cyan">Hashed 3가지 가치</span>
+    <span class="tag tag-cyan">20명 → 1000명 퍼포먼스</span>
+    <span class="tag tag-cyan">스테이블코인 콘텐츠</span>
+  </div>
+
+  <div class="quote-block" style="margin-top:24px">
+    <p>"저는 의도의 가치가 굉장히 커진다고 생각해요. 실행은 이제 LLM이 해줄 수 있는데, 의도는 사람이 주는 거거든요. 의도를 가지고 움직이는 사람으로 자기의 생활이 차 있는 사람들. 안 될 거라는 생각 없이 이제 No가 없는 사람이 되게 중요해지는 것 같아요."</p>
+    <div class="attr">— 김서준 (에피소드 핵심 메시지)</div>
+  </div>
+</section>
+
+</main>
+
+<!-- SIDEBAR TOC -->
+<aside>
+  <nav class="toc">
+    <h3>목차</h3>
+    <a href="#overview">에피소드 개요</a>
+    <a href="#thesis">핵심 테제: 의도만 남는 시대</a>
+    <a href="#click-moment">딸깍 모먼트</a>
+    <a href="#vc-crisis">VC 위기 & 새로운 창업자</a>
+    <a href="#ai-native">AI 네이티브 탤런트</a>
+    <a href="#unbundling">대학 언번들링</a>
+    <a href="#aeo-geo">AEO / GEO</a>
+    <a href="#agent-identity">ERC-8004 에이전트 신원</a>
+    <a href="#network-state">Network State</a>
+    <a href="#hashed-strategy">Hashed 전략</a>
+    <a href="#insight">GARAMbada 인사이트</a>
+    <a href="#keywords">핵심 키워드</a>
+  </nav>
+</aside>
+</div>
+
+<footer style="background:var(--surface);border-top:1px solid var(--border);padding:24px;text-align:center;font-size:12px;color:var(--muted);margin-top:40px">
+  GARAMwiki · 개인 지식 베이스 · 최종 업데이트 2026-05 · <a href="../index.html">인덱스로 돌아가기</a>
+</footer>
+
+</body>
+</html>
