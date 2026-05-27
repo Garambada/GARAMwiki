@@ -83,6 +83,10 @@ ARTICLE_META = {
         "tags":  ["Claude for SMB", "유통 채널 전쟁", "버티컬 AI", "GTM", "신뢰 설계"],
     },
     # 트렌드 인텔리전스
+    "2026-02_HBR_Google_Cloud_Agentic_AI_Blueprint.html": {
+        "title": "HBR × Google Cloud — 전사 에이전틱 AI 전환 블루프린트<br>3가지 치명적 실수와 첫 번째 행동",
+        "tags":  ["HBR", "Google Cloud", "Agentic AI", "Agent Sprawl", "멀티에이전트"],
+    },
     "2026-05_MS_Work_Trend_Index_2026_에이전트_인간_주체성.html": {
         "title": "Microsoft 2026 Work Trend Index<br>— 에이전트 시대, 인간 주체성의 재정의",
         "tags":  ["Microsoft WTI", "Frontier Firm", "Transformation Paradox", "Learning System", "AI Agency"],

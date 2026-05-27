@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HBR × Google Cloud — 전사 에이전틱 AI 전환 블루프린트 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0c0e14;
+    --surface: #13151f;
+    --surface2: #1a1d2e;
+    --border: #2a2d3e;
+    --accent: #3b82f6;
+    --accent2: #60a5fa;
+    --accent3: #93c5fd;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+    --purple: #a78bfa;
+    --orange: #f97316;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12,14,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo { font-size: 18px; font-weight: 800; color: var(--accent); text-decoration: none; letter-spacing: -0.5px; }
+  .nav-links { display: flex; gap: 20px; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0f1729 0%, #0c1a3a 40%, #0c0e14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 72px 24px 60px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -40%; left: -20%;
+    width: 80%; height: 200%;
+    background: radial-gradient(ellipse, rgba(59,130,246,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.35);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px; font-weight: 600; color: var(--accent2);
+    letter-spacing: .5px; margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(24px, 3.8vw, 40px);
+    font-weight: 800; line-height: 1.25;
+    color: #fff; letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(13px, 1.8vw, 16px);
+    color: var(--muted); margin-bottom: 28px;
+    max-width: 600px; margin-left: auto; margin-right: auto;
+  }
+  .hero-meta {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 16px;
+    margin-bottom: 32px;
+  }
+  .hero-meta-item {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--muted); font-size: 13px;
+  }
+  .hero-meta-item .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+  .paradox-box {
+    max-width: 720px; margin: 0 auto;
+    background: rgba(239,68,68,0.07);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    text-align: left;
+  }
+  .paradox-box .q {
+    font-size: 13px; font-weight: 700;
+    color: #f87171; letter-spacing: .5px;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .paradox-box p { color: var(--text); font-size: 15px; line-height: 1.75; margin: 0; }
+
+  /* STATS STRIP */
+  .stats-strip {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex; flex-wrap: wrap; justify-content: center;
+  }
+  .stat-item {
+    flex: 1; min-width: 140px; max-width: 200px;
+    text-align: center; padding: 12px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-value {
+    font-size: 28px; font-weight: 800;
+    color: var(--accent); line-height: 1; margin-bottom: 6px;
+  }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+
+  /* LAYOUT */
+  .main-wrap {
+    max-width: 1100px; margin: 0 auto;
+    padding: 48px 24px 80px;
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 40px;
+  }
+  @media (max-width: 900px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+  }
+
+  /* SIDEBAR */
+  .sidebar { position: relative; }
+  .sidebar-inner {
+    position: sticky; top: 76px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .sidebar h3 {
+    font-size: 11px; font-weight: 700;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 14px;
+  }
+  .sidebar ul { list-style: none; }
+  .sidebar ul li { margin-bottom: 2px; }
+  .sidebar ul li a {
+    display: block; padding: 6px 10px;
+    color: var(--muted); text-decoration: none;
+    font-size: 13px; border-radius: 6px;
+    transition: all .15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar ul li a:hover { color: var(--text); background: var(--surface2); border-left-color: var(--accent); }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 10px 0; }
+  .sidebar-tag {
+    display: inline-block;
+    background: rgba(59,130,246,0.12);
+    color: var(--accent2);
+    border-radius: 4px; padding: 2px 8px;
+    font-size: 11px; margin: 2px 2px 0 0;
+  }
+
+  /* SECTIONS */
+  section { margin-bottom: 56px; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700;
+    color: var(--accent2); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block; width: 3px; height: 16px;
+    background: var(--accent); border-radius: 2px;
+  }
+  h2 { font-size: clamp(20px, 2.5vw, 26px); font-weight: 800; color: #fff; line-height: 1.3; letter-spacing: -.5px; margin-bottom: 18px; }
+  h3 { font-size: 17px; font-weight: 700; color: var(--text); margin: 28px 0 12px; }
+  p { color: var(--muted); margin-bottom: 14px; line-height: 1.75; }
+
+  /* MISTAKE CARD */
+  .mistake-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mistake-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .mistake-card.m1::before { background: var(--danger); }
+  .mistake-card.m2::before { background: var(--warning); }
+  .mistake-card.m3::before { background: var(--purple); }
+  .mistake-num {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .mistake-card.m1 .mistake-num { color: var(--danger); }
+  .mistake-card.m2 .mistake-num { color: var(--warning); }
+  .mistake-card.m3 .mistake-num { color: var(--purple); }
+  .mistake-title {
+    font-size: 18px; font-weight: 800; color: #fff;
+    margin-bottom: 14px; line-height: 1.3;
+  }
+  .mistake-sub {
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .mistake-card.m1 .mistake-sub { color: var(--danger); }
+  .mistake-card.m2 .mistake-sub { color: var(--warning); }
+  .mistake-card.m3 .mistake-sub { color: var(--purple); }
+  .mistake-card p { font-size: 14px; margin-bottom: 10px; }
+  .mistake-card p:last-child { margin-bottom: 0; }
+
+  /* CONCERN BARS */
+  .bar-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .bar-label { width: 220px; font-size: 12px; color: var(--muted); flex-shrink: 0; text-align: right; }
+  .bar-track { flex: 1; height: 10px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 99px; background: var(--accent); }
+  .bar-fill.red { background: var(--danger); }
+  .bar-fill.orange { background: var(--orange); }
+  .bar-fill.warning { background: var(--warning); }
+  .bar-val { width: 36px; font-size: 12px; color: var(--accent2); font-weight: 700; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 20px 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 20px 0; }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .card p { font-size: 14px; margin-bottom: 0; }
+
+  /* HL CARD */
+  .hl-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    border-top: 3px solid var(--accent);
+  }
+  .hl-card .num { font-size: 36px; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+  .hl-card .desc { font-size: 13px; color: var(--muted); }
+
+  /* MOVE CARD */
+  .move-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px;
+    margin-bottom: 16px;
+  }
+  .move-header {
+    display: flex; align-items: flex-start; gap: 16px;
+    margin-bottom: 16px;
+  }
+  .move-num {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900; color: var(--accent);
+    flex-shrink: 0;
+  }
+  .move-title { font-size: 16px; font-weight: 800; color: #fff; line-height: 1.3; }
+  .move-card p { font-size: 14px; }
+  .case-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 14px;
+  }
+  .case-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--accent2); margin-bottom: 6px; }
+  .case-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* COMPARE TABLE */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--surface2);
+    padding: 12px 16px; text-align: left;
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .5px;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); color: var(--text); }
+  .td-em { color: var(--text); font-weight: 600; }
+  .td-bad { color: var(--danger); font-weight: 600; }
+  .td-good { color: var(--success); font-weight: 600; }
+
+  /* QUOTE */
+  .quote-block {
+    background: rgba(59,130,246,0.07);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 18px 22px; margin: 20px 0;
+    font-size: 15px; color: var(--text);
+    font-style: italic; line-height: 1.75;
+  }
+  .quote-attr { font-size: 12px; color: var(--muted); margin-top: 8px; font-style: normal; }
+
+  /* BIG QUOTE */
+  .big-quote {
+    background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(96,165,250,0.04));
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: var(--radius);
+    padding: 28px 32px; margin: 24px 0;
+    text-align: center;
+  }
+  .big-quote .bq-text { font-size: 19px; font-weight: 800; color: #fff; line-height: 1.4; margin-bottom: 8px; }
+  .big-quote .bq-sub { font-size: 13px; color: var(--muted); }
+
+  /* FRAMEWORK */
+  .fw-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px; margin: 20px 0;
+  }
+  .fw-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 16px; }
+  .fw-row {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .fw-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .fw-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .fw-icon.blue { background: rgba(59,130,246,0.15); }
+  .fw-icon.red { background: rgba(239,68,68,0.15); }
+  .fw-icon.green { background: rgba(16,185,129,0.15); }
+  .fw-icon.orange { background: rgba(249,115,22,0.15); }
+  .fw-content .fw-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .fw-content .fw-desc { font-size: 13px; color: var(--muted); }
+
+  /* INSIGHT */
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px; margin-bottom: 12px;
+    border-left: 3px solid var(--accent);
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .insight-num { font-size: 22px; font-weight: 900; color: var(--accent); flex-shrink: 0; min-width: 28px; }
+  .insight-content .title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .insight-content .desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+  /* TAGS */
+  .tag-area { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .tag {
+    display: inline-block;
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    color: var(--accent2); border-radius: 20px;
+    padding: 4px 12px; font-size: 12px; font-weight: 500;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px; text-align: center;
+    color: var(--muted); font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">⚡ GARAMwiki</a>
+  <div class="nav-links">
+    <a href="../index.html">← 홈</a>
+    <a href="#overview">개요</a>
+    <a href="#mistakes">3가지 실수</a>
+    <a href="#moves">3가지 행동</a>
+    <a href="#insights">인사이트</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📡 트렌드 인텔리전스 · HBR × Google Cloud Consulting · Feb 2026</div>
+  <h1>전사 에이전틱 AI 전환<br><span>블루프린트</span></h1>
+  <div class="hero-sub">A Blueprint for Enterprise-Wide Agentic AI Transformation<br>HBR Sponsor Content — Google Cloud Consulting</div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="dot"></div>2026.02.12 발간</div>
+    <div class="hero-meta-item"><div class="dot"></div>Marcus Oliver · Ryan Faris</div>
+    <div class="hero-meta-item"><div class="dot"></div>Google Cloud delta 팀</div>
+    <div class="hero-meta-item"><div class="dot"></div>Harvard Business Review</div>
+  </div>
+  <div class="paradox-box">
+    <div class="q">⚠️ 핵심 역설</div>
+    <p>AI 도입은 거의 보편화됐다. 그런데 역설적으로 AI는 생산성을 높이는 대신 <strong>운영 마찰을 증가</strong>시키고 있다. 근본적인 결함을 고치는 게 아니라 <strong>증폭</strong>하고 있기 때문이다.</p>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-value">74%+</div>
+    <div class="stat-label">1년 내 ROI 확인한<br>에이전틱 AI 도입 기업</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">37%</div>
+    <div class="stat-label">AI 도입 최대 우려<br>데이터 프라이버시·보안</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">3</div>
+    <div class="stat-label">기업이 저지르는<br>치명적 실수 수</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">4개월</div>
+    <div class="stat-label">소매 기업 멀티에이전트<br>시스템 프로덕션 승인 기간</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">3</div>
+    <div class="stat-label">즉시 실행 가능한<br>첫 번째 행동 수</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+<div class="content">
+
+<!-- 개요 -->
+<section id="overview">
+  <div class="section-label">리포트 개요</div>
+  <h2>AI 도입의 역설 — 더 많이 쓸수록<br>왜 더 복잡해지는가?</h2>
+
+  <p>Harvard Business Review에 게재된 Google Cloud Consulting의 스폰서 콘텐츠다. 저자는 Google Cloud의 전략·전환 전문 팀인 <strong>delta</strong>의 리더 Marcus Oliver와 에이전틱 AI 전환 리드 Ryan Faris다.</p>
+
+  <p>리포트가 출발하는 지점은 모순적인 현실이다. AI 도입이 거의 보편화됐지만, 많은 기업에서 AI는 성장의 촉매가 아니라 <strong>운영 마찰의 원인</strong>이 되고 있다. 기존 시스템의 결함을 해결하는 것이 아니라 예산과 시스템에 압박을 가하고 있기 때문이다.</p>
+
+  <div class="big-quote">
+    <div class="bq-text">"AI는 강력한 증폭기다.<br>취약하거나 파편화된 시스템에 도입되면,<br>시스템을 고치지 않고 결함을 증폭시킨다."</div>
+    <div class="bq-sub">— Marcus Oliver & Ryan Faris, Google Cloud delta</div>
+  </div>
+
+  <p>이 문제의 뿌리는 기업들이 저지르는 세 가지 치명적 실수에 있다. 그리고 해결책은 단순한 도구 도입이 아니라, <strong>지능의 응집된 에코시스템을 구축</strong>하는 전략적 전환에 있다.</p>
+
+  <h3>🏗️ 필요한 세 가지 요소</h3>
+  <div class="grid-3">
+    <div class="card" style="border-top: 3px solid var(--accent);">
+      <div class="card-title">엔터프라이즈급 플랫폼</div>
+      <p>커스텀 실리콘 → 파운데이션 모델 → 거버넌스 플랫폼까지 수직 통합된 AI 스택</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--success);">
+      <div class="card-title">전략적 프레임워크</div>
+      <p>분산된 혁신과 중앙화된 통제 사이의 긴장을 해결하는 반복 가능한 블루프린트</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--purple);">
+      <div class="card-title">전문 파트너</div>
+      <p>조직 건강 진단, 가치 흐름 매핑, 문화·프로세스 변화를 이끌 전문 가이드</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 3가지 실수 -->
+<section id="mistakes">
+  <div class="section-label">3가지 치명적 실수</div>
+  <h2>기업이 저지르는<br>3가지 치명적 실수</h2>
+
+  <!-- Mistake 1 -->
+  <div class="mistake-card m1">
+    <div class="mistake-num">🚨 실수 1</div>
+    <div class="mistake-title">균열된 기반 위에 짓기<br>(Building on a Cracked Foundation)</div>
+    <div class="mistake-sub">기술 부채가 해결되지 않은 환경에 AI 도입</div>
+    <p>AI 도입에서 가장 흔한 실수는 기반이 약한 시스템에 에이전틱 AI를 도입하는 것이다. AI는 성능을 부스팅하지만, <strong>소프트웨어 배포 불안정성도 함께 증가</strong>시킨다(DORA AI 보고서). AI는 강화제다 — 취약한 시스템에서는 결함을 고치지 않고 증폭시킨다.</p>
+
+    <h3 style="margin-top:16px;margin-bottom:12px;font-size:15px;">📊 AI 도입 시 경영진이 꼽은 최대 장벽 (ROI of AI 2025)</h3>
+    <div class="bar-row">
+      <div class="bar-label">데이터 프라이버시·보안</div>
+      <div class="bar-track"><div class="bar-fill red" style="width:37%"></div></div>
+      <div class="bar-val">37%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">레거시 시스템 통합 어려움</div>
+      <div class="bar-track"><div class="bar-fill warning" style="width:28%"></div></div>
+      <div class="bar-val">28%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">비용 통제</div>
+      <div class="bar-track"><div class="bar-fill orange" style="width:27%"></div></div>
+      <div class="bar-val">27%</div>
+    </div>
+
+    <p style="margin-top:16px;"><strong>해결책</strong>: 개별 도구의 집합이 아닌 <strong>통합·원활·수직 통합된 AI 스택</strong>이 필요하다. "포장된 도로(Paved Roads)" — 개발팀에게 안전하고 거버넌스가 갖춰진 도구에 셀프서비스로 접근할 수 있는 내부 플랫폼을 구축해야 한다.</p>
+  </div>
+
+  <!-- Mistake 2 -->
+  <div class="mistake-card m2">
+    <div class="mistake-num">⚠️ 실수 2</div>
+    <div class="mistake-title">확산을 혁신으로 착각하기<br>(Mistaking Proliferation for Innovation)</div>
+    <div class="mistake-sub">통합 전략 없는 분산 에이전트 개발 → "에이전트 스프롤"</div>
+    <p>리더들은 팀이 에이전틱 AI를 실험하도록 장려한다. 그러나 통합 전략 없이 분산적으로 개발이 이루어지면 결과는 <strong>"에이전트 스프롤(Agent Sprawl)"</strong>이다 — 비용이 많이 들고 통제되지 않은, 사일로화된·불안전한·중복적인 AI 에이전트의 무분별한 확산.</p>
+    <p>개별 팀은 국지적 성공을 거둘 수 있지만, 이 바텀업 접근은 역설적으로 전사 AI ROI를 훼손한다. 에이전트 스프롤은 막대한 기술 부채를 만들고, 보안 취약성을 배가하며, 중복 개발로 자원을 낭비한다.</p>
+
+    <div class="fw-box" style="margin-top:16px;">
+      <div class="fw-title">에이전트 스프롤의 4가지 결과</div>
+      <div class="fw-row">
+        <div class="fw-icon red">💸</div>
+        <div class="fw-content">
+          <div class="fw-name">막대한 기술 부채</div>
+          <div class="fw-desc">통합 없는 독립 에이전트들이 쌓이며 유지·관리 비용이 기하급수적으로 증가한다.</div>
+        </div>
+      </div>
+      <div class="fw-row">
+        <div class="fw-icon red">🔓</div>
+        <div class="fw-content">
+          <div class="fw-name">보안 취약성 배가</div>
+          <div class="fw-desc">에이전트가 늘어날수록 공격 표면이 넓어지고, 각 에이전트의 접근 권한이 통제 불가 상태가 된다.</div>
+        </div>
+      </div>
+      <div class="fw-row">
+        <div class="fw-icon red">🗑️</div>
+        <div class="fw-content">
+          <div class="fw-name">중복 개발 낭비</div>
+          <div class="fw-desc">같은 기능을 다른 팀이 각자 개발하는 낭비가 발생한다.</div>
+        </div>
+      </div>
+      <div class="fw-row">
+        <div class="fw-icon red">🚫</div>
+        <div class="fw-content">
+          <div class="fw-name">응집된 지능 시스템 구축 불가</div>
+          <div class="fw-desc">강력한 복합 자산이 아니라, 연결되지 않은 점 솔루션의 집합만 남게 된다.</div>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>해결책</strong>: 검증된 반복 가능한 블루프린트가 필요하다. 전략적 오케스트레이션 프레임워크는 비즈니스 프로세스 재설계부터 에이전트 구축·정렬까지 전체 라이프사이클을 커버하는 민첩한 반복 방법론을 제공해야 한다.</p>
+  </div>
+
+  <!-- Mistake 3 -->
+  <div class="mistake-card m3">
+    <div class="mistake-num">🔮 실수 3</div>
+    <div class="mistake-title">과거를 자동화하고 미래를 오케스트레이션하지 않기<br>(Automating the Past Instead of Orchestrating the Future)</div>
+    <div class="mistake-sub">페르소나 기반 에이전트 = 조직 사일로의 디지털화</div>
+    <p>많은 리더들이 아직도 AI를 "기존의 정적·선형 프로세스 자동화" 관점으로만 본다. 이는 <strong>"페르소나 기반" 에이전트</strong> — 특정 인간 직무를 모방하거나 대체하도록 설계된 도구 — 를 만드는 것으로 나타난다.</p>
+
+    <div class="table-wrap" style="margin:16px 0;">
+      <table>
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>❌ 페르소나 기반 (잘못된 접근)</th>
+            <th>✅ 아웃컴 기반 (올바른 접근)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>설계 목표</td>
+            <td class="td-bad">특정 역할(예: 분석가)을 모방</td>
+            <td class="td-good">특정 결과(예: 분석)를 달성</td>
+          </tr>
+          <tr>
+            <td>워크플로우</td>
+            <td class="td-bad">조직 사일로를 디지털화</td>
+            <td class="td-good">여러 역할에 걸친 워크플로우를 통합</td>
+          </tr>
+          <tr>
+            <td>오케스트레이션</td>
+            <td class="td-bad">기존 인간 조직도의 경직된 핸드오프 반복</td>
+            <td class="td-good">실시간 동적 오케스트레이션 — 인간 조직도에 구애받지 않음</td>
+          </tr>
+          <tr>
+            <td>결과</td>
+            <td class="td-bad">점진적 속도 향상에 그침</td>
+            <td class="td-good">헤드카운트와 가치 창출 분리</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>올바른 접근</strong>: 목표는 역할(예: 분석가)을 디지털화하는 것이 아니라, 궁극적인 아웃컴(예: 분석)을 위한 에이전트를 구축하는 것이다. 여러 역할에 걸쳐 필요했던 조정·협업 워크플로우를 하나로 통합하는 에이전트를 만들어야 한다. 이것이 <strong>동적 오케스트레이션</strong>으로의 도약이다.</p>
+
+    <div class="quote-block">
+      "에이전틱 AI를 단순한 기술 프로젝트로 보는 것은 실패의 처방전이다. 레거시 프로세스를 해체하지 않는 조직은 점진적인 속도 향상만 얻을 뿐, 가치 창출과 헤드카운트를 분리한 경쟁자에게 뒤처지게 된다."
+      <div class="quote-attr">— Oliver & Faris, Google Cloud delta</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 3가지 행동 -->
+<section id="moves">
+  <div class="section-label">첫 번째 3가지 행동</div>
+  <h2>지금 당장 실행할<br>Your First Three Moves</h2>
+
+  <div class="hl-card" style="margin-bottom:24px;">
+    <div class="num">74%+</div>
+    <div class="desc">에이전틱 AI를 도입한 조직 중 <strong>1년 내</strong> ROI를 확인한 경영진 비율. 구체적인 성과가 더 큰 비전을 위한 자금을 만든다.</div>
+  </div>
+
+  <!-- Move 1 -->
+  <div class="move-card">
+    <div class="move-header">
+      <div class="move-num">1</div>
+      <div class="move-title">손익(P&L)에 닻을 내리고, 그다음 비전을 확장하라</div>
+    </div>
+    <p>측정 가능한 결과에 초점을 맞춘 최소 실행 가능 제품(MVP)으로 시작하라. 구체적인 성과가 더 넓은 비전을 위한 자금과 지지를 만들어낸다. 추상적인 AI 전략이 아니라 <strong>P&L에 직접 연결된 사용 사례</strong>로 시작해야 한다.</p>
+    <div class="case-box">
+      <div class="case-label">📦 사례: 소매 가격 분석 기업</div>
+      <div class="case-text">멀티에이전트 시스템을 구축하여 <strong>4개월 이내</strong>에 프로덕션 승인을 받았다. 시장 반응 가속화 및 수작업 오류 감소에 직접 연결되어 있었기 때문에 가능했다.</div>
+    </div>
+  </div>
+
+  <!-- Move 2 -->
+  <div class="move-card">
+    <div class="move-header">
+      <div class="move-num">2</div>
+      <div class="move-title">협업을 위해 설계하라</div>
+    </div>
+    <p>에이전틱 AI 도입의 목표는 핵심 워크플로우를 <strong>인간-에이전트 협업</strong> 중심으로 재설계하는 것이어야 한다. 비즈니스 프로세스를 해체하고, 오케스트레이터-전문가-거버넌스 에이전트가 협업하는 멀티에이전트 프레임워크를 설계하라.</p>
+
+    <div class="fw-box" style="margin-top:14px;">
+      <div class="fw-title">멀티에이전트 협업 구조</div>
+      <div class="fw-row">
+        <div class="fw-icon blue">🎯</div>
+        <div class="fw-content">
+          <div class="fw-name">오케스트레이터 에이전트 (Orchestrator)</div>
+          <div class="fw-desc">전체 작업을 조율하고 전문 에이전트들 간의 태스크를 분배한다. 전략적 판단의 중심.</div>
+        </div>
+      </div>
+      <div class="fw-row">
+        <div class="fw-icon green">🔧</div>
+        <div class="fw-content">
+          <div class="fw-name">전문가 에이전트 (Specialist Agents)</div>
+          <div class="fw-desc">문서 분석, 데이터 검색 등 특정 도메인 태스크를 전문적으로 수행한다.</div>
+        </div>
+      </div>
+      <div class="fw-row">
+        <div class="fw-icon orange">🛡️</div>
+        <div class="fw-content">
+          <div class="fw-name">거버넌스 에이전트 (Governance Agents)</div>
+          <div class="fw-desc">정확도 검증, 품질 통제, 컴플라이언스를 담당한다. 인간 책임의 핵심 레이어.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-box">
+      <div class="case-label">🏠 사례: 미국 모기지 서비스 기업</div>
+      <div class="case-text">핵심 비즈니스 프로세스를 해체하고 멀티에이전트 프레임워크를 설계했다. 오케스트레이터가 문서 분석·데이터 검색 전문 에이전트와 거버넌스 에이전트를 조율한다. 인간도 AI도 단독으로는 달성 불가능한 가치를 창출하는 공생 워크플로우가 완성됐다.</div>
+    </div>
+  </div>
+
+  <!-- Move 3 -->
+  <div class="move-card">
+    <div class="move-header">
+      <div class="move-num">3</div>
+      <div class="move-title">에이전트가 아니라 기반을 구축하라</div>
+    </div>
+    <p>연결되지 않은 에이전트를 개별적으로 구축하는 유혹을 피하라. 첫 번째 사용 사례를 <strong>전사 멀티에이전트 시스템 배포를 위한 엔터프라이즈 프레임워크의 첫 번째 사례</strong>로 설계하라. 이 기반적 접근법은 새로운 에이전트가 추가될 때마다 전체 에코시스템이 더 지능적이고 가치 있어지도록 보장한다.</p>
+
+    <div class="case-box">
+      <div class="case-label">🏦 사례: 선도적 금융 서비스 기업</div>
+      <div class="case-text">자율적 위협 탐지 시스템을 단일 도구가 아닌 <strong>멀티에이전트 시스템 배포를 위한 전사 프레임워크의 첫 번째 사용 사례</strong>로 개발했다. 기반 구축 접근법으로 이후 모든 에이전트가 에코시스템 전체를 더 지능적으로 만들 수 있게 됐다.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INSIGHTS -->
+<section id="insights">
+  <div class="section-label">GARAMbada 인사이트</div>
+  <h2>C-Level이 지금 해야 할<br>5가지 판단</h2>
+
+  <div class="insight-card">
+    <div class="insight-num">01</div>
+    <div class="insight-content">
+      <div class="title">AI 도입 전에 기반을 먼저 진단하라 — AI는 증폭기지 치료제가 아니다</div>
+      <div class="desc">기술 부채, 레거시 시스템, 데이터 거버넌스 문제를 해결하지 않고 AI를 도입하면 기존 문제를 속도와 규모로 증폭시킨다. "AI를 먼저 도입하고 문제는 나중에"가 아니라 "기반을 먼저 고치고 AI는 그다음"이 맞다. 특히 규모가 큰 조직일수록 균열된 기반의 증폭 효과가 치명적이다.</div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="insight-num">02</div>
+    <div class="insight-content">
+      <div class="title">에이전트 스프롤은 혁신이 아니다 — 지금 당장 통합 거버넌스를 설계하라</div>
+      <div class="desc">팀별로 자유롭게 AI 에이전트를 만들도록 허용하면 단기적으로는 혁신처럼 보인다. 하지만 6개월 후에는 유지 불가능한 기술 부채, 보안 공백, 중복 비용만 남는다. 지금 당장 에이전트 등록·권한·라이프사이클 관리 체계를 잡지 않으면, 나중에는 더 큰 비용으로 정리해야 한다.</div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="insight-num">03</div>
+    <div class="insight-content">
+      <div class="title">"사람 대체" 프레임을 버리고 "아웃컴 달성" 프레임으로 전환하라</div>
+      <div class="desc">AI 에이전트를 "분석가 에이전트" "CS 에이전트" 식으로 직무 단위로 설계하는 것은 조직 사일로를 디지털화할 뿐이다. 진짜 가치는 "분석 결과 도출"이라는 아웃컴을 중심으로 여러 직무에 걸쳐 있던 조정 업무를 하나의 에이전트 워크플로우로 통합하는 데 있다. 롤이 아닌 아웃컴으로 에이전트를 설계하라.</div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="insight-num">04</div>
+    <div class="insight-content">
+      <div class="title">첫 번째 AI 사용 사례는 반드시 P&L에 직접 연결하라</div>
+      <div class="desc">추상적인 생산성 향상이나 "AI 문화 조성"을 목표로 한 파일럿은 조직 내 지지를 얻지 못한다. 74%의 기업이 1년 내 ROI를 확인하는 이유는 처음부터 측정 가능한 비즈니스 결과에 닻을 내렸기 때문이다. 첫 번째 에이전트는 반드시 "이 수치가 X% 개선됐다"고 말할 수 있어야 한다.</div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="insight-num">05</div>
+    <div class="insight-content">
+      <div class="title">에이전트 #1을 플랫폼처럼 설계하라 — 두 번째가 더 쉬워야 한다</div>
+      <div class="desc">첫 번째 에이전트를 독립 도구로 만들면, 두 번째 에이전트도 처음부터 다시 만들어야 한다. 처음부터 "멀티에이전트 시스템 배포를 위한 전사 프레임워크의 첫 사례"로 설계하면, 새로운 에이전트가 추가될 때마다 전체 에코시스템이 더 스마트해진다. AI 인프라는 선투자가 가장 싸다.</div>
+    </div>
+  </div>
+
+  <div class="tag-area" style="margin-top: 24px;">
+    <span class="tag">Google Cloud Consulting</span>
+    <span class="tag">Agentic AI</span>
+    <span class="tag">Agent Sprawl</span>
+    <span class="tag">Cracked Foundation</span>
+    <span class="tag">Dynamic Orchestration</span>
+    <span class="tag">멀티에이전트 시스템</span>
+    <span class="tag">오케스트레이터 에이전트</span>
+    <span class="tag">거버넌스 에이전트</span>
+    <span class="tag">P&L 연결</span>
+    <span class="tag">전사 AI 전환</span>
+    <span class="tag">기술 부채</span>
+    <span class="tag">HBR</span>
+  </div>
+</section>
+
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-inner">
+    <h3>목차</h3>
+    <ul>
+      <li><a href="#overview">📋 개요 & 역설</a></li>
+      <li><a href="#mistakes">⚠️ 3가지 치명적 실수</a></li>
+      <li><a href="#moves">🚀 첫 번째 3가지 행동</a></li>
+      <li><a href="#insights">💡 GARAMbada 인사이트</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>3가지 실수</h3>
+    <ul>
+      <li><a href="#mistakes">🔴 균열된 기반</a></li>
+      <li><a href="#mistakes">🟡 에이전트 스프롤</a></li>
+      <li><a href="#mistakes">🟣 과거 자동화</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>3가지 행동</h3>
+    <ul>
+      <li><a href="#moves">1. P&L에 닻 내리기</a></li>
+      <li><a href="#moves">2. 협업 설계</a></li>
+      <li><a href="#moves">3. 기반 구축</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>키워드</h3>
+    <div>
+      <span class="sidebar-tag">Agent Sprawl</span>
+      <span class="sidebar-tag">Orchestrator</span>
+      <span class="sidebar-tag">P&L 연결</span>
+      <span class="sidebar-tag">기반 구축</span>
+      <span class="sidebar-tag">동적 오케스트레이션</span>
+    </div>
+
+    <div class="sidebar-divider"></div>
+    <h3>저자</h3>
+    <ul>
+      <li><a href="https://hbr.org/sponsored/2026/02/a-blueprint-for-enterprise-wide-agentic-ai-transformation" target="_blank" style="font-size:11px;">Marcus Oliver · Ryan Faris<br>Google Cloud delta →</a></li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /main-wrap -->
+
+<footer>
+  <div>HBR × Google Cloud Consulting — 전사 에이전틱 AI 전환 블루프린트 | GARAMwiki 정리 분석 · 2026.05.27</div>
+  <div style="margin-top:6px;font-size:11px;">출처: Harvard Business Review Sponsor Content (Google Cloud Consulting) · 2026.02.12</div>
+</footer>
+
+</body>
+</html>
