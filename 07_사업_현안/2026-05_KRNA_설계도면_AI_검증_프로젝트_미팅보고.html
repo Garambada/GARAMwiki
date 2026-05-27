@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRNA 설계도면 AI 검증 프로젝트 — 5/27 미팅 보고 및 대응 전략 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0c0e14;
+    --surface: #13151f;
+    --surface2: #1a1d2e;
+    --border: #2a2d3e;
+    --accent: #f97316;
+    --accent2: #fb923c;
+    --accent3: #fdba74;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+    --blue: #3b82f6;
+    --blue2: #60a5fa;
+    --purple: #a78bfa;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12,14,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo { font-size: 18px; font-weight: 800; color: var(--accent); text-decoration: none; letter-spacing: -0.5px; }
+  .nav-links { display: flex; gap: 20px; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1a0e00 0%, #1c1108 40%, #0c0e14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 24px 52px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -40%; right: -10%;
+    width: 60%; height: 200%;
+    background: radial-gradient(ellipse, rgba(249,115,22,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; }
+  .confidential-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.35);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 11px; font-weight: 700; color: #f87171;
+    letter-spacing: 1px; margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.35);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px; font-weight: 600; color: var(--accent2);
+    letter-spacing: .5px; margin-bottom: 16px; margin-left: 8px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(22px, 3.5vw, 36px);
+    font-weight: 800; line-height: 1.25;
+    color: #fff; letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub { font-size: 15px; color: var(--muted); margin-bottom: 20px; }
+  .hero-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px; margin-bottom: 24px;
+  }
+  .meta-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+  }
+  .meta-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 4px; }
+  .meta-value { font-size: 13px; color: var(--text); font-weight: 600; }
+  .alert-box {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+  }
+  .alert-box .alert-title {
+    font-size: 13px; font-weight: 700;
+    color: #f87171; text-transform: uppercase; letter-spacing: .5px;
+    margin-bottom: 10px;
+  }
+  .alert-box ul { list-style: none; padding: 0; }
+  .alert-box ul li {
+    font-size: 13px; color: var(--muted);
+    padding: 4px 0; border-bottom: 1px solid rgba(239,68,68,0.1);
+  }
+  .alert-box ul li:last-child { border-bottom: none; }
+  .alert-box ul li::before { content: '⚠ '; color: #f87171; font-size: 11px; }
+
+  /* STATS STRIP */
+  .stats-strip {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 24px;
+    display: flex; flex-wrap: wrap; justify-content: center;
+  }
+  .stat-item {
+    flex: 1; min-width: 120px; max-width: 180px;
+    text-align: center; padding: 10px 12px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-value { font-size: 24px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 5px; }
+  .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; line-height: 1.4; }
+
+  /* LAYOUT */
+  .main-wrap {
+    max-width: 1100px; margin: 0 auto;
+    padding: 48px 24px 80px;
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 40px;
+  }
+  @media (max-width: 900px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+  }
+
+  /* SIDEBAR */
+  .sidebar { position: relative; }
+  .sidebar-inner {
+    position: sticky; top: 76px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .sidebar h3 {
+    font-size: 11px; font-weight: 700;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 14px;
+  }
+  .sidebar ul { list-style: none; }
+  .sidebar ul li { margin-bottom: 2px; }
+  .sidebar ul li a {
+    display: block; padding: 6px 10px;
+    color: var(--muted); text-decoration: none;
+    font-size: 13px; border-radius: 6px;
+    transition: all .15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar ul li a:hover { color: var(--text); background: var(--surface2); border-left-color: var(--accent); }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 10px 0; }
+  .sidebar-tag {
+    display: inline-block;
+    background: rgba(249,115,22,0.12);
+    color: var(--accent2);
+    border-radius: 4px; padding: 2px 8px;
+    font-size: 11px; margin: 2px 2px 0 0;
+  }
+
+  /* SECTIONS */
+  section { margin-bottom: 52px; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700;
+    color: var(--accent2); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block; width: 3px; height: 16px;
+    background: var(--accent); border-radius: 2px;
+  }
+  h2 { font-size: clamp(18px, 2.2vw, 24px); font-weight: 800; color: #fff; line-height: 1.3; letter-spacing: -.5px; margin-bottom: 18px; }
+  h3 { font-size: 16px; font-weight: 700; color: var(--text); margin: 24px 0 10px; }
+  p { color: var(--muted); margin-bottom: 14px; line-height: 1.75; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--surface2);
+    padding: 10px 14px; text-align: left;
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .5px;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(249,115,22,0.04); }
+  .td-em { color: var(--text); font-weight: 600; }
+  .td-red { color: #f87171; font-weight: 600; }
+  .td-orange { color: var(--accent2); font-weight: 600; }
+  .td-green { color: var(--success); font-weight: 600; }
+  .td-yellow { color: var(--warning); font-weight: 600; }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px; margin-bottom: 14px;
+  }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .card p { font-size: 13px; margin-bottom: 6px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 16px 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 16px 0; }
+
+  /* CHALLENGE CARD */
+  .challenge-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px; margin-bottom: 12px;
+    border-left: 3px solid var(--danger);
+  }
+  .challenge-num {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: #f87171; margin-bottom: 6px;
+  }
+  .challenge-title { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+  .challenge-arrow {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .challenge-arrow .label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--accent2); flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .challenge-arrow .content { font-size: 13px; color: var(--accent3); line-height: 1.5; }
+
+  /* LAYER CARD */
+  .layer-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px; margin-bottom: 14px;
+    position: relative; overflow: hidden;
+  }
+  .layer-card::after {
+    content: '';
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .layer-card.l1::after { background: var(--blue); }
+  .layer-card.l2::after { background: var(--accent); }
+  .layer-card.l3::after { background: var(--success); }
+  .layer-badge {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; margin-bottom: 6px;
+  }
+  .layer-card.l1 .layer-badge { color: var(--blue2); }
+  .layer-card.l2 .layer-badge { color: var(--accent2); }
+  .layer-card.l3 .layer-badge { color: var(--success); }
+  .layer-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+  .layer-role {
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .5px;
+    margin-bottom: 8px;
+  }
+  .layer-items { list-style: none; }
+  .layer-items li {
+    font-size: 13px; color: var(--muted);
+    padding: 4px 0; border-bottom: 1px solid var(--border);
+  }
+  .layer-items li:last-child { border-bottom: none; }
+  .layer-items li::before { content: '→ '; color: var(--accent2); font-weight: 700; }
+
+  /* PRINCIPLE CARD */
+  .principle-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px; margin-bottom: 10px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .principle-icon {
+    width: 34px; height: 34px; flex-shrink: 0;
+    border-radius: 8px;
+    background: rgba(249,115,22,0.12);
+    border: 1px solid rgba(249,115,22,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+  .principle-content .title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .principle-content .desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0; }
+
+  /* RISK BADGE */
+  .risk-h { background: rgba(239,68,68,0.15); color: #f87171; }
+  .risk-m { background: rgba(245,158,11,0.15); color: var(--warning); }
+  .risk-l { background: rgba(16,185,129,0.15); color: var(--success); }
+  .risk-badge {
+    display: inline-block;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 700;
+  }
+
+  /* TRACK CARD */
+  .track-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px; margin-bottom: 10px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .track-letter {
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 900;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.3);
+    color: var(--accent);
+  }
+  .track-content .title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .track-content .timeline { font-size: 11px; color: var(--accent2); font-weight: 600; margin-bottom: 6px; }
+  .track-content .output { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0; }
+
+  /* ACTION ITEM */
+  .action-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px; margin-bottom: 8px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .action-when {
+    flex-shrink: 0; min-width: 72px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--accent); padding-top: 2px;
+  }
+  .action-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* QUOTE */
+  .quote-block {
+    background: rgba(249,115,22,0.07);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px; margin: 16px 0;
+    font-size: 14px; color: var(--text);
+    font-style: italic; line-height: 1.75;
+  }
+
+  /* BIG QUOTE */
+  .big-quote {
+    background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(251,146,60,0.04));
+    border: 1px solid rgba(249,115,22,0.2);
+    border-radius: var(--radius);
+    padding: 24px 28px; margin: 20px 0; text-align: center;
+  }
+  .big-quote .bq-text { font-size: 17px; font-weight: 800; color: #fff; line-height: 1.4; margin-bottom: 8px; }
+  .big-quote .bq-sub { font-size: 12px; color: var(--muted); }
+
+  /* STRATEGIC IMPLICATION */
+  .implication-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px; margin-bottom: 12px;
+    border-top: 3px solid var(--accent);
+  }
+  .implication-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent2); margin-bottom: 6px; }
+  .implication-title { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .implication-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+  /* TAGS */
+  .tag-area { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .tag {
+    display: inline-block;
+    background: rgba(249,115,22,0.12);
+    border: 1px solid rgba(249,115,22,0.25);
+    color: var(--accent2); border-radius: 20px;
+    padding: 4px 12px; font-size: 12px; font-weight: 500;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px; text-align: center;
+    color: var(--muted); font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">⚡ GARAMwiki</a>
+  <div class="nav-links">
+    <a href="../index.html">← 홈</a>
+    <a href="#summary">요약</a>
+    <a href="#challenges">도메인 난제</a>
+    <a href="#strategy">전략 함의</a>
+    <a href="#architecture">3-Layer</a>
+    <a href="#risks">리스크</a>
+    <a href="#actions">액션플랜</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <span class="confidential-badge">🔒 Confidential — 외부 유출 금지</span>
+      <span class="hero-badge">🏢 사업 현안 · WISE42 · 2026.05.27</span>
+    </div>
+    <h1>KRNA 설계도면 수량·공사비 산출<br><span>AI 검증 프로젝트</span></h1>
+    <div class="hero-sub">5/27 미팅 보고 및 심층 대응 전략 — WISE42 / Garambada</div>
+
+    <div class="hero-meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">일시·장소</div>
+        <div class="meta-value">2026.05.27(수) 15:30~16:00 · 한국철도학회 사무실</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">참석 (공단)</div>
+        <div class="meta-value">KRNA 이종국 부장, 안호성 차장</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">참석 (협력사)</div>
+        <div class="meta-value">엔텍 원우식 부사장</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">참석 (설계사)</div>
+        <div class="meta-value">한국EREC 부사장 외 3명</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">참석 (당사)</div>
+        <div class="meta-value">WISE42 / Garambada</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">작성자</div>
+        <div class="meta-value">WISE42 / Garambada</div>
+      </div>
+    </div>
+
+    <div class="alert-box">
+      <div class="alert-title">⚠️ 핵심 결과 — Top-line Outcome</div>
+      <ul>
+        <li><strong>EREC 이탈:</strong> 회의 직후 불참 의사 공식 표명. 사유 — 난이도 / 성공 가능성 회의 / 리소스 부족</li>
+        <li><strong>대체 설계사:</strong> 공단·엔텍 협의로 세종기술(구로디지털단지, 임직원 ~180명, 매출 ~160억) 우선 제안 추진</li>
+        <li><strong>엔텍 계약:</strong> 설계사 섭외와 분리 병행 — 익일 계약요청 시 익주 수요일 경 체결 전망. WISE42–엔텍 동시 체결 목표</li>
+        <li><strong>도메인 난제 6가지:</strong> EREC 제기 — 솔루션 아키텍처·운영모델·계약전략에 모두 선반영 필요</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-value">6</div>
+    <div class="stat-label">EREC 제기<br>도메인 난제 수</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">5년</div>
+    <div class="stat-label">수량산출 업무<br>숙련 소요 기간</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">1만+</div>
+    <div class="stat-label">철도전기 자재<br>SKU 규모</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">3개층</div>
+    <div class="stat-label">필수 아키텍처<br>Ontology+RAG+Pricing</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">5개</div>
+    <div class="stat-label">SME 부담<br>최소화 원칙</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">수요일</div>
+    <div class="stat-label">차주 엔텍<br>계약 목표일</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+<div class="content">
+
+<!-- Executive Summary -->
+<section id="summary">
+  <div class="section-label">Executive Summary</div>
+  <h2>핵심 판단 — Key Judgements</h2>
+
+  <div class="implication-card">
+    <div class="implication-num">판단 01</div>
+    <div class="implication-title">EREC 이탈 = 설계회사 풀 전체의 경고</div>
+    <div class="implication-body">EREC 이탈은 단일 파트너 이탈이 아니라 '설계회사 풀(pool) 전체가 우리에게 던지는 경고'로 해석해야 한다. 세종기술도 동일한 사유로 이탈할 가능성이 있어, 첫 미팅 이전에 <strong>'SME 부담 최소화 모델'을 명시적으로 제시</strong>해야 한다.</div>
+  </div>
+  <div class="implication-card">
+    <div class="implication-num">판단 02</div>
+    <div class="implication-title">과거 실패 = 우리의 결정적 포지셔닝 단서</div>
+    <div class="implication-body">고가 SW 1회 구입 → 업데이트 단절 → 폐기 패턴은 우리가 피해야 할 함정이자 차별화 메시지의 원천이다. WISE42의 차별점은 <strong>'AI 모델 납품'이 아니라 'Living System으로서의 AX 운영서비스'</strong>여야 한다.</div>
+  </div>
+  <div class="implication-card">
+    <div class="implication-num">판단 03</div>
+    <div class="implication-title">LLM 단독 불가 — Ontology가 모델보다 먼저다</div>
+    <div class="implication-body">기술적으로는 LLM 단독으로 풀 수 없으며, <strong>Ontology + RAG + Pricing Feed의 3-Layer Architecture</strong>가 필수다. 자재·공종·지역·속도등급·전압 등을 차원으로 갖는 분류체계를 먼저 설계해야 한다.</div>
+  </div>
+
+  <h3>📋 미팅 개요</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>항목</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td class="td-em">일시·장소</td><td>2026년 5월 27일(수) 15:30 ~ 16:00 (30분) / 한국철도학회 사무실</td></tr>
+        <tr><td class="td-em">참석자 (공단)</td><td>KRNA 이종국 부장, 안호성 차장</td></tr>
+        <tr><td class="td-em">참석자 (협력사)</td><td>엔텍 원우식 부사장</td></tr>
+        <tr><td class="td-em">참석자 (설계사)</td><td>한국EREC 부사장 외 3명</td></tr>
+        <tr><td class="td-em">참석자 (당사)</td><td>WISE42 / Garambada</td></tr>
+        <tr><td class="td-em">의제</td><td>설계도면 기반 수량 산출 및 공사비 산출 검증 AI 솔루션 제안 설명</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>📝 논의 흐름</h3>
+  <div class="card">
+    <p>① WISE42가 설계도면으로부터 수량·공사비를 자동 산출·검증하는 AI 솔루션의 목표와 접근방식 설명</p>
+    <p>② EREC는 본 업무의 도메인적 난이도와 자사 리소스 한계를 들어 부정적 의견 표명</p>
+    <p>③ EREC는 회의 직후 별도로 <strong>불참 의사를 공식 표명</strong></p>
+    <p>④ 공단·엔텍은 즉시 후속 협의 후, 대체 설계사로 <strong>세종기술을 우선 검토·제안</strong>하기로 결정</p>
+    <p>⑤ 엔텍–WISE42 계약은 설계사 섭외와 분리하여 <strong>다음 주 수요일 경 체결</strong>을 목표로 병행 추진</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 도메인 난제 -->
+<section id="challenges">
+  <div class="section-label">EREC 제기 도메인 난제 정밀 분석</div>
+  <h2>6대 도메인 난제 —<br>프로젝트의 본질적 리스크</h2>
+  <p>아래 6개 난제는 EREC 측이 '성공 가능성 낮음' 판단의 근거로 제시한 항목이다. 각 난제는 솔루션 아키텍처·운영모델·계약전략에 1:1로 매핑되어 선반영되어야 한다.</p>
+
+  <div class="challenge-card">
+    <div class="challenge-num">🔴 난제 01</div>
+    <div class="challenge-title">수량산출 업무 숙련에 신입→5년 소요</div>
+    <p style="font-size:13px;color:var(--muted);">도면 해독 능력 + 철도전기 도메인 암묵지(tacit knowledge)가 핵심 자산. 문제는 '도면→수량' 변환이 아니라 '도면을 어떻게 읽어야 하는가에 대한 5년치 경험'을 LLM이 대체·증강할 수 있는가다.</p>
+    <div class="challenge-arrow">
+      <div class="label">→ 함의</div>
+      <div class="content">Ontology + 준공도면 학습으로 5년치 암묵지를 디지털 자산화. 이것이 Living System의 핵심 가치.</div>
+    </div>
+  </div>
+
+  <div class="challenge-card">
+    <div class="challenge-num">🔴 난제 02</div>
+    <div class="challenge-title">설계도면 오류는 준공 시 일괄 수정</div>
+    <p style="font-size:13px;color:var(--muted);">설계변경이 잦아 준공 전 수정이 무의미하다는 업계 관행. 결과적으로 학습데이터로 직접 활용 가능한 '클린 도면'은 <strong>준공도면뿐</strong>이며, 설계 중 도면은 노이즈 포함 상태로 학습해야 함.</p>
+    <div class="challenge-arrow">
+      <div class="label">→ 함의</div>
+      <div class="content">학습 데이터 거버넌스 설계 필수. 준공도면 우선 학습(클린 데이터셋), 설계 중 도면은 수정 이력과 함께 학습하여 변경 패턴까지 예측.</div>
+    </div>
+  </div>
+
+  <div class="challenge-card">
+    <div class="challenge-num">🔴 난제 03</div>
+    <div class="challenge-title">수백 변종, SKU 1만+ 규모</div>
+    <p style="font-size:13px;color:var(--muted);">동일 설비도 지역·궤도종류·운행속도·운행간격·전압·시공방식에 따라 수백 변종 발생. 철도전기 자재 마스터만 1만 개를 초과.</p>
+    <div class="challenge-arrow">
+      <div class="label">→ 함의</div>
+      <div class="content">단순 OCR/룰베이스로는 절대 불가능. <strong>분류체계(Ontology)가 모델보다 먼저</strong> 구축되어야 함. Layer 1이 가장 선행되어야 하는 이유.</div>
+    </div>
+  </div>
+
+  <div class="challenge-card">
+    <div class="challenge-num">🟡 난제 04</div>
+    <div class="challenge-title">단가가 물가정보지·나라장터 미등재</div>
+    <p style="font-size:13px;color:var(--muted);">철도전기 자재는 일반 전기공사 자재와 달라 공개 가격 DB 부재. 견적 기반으로만 단가 확보 가능하며, 6개월 단위로 가격이 변동.</p>
+    <div class="challenge-arrow">
+      <div class="label">→ 함의</div>
+      <div class="content">단가 신선도(freshness)를 시스템이 자체 관리해야 함. 견적 미보유 자재 발생 시 RFQ 자동발송 이벤트로 정의. Layer 3의 핵심 기능.</div>
+    </div>
+  </div>
+
+  <div class="challenge-card">
+    <div class="challenge-num">🟡 난제 05</div>
+    <div class="challenge-title">과거 유사 프로젝트의 실패 전례</div>
+    <p style="font-size:13px;color:var(--muted);">설계사들이 고가의 산출 SW를 구입했으나, 업데이트가 단절되어 1회 사용 후 폐기됨.</p>
+    <div class="challenge-arrow">
+      <div class="label">→ 함의</div>
+      <div class="content">본 프로젝트는 '제품(product)'이 아니라 <strong>'운영서비스(operating service)'</strong>로 포지셔닝해야 함. 구독형 + 자동 업데이트 + 정기 감사 = Living System.</div>
+    </div>
+  </div>
+
+  <div class="challenge-card" style="border-color:var(--warning);">
+    <div class="challenge-num" style="color:var(--warning);">🟠 난제 06</div>
+    <div class="challenge-title">설계사 SME 인력의 상시 외근</div>
+    <p style="font-size:13px;color:var(--muted);">설계사 인력 다수가 현장조사 등으로 상시 외근. 개발자의 실시간 질의응답을 받아주기 어려움.</p>
+    <div class="challenge-arrow">
+      <div class="label">→ 함의</div>
+      <div class="content">'실시간 SME 의존' 협업 모델은 실패할 것. <strong>'비동기 수집·라벨링' 모델로 재설계</strong> 필요. 설계사에 묻는 게 아니라 설계사가 평소 만들어내는 결과물(견적요청서, 산출서, 도면 수정이력)을 수동으로 수집·라벨링·학습.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 전략적 함의 -->
+<section id="strategy">
+  <div class="section-label">전략적 함의</div>
+  <h2>이번 미팅이 드러낸<br>4가지 구조적 리스크와 기회</h2>
+
+  <div class="grid-2">
+    <div class="card" style="border-top: 3px solid var(--danger);">
+      <div class="card-title">🚨 설계회사 풀 전체의 경고 신호</div>
+      <p>EREC가 '리소스 부족'과 '성공 가능성 낮음' 두 가지를 동시에 사유로 든 점에 주목. 전자는 회사 사정이지만 후자는 <strong>업계 공통의 인식</strong>에 가깝다. 세종기술 역시 첫 검토에서 동일 결론에 도달할 가능성이 적지 않다.</p>
+      <p style="font-size:12px;color:var(--accent2);">→ '왜 이번에는 다른가'를 첫 미팅 이전에 자료로 입증해야 한다.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--accent);">
+      <div class="card-title">🎯 과거 실패 = 결정적 포지셔닝 단서</div>
+      <p>'고가 SW 1회 구입 → 업데이트 단절 → 폐기' 패턴은 우리가 피해야 할 함정이자, 동시에 <strong>차별화 메시지의 원천</strong>이다. 라이선스 판매가 아닌 구독형 운영서비스 모델, 자동 업데이트 파이프라인, 정기 정확도 감사로 Living System을 증명한다.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--blue);">
+      <div class="card-title">🏗️ Ontology가 모델보다 먼저다</div>
+      <p>1만+ SKU, 수백 변종, 6개월 단위 가격변동에서는 어떤 LLM도 단독으로 정답을 내지 못한다. <strong>자재·공종·지역·속도등급·전압 등을 차원으로 갖는 분류체계(Ontology)</strong>를 먼저 설계하고, 그 위에 RAG와 Pricing Feed를 얹는 3-Layer 구조가 필수다.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--success);">
+      <div class="card-title">🔄 비동기 수집 협업 모델로 재설계</div>
+      <p>설계사 SME가 상시 외근 상태라는 사실은 우리가 일하는 방식 자체를 바꿔야 함을 의미한다. '설계회사에 묻는다'가 아니라 <strong>'설계회사가 평소 만들어내는 결과물을 수동으로 수집·라벨링·학습'</strong>하는 비동기 모델로의 전환이다.</p>
+    </div>
+  </div>
+
+  <div class="big-quote">
+    <div class="bq-text">WISE42는 '철도전기 도메인의 5년치 암묵지를<br>디지털 자산으로 전환하고 지속적으로 갱신하는 운영체계'를 제공한다.<br>이것이 과거 실패한 SW 사업자들과 우리를 가르는 본질적 차이다.</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 3-Layer Architecture -->
+<section id="architecture">
+  <div class="section-label">솔루션 아키텍처</div>
+  <h2>3-Layer Architecture —<br>LLM 단독의 한계를 넘어서</h2>
+  <p>본 프로젝트의 본질적 난이도를 고려할 때, 단일 LLM 호출만으로는 절대 해결되지 않는다. 다음과 같은 3-Layer 아키텍처가 필수다.</p>
+
+  <div class="layer-card l1">
+    <div class="layer-badge">Layer 1 · 선행 필수</div>
+    <div class="layer-title">🗂️ Ontology Layer — 자재·공종 마스터</div>
+    <div class="layer-role">역할: 철도전기 도메인 분류체계 구축</div>
+    <ul class="layer-items">
+      <li>철도전기 자재 1만+ SKU에 대한 분류체계 구축</li>
+      <li>변종 차원: 지역 / 궤도종류 / 운행속도 / 운행간격 / 전압 / 시공방식</li>
+      <li>초기 시드데이터: 엔텍·세종기술의 과거 견적·산출서 기반</li>
+      <li><strong>핵심 원칙: Ontology는 모델보다 먼저 — 시드 분류체계가 부정확하면 어떤 모델도 정확하게 동작하지 않음</strong></li>
+    </ul>
+  </div>
+
+  <div class="layer-card l2">
+    <div class="layer-badge">Layer 2</div>
+    <div class="layer-title">🔍 Extraction Layer — 도면 → 수량</div>
+    <div class="layer-role">역할: 도면 해독 및 수량 산출</div>
+    <ul class="layer-items">
+      <li>Multi-modal LLM(도면 이해) + Vision OCR + 도면 기호/심볼 인식 + 도면-자재 매핑</li>
+      <li>준공도면 우선 학습(클린 데이터셋) — '준공도면 우선 학습' 원칙</li>
+      <li>설계 중 도면은 수정 이력과 함께 학습하여 변경 패턴까지 예측</li>
+      <li>불확실성의 가시화 — 모델이 자신없는 항목을 사람 검수 항목으로 자동 분류하여 SME 부담 정량화</li>
+    </ul>
+  </div>
+
+  <div class="layer-card l3">
+    <div class="layer-badge">Layer 3</div>
+    <div class="layer-title">💰 Pricing Layer — 단가 산정</div>
+    <div class="layer-role">역할: 공사비 산출을 위한 단가 관리</div>
+    <ul class="layer-items">
+      <li>자재별 견적 이력 DB + 공급사 견적 자동 요청 워크플로우</li>
+      <li>6개월 가격변동 대응: 단가 신선도(freshness) 스코어를 시스템이 자체 표시</li>
+      <li>견적 미보유 자재 발생 시 자동 RFQ 발송 → 회신 결과 학습 — 단가 미보유는 '오류'가 아니라 'RFQ 자동발송 이벤트'로 정의</li>
+    </ul>
+  </div>
+
+  <h3>⚙️ 아키텍처 적용 핵심 원칙</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>원칙</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td class="td-em">Ontology First</td><td>시드 분류체계가 부정확하면 어떤 모델도 정확하게 동작하지 않음</td></tr>
+        <tr><td class="td-em">준공도면 우선</td><td>설계 중 도면은 노이즈가 많으므로 학습 가중치를 낮추고, 준공도면을 '정답 데이터'로 활용</td></tr>
+        <tr><td class="td-em">RFQ 이벤트 정의</td><td>단가 미보유는 '오류'가 아니라 'RFQ 자동발송 이벤트'로 명시적 처리</td></tr>
+        <tr><td class="td-em">불확실성 가시화</td><td>모델이 자신없는 항목은 사람 검수 항목으로 자동 분류하여 SME 부담을 정량화</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SME 부담 최소화 -->
+<section id="sme">
+  <div class="section-label">SME 부담 최소화 모델</div>
+  <h2>세종기술 첫 미팅 전<br>5대 원칙 명문화 필수</h2>
+  <p>EREC 이탈의 가장 핵심적 사유는 '인력 부담'이었다. 세종기술 제안 시 다음 5가지 원칙을 명문화하여 사전 제시해야 한다.</p>
+
+  <div class="principle-card">
+    <div class="principle-icon">⏰</div>
+    <div class="principle-content">
+      <div class="title">비동기 우선</div>
+      <div class="desc">Slack/카톡 질문은 24~48시간 내 회신을 표준으로 함. 즉시 응답을 요구하지 않음. 상시 외근 SME 인력의 현실을 명시적으로 수용.</div>
+    </div>
+  </div>
+  <div class="principle-card">
+    <div class="principle-icon">📅</div>
+    <div class="principle-content">
+      <div class="title">정기 리뷰 한정</div>
+      <div class="desc">주 1회 1시간 화상 또는 대면 리뷰. 그 외 시간 점유 금지. 설계사 인력의 업무 시간 침범 최소화.</div>
+    </div>
+  </div>
+  <div class="principle-card">
+    <div class="principle-icon">📂</div>
+    <div class="principle-content">
+      <div class="title">수동 수집 우선</div>
+      <div class="desc">견적요청서·산출서·도면을 '있는 그대로' 수집하여 WISE42가 라벨링·전처리. 설계사에게 별도 작업을 요구하지 않음.</div>
+    </div>
+  </div>
+  <div class="principle-card">
+    <div class="principle-icon">🧑‍💼</div>
+    <div class="principle-content">
+      <div class="title">WISE42 측 도메인 페어</div>
+      <div class="desc">철도전기 출신 전문가 1인 상시 배치(필요 시 KRNA 퇴직자 영입). 설계사에 묻기 전 1차 필터로 작동. 설계사의 질의응답 부담을 대폭 감소.</div>
+    </div>
+  </div>
+  <div class="principle-card">
+    <div class="principle-icon">🎁</div>
+    <div class="principle-content">
+      <div class="title">환원 모델</div>
+      <div class="desc">정확도가 일정 임계치를 넘으면 설계사 자체 업무에 무상 사용권 제공. '협력의 보상'을 명시하여 참여 인센티브 구조 설계.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Living System -->
+<section id="living">
+  <div class="section-label">Living System 운영 모델</div>
+  <h2>과거 실패 패턴과의 결별 —<br>4가지 운영 원칙</h2>
+
+  <div class="grid-2">
+    <div class="card" style="border-top: 3px solid var(--accent);">
+      <div class="card-title">💳 구독형(SaaS) 단가 체계</div>
+      <p>1회 라이선스 판매 <strong>명시적 금지</strong>. 연간 운영료 + 사용량 기반 구조로만 제안. 초기 도입 비용을 낮추고, 가치가 검증된 후 단계적 확장.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--blue);">
+      <div class="card-title">🔄 자동 업데이트 파이프라인</div>
+      <p>신규 견적·신규 도면이 들어올 때마다 모델·DB 자동 재학습. 단가 신선도 스코어 일별 갱신, Ontology 변경 분기별 정기 릴리스.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--success);">
+      <div class="card-title">🏛️ 공단 내부 운영팀 양성</div>
+      <p>KRNA 전철전력처 내 2~3명을 시스템 운영 담당자로 지정·교육. 외부 의존을 점진적으로 줄여, 본 시스템이 <strong>공단 내부 자산으로 정착</strong>하도록 설계.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--purple);">
+      <div class="card-title">📊 연 1회 정기 정확도 감사</div>
+      <p>WISE42가 정확도·신뢰도 리포트를 KRNA에 공식 제출. 정확도 미달 시 사전 합의된 <strong>SLA에 따른 보완 계획 자동 발동</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 리스크 매트릭스 -->
+<section id="risks">
+  <div class="section-label">리스크 매트릭스</div>
+  <h2>6대 리스크 — 심각도별 대응 방안</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>리스크</th><th>심각도</th><th>영향</th><th>대응 방안</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-em">세종기술도 EREC와 동일 사유로 이탈</td>
+          <td><span class="risk-badge risk-h">高</span></td>
+          <td>프로젝트 4~8주 지연</td>
+          <td>백업 설계사 사전 컨택, SME 부담 최소화 모델 선제 제시, 1-pager 사전 송부</td>
+        </tr>
+        <tr>
+          <td class="td-em">1만+ SKU 마스터 구축 지연</td>
+          <td><span class="risk-badge risk-h">高</span></td>
+          <td>정확도 미달</td>
+          <td>Quick Win 범위 축소(특정 공종/지역 우선), Ontology 점진 확장 전략</td>
+        </tr>
+        <tr>
+          <td class="td-em">단가 데이터 미확보</td>
+          <td><span class="risk-badge risk-m">中</span></td>
+          <td>공사비 산출 불가</td>
+          <td>엔텍 보유 견적이력 우선 활용 + 공급사 RFQ 자동화 파이프라인</td>
+        </tr>
+        <tr>
+          <td class="td-em">엔텍 계약만 체결, 설계사 계약 지연</td>
+          <td><span class="risk-badge risk-m">中</span></td>
+          <td>데이터 공급 단절</td>
+          <td>엔텍 보유 과거 프로젝트 데이터로 우선 PoC 착수</td>
+        </tr>
+        <tr>
+          <td class="td-em">과거 실패 사례에 대한 공단 내부 회의론</td>
+          <td><span class="risk-badge risk-m">中</span></td>
+          <td>예산 승인 지연</td>
+          <td>Living System 모델·정기 감사 체계로 차별화 명시</td>
+        </tr>
+        <tr>
+          <td class="td-em">KRNA 측 인사이동·조직개편</td>
+          <td><span class="risk-badge risk-l">低</span></td>
+          <td>의사결정 단절</td>
+          <td>공단 다층 컨택 포인트 확보, 회의록 공식화</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 액션플랜 -->
+<section id="actions">
+  <div class="section-label">트랙별 액션플랜 & Next 7 Days</div>
+  <h2>5개 트랙 실행 계획 &<br>즉시 실행 항목</h2>
+
+  <h3>📊 트랙별 액션플랜</h3>
+  <div class="track-card">
+    <div class="track-letter">A</div>
+    <div class="track-content">
+      <div class="title">계약·파트너 트랙</div>
+      <div class="timeline">⏱ 이번 주 ~ 다음 주</div>
+      <div class="output">산출물: 엔텍-WISE42 계약 병행 체결 / 세종기술 사전 브리핑 자료 / 백업 설계사 2~3곳 식별</div>
+    </div>
+  </div>
+  <div class="track-card">
+    <div class="track-letter">B</div>
+    <div class="track-content">
+      <div class="title">솔루션 아키텍처 트랙</div>
+      <div class="timeline">⏱ 4주 내 PoC 설계 확정</div>
+      <div class="output">산출물: 3-Layer Architecture 기술 명세서 v0.1 / 시드 Ontology 초안 / Pricing Feed 파일럿</div>
+    </div>
+  </div>
+  <div class="track-card">
+    <div class="track-letter">C</div>
+    <div class="track-content">
+      <div class="title">SME 부담 최소화 트랙</div>
+      <div class="timeline">⏱ 세종기술 첫 미팅 이전</div>
+      <div class="output">산출물: 5대 원칙 합의서 초안 / WISE42 측 도메인 페어 인력 확보(KRNA 퇴직자 풀 탐색)</div>
+    </div>
+  </div>
+  <div class="track-card">
+    <div class="track-letter">D</div>
+    <div class="track-content">
+      <div class="title">Living System 운영모델 트랙</div>
+      <div class="timeline">⏱ PoC 종료 시점 동시 출범</div>
+      <div class="output">산출물: 구독형 단가표 / 자동 업데이트 파이프라인 설계 / 정확도 감사 SLA 초안</div>
+    </div>
+  </div>
+  <div class="track-card">
+    <div class="track-letter">E</div>
+    <div class="track-content">
+      <div class="title">리스크 관리 트랙</div>
+      <div class="timeline">⏱ 상시</div>
+      <div class="output">산출물: 주간 리스크 리뷰 / 백업 설계사 비공식 타진 / KRNA 다층 컨택 포인트 매핑</div>
+    </div>
+  </div>
+
+  <h3>⚡ Next 7 Days — 즉시 실행 항목</h3>
+  <div class="action-item">
+    <div class="action-when">금주 내</div>
+    <div class="action-text"><strong>엔텍 계약서 초안 검토·송부</strong> (WISE42 법무 검토 포함). 다음 주 수요일 동시 체결을 목표.</div>
+  </div>
+  <div class="action-item">
+    <div class="action-when">금주 내</div>
+    <div class="action-text"><strong>세종기술 첫 미팅용 1-pager 작성</strong>. SME 부담 최소화 5대 원칙을 명시적으로 강조.</div>
+  </div>
+  <div class="action-item">
+    <div class="action-when">차주 초</div>
+    <div class="action-text"><strong>백업 설계사 2~3곳 리스트업 및 비공식 타진</strong>. 도경·KR엔지니어링 등 철도전기 설계 실적 보유사 중심.</div>
+  </div>
+  <div class="action-item">
+    <div class="action-when">차주 중</div>
+    <div class="action-text"><strong>PoC 범위 확정</strong> — 어느 공종·어느 노선 1개를 첫 타깃으로 할지 의사결정.</div>
+  </div>
+  <div class="action-item">
+    <div class="action-when">차주 말</div>
+    <div class="action-text"><strong>3-Layer Architecture 기술 명세서 v0.1 작성</strong> 및 내부 리뷰.</div>
+  </div>
+  <div class="action-item">
+    <div class="action-when">차주 말</div>
+    <div class="action-text"><strong>KRNA 안호성 차장과 1:1 후속 미팅</strong> — 세종기술 외 백업 옵션, 공단 내부 운영팀 양성 가능성 사전 논의.</div>
+  </div>
+
+  <div class="quote-block" style="margin-top:24px;">
+    <strong>다음 단계 우선순위:</strong> ① 엔텍 계약을 다음 주 내 확정하여 데이터 공급 채널 안정화 → ② 세종기술 첫 미팅 이전에 SME 부담 최소화 모델을 1-pager로 명문화하여 송부 → ③ 동시에 백업 설계사 옵션을 비공식적으로 확보
+  </div>
+
+  <div class="tag-area" style="margin-top: 24px;">
+    <span class="tag">KRNA</span>
+    <span class="tag">WISE42</span>
+    <span class="tag">엔텍</span>
+    <span class="tag">세종기술</span>
+    <span class="tag">3-Layer Architecture</span>
+    <span class="tag">Ontology</span>
+    <span class="tag">철도전기</span>
+    <span class="tag">Living System</span>
+    <span class="tag">SME 부담 최소화</span>
+    <span class="tag">설계도면 AI</span>
+    <span class="tag">공사비 산출</span>
+    <span class="tag">AX 운영서비스</span>
+  </div>
+</section>
+
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-inner">
+    <h3>목차</h3>
+    <ul>
+      <li><a href="#summary">📋 Executive Summary</a></li>
+      <li><a href="#challenges">⚠️ 6대 도메인 난제</a></li>
+      <li><a href="#strategy">🎯 전략적 함의</a></li>
+      <li><a href="#architecture">🏗️ 3-Layer Architecture</a></li>
+      <li><a href="#sme">👷 SME 부담 최소화</a></li>
+      <li><a href="#living">🔄 Living System</a></li>
+      <li><a href="#risks">⚠️ 리스크 매트릭스</a></li>
+      <li><a href="#actions">⚡ 액션플랜</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>핵심 숫자</h3>
+    <ul>
+      <li><a href="#challenges">5년 — 업무 숙련 소요</a></li>
+      <li><a href="#challenges">1만+ — SKU 규모</a></li>
+      <li><a href="#challenges">6개월 — 단가 변동 주기</a></li>
+      <li><a href="#architecture">3개층 — 필수 아키텍처</a></li>
+      <li><a href="#sme">5대 원칙 — SME 협약</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>5개 트랙</h3>
+    <ul>
+      <li><a href="#actions">A — 계약·파트너</a></li>
+      <li><a href="#actions">B — 솔루션 아키텍처</a></li>
+      <li><a href="#actions">C — SME 부담 최소화</a></li>
+      <li><a href="#actions">D — Living System</a></li>
+      <li><a href="#actions">E — 리스크 관리</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>키워드</h3>
+    <div>
+      <span class="sidebar-tag">KRNA</span>
+      <span class="sidebar-tag">Ontology First</span>
+      <span class="sidebar-tag">Living System</span>
+      <span class="sidebar-tag">비동기 협업</span>
+      <span class="sidebar-tag">세종기술</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main-wrap -->
+
+<footer>
+  <div>🔒 기밀(Confidential) — 외부 유출 금지 | WISE42 × KRNA 프로젝트 미팅 보고서 · 2026.05.27</div>
+  <div style="margin-top:6px;font-size:11px;">작성: WISE42 / Garambada | 수신: 내부 경영진 / 프로젝트 코어팀</div>
+</footer>
+
+</body>
+</html>

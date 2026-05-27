@@ -175,6 +175,10 @@ ARTICLE_META = {
         "tags":  ["공공기관", "AX", "철도공단", "항만공사", "Company Builder"],
     },
     # 사업 현안
+    "2026-05_KRNA_설계도면_AI_검증_프로젝트_미팅보고.html": {
+        "title": "KRNA 설계도면 수량·공사비 산출 AI 검증 프로젝트<br>5/27 미팅 보고 및 심층 대응 전략 — WISE42",
+        "tags":  ["KRNA", "WISE42", "설계도면 AI", "3-Layer Architecture", "Living System"],
+    },
     "2026-05_OctaPulse_수산양식_AI로보틱스_투자검토.html": {
         "title": "OctaPulse — 수산양식 AI 비전·로보틱스<br>투자 검토 보고서 (YC W26)",
         "tags":  ["Aquaculture", "YC W26", "Computer Vision", "Hatchery QA", "투자검토"],
