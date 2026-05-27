@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft 2026 Work Trend Index — 에이전트 시대, 인간 주체성의 재정의 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0c0e14;
+    --surface: #13151f;
+    --surface2: #1a1d2e;
+    --border: #2a2d3e;
+    --accent: #3b82f6;
+    --accent2: #60a5fa;
+    --accent3: #93c5fd;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --highlight: #1e40af;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+    --purple: #a78bfa;
+    --orange: #f97316;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12,14,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo { font-size: 18px; font-weight: 800; color: var(--accent); text-decoration: none; letter-spacing: -0.5px; }
+  .nav-links { display: flex; gap: 20px; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0f1729 0%, #0c1a3a 40%, #0c0e14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 72px 24px 60px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -40%; left: -20%;
+    width: 80%; height: 200%;
+    background: radial-gradient(ellipse, rgba(59,130,246,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.35);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px; font-weight: 600; color: var(--accent2);
+    letter-spacing: .5px; margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(26px, 4vw, 42px);
+    font-weight: 800;
+    line-height: 1.25;
+    color: #fff;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(14px, 2vw, 17px);
+    color: var(--muted);
+    margin-bottom: 28px;
+    max-width: 600px; margin-left: auto; margin-right: auto;
+  }
+  .hero-meta {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 16px;
+    margin-bottom: 32px;
+  }
+  .hero-meta-item {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--muted); font-size: 13px;
+  }
+  .hero-meta-item .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+  .thesis-box {
+    max-width: 700px; margin: 0 auto;
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    font-size: 16px; line-height: 1.75;
+    color: var(--text);
+    text-align: left;
+  }
+  .thesis-box .q {
+    font-size: 13px; font-weight: 700;
+    color: var(--accent2); letter-spacing: .5px;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+
+  /* STATS STRIP */
+  .stats-strip {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex; flex-wrap: wrap; gap: 0;
+    justify-content: center;
+  }
+  .stat-item {
+    flex: 1; min-width: 130px; max-width: 200px;
+    text-align: center; padding: 12px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-value {
+    font-size: 28px; font-weight: 800;
+    color: var(--accent); line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+
+  /* LAYOUT */
+  .main-wrap {
+    max-width: 1100px; margin: 0 auto;
+    padding: 48px 24px 80px;
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 40px;
+  }
+  @media (max-width: 900px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+  }
+
+  /* SIDEBAR */
+  .sidebar { position: relative; }
+  .sidebar-inner {
+    position: sticky; top: 76px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .sidebar h3 {
+    font-size: 11px; font-weight: 700;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 14px;
+  }
+  .sidebar ul { list-style: none; }
+  .sidebar ul li { margin-bottom: 2px; }
+  .sidebar ul li a {
+    display: block; padding: 6px 10px;
+    color: var(--muted); text-decoration: none;
+    font-size: 13px; border-radius: 6px;
+    transition: all .15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar ul li a:hover {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--accent);
+  }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 10px 0; }
+  .sidebar-tag {
+    display: inline-block;
+    background: rgba(59,130,246,0.12);
+    color: var(--accent2);
+    border-radius: 4px; padding: 2px 8px;
+    font-size: 11px; margin: 2px 2px 0 0;
+  }
+
+  /* SECTIONS */
+  section { margin-bottom: 56px; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700;
+    color: var(--accent2); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block; width: 3px; height: 16px;
+    background: var(--accent); border-radius: 2px;
+  }
+  h2 {
+    font-size: clamp(20px, 2.5vw, 26px);
+    font-weight: 800; color: #fff;
+    line-height: 1.3; letter-spacing: -.5px;
+    margin-bottom: 18px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: var(--text);
+    margin: 28px 0 12px;
+  }
+  p { color: var(--muted); margin-bottom: 14px; line-height: 1.75; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 14px; font-weight: 700; color: var(--text);
+    margin-bottom: 8px;
+  }
+  .card p { margin-bottom: 0; font-size: 14px; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 20px 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 20px 0; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 20px 0; }
+
+  /* HIGHLIGHT CARD */
+  .hl-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    border-top: 3px solid var(--accent);
+  }
+  .hl-card .num {
+    font-size: 36px; font-weight: 900;
+    color: var(--accent); line-height: 1;
+    margin-bottom: 6px;
+  }
+  .hl-card .desc { font-size: 13px; color: var(--muted); }
+
+  /* QUOTE */
+  .quote-block {
+    background: rgba(59,130,246,0.07);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-size: 15px; color: var(--text);
+    font-style: italic; line-height: 1.75;
+  }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--surface2);
+    padding: 12px 16px;
+    text-align: left; font-size: 12px;
+    font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .5px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px; color: var(--muted);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); color: var(--text); }
+  .td-em { color: var(--text); font-weight: 600; }
+
+  /* BAR CHART */
+  .bar-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 10px;
+  }
+  .bar-label { width: 200px; font-size: 12px; color: var(--muted); flex-shrink: 0; text-align: right; }
+  .bar-track {
+    flex: 1; height: 10px;
+    background: var(--surface2);
+    border-radius: 99px; overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%; border-radius: 99px;
+    background: var(--accent);
+    transition: width .4s;
+  }
+  .bar-fill.purple { background: var(--purple); }
+  .bar-fill.orange { background: var(--orange); }
+  .bar-fill.green { background: var(--success); }
+  .bar-fill.warning { background: var(--warning); }
+  .bar-val { width: 40px; font-size: 12px; color: var(--accent2); font-weight: 700; }
+
+  /* ZONE MAP */
+  .zone-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 3px;
+    margin: 20px 0;
+    background: var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .zone-cell {
+    background: var(--surface);
+    padding: 18px 16px;
+    text-align: center;
+  }
+  .zone-cell.frontier {
+    border: 2px solid var(--accent);
+    background: rgba(59,130,246,0.1);
+  }
+  .zone-cell.blocked { border: 2px solid var(--purple); background: rgba(167,139,250,0.07); }
+  .zone-cell.unclaimed { border: 2px solid var(--success); background: rgba(16,185,129,0.07); }
+  .zone-cell.stalled { border: 2px solid var(--danger); background: rgba(239,68,68,0.07); }
+  .zone-cell.emergent { border: 2px solid var(--warning); background: rgba(245,158,11,0.07); grid-column: 1 / -1; }
+  .zone-pct {
+    font-size: 32px; font-weight: 900;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .zone-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .zone-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .frontier .zone-pct { color: var(--accent); }
+  .frontier .zone-name { color: var(--accent2); }
+  .blocked .zone-pct { color: var(--purple); }
+  .blocked .zone-name { color: var(--purple); }
+  .unclaimed .zone-pct { color: var(--success); }
+  .unclaimed .zone-name { color: var(--success); }
+  .stalled .zone-pct { color: var(--danger); }
+  .stalled .zone-name { color: var(--danger); }
+  .emergent .zone-pct { color: var(--warning); }
+  .emergent .zone-name { color: var(--warning); }
+  .zone-axis {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--muted);
+    padding: 4px 0;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+
+  /* MODE GRID */
+  .mode-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+  }
+  .mode-icon { font-size: 28px; margin-bottom: 8px; }
+  .mode-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .mode-sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* PARADOX BOX */
+  .paradox-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin: 20px 0;
+  }
+  .paradox-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .paradox-item.red { border-top: 3px solid var(--danger); }
+  .paradox-item.blue { border-top: 3px solid var(--accent); }
+  .paradox-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+  .paradox-item.red .paradox-label { color: var(--danger); }
+  .paradox-item.blue .paradox-label { color: var(--accent); }
+  .paradox-stat { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+  .paradox-item.red .paradox-stat { color: var(--danger); }
+  .paradox-item.blue .paradox-stat { color: var(--accent); }
+  .paradox-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* FRAMEWORK */
+  .framework-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .fw-title {
+    font-size: 16px; font-weight: 800; color: var(--text);
+    margin-bottom: 16px;
+  }
+  .fw-row {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .fw-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .fw-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .fw-icon.blue { background: rgba(59,130,246,0.15); }
+  .fw-icon.purple { background: rgba(167,139,250,0.15); }
+  .fw-icon.green { background: rgba(16,185,129,0.15); }
+  .fw-icon.orange { background: rgba(249,115,22,0.15); }
+  .fw-content .fw-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .fw-content .fw-desc { font-size: 13px; color: var(--muted); }
+
+  /* INSIGHT */
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 12px;
+    border-left: 3px solid var(--accent);
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .insight-num {
+    font-size: 22px; font-weight: 900; color: var(--accent);
+    flex-shrink: 0; min-width: 28px;
+  }
+  .insight-content .title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .insight-content .desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+  /* TAGS */
+  .tag-area { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .tag {
+    display: inline-block;
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    color: var(--accent2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px; font-weight: 500;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 40px 0;
+  }
+
+  /* PILL */
+  .pill {
+    display: inline-flex; align-items: center;
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 99px;
+    padding: 3px 10px;
+    font-size: 12px; color: var(--accent2); font-weight: 600;
+    margin-right: 6px; margin-bottom: 4px;
+  }
+  .pill.green { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.25); color: #34d399; }
+  .pill.purple { background: rgba(167,139,250,0.12); border-color: rgba(167,139,250,0.25); color: var(--purple); }
+  .pill.orange { background: rgba(249,115,22,0.12); border-color: rgba(249,115,22,0.25); color: #fb923c; }
+
+  /* BIG QUOTE */
+  .big-quote {
+    background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(96,165,250,0.04));
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin: 24px 0;
+    text-align: center;
+  }
+  .big-quote .bq-text {
+    font-size: 20px; font-weight: 800;
+    color: #fff; line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .big-quote .bq-sub { font-size: 13px; color: var(--muted); }
+
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">⚡ GARAMwiki</a>
+  <div class="nav-links">
+    <a href="../index.html">← 홈</a>
+    <a href="#overview">개요</a>
+    <a href="#section1">개인</a>
+    <a href="#section2">리더</a>
+    <a href="#section3">조직</a>
+    <a href="#insights">인사이트</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📡 트렌드 인텔리전스 · Microsoft WorkLab · May 2026</div>
+  <h1>Microsoft 2026<br><span>Work Trend Index</span></h1>
+  <div class="hero-sub">Agents, Human Agency, and the Opportunity for Every Organization</div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="dot"></div>2026.05.05 발간</div>
+    <div class="hero-meta-item"><div class="dot"></div>20,000명 설문 · 10개국</div>
+    <div class="hero-meta-item"><div class="dot"></div>Microsoft WorkLab</div>
+    <div class="hero-meta-item"><div class="dot"></div>Edelman Data × Intelligence</div>
+  </div>
+  <div class="thesis-box">
+    <div class="q">📌 핵심 테제</div>
+    AI와 에이전트가 실행을 담당하는 만큼, 인간의 주체성(Agency)은 확장된다.<br>
+    문제는 <strong>조직이 그 주체성을 포착할 준비가 되어 있는가</strong>이다.<br>
+    <br>
+    개인은 준비됐다. 시스템이 따라가지 못하고 있다.
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-value">20,000</div>
+    <div class="stat-label">설문 참여자 수</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">10</div>
+    <div class="stat-label">조사 국가 수</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">49%</div>
+    <div class="stat-label">Copilot 채팅 중<br>고차원 인지 업무 비율</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">15×</div>
+    <div class="stat-label">M365 활성 에이전트<br>YoY 성장률</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">2×</div>
+    <div class="stat-label">조직 요인이<br>개인보다 큰 AI 임팩트</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">19%</div>
+    <div class="stat-label">Frontier Zone<br>진입 비율</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+<div class="content">
+
+<!-- 개요 -->
+<section id="overview">
+  <div class="section-label">리포트 개요</div>
+  <h2>3개 레이어로 바라본 AI 시대의 일하기</h2>
+  <p>Microsoft WorkLab은 매년 발간하는 Work Trend Index 연간 보고서에서 2026년의 핵심 질문을 던진다: <strong>에이전트가 실행을 맡아가는 시대에, 인간과 조직은 어떻게 재설계되어야 하는가?</strong></p>
+  <p>리포트는 세 개의 레이어로 구성된다. 개인(Employees), 리더(Leaders), 조직(Organizations)이 각각 AI 시대에 어떤 새로운 역할을 맡아야 하는지를 데이터 기반으로 분석한다.</p>
+
+  <div class="grid-3">
+    <div class="card" style="border-top: 3px solid var(--accent);">
+      <div class="card-title">👤 Section I — 개인</div>
+      <p>AI가 개인의 잠재력 상한선을 높이다. 전문가만 하던 고가치 업무를 이제 누구나 할 수 있다.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--purple);">
+      <div class="card-title">🧑‍💼 Section II — 리더</div>
+      <p>모든 리더의 업무는 이제 '일의 재설계'다. 변혁 역설(Transformation Paradox)을 깨야 한다.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--success);">
+      <div class="card-title">🏢 Section III — 조직</div>
+      <p>모든 기업은 학습 시스템(Learning System)이 되어야 한다. 에이전트 출력이 조직 지식이 된다.</p>
+    </div>
+  </div>
+
+  <h3>📊 연구 방법론</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>구분</th><th>내용</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>설문 조사</td><td class="td-em">20,000명 / 10개국 (미·브·호·인·일·프·독·이·네·영) / AI 사용 지식 근로자 대상</td></tr>
+        <tr><td>조사 기간</td><td>2026.02.18 ~ 2026.04.07 (Edelman Data × Intelligence 수행)</td></tr>
+        <tr><td>M365 텔레메트리</td><td class="td-em">수조 건의 익명화된 생산성 신호 분석 / 2025.03 ~ 2026.03</td></tr>
+        <tr><td>Copilot 분석</td><td>10만 5,000개 채팅 샘플 (2026년 2월 1주 데이터) — O*NET IWA 분류체계 적용</td></tr>
+        <tr><td>매니저 연구</td><td>Microsoft People Science — 1,800명 (리더 819, 매니저 520, IC 461)</td></tr>
+        <tr><td>AI 임팩트 분석</td><td>29개 요인 × Random Forest + Elastic Net + XGBoost 모델 (R² 0.68~0.69)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECTION I -->
+<section id="section1">
+  <div class="section-label">Section I — 개인 (Employees)</div>
+  <h2>AI가 개인 잠재력의<br>상한선을 높이다</h2>
+
+  <p>Microsoft 365 Copilot 채팅 10만 5천 건을 분석한 결과, <strong>49%</strong>가 분석·문제 해결·창의적 사고 등 고차원 인지 업무를 지원했다. 나머지는 협업(19%), 정보 생산(17%), 정보 탐색(15%)이다.</p>
+  <p>과거에는 깊은 전문성이 있어야 가능했던 고가치 업무를 이제 AI가 누구에게나 열어주고 있다.</p>
+
+  <h3>📊 Copilot 채팅 목적 분포</h3>
+  <div class="bar-row">
+    <div class="bar-label">고차원 인지 업무</div>
+    <div class="bar-track"><div class="bar-fill" style="width:49%"></div></div>
+    <div class="bar-val">49%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">협업·소통</div>
+    <div class="bar-track"><div class="bar-fill warning" style="width:19%"></div></div>
+    <div class="bar-val">19%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">정보 생산 (Output)</div>
+    <div class="bar-track"><div class="bar-fill orange" style="width:17%"></div></div>
+    <div class="bar-val">17%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">정보 탐색</div>
+    <div class="bar-track"><div class="bar-fill green" style="width:15%"></div></div>
+    <div class="bar-val">15%</div>
+  </div>
+
+  <div class="grid-2" style="margin-top:24px;">
+    <div class="hl-card">
+      <div class="num">66%</div>
+      <div class="desc">AI 덕분에 고가치 업무에 더 많은 시간을 쓰게 됐다고 응답한 AI 사용자 비율</div>
+    </div>
+    <div class="hl-card">
+      <div class="num">58%</div>
+      <div class="desc">1년 전에는 불가능했던 수준의 결과물을 만들어내고 있다고 응답한 비율</div>
+    </div>
+  </div>
+
+  <h3>🌟 Frontier Professionals — 상위 16%</h3>
+  <p>리포트는 AI 사용자 중 <strong>Frontier Professionals(프론티어 전문가)</strong>를 별도로 분류한다. 전체 AI 사용자의 <strong>16%</strong>에 불과하지만 가장 큰 가치를 창출하는 집단이다.</p>
+
+  <div class="framework-box">
+    <div class="fw-title">🔍 Frontier Professional을 정의하는 3가지 행동</div>
+    <div class="fw-row">
+      <div class="fw-icon blue">🤖</div>
+      <div class="fw-content">
+        <div class="fw-name">고급 에이전트 활용</div>
+        <div class="fw-desc">AI 에이전트를 복잡한 멀티스텝 업무에 활용하고, 멀티에이전트 시스템을 직접 구축한다.</div>
+      </div>
+    </div>
+    <div class="fw-row">
+      <div class="fw-icon purple">🔄</div>
+      <div class="fw-content">
+        <div class="fw-name">일상적 워크플로우 재설계</div>
+        <div class="fw-desc">AI가 잘하는 것과 인간이 해야 하는 것을 구분하여 업무 방식을 지속적으로 재설계한다.</div>
+      </div>
+    </div>
+    <div class="fw-row">
+      <div class="fw-icon green">📋</div>
+      <div class="fw-content">
+        <div class="fw-name">팀/조직 수준의 AI 표준 참여</div>
+        <div class="fw-desc">팀이나 조직을 위한 공유 AI 표준 수립, 학습 공유 등 집단적 실천에 참여한다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="hl-card" style="border-color: var(--purple);">
+      <div class="num" style="color:var(--purple)">80%</div>
+      <div class="desc">Frontier Professionals 중 "1년 전에는 불가능했던 결과를 내고 있다"는 비율 (일반 AI 사용자 58%)</div>
+    </div>
+    <div class="hl-card" style="border-color: var(--success);">
+      <div class="num" style="color:var(--success)">2×</div>
+      <div class="desc">FP가 일반 AI 사용자보다 '업무 재설계 보상을 받는다'고 응답한 비율 (26% vs 11%)</div>
+    </div>
+  </div>
+
+  <h3>🧠 AI 시대 인간 역량 프리미엄</h3>
+  <p>AI가 더 많은 실행을 맡을수록, 어떤 인간 스킬이 더 중요해지는가? 설문 응답자가 꼽은 상위 2개:</p>
+  <div class="bar-row">
+    <div class="bar-label">AI 결과물 품질 통제</div>
+    <div class="bar-track"><div class="bar-fill" style="width:50%"></div></div>
+    <div class="bar-val">50%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">비판적 사고 (Critical Thinking)</div>
+    <div class="bar-track"><div class="bar-fill purple" style="width:46%"></div></div>
+    <div class="bar-val">46%</div>
+  </div>
+
+  <div class="quote-block">
+    "86%의 AI 사용자는 AI 결과물을 출발점으로 보고, 최종 판단은 자신이 내린다고 응답했다. 역할이 '답 생성'에서 '평가, 정제, 책임'으로 전환되고 있다."
+  </div>
+
+  <p><strong>Frontier Professionals의 차별점</strong>: 43%가 "스킬 유지를 위해 의도적으로 AI 없이 일하는 시간을 만든다"고 응답(일반 30%). 53%가 "업무 시작 전, AI가 할 것과 인간이 할 것을 먼저 구분한다"(일반 33%).</p>
+
+  <h3>🎯 AI와 일하는 4가지 모드</h3>
+  <p>Microsoft WTI는 인간 개입 강도 × 에이전트 활용 강도 두 축으로 4가지 협업 모드를 제시한다.</p>
+  <div class="grid-4">
+    <div class="mode-card">
+      <div class="mode-icon">🤝</div>
+      <div class="mode-name">협업 (Collaboration)</div>
+      <div class="mode-sub">인간 개입 높음 + 에이전트 활용 높음<br>함께 사고하며 작업</div>
+    </div>
+    <div class="mode-card">
+      <div class="mode-icon">📋</div>
+      <div class="mode-name">위임 (Delegation)</div>
+      <div class="mode-sub">인간 개입 낮음 + 에이전트 활용 높음<br>에이전트에게 실행 맡김</div>
+    </div>
+    <div class="mode-card">
+      <div class="mode-icon">💬</div>
+      <div class="mode-name">질문 (Asking)</div>
+      <div class="mode-sub">인간 개입 높음 + 에이전트 활용 낮음<br>정보 탐색, 아이디어 발산</div>
+    </div>
+    <div class="mode-card">
+      <div class="mode-icon">🔍</div>
+      <div class="mode-name">탐색 (Exploration)</div>
+      <div class="mode-sub">인간 개입 낮음 + 에이전트 활용 낮음<br>가볍게 실험하며 학습</div>
+    </div>
+  </div>
+  <p>FP가 일반 사용자와 다른 점은 어떤 모드를 쓰느냐가 아니라, <strong>어떤 업무에 어떤 모드가 맞는지 알고 선택한다</strong>는 것이다.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECTION II -->
+<section id="section2">
+  <div class="section-label">Section II — 리더 (Leaders)</div>
+  <h2>모든 리더의 업무는<br>'일의 재설계'다</h2>
+
+  <p>대부분의 조직은 확장된 인간 주체성의 가치를 포착하도록 설계되어 있지 않다. 문제는 도구나 개인이 아니라, 리더십·문화·관리 관행·성과 측정 방식을 연결하는 <strong>시스템 전체의 붕괴</strong>에 있다.</p>
+
+  <h3>🗺️ AI 사용자 5대 구분: Transformation Zone Map</h3>
+  <p>개인 AI 역량(X축)과 조직 준비도(Y축)로 AI 사용자를 5개 구역으로 분류했다.</p>
+
+  <div class="zone-axis"><span>← 조직 준비도 낮음</span><span>조직 준비도 높음 →</span></div>
+  <div class="zone-grid">
+    <div class="zone-cell blocked">
+      <div class="zone-pct">10%</div>
+      <div class="zone-name">Blocked Agency</div>
+      <div class="zone-desc">개인 역량 高 / 조직 준비 低<br>인재는 있는데 시스템이 막음</div>
+    </div>
+    <div class="zone-cell frontier">
+      <div class="zone-pct">19%</div>
+      <div class="zone-name">🌟 Frontier</div>
+      <div class="zone-desc">개인 역량 高 / 조직 준비 高<br>가장 이상적인 상태</div>
+    </div>
+    <div class="zone-cell stalled">
+      <div class="zone-pct">16%</div>
+      <div class="zone-name">Stalled</div>
+      <div class="zone-desc">개인 역량 低 / 조직 준비 低<br>AI 도입 출발점 미도달</div>
+    </div>
+    <div class="zone-cell unclaimed">
+      <div class="zone-pct">5%</div>
+      <div class="zone-name">Unclaimed Capacity</div>
+      <div class="zone-desc">개인 역량 低 / 조직 준비 高<br>조직은 준비됐으나 인재가 따라가지 못함</div>
+    </div>
+    <div class="zone-cell emergent">
+      <div class="zone-pct">50%</div>
+      <div class="zone-name">Emergent Zone (중간 지대)</div>
+      <div class="zone-desc">개인 역량·조직 준비도 모두 아직 형성 중인 다수 — 변화의 가장 중요한 타깃</div>
+    </div>
+  </div>
+
+  <h3>⚠️ Transformation Paradox — 변혁의 역설</h3>
+  <div class="big-quote">
+    <div class="bq-text">"직원은 준비됐다. 주변 시스템이 아직 아니다."</div>
+    <div class="bq-sub">— Microsoft 2026 Work Trend Index</div>
+  </div>
+
+  <div class="paradox-grid">
+    <div class="paradox-item red">
+      <div class="paradox-label">🚨 Paradox의 현실</div>
+      <div class="paradox-stat">65%</div>
+      <div class="paradox-desc">AI로 빠르게 적응하지 않으면 뒤처진다는 두려움을 느끼는 AI 사용자 비율</div>
+    </div>
+    <div class="paradox-item blue">
+      <div class="paradox-label">🔒 같은 직원의 반응</div>
+      <div class="paradox-stat">45%</div>
+      <div class="paradox-desc">현재 목표에 집중하는 것이 AI로 일을 재설계하는 것보다 더 안전하다고 느끼는 비율</div>
+    </div>
+    <div class="paradox-item red">
+      <div class="paradox-label">❌ 보상 시스템의 실패</div>
+      <div class="paradox-stat">13%</div>
+      <div class="paradox-desc">성과 미달이어도 AI 기반 업무 혁신 시도에 보상받는다고 응답한 비율</div>
+    </div>
+    <div class="paradox-item blue">
+      <div class="paradox-label">🎯 리더십 정렬 부재</div>
+      <div class="paradox-stat">26%</div>
+      <div class="paradox-desc">리더십이 AI에 대해 명확하고 일관되게 정렬되어 있다고 응답한 비율</div>
+    </div>
+  </div>
+
+  <h3>📈 매니저의 역할 — 17포인트 임팩트</h3>
+  <p>별도 연구(1,800명, 2025년 7월)에서 <strong>매니저가 AI 사용을 직접 모델링하면</strong> 직원의 AI 가치 인식이 17포인트 상승했다. 매니저가 실험 심리적 안전감을 만들면 AI 준비도가 20포인트 높아졌다.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>매니저 행동</th><th>Frontier Prof.</th><th>일반 AI 사용자</th><th>격차</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>매니저가 AI를 공개적으로 사용</td>
+          <td class="td-em">85%</td><td>64%</td><td>+21%p</td>
+        </tr>
+        <tr>
+          <td>AI 업무 품질 기준 제시</td>
+          <td class="td-em">83%</td><td>57%</td><td>+26%p</td>
+        </tr>
+        <tr>
+          <td>실험 공간 조성</td>
+          <td class="td-em">84%</td><td>61%</td><td>+23%p</td>
+        </tr>
+        <tr>
+          <td>더 야심찬 재설계 독려</td>
+          <td class="td-em">87%</td><td>61%</td><td>+26%p</td>
+        </tr>
+        <tr>
+          <td>결과 무관하게 혁신 보상</td>
+          <td class="td-em">26%</td><td>11%</td><td>+15%p (2×)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="quote-block">
+    "변혁의 역설은 본질적으로 시스템 문제다. 시스템은 스스로 고쳐지지 않는다. 재설계해야 한다."<br>
+    — Microsoft WTI 2026
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECTION III -->
+<section id="section3">
+  <div class="section-label">Section III — 조직 (Organizations)</div>
+  <h2>모든 기업은<br>Learning System이 되어야 한다</h2>
+
+  <p>선도 기업들은 AI '도입'이 아닌 AI '흡수'에 집중한다. 에이전트가 실행하면 신호가 생긴다: 무엇이 효과적이었나, 어디서 실패했나. 이 신호를 포착하고 조직 운영 방식으로 반영하는 기업이 Learning System이 된다.</p>
+
+  <h3>📊 AI 임팩트의 최대 변수: 조직 vs. 개인</h3>
+  <p>29개 요인 × 3개 모델로 AI 임팩트를 분석했을 때, 조직 환경 요인이 개인 마인드셋 요인보다 <strong>2배 이상</strong> 큰 영향을 미쳤다.</p>
+
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:180px;">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">조직 환경 요인 (10개 항목)</div>
+        <div style="height:28px; background:var(--surface2); border-radius:6px; overflow:hidden; margin-bottom:6px;">
+          <div style="height:100%; width:67%; background:var(--accent); border-radius:6px; display:flex; align-items:center; justify-content:flex-end; padding-right:10px;">
+            <span style="font-size:14px;font-weight:800;color:#fff;">67%</span>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);">AI 문화, 매니저 지원, 인재 육성 관행</div>
+      </div>
+      <div style="flex:1; min-width:180px;">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">개인 마인드셋·행동 (9개 항목)</div>
+        <div style="height:28px; background:var(--surface2); border-radius:6px; overflow:hidden; margin-bottom:6px;">
+          <div style="height:100%; width:32%; background:var(--purple); border-radius:6px; display:flex; align-items:center; justify-content:flex-end; padding-right:10px;">
+            <span style="font-size:14px;font-weight:800;color:#fff;">32%</span>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);">자신감, AI 개방성, 자기 주도 학습</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>🚀 에이전트 성장 속도</h3>
+  <div class="grid-2">
+    <div class="hl-card">
+      <div class="num">15×</div>
+      <div class="desc">Microsoft 365 에코시스템 내 활성 에이전트 수 YoY 성장률 (전체 기준)</div>
+    </div>
+    <div class="hl-card">
+      <div class="num">18×</div>
+      <div class="desc">대기업(Large Enterprise) 기준 YoY 성장률 — 규모의 기업일수록 더 빠른 도입</div>
+    </div>
+  </div>
+
+  <p>업종별로는 소프트웨어·기술 업종이 전체 에이전트 사용 기업의 약 1/5을 차지(폭넓은 도입). 제조업은 사용 기업 수는 적으나 기업당 에이전트 규모가 훨씬 크다(깊은 도입). 개인의 에이전트 사용 수준은 산업 무관하게 비슷하다.</p>
+
+  <h3>🔐 Owned Intelligence — 기업의 독자 지식 자산</h3>
+  <div class="quote-block">
+    "모든 Frontier Firm은 Owned Intelligence를 구축해야 한다. 시간이 지날수록 복리로 성장하며, 그 기업만이 가진, 복제 불가능한 제도적 노하우다."
+  </div>
+
+  <p>에이전트 평가 인프라 구축을 위해 답해야 할 3가지 질문:</p>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">👁️ 누가 검토하는가?</div>
+      <p>에이전트 성과를 리뷰하는 책임자와 프로세스가 명확해야 한다.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">✏️ 누가 업데이트하는가?</div>
+      <p>에이전트가 실행하는 워크플로우를 수정·개선할 권한 체계가 필요하다.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">📡 어떻게 확산하는가?</div>
+      <p>로컬 성공 사례를 전사 수준으로 포착하고 공유하는 메커니즘이 필요하다.</p>
+    </div>
+  </div>
+
+  <h3>🏗️ Learning System을 위한 4개 역할</h3>
+  <div class="framework-box">
+    <div class="fw-title">에이전트 운영 체계의 4개 핵심 플레이어</div>
+    <div class="fw-row">
+      <div class="fw-icon blue">👤</div>
+      <div class="fw-content">
+        <div class="fw-name">직원 (Employees)</div>
+        <div class="fw-desc">의도 설정(intent-setting)과 결과물 검토 중심으로 역할을 재설계한다. 실행은 에이전트에게, 판단과 책임은 인간이.</div>
+      </div>
+    </div>
+    <div class="fw-row">
+      <div class="fw-icon purple">🧑‍💼</div>
+      <div class="fw-content">
+        <div class="fw-name">리더 (Leaders)</div>
+        <div class="fw-desc">아웃컴과 에이전트 자율성을 기준으로 프로세스를 재설계한다. 지표·인센티브·규범을 새로운 방식으로 재구성.</div>
+      </div>
+    </div>
+    <div class="fw-row">
+      <div class="fw-icon orange">💻</div>
+      <div class="fw-content">
+        <div class="fw-name">IT (Infrastructure)</div>
+        <div class="fw-desc">에이전트를 신원·권한·정책·라이프사이클이 관리되는 독립 엔티티로 취급하는 제어 플레인을 구축한다.</div>
+      </div>
+    </div>
+    <div class="fw-row">
+      <div class="fw-icon green">🔒</div>
+      <div class="fw-content">
+        <div class="fw-name">보안 (Security)</div>
+        <div class="fw-desc">데이터 유출·무단 시스템 액세스·권한 초과 위험을 감시·정책집행·감사 가능성을 플랫폼 구조에 내재화한다.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>📋 Frontier Firm vs. 일반 기업 — 조직 행동 비교</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>조직 행동</th><th>Frontier Prof. 팀</th><th>일반 AI 팀</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AI 기회 도출 위한 프로세스 공동 재설계</td>
+          <td class="td-em">63%</td><td>32%</td>
+        </tr>
+        <tr>
+          <td>AI 팁·에이전트·실수 공유</td>
+          <td class="td-em">61%</td><td>36%</td>
+        </tr>
+        <tr>
+          <td>AI 지원 업무 품질 기준 논의</td>
+          <td class="td-em">54%</td><td>29%</td>
+        </tr>
+        <tr>
+          <td>에이전트 워크플로우·품질 기준 문서화 (조직 수준)</td>
+          <td class="td-em">25%</td><td>14%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INSIGHTS -->
+<section id="insights">
+  <div class="section-label">GARAMbada 인사이트</div>
+  <h2>C-Level이 지금 해야 할<br>5가지 판단</h2>
+
+  <div class="insight-card">
+    <div class="insight-num">01</div>
+    <div class="insight-content">
+      <div class="title">조직 준비도가 개인보다 2배 중요하다 — 채용 전략보다 시스템 재설계 먼저</div>
+      <div class="desc">AI 임팩트의 67%는 조직 환경(문화·매니저·인사 관행)에서 나온다. "AI 잘하는 사람 뽑자"는 전략보다, "AI를 써도 안전하고 보상받는 환경"을 먼저 만들어야 한다. 올바른 질문은 "누구를 뽑을까?"가 아니라 "어떤 판을 깔까?"다.</div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="insight-num">02</div>
+    <div class="insight-content">
+      <div class="title">Frontier Zone 19%의 격차는 곧 경쟁 해자다 — 지금이 격차가 굳어지기 전</div>
+      <div class="desc">전체 AI 사용자의 19%만이 개인 역량·조직 준비도가 모두 높은 Frontier Zone에 있다. 이 격차는 지금 속도라면 1~2년 내 구조화된다. 지금 50% 이상을 차지하는 'Emergent Zone'을 공략하는 기업이 다음 라운드의 승자가 된다.</div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="insight-num">03</div>
+    <div class="insight-content">
+      <div class="title">매니저가 AI를 직접 보여줘야 한다 — CEO 선언이 아니라 팀장의 습관이 바꾼다</div>
+      <div class="desc">매니저가 AI 사용을 모델링하면 팀 전체의 AI 가치 인식이 17포인트 오른다. 사내 AI 교육 프로그램보다, 매니저 레이어의 AI 사용 문화가 더 강력한 레버다. 경영진 메시지보다 "내 팀장이 오늘 Copilot으로 회의 요약을 했다"가 더 효과적이다.</div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="insight-num">04</div>
+    <div class="insight-content">
+      <div class="title">에이전트는 이제 인프라다 — IT가 '에이전트 관제 플레인'을 구축해야 한다</div>
+      <div class="desc">M365 활성 에이전트가 15배 성장했다. 에이전트가 실행하는 업무의 품질 통제·권한 관리·감사 추적을 사람 수준으로 엄격히 관리해야 한다. 특히 규모가 커질수록 "나쁜 에이전트 출력 하나"가 전사 리스크로 증폭된다. IT가 에이전트 통제 레이어를 빨리 잡아야 한다.</div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="insight-num">05</div>
+    <div class="insight-content">
+      <div class="title">인간의 역할은 '의도 설정(Intent-Setting)'으로 수렴한다 — 그게 차별화의 마지막 성소</div>
+      <div class="desc">리포트 전반에서 반복되는 메시지: AI가 실행을 맡을수록 인간에게 남는 건 "무엇을 하고 싶은가"라는 의도의 명료함이다. 회사 전략·제품 방향·조직 문화 모두 결국 "우리는 무엇을 원하는가"를 얼마나 정확하게 정의하느냐의 경쟁이 된다. 판단, 취향, 책임이 새로운 핵심 역량이다.</div>
+    </div>
+  </div>
+
+  <div class="tag-area" style="margin-top: 24px;">
+    <span class="tag">Microsoft WorkLab</span>
+    <span class="tag">Work Trend Index 2026</span>
+    <span class="tag">Frontier Firm</span>
+    <span class="tag">Frontier Professional</span>
+    <span class="tag">AI Agency</span>
+    <span class="tag">Transformation Paradox</span>
+    <span class="tag">Learning System</span>
+    <span class="tag">Owned Intelligence</span>
+    <span class="tag">에이전트 오케스트레이션</span>
+    <span class="tag">조직 설계</span>
+    <span class="tag">매니저 역할</span>
+    <span class="tag">인간 주체성</span>
+  </div>
+</section>
+
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-inner">
+    <h3>목차</h3>
+    <ul>
+      <li><a href="#overview">📋 리포트 개요</a></li>
+      <li><a href="#section1">👤 Section I: 개인</a></li>
+      <li><a href="#section2">🧑‍💼 Section II: 리더</a></li>
+      <li><a href="#section3">🏢 Section III: 조직</a></li>
+      <li><a href="#insights">💡 GARAMbada 인사이트</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>핵심 수치</h3>
+    <ul>
+      <li><a href="#section1">49% — Copilot 인지 업무</a></li>
+      <li><a href="#section1">16% — Frontier Professionals</a></li>
+      <li><a href="#section2">19% — Frontier Zone</a></li>
+      <li><a href="#section2">65% — 뒤처짐 두려움</a></li>
+      <li><a href="#section3">67% vs 32% — 조직 vs 개인</a></li>
+      <li><a href="#section3">15× — 에이전트 성장</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>키워드</h3>
+    <div>
+      <span class="sidebar-tag">Frontier Firm</span>
+      <span class="sidebar-tag">Learning System</span>
+      <span class="sidebar-tag">Owned Intelligence</span>
+      <span class="sidebar-tag">에이전트</span>
+      <span class="sidebar-tag">주체성</span>
+      <span class="sidebar-tag">변혁 역설</span>
+    </div>
+
+    <div class="sidebar-divider"></div>
+    <h3>출처</h3>
+    <ul>
+      <li><a href="https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization" target="_blank" style="font-size:11px;">Microsoft WTI 2026 원문 →</a></li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /main-wrap -->
+
+<footer>
+  <div>Microsoft 2026 Work Trend Index — GARAMwiki 정리 분석 | 2026.05.27</div>
+  <div style="margin-top:6px;font-size:11px;">출처: Microsoft WorkLab · Edelman Data × Intelligence · 20,000명 설문 · 10개국</div>
+</footer>
+
+</body>
+</html>
