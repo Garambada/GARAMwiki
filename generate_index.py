@@ -58,6 +58,10 @@ ARTICLE_META = {
         "tags":  ["YCombinator", "로보틱스", "휴머노이드", "방위드론", "데이터인프라"],
     },
     # 나의 인사이트
+    "2026-05_AI_Native_vs_Agent_Native_전략_분석.html": {
+        "title": "AI-Native vs Agent-Native — 개념 정의·전략·실행 플랜<br>Garambada 심층 분석 보고서",
+        "tags":  ["AI-Native", "Agent-Native", "Owned Intelligence", "Agent Manager", "소로프레너"],
+    },
     "2026-05_AI_Frontier_EP98_의도가_남는_시대_김서준_Hashed.html": {
         "title": "AI Frontier EP98 — AI가 실행하는 시대, 인간에게 남는 건 '의도'<br>(Hashed 김서준 대표 × 노정석)",
         "tags":  ["AI Frontier", "김서준", "Hashed", "의도", "바이브 코딩", "VC 위기"],

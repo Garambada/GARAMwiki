@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Native vs Agent-Native — 개념 정의·전략·실행 플랜 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0c0e14;
+    --surface: #13151f;
+    --surface2: #1a1d2e;
+    --border: #2a2d3e;
+    --accent: #10b981;
+    --accent2: #34d399;
+    --accent3: #6ee7b7;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --blue: #3b82f6;
+    --blue2: #60a5fa;
+    --purple: #a78bfa;
+    --orange: #f97316;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12,14,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo { font-size: 18px; font-weight: 800; color: var(--accent); text-decoration: none; letter-spacing: -0.5px; }
+  .nav-links { display: flex; gap: 20px; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #071a12 0%, #0a1f16 40%, #0c0e14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 72px 24px 60px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -40%; right: -20%;
+    width: 70%; height: 200%;
+    background: radial-gradient(ellipse, rgba(16,185,129,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(16,185,129,0.15);
+    border: 1px solid rgba(16,185,129,0.35);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px; font-weight: 600; color: var(--accent2);
+    letter-spacing: .5px; margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(26px, 4vw, 44px);
+    font-weight: 800; line-height: 1.2;
+    color: #fff; letter-spacing: -1.5px;
+    margin-bottom: 10px;
+  }
+  .hero h1 .vs {
+    color: var(--muted);
+    font-size: 0.7em;
+    font-weight: 600;
+    padding: 0 8px;
+  }
+  .hero h1 .ai { color: var(--blue2); }
+  .hero h1 .ag { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(13px, 1.8vw, 16px);
+    color: var(--muted); margin-bottom: 28px;
+    max-width: 600px; margin-left: auto; margin-right: auto;
+  }
+  .hero-meta {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 16px;
+    margin-bottom: 32px;
+  }
+  .hero-meta-item {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--muted); font-size: 13px;
+  }
+  .hero-meta-item .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+  .core-thesis {
+    max-width: 700px; margin: 0 auto;
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: var(--radius);
+    padding: 24px 28px; text-align: left;
+  }
+  .core-thesis .q {
+    font-size: 13px; font-weight: 700;
+    color: var(--accent2); letter-spacing: .5px;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .core-thesis p { color: var(--text); font-size: 15px; line-height: 1.75; margin: 0; }
+
+  /* STATS STRIP */
+  .stats-strip {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex; flex-wrap: wrap; justify-content: center;
+  }
+  .stat-item {
+    flex: 1; min-width: 130px; max-width: 180px;
+    text-align: center; padding: 12px 14px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-value { font-size: 26px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; line-height: 1.4; }
+
+  /* LAYOUT */
+  .main-wrap {
+    max-width: 1100px; margin: 0 auto;
+    padding: 48px 24px 80px;
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 40px;
+  }
+  @media (max-width: 900px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+  }
+
+  /* SIDEBAR */
+  .sidebar { position: relative; }
+  .sidebar-inner {
+    position: sticky; top: 76px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .sidebar h3 {
+    font-size: 11px; font-weight: 700;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 14px;
+  }
+  .sidebar ul { list-style: none; }
+  .sidebar ul li { margin-bottom: 2px; }
+  .sidebar ul li a {
+    display: block; padding: 6px 10px;
+    color: var(--muted); text-decoration: none;
+    font-size: 13px; border-radius: 6px;
+    transition: all .15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar ul li a:hover { color: var(--text); background: var(--surface2); border-left-color: var(--accent); }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 10px 0; }
+  .sidebar-tag {
+    display: inline-block;
+    background: rgba(16,185,129,0.12);
+    color: var(--accent2);
+    border-radius: 4px; padding: 2px 8px;
+    font-size: 11px; margin: 2px 2px 0 0;
+  }
+
+  /* SECTIONS */
+  section { margin-bottom: 56px; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700;
+    color: var(--accent2); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block; width: 3px; height: 16px;
+    background: var(--accent); border-radius: 2px;
+  }
+  h2 { font-size: clamp(20px, 2.5vw, 26px); font-weight: 800; color: #fff; line-height: 1.3; letter-spacing: -.5px; margin-bottom: 18px; }
+  h3 { font-size: 17px; font-weight: 700; color: var(--text); margin: 28px 0 12px; }
+  h4 { font-size: 14px; font-weight: 700; color: var(--accent2); margin: 18px 0 8px; }
+  p { color: var(--muted); margin-bottom: 14px; line-height: 1.75; }
+
+  /* COMPARE TABLE */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--surface2);
+    padding: 12px 16px; text-align: left;
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .5px;
+    border-bottom: 1px solid var(--border);
+  }
+  th.blue { color: var(--blue2); }
+  th.green { color: var(--accent2); }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); color: var(--text); }
+  .td-em { color: var(--text); font-weight: 600; }
+  .td-blue { color: var(--blue2); font-weight: 600; }
+  .td-green { color: var(--accent2); font-weight: 600; }
+  .td-bad { color: var(--danger); font-weight: 600; }
+  .td-good { color: var(--accent2); font-weight: 600; }
+  .td-warn { color: var(--warning); font-weight: 600; }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px; margin-bottom: 14px;
+  }
+  .card-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .card p { font-size: 14px; margin-bottom: 6px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* HL CARD */
+  .hl-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    border-top: 3px solid var(--accent);
+  }
+  .hl-card .num { font-size: 34px; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+  .hl-card .desc { font-size: 13px; color: var(--muted); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 20px 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 20px 0; }
+
+  /* CASE CARD */
+  .case-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px; margin-bottom: 14px;
+  }
+  .case-card.success { border-left: 3px solid var(--accent); }
+  .case-card.fail { border-left: 3px solid var(--danger); }
+  .case-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .case-badge {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; padding: 2px 8px; border-radius: 4px;
+  }
+  .case-badge.success { background: rgba(16,185,129,0.15); color: var(--accent2); }
+  .case-badge.fail { background: rgba(239,68,68,0.15); color: #f87171; }
+  .case-company { font-size: 16px; font-weight: 800; color: #fff; }
+  .case-stat { font-size: 13px; color: var(--muted); }
+  .case-lesson {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 10px 14px; margin-top: 12px;
+    font-size: 13px; color: var(--muted);
+  }
+  .case-lesson strong { color: var(--accent2); }
+
+  /* QUOTE */
+  .quote-block {
+    background: rgba(16,185,129,0.07);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 18px 22px; margin: 20px 0;
+    font-size: 15px; color: var(--text);
+    font-style: italic; line-height: 1.75;
+  }
+  .quote-attr { font-size: 12px; color: var(--muted); margin-top: 8px; font-style: normal; }
+
+  /* BIG QUOTE */
+  .big-quote {
+    background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(52,211,153,0.04));
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: var(--radius);
+    padding: 28px 32px; margin: 24px 0; text-align: center;
+  }
+  .big-quote .bq-text { font-size: 19px; font-weight: 800; color: #fff; line-height: 1.4; margin-bottom: 8px; }
+  .big-quote .bq-sub { font-size: 13px; color: var(--muted); }
+
+  /* TIMELINE */
+  .timeline { margin: 20px 0; }
+  .tl-item {
+    display: flex; gap: 16px;
+    padding-bottom: 24px;
+    position: relative;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute; left: 19px; top: 40px; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-item:last-child::before { display: none; }
+  .tl-dot {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 900;
+    position: relative; z-index: 1;
+  }
+  .tl-dot.short { background: rgba(16,185,129,0.15); color: var(--accent); border: 1px solid rgba(16,185,129,0.3); }
+  .tl-dot.mid { background: rgba(59,130,246,0.15); color: var(--blue2); border: 1px solid rgba(59,130,246,0.3); }
+  .tl-dot.long { background: rgba(167,139,250,0.15); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+  .tl-content { flex: 1; }
+  .tl-period { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .tl-dot.short ~ .tl-content .tl-period { color: var(--accent); }
+  .tl-dot.mid ~ .tl-content .tl-period { color: var(--blue2); }
+  .tl-dot.long ~ .tl-content .tl-period { color: var(--purple); }
+  .tl-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .tl-list { list-style: none; }
+  .tl-list li { font-size: 13px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .tl-list li:last-child { border-bottom: none; }
+  .tl-list li::before { content: '→ '; color: var(--accent2); font-weight: 700; }
+
+  /* PRINCIPLE CARD */
+  .principle-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px; margin-bottom: 12px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .principle-num {
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 8px;
+    background: rgba(16,185,129,0.15);
+    border: 1px solid rgba(16,185,129,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 900; color: var(--accent);
+  }
+  .principle-content .title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .principle-content .desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+  /* INSIGHT */
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px; margin-bottom: 12px;
+    border-left: 3px solid var(--accent);
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .insight-num { font-size: 22px; font-weight: 900; color: var(--accent); flex-shrink: 0; min-width: 28px; }
+  .insight-content .title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .insight-content .desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+  /* ACTION BOX */
+  .action-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px; margin-bottom: 14px;
+    border-top: 3px solid var(--accent);
+  }
+  .action-month {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--accent2); margin-bottom: 10px;
+  }
+  .action-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+  .action-list { list-style: none; }
+  .action-list li {
+    font-size: 13px; color: var(--muted);
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .action-list li:last-child { border-bottom: none; }
+  .action-list li::before { content: '✦'; color: var(--accent); font-size: 10px; margin-top: 3px; flex-shrink: 0; }
+
+  /* TAG */
+  .tag-area { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .tag {
+    display: inline-block;
+    background: rgba(16,185,129,0.12);
+    border: 1px solid rgba(16,185,129,0.25);
+    color: var(--accent2); border-radius: 20px;
+    padding: 4px 12px; font-size: 12px; font-weight: 500;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+  /* BAR */
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .bar-label { width: 200px; font-size: 12px; color: var(--muted); flex-shrink: 0; text-align: right; }
+  .bar-track { flex: 1; height: 10px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 99px; background: var(--accent); }
+  .bar-fill.blue { background: var(--blue); }
+  .bar-fill.warning { background: var(--warning); }
+  .bar-val { width: 40px; font-size: 12px; color: var(--accent2); font-weight: 700; }
+
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px; text-align: center;
+    color: var(--muted); font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">⚡ GARAMwiki</a>
+  <div class="nav-links">
+    <a href="../index.html">← 홈</a>
+    <a href="#concept">개념 정의</a>
+    <a href="#hbr">HBR 분석</a>
+    <a href="#cases">사례</a>
+    <a href="#wti">MS WTI</a>
+    <a href="#outlook">전망</a>
+    <a href="#action">실행</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">💡 나의 인사이트 · Garambada · May 2026</div>
+  <h1>
+    <span class="ai">AI-Native</span>
+    <span class="vs">vs</span>
+    <span class="ag">Agent-Native</span>
+  </h1>
+  <div class="hero-sub">심층 분석 및 전략 수립 보고서<br>HBR Feb 2026 · Microsoft WTI 2026 · Deloitte · Industry Cases</div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="dot"></div>May 2026</div>
+    <div class="hero-meta-item"><div class="dot"></div>Garambada</div>
+    <div class="hero-meta-item"><div class="dot"></div>AI Company Builder</div>
+  </div>
+  <div class="core-thesis">
+    <div class="q">📌 핵심 테제</div>
+    <p>2026년 현재의 경쟁 전선은 <strong>'AI-Native냐 아니냐'</strong>에서 <strong>'Agent-Native를 얼마나 빠르게 구현하느냐'</strong>로 이동했다. 기존 AI-Native 스타트업조차 에이전트 오케스트레이션을 갖추지 못하면 Agent-Native 신생 기업에 추월당하는 구도다.</p>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-value">73×</div>
+    <div class="stat-label">Cognition ARR 성장<br>9개월 ($1M→$73M)</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">$60M</div>
+    <div class="stat-label">Klarna 에이전트 도입<br>연간 절감 비용</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">11%</div>
+    <div class="stat-label">파일럿→프로덕션<br>실제 전환율 (Deloitte)</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">19%</div>
+    <div class="stat-label">개인+조직 역량<br>모두 갖춘 Frontier 비율</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">340%</div>
+    <div class="stat-label">에이전트 활용 소로프레너<br>매출 평균 증가율</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">15×</div>
+    <div class="stat-label">M365 활성 에이전트<br>YoY 성장</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+<div class="content">
+
+<!-- 개념 정의 -->
+<section id="concept">
+  <div class="section-label">개념 정의와 차이점</div>
+  <h2>AI-Native vs Agent-Native:<br>무엇이 다른가</h2>
+
+  <h3>📌 AI-Native Company란</h3>
+  <p>AI-Native 기업은 AI를 나중에 추가한 기능(feature)이 아니라, 회사의 <strong>아키텍처적 토대(architectural foundation)로 처음부터 설계</strong>한 조직이다. IBM/HBS 등 주요 기관의 정의에 따르면, AI-Native는 AI-augmented(AI 보조)와 근본적으로 다르다.</p>
+
+  <div class="quote-block">
+    "AI-native는 AI로 강화된 시스템이 아니라, AI가 핵심인 시스템이다. 전체 비즈니스 모델이 AI 모델의 작동을 전제로 설계된다."
+    <div class="quote-attr">— IBM Think, 2026</div>
+  </div>
+
+  <h4>AI-Native 핵심 구조 6가지 (IBM/BigDATAwire, 2026)</h4>
+  <div class="grid-2">
+    <div class="card" style="border-left: 3px solid var(--blue);">
+      <div class="card-title">🗄️ 통합·검색 가능한 데이터 인프라</div>
+      <p>Unified & Retrievable Data — 에이전트가 활용할 수 있는 데이터 기반</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--blue);">
+      <div class="card-title">🤖 에이전트가 실제 업무를 실행하는 구조</div>
+      <p>Agent-Executed Work — AI가 단순 보조가 아닌 실행 주체</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--blue);">
+      <div class="card-title">🏗️ 에이전트 친화적 아키텍처</div>
+      <p>Agent-Ready Architecture — 에이전트가 작동하기 좋은 시스템 설계</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--blue);">
+      <div class="card-title">📊 지속적 평가 시스템</div>
+      <p>Continuous Evaluation — AI 출력의 품질을 지속적으로 모니터링</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--blue);">
+      <div class="card-title">🧑‍💻 명시적 인간-AI 의사결정 설계</div>
+      <p>Human-AI Decision Design — 어디서 인간이 판단하는지 명시적으로 설계</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--blue);">
+      <div class="card-title">🛡️ 내재된 거버넌스</div>
+      <p>Built-in Governance — 보안·컴플라이언스가 설계에 포함됨</p>
+    </div>
+  </div>
+
+  <h3>🚀 Agent-Native Company란</h3>
+  <p>Agent-Native는 AI-Native의 <strong>진화된 형태</strong>로, 에이전트(자율적으로 목표를 추구하는 AI 시스템)를 단순 도구가 아닌 <strong>업무 실행의 주체</strong>로 설계한 회사다. 2025~2026년을 기점으로 명확히 등장하기 시작한 패러다임이다.</p>
+
+  <div class="grid-2">
+    <div class="card" style="border-left: 3px solid var(--accent);">
+      <div class="card-title">🎯 목표 지향 자율 실행</div>
+      <p>'요청-응답' 방식이 아닌 목표를 향해 자율적으로 <strong>계획-실행-적응</strong>한다.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent);">
+      <div class="card-title">🔗 멀티에이전트 오케스트레이션</div>
+      <p>에이전트들이 서로 통신하며 복잡한 업무를 병렬 처리한다.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent);">
+      <div class="card-title">👁️ 인간의 역할 전환</div>
+      <p>인간은 실행자가 아닌 <strong>감독자·방향 설정자</strong> 역할로 이동한다.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent);">
+      <div class="card-title">🧠 워크플로우 지식 축적</div>
+      <p>에이전트 경험이 누적되어 <strong>'학습하는 조직(Learning System)'</strong>을 구현한다.</p>
+    </div>
+  </div>
+
+  <h3>📊 AI-Native vs Agent-Native 전면 비교</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th class="blue">AI-Native Company</th>
+          <th class="green">Agent-Native Company</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-em">정의</td>
+          <td>AI를 핵심 인프라로 설계된 회사. 전체 제품/서비스가 AI 모델 위에 구축됨</td>
+          <td class="td-green">에이전트(자율적 AI)가 업무의 실행 주체인 회사. AI가 사람 대신 태스크를 자율 수행</td>
+        </tr>
+        <tr>
+          <td class="td-em">AI 역할</td>
+          <td class="td-blue">AI = 제품 기반 (Foundation)</td>
+          <td class="td-green">AI = 실행 주체 (Executor + Orchestrator)</td>
+        </tr>
+        <tr>
+          <td class="td-em">구조 핵심</td>
+          <td>모델 + 데이터 파이프라인 + 추론 엔진</td>
+          <td class="td-green">멀티에이전트 오케스트레이션 + 인간-에이전트 핸드오프</td>
+        </tr>
+        <tr>
+          <td class="td-em">대표 사례</td>
+          <td>OpenAI, Midjourney, Perplexity, Cursor</td>
+          <td>Cognition(Devin), Klarna AI Agent, Salesforce Agentforce</td>
+        </tr>
+        <tr>
+          <td class="td-em">팀 구조</td>
+          <td>AI 엔지니어 중심, 소수 정예 팀</td>
+          <td class="td-green">Agent Manager 역할 등장, 에이전트 운영 전담팀</td>
+        </tr>
+        <tr>
+          <td class="td-em">경쟁 우위</td>
+          <td>모델 성능, 데이터 독점성</td>
+          <td class="td-green">워크플로우 지식 독점, Owned Intelligence 축적</td>
+        </tr>
+        <tr>
+          <td class="td-em">진화 단계</td>
+          <td>1세대 AI 회사 패러다임 (2020~2024)</td>
+          <td class="td-green">2세대 패러다임 전환점 (2025~)</td>
+        </tr>
+        <tr>
+          <td class="td-em">리스크</td>
+          <td class="td-warn">모델 범용화로 차별화 약화</td>
+          <td class="td-warn">신뢰/감사 가능성/거버넌스 이슈</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="big-quote">
+    <div class="bq-text">AI-Native는 Agent-Native의 필요조건이다.<br>하지만 AI-Native라고 해서 자동으로 Agent-Native가 되는 것은 아니다.</div>
+    <div class="bq-sub">많은 AI-Native 기업들이 여전히 인간이 모든 실행 단계를 처리하는 구조다</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HBR 분석 -->
+<section id="hbr">
+  <div class="section-label">HBR 2026년 2월 — 에이전트 시대의 경영 흐름</div>
+  <h2>HBR이 포착한<br>2가지 핵심 패러다임 전환</h2>
+
+  <h3>① Agent Manager의 등장</h3>
+  <p>출처: <em>"To Thrive in the AI Era, Companies Need Agent Managers"</em> — HBR, 2026.02.12, Suraj Srinivasan & Vivienne Wei (Salesforce COO)</p>
+  <p>Salesforce의 에이전트 매니저 Zach Stauber의 하루는 첫 번째 고객 지원 티켓이 들어오기도 전에 시작된다. 그는 Agentforce 플랫폼에서 지원·영업·마케팅 전반의 에이전트 플릿을 관리한다. 그의 루틴: <em>"데이터, 데이터, 데이터. 하루를 대시보드와 스코어카드, 에이전트 모니터링으로 시작하고 끝낸다."</em></p>
+
+  <div class="quote-block">
+    "소프트웨어 혁명이 프로덕트 매니저를 탄생시켰듯, AI 에이전트 혁명은 Agent Manager를 탄생시킨다. 전략적 의도를 에이전트 운영의 신뢰할 수 있는 결과로 번역하는 핵심 역할이다."
+    <div class="quote-attr">— HBR 2026, Srinivasan & Wei</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🎯 Agent Manager의 4대 역할</div>
+      <p>• 에이전트의 <strong>학습·협업·성과·안전한 인간 협업</strong> 오케스트레이션</p>
+      <p>• 전략적 의도를 에이전트 운영의 신뢰할 수 있는 결과로 번역</p>
+      <p>• 에이전트 성과 모니터링, 훈련, 품질 기준 설정</p>
+      <p>• 에이전트는 '고용'이 아니라 <strong>'관리'의 대상</strong></p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--accent);">
+      <div class="card-title">💡 Company Builder와의 연결</div>
+      <p>HBR이 말하는 Agent Manager가 바로 <strong>Company Builder의 새로운 역할</strong>이다. 에이전트를 '고용'하고, '성과를 측정'하고, '개선'하는 사이클이 새로운 경영 활동이다.</p>
+    </div>
+  </div>
+
+  <h3>② Enterprise-Wide Agentic AI Transformation</h3>
+  <p>출처: <em>"A Blueprint for Enterprise-Wide Agentic AI Transformation"</em> — HBR/Google Cloud Consulting, 2026.02</p>
+  <p>기업들이 에이전트 AI 도입 시 범하는 3가지 치명적 실수와 그 해법:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>실수</th><th>내용</th><th>해법</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-bad">① 균열된 기반</td>
+          <td>미해결 기술 부채(레거시 데이터, 사일로 시스템) 위에 에이전트 AI 배포 → AI가 결함을 증폭</td>
+          <td class="td-good">통합 수직 AI 스택 + "포장된 도로(Paved Roads)" 먼저 구축</td>
+        </tr>
+        <tr>
+          <td class="td-bad">② 통제 불능 증식</td>
+          <td>부서별 분절된 에이전트 무분별 도입 → 에이전트 스프롤(Agent Sprawl), 기술 부채 누적</td>
+          <td class="td-good">전략적 오케스트레이션 프레임워크 + 전사 거버넌스</td>
+        </tr>
+        <tr>
+          <td class="td-bad">③ 과거 자동화</td>
+          <td>기존 프로세스에 AI를 레이어로 추가하는 방식 → 점진적 효율화, 근본적 재설계 없음</td>
+          <td class="td-good">아웃컴 기반 에이전트 설계 + 동적 오케스트레이션</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="border-top: 3px solid var(--accent); margin-top: 16px;">
+    <div class="card-title">💡 핵심 결론</div>
+    <p>에이전트 AI의 진정한 파워는 단일 에이전트가 아니라 <strong>조율된 에이전트 시스템(Multi-Agent Ecosystem)</strong>에서 나온다. 이것이 Agent-Native로의 전환이 단순 기술 도입 이상의 <strong>조직 재설계</strong>를 요구하는 이유다.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 사례 분석 -->
+<section id="cases">
+  <div class="section-label">업계 성공 & 실패 사례</div>
+  <h2>실전에서 배우는<br>Agent-Native 성공과 실패의 갈림길</h2>
+
+  <h3>✅ 성공 사례</h3>
+
+  <div class="case-card success">
+    <div class="case-header">
+      <div class="case-badge success">✅ 성공</div>
+      <div class="case-company">Cognition (Devin) — Agent-Native의 교과서</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">설립: 2023.08 | 설립자: Scott Wu 외 (국제 정보올림피아드 금메달리스트) | 목표 밸류에이션: $25B</p>
+    <div class="grid-2" style="margin:10px 0;">
+      <div class="hl-card" style="border-color:var(--accent);">
+        <div class="num">73×</div>
+        <div class="desc">ARR 성장: $1M(2024.9) → $73M(2025.6) — 9개월 만에 73배</div>
+      </div>
+      <div class="hl-card" style="border-color:var(--accent);">
+        <div class="num">67%</div>
+        <div class="desc">머지 PR 성공률: 34%(2024) → 67%(2025) — 에이전트 품질의 급격한 개선</div>
+      </div>
+    </div>
+    <div class="case-lesson">
+      <strong>교훈:</strong> 에이전트 성능이 임계점을 넘는 순간 채택은 폭발적으로 증가한다. '좋은 에이전트'보다 <strong>'신뢰할 수 있는 에이전트'</strong>가 핵심이다.
+    </div>
+  </div>
+
+  <div class="case-card success">
+    <div class="case-header">
+      <div class="case-badge success">✅ 성공</div>
+      <div class="case-company">Klarna — 대규모 에이전트 전환의 ROI</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">AI 고객서비스 에이전트 1개 → 853명의 직원 역할 수행</p>
+    <div class="grid-3" style="margin:10px 0;">
+      <div class="hl-card" style="border-color:var(--accent);">
+        <div class="num">$60M</div>
+        <div class="desc">연간 절감 비용</div>
+      </div>
+      <div class="hl-card" style="border-color:var(--accent);">
+        <div class="num">NPS 73</div>
+        <div class="desc">고객 만족도 — 인간 에이전트와 동등</div>
+      </div>
+      <div class="hl-card" style="border-color:var(--accent);">
+        <div class="num">80%</div>
+        <div class="desc">전체 상담 중 에이전트가 처리하는 비율</div>
+      </div>
+    </div>
+    <div class="case-lesson">
+      <strong>교훈:</strong> Agent-Native 전환은 단순한 '자동화'가 아니다. Klarna는 동일한 팀 규모로 더 많은 고객을 더 잘 처리하는 구조를 만들었다. <strong>'대체'가 아닌 '확장'</strong>의 프레임이 핵심이다.
+    </div>
+  </div>
+
+  <div class="case-card success">
+    <div class="case-header">
+      <div class="case-badge success">✅ 성공</div>
+      <div class="case-company">Midjourney — 1인 팀 AI-Native의 극한</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">직원 40명으로 연 매출 $200M 달성. 부트스트랩 흑자 운영.</p>
+    <div class="case-lesson">
+      <strong>교훈:</strong> AI를 제품의 핵심으로 설계해 인력을 최소화하면서도 전 세계 시장에 서비스한다. 소프트웨어 혁명 시대의 GitHub(2명→수억 유저)를 AI 시대에 재현하는 구조. <strong>Revenue per employee: AI-Native가 가능하게 한 극단적 레버리지.</strong>
+    </div>
+  </div>
+
+  <h3>❌ 실패 패턴</h3>
+
+  <div class="case-card fail">
+    <div class="case-header">
+      <div class="case-badge fail">❌ 실패 패턴 1</div>
+      <div class="case-company">과거 자동화 함정</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);">기존 워크플로우를 그대로 AI로 자동화. 프로세스 자체를 재설계하지 않아 진정한 가치 창출 실패. 점진적 효율화에 그침.</p>
+  </div>
+
+  <div class="case-card fail">
+    <div class="case-header">
+      <div class="case-badge fail">❌ 실패 패턴 2</div>
+      <div class="case-company">파일럿 지옥 (Pilot Purgatory)</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);">전체 기업의 30%가 탐색, 38%가 파일럿 단계에 있지만 실제 프로덕션 전환율은 <strong style="color:var(--danger);">11%</strong> (Deloitte 2026). PoC에서 벗어나지 못하는 조직 문화와 거버넌스 문제.</p>
+  </div>
+
+  <div class="case-card fail">
+    <div class="case-header">
+      <div class="case-badge fail">❌ 실패 패턴 3</div>
+      <div class="case-company">에이전트 Silo 증식</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);">부서별로 독립적인 에이전트 도입. 조직 전체 차원의 에이전트 오케스트레이션 부재. HBR이 경고하는 '통제 불능 증식' 패턴. 에이전트 스프롤로 기술 부채 누적.</p>
+  </div>
+
+  <div class="quote-block">
+    "에이전트 AI 실패의 공통 원인은 기술 부족이 아니라 <strong>조직 설계와 프로세스 재상상의 부재</strong>다."
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Microsoft WTI -->
+<section id="wti">
+  <div class="section-label">Microsoft 2026 Work Trend Index 핵심</div>
+  <h2>Microsoft WTI 2026이<br>증명하는 에이전시 방정식</h2>
+  <p>발간: 2026.05.05 | <em>"Agents, Human Agency, and the Opportunity for Every Organization"</em><br>20개국 20,000명 AI 사용 지식 근로자 설문 + 수조 건의 Microsoft 365 생산성 신호 분석</p>
+
+  <h3>📊 핵심 수치 요약</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>핵심 지표</th><th>내용</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="td-em">에이전트 성장</td><td>Microsoft 365 내 활성 에이전트 전년 대비 <strong class="td-green">15배</strong> 증가 (대기업 18배)</td></tr>
+        <tr><td class="td-em">생산성 임팩트</td><td>AI 사용자의 58%: "1년 전엔 못했던 일을 지금은 한다"</td></tr>
+        <tr><td class="td-em">인지 업무 비중</td><td>Copilot 채팅의 <strong class="td-green">49%</strong>가 분석·문제해결·창의적 사고 지원 (단순 검색은 15%)</td></tr>
+        <tr><td class="td-em">AI 임팩트 결정</td><td>개인 요인 32% < <strong class="td-green">조직 요인(문화+매니저+인재개발) 67%</strong> — 2배 이상 차이</td></tr>
+        <tr><td class="td-em">Frontier Firm 비율</td><td>전체 AI 사용자 중 <strong class="td-warn">19%</strong>만이 개인+조직 역량 모두 고도화된 'Frontier' 상태</td></tr>
+        <tr><td class="td-em">변혁의 역설</td><td>65%: AI 안 하면 뒤처질 것 — 동시에 45%: 기존 방식이 더 안전하게 느껴짐</td></tr>
+        <tr><td class="td-em">매니저 효과</td><td>매니저가 AI 모델링 시: AI 가치 <strong class="td-green">+17점</strong>, 에이전트 신뢰 <strong class="td-green">+30점</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>🔑 The New Agency Equation</h3>
+  <p>Microsoft WTI 2026의 중심 개념: <strong>에이전트가 실행을 맡을수록, 인간은 더 많은 에이전시(주도권)를 얻는다.</strong></p>
+
+  <div class="bar-row">
+    <div class="bar-label">고가치 업무에 더 집중</div>
+    <div class="bar-track"><div class="bar-fill" style="width:66%"></div></div>
+    <div class="bar-val">66%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">1년 전 불가능한 일을 지금 함</div>
+    <div class="bar-track"><div class="bar-fill" style="width:58%"></div></div>
+    <div class="bar-val">58%</div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">AI 결과물을 출발점으로만 봄</div>
+    <div class="bar-track"><div class="bar-fill" style="width:86%"></div></div>
+    <div class="bar-val">86%</div>
+  </div>
+
+  <div class="quote-block">
+    "에이전트 시대의 역설: 에이전트가 더 많이 할수록 인간의 판단이 더 중요해진다."
+  </div>
+
+  <h3>🏢 Frontier Firm — 앞서 나가는 조직의 공통점</h3>
+  <p>Frontier Firm은 단순 AI 채택을 넘어 <strong>AI 흡수(AI Absorption)</strong>에 집중한다. 업무가 지속적으로 통찰을 생산하고, 통찰이 업무 방식을 지속적으로 재형성하는 <strong>Learning System</strong>으로 진화한다.</p>
+
+  <div class="grid-2">
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <div class="card-title">🧠 Owned Intelligence 구축</div>
+      <p>에이전트 실행 결과, 성공/실패 신호를 조직 지식으로 축적. 시간이 갈수록 <strong>복리 효과</strong> 발생. 경쟁사가 복제할 수 없는 진정한 경쟁 우위.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <div class="card-title">🎛️ 에이전트 인프라 관리</div>
+      <p>에이전트를 관리 가능한 개체로 취급 — ID, 권한, 정책 집행, 생명주기 관리. IT가 에이전트 통제 플레인(Control Plane)을 구축한다.</p>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "The firms that build a new operating model today won't just move faster in the short term. They'll build something more durable."
+    <div class="quote-attr">— Microsoft WTI 2026</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 전망 -->
+<section id="outlook">
+  <div class="section-label">향후 전망 — 업계 진화 시나리오</div>
+  <h2>에이전트 시대의<br>3단계 진화 로드맵</h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot short">1</div>
+      <div class="tl-content">
+        <div class="tl-period">단기 (2026~2027) — 에이전트 임계점 돌파</div>
+        <div class="tl-title">티핑포인트: AI-Native → Agent-Native 전환 가속</div>
+        <ul class="tl-list">
+          <li>Microsoft 365 에이전트 15× 성장이 '에이전트 티핑포인트'의 신호</li>
+          <li>Agent-Native 스타트업이 기존 AI-Native 기업 잠식 가속화</li>
+          <li>Owned Intelligence 보유 여부가 B2B AI 제품의 핵심 차별화 요소로 부상</li>
+          <li>Agent Manager 직책 표준화 — 제품 매니저의 일부가 에이전트 매니저로 전환</li>
+          <li>프로덕션 에이전트 비율: 현재 11% → 2027년 35% 이상 전망 (Deloitte)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot mid">2</div>
+      <div class="tl-content">
+        <div class="tl-period">중기 (2027~2029) — 에이전트 생태계 성숙</div>
+        <div class="tl-title">표준화: 멀티에이전트 오케스트레이션이 기업 운영의 기본 인프라로</div>
+        <ul class="tl-list">
+          <li>에이전트 간 표준 통신 프로토콜 정립 (현재 MCP, A2A 경쟁 중)</li>
+          <li>1인 또는 소수 팀이 $10M+ ARR 달성하는 사례 일반화 — 소로프레너 경제 폭발</li>
+          <li>Owned Intelligence 격차가 대형 기업과 애자일 스타트업 간 역전 가능성 생성</li>
+          <li>규제: EU AI Act, G7 에이전트 거버넌스 프레임워크 확산</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot long">3</div>
+      <div class="tl-content">
+        <div class="tl-period">장기 (2029+) — 새로운 경제 구조</div>
+        <div class="tl-title">패러다임: 회사 규모 ≠ 회사 역량 — 완전한 분리</div>
+        <ul class="tl-list">
+          <li>에이전트 플릿을 운영하는 개인/소규모 팀이 대기업과 직접 경쟁</li>
+          <li>Frontier Firm들이 Owned Intelligence를 자산으로 M&A 가치 산정</li>
+          <li>교육 시스템의 근본 변화: '태스크 실행' 역량 → '에이전트 설계 및 감독' 역량</li>
+          <li>LinkedIn 2026: 과거 2년간 130만 개 이상의 AI 관련 신규 일자리 창출</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Garambada 실행 -->
+<section id="action">
+  <div class="section-label">Garambada 맞춤 전략</div>
+  <h2>AI Company Builder를 위한<br>실행 전략 & 90일 플랜</h2>
+
+  <h3>🎯 왜 지금이 유일한 타이밍인가</h3>
+  <p>2026년은 에이전트 전환의 초기이지만 가장 유리한 시기다. 대기업은 Transformation Paradox에 갇혀 있고, AI-Native 스타트업도 Agent-Native 전환 준비가 부족하다. <strong>이 공백이 기회다.</strong></p>
+  <div class="grid-3">
+    <div class="hl-card">
+      <div class="num">340%</div>
+      <div class="desc">AI 에이전트 활용 소로프레너의 매출 평균 증가율 (Indie Hackers 2026)</div>
+    </div>
+    <div class="hl-card">
+      <div class="num">36.3%</div>
+      <div class="desc">Solo-founded 스타트업 비율 (2019: 23.7% → 2025: 36.3%) — 트렌드 명확</div>
+    </div>
+    <div class="hl-card">
+      <div class="num">$200/월</div>
+      <div class="desc">소로프레너 AI 스택으로 10인 팀을 대체 가능한 수준의 월 비용</div>
+    </div>
+  </div>
+
+  <h3>📍 나의 포지셔닝</h3>
+  <div class="card" style="border-top: 3px solid var(--accent);">
+    <div class="card-title">현재 위치: AI-Native 환경 세팅 완료 → Agent-Native 실행 구조로 전환 단계</div>
+    <p>• 이미 Hermes-style 폐쇄형 학습루프를 구현했다. 이것이 <strong>Owned Intelligence의 시작</strong>이다.</p>
+    <p>• C-level Company Builder로서의 강점: 전략→실행→팀 구축의 전 과정 이해. 에이전트를 이 프로세스에 내재화하는 것이 다른 빌더 대비 압도적 우위.</p>
+    <p>• Solopreneur 전략: 에이전트로 채운 '가상의 팀' 운영 → 실제 팀 없이도 엔터프라이즈급 output</p>
+  </div>
+
+  <h3>⚙️ 에이전트 플릿 설계 4원칙</h3>
+
+  <div class="principle-card">
+    <div class="principle-num">P1</div>
+    <div class="principle-content">
+      <div class="title">3 Core Agents 먼저</div>
+      <div class="desc">최소 3개의 핵심 에이전트부터 시작. <strong>리서치 에이전트</strong>(정보 수집) + <strong>실행 에이전트</strong>(결과물 생성) + <strong>메모리 에이전트</strong>(지식 축적). 3개가 돌아가는 순간 시너지가 폭발적으로 증가한다.</div>
+    </div>
+  </div>
+  <div class="principle-card">
+    <div class="principle-num">P2</div>
+    <div class="principle-content">
+      <div class="title">Owned Intelligence First</div>
+      <div class="desc">에이전트가 생성한 모든 결과물에서 재사용 가능한 패턴을 추출해 <strong>skills/</strong>에 축적. 이것이 경쟁 불가능한 자산이 된다. 6개월 후의 나는 지금의 나보다 압도적으로 강력해진다.</div>
+    </div>
+  </div>
+  <div class="principle-card">
+    <div class="principle-num">P3</div>
+    <div class="principle-content">
+      <div class="title">Human-in-the-Loop 설계</div>
+      <div class="desc">Microsoft WTI의 핵심 발견 — 에이전트 신뢰의 핵심은 인간 감독 체계. LEARNING_LOOP.md에서 이미 구현한 <strong>'반성(Reflection) → 스킬 생성' 루프</strong>가 이것이다. 이 구조를 더 정교하게 발전시킨다.</div>
+    </div>
+  </div>
+  <div class="principle-card">
+    <div class="principle-num">P4</div>
+    <div class="principle-content">
+      <div class="title">Agent Manager로서 자기 포지셔닝</div>
+      <div class="desc">HBR이 말하는 Agent Manager가 바로 나의 역할이다. 에이전트를 '고용'하고, '성과를 측정'하고, '개선'하는 사이클이 새로운 경영 활동이다. <strong>대시보드 → 스코어카드 → 에이전트 모니터링</strong>으로 하루를 시작하고 끝낸다.</div>
+    </div>
+  </div>
+
+  <h3>📅 즉시 실행 전략 매트릭스</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>영역</th><th>지금 당장 실행 가능</th><th>6개월 내 목표</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-em">에이전트 스택</td>
+          <td>Cowork + Claude API 활용한 핵심 에이전트 2~3개 배치</td>
+          <td class="td-green">리서치/콘텐츠/운영 에이전트 완전 자동화 루프</td>
+        </tr>
+        <tr>
+          <td class="td-em">Owned Intelligence</td>
+          <td>skills/ 디렉토리 채우기</td>
+          <td class="td-green">30개 이상 재사용 스킬 → 경쟁 불가 지식 자산</td>
+        </tr>
+        <tr>
+          <td class="td-em">수익 모델</td>
+          <td>AI로 압축한 역량을 SaaS/컨설팅으로 패키징</td>
+          <td class="td-green">1인 팀으로 $1M ARR 가능한 구조 완성</td>
+        </tr>
+        <tr>
+          <td class="td-em">포지셔닝</td>
+          <td>AI-Native 스타트업 빌더로 개인 브랜드 구축</td>
+          <td class="td-green">특정 도메인 Agent-Native 솔루션 카테고리 선점</td>
+        </tr>
+        <tr>
+          <td class="td-em">거버넌스/신뢰</td>
+          <td>에이전트 출력 품질 기준 문서화 (learning_loop.md)</td>
+          <td class="td-green">감사 가능한 에이전트 운영 체계 완성</td>
+        </tr>
+        <tr>
+          <td class="td-em">학습 루프</td>
+          <td>매 세션 종료 후 스킬 증류 습관화</td>
+          <td class="td-green">월 1회 memory/ 정제 및 insights.md 업데이트</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>🗓️ 다음 90일 액션 플랜</h3>
+
+  <div class="action-box">
+    <div class="action-month">Month 1</div>
+    <div class="action-title">에이전트 스택 정의 & 3 Core Agent 배치</div>
+    <ul class="action-list">
+      <li>Cowork + Claude API 활용한 핵심 에이전트 2~3개 배치</li>
+      <li>skills/ 에 첫 10개 스킬 파일 생성</li>
+      <li>반복 업무 패턴 식별 및 자동화 우선순위 결정</li>
+    </ul>
+  </div>
+
+  <div class="action-box" style="border-color:var(--blue);">
+    <div class="action-month" style="color:var(--blue2);">Month 2</div>
+    <div class="action-title">Owned Intelligence 첫 번째 축적</div>
+    <ul class="action-list">
+      <li>에이전트 출력 품질 기준 수립 (LEARNING_LOOP.md 고도화)</li>
+      <li>memory/ 의 projects.md 첫 번째 프로젝트 등록</li>
+      <li>소로프레너 수익 모델 설계 문서화</li>
+    </ul>
+  </div>
+
+  <div class="action-box" style="border-color:var(--purple);">
+    <div class="action-month" style="color:var(--purple);">Month 3</div>
+    <div class="action-title">검증 & 첫 번째 Agent-Native 제품/서비스 런칭</div>
+    <ul class="action-list">
+      <li>Owned Intelligence 첫 번째 리뷰 — skills/ 30개 목표</li>
+      <li>외부 MCP 연결로 에이전트 역량 확장 (Slack, Notion, Linear 등)</li>
+      <li>첫 번째 Agent-Native 제품/서비스 런칭 또는 시장 검증</li>
+    </ul>
+  </div>
+
+  <div class="big-quote">
+    <div class="bq-text">"The agent that grows with you" —<br>이 Hermes 철학은 단순한 도구 철학이 아니다.<br>Company Builder로서의 당신 자신이 에이전트와 함께 성장하는 시스템을 만드는 것이다.</div>
+    <div class="bq-sub">지금 이 워크스페이스가 그 출발점이다</div>
+  </div>
+
+  <div class="tag-area" style="margin-top: 24px;">
+    <span class="tag">AI-Native</span>
+    <span class="tag">Agent-Native</span>
+    <span class="tag">Owned Intelligence</span>
+    <span class="tag">Frontier Firm</span>
+    <span class="tag">Agent Manager</span>
+    <span class="tag">멀티에이전트 오케스트레이션</span>
+    <span class="tag">Transformation Paradox</span>
+    <span class="tag">소로프레너</span>
+    <span class="tag">Learning System</span>
+    <span class="tag">90일 플랜</span>
+    <span class="tag">Company Builder</span>
+    <span class="tag">Hermes Agent</span>
+  </div>
+</section>
+
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-inner">
+    <h3>목차</h3>
+    <ul>
+      <li><a href="#concept">🔵 개념 정의</a></li>
+      <li><a href="#hbr">📰 HBR 2026 분석</a></li>
+      <li><a href="#cases">💼 업계 사례</a></li>
+      <li><a href="#wti">📊 Microsoft WTI</a></li>
+      <li><a href="#outlook">🔭 향후 전망</a></li>
+      <li><a href="#action">🎯 실행 전략</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>핵심 수치</h3>
+    <ul>
+      <li><a href="#cases">73× — Cognition ARR 성장</a></li>
+      <li><a href="#cases">$60M — Klarna 절감</a></li>
+      <li><a href="#cases">11% — 파일럿 전환율</a></li>
+      <li><a href="#wti">15× — M365 에이전트 성장</a></li>
+      <li><a href="#action">340% — 소로프레너 매출</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>출처</h3>
+    <ul>
+      <li><a href="#" style="font-size:11px;">HBR Feb 2026 (×2)</a></li>
+      <li><a href="#" style="font-size:11px;">Microsoft WTI 2026</a></li>
+      <li><a href="#" style="font-size:11px;">Deloitte 2026</a></li>
+      <li><a href="#" style="font-size:11px;">Indie Hackers 2026</a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <h3>키워드</h3>
+    <div>
+      <span class="sidebar-tag">Agent-Native</span>
+      <span class="sidebar-tag">Owned Intelligence</span>
+      <span class="sidebar-tag">Agent Manager</span>
+      <span class="sidebar-tag">Learning System</span>
+      <span class="sidebar-tag">소로프레너</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main-wrap -->
+
+<footer>
+  <div>AI-Native vs Agent-Native 심층 분석 — Garambada | GARAMwiki · 2026.05.27</div>
+  <div style="margin-top:6px;font-size:11px;">Sources: HBR Feb 2026 · Microsoft WTI 2026 · Deloitte 2026 · Cognition · Klarna · Indie Hackers 2026</div>
+</footer>
+
+</body>
+</html>
