@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주간 경쟁사·시장 모니터링 | GARAMwiki 트렌드</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #1a1a1a;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --accent: #c8613a;
+    --accent-soft: #faf2ee;
+    --card: #fafafa;
+    --chip: #f0ede8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    color: var(--ink);
+    background: #f4f4f2;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
+  header.page {
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 36px 0 28px;
+    margin-bottom: 28px;
+  }
+  .header-inner { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+  .breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 14px; letter-spacing: .02em; }
+  .breadcrumb b { color: var(--accent); font-weight: 600; }
+  h1 { font-size: 30px; line-height: 1.3; margin: 0 0 10px; letter-spacing: -.01em; }
+  .meta { font-size: 14px; color: var(--muted); }
+  .tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { background: var(--chip); color: #555; font-size: 12px; padding: 4px 11px; border-radius: 20px; }
+  .summary {
+    background: var(--accent-soft);
+    border: 1px solid #f0ddd2;
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin: 0 0 34px;
+    font-size: 15.5px;
+  }
+  .summary h2 { font-size: 14px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin: 0 0 10px; }
+  section.block { margin-bottom: 38px; }
+  h2.sec {
+    font-size: 20px;
+    margin: 0 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  h2.sec .num {
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 700;
+    background: var(--accent-soft);
+    border-radius: 6px;
+    padding: 2px 9px;
+  }
+  .item {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .item h3 { font-size: 15.5px; margin: 0 0 6px; }
+  .item p { margin: 0 0 8px; font-size: 14.5px; color: #2c2c2c; }
+  .src { font-size: 12.5px; color: var(--muted); }
+  .src a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  .src a:hover { background: var(--accent-soft); }
+  .nochange { display:inline-block; background:#eee; color:#777; font-size:11.5px; padding:2px 8px; border-radius:5px; margin-left:4px; }
+  ul.takeaways { list-style: none; padding: 0; margin: 0; }
+  ul.takeaways li {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    font-size: 14.5px;
+  }
+  ul.takeaways b { color: var(--accent); }
+  footer.note { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+  @media (max-width: 600px) { h1 { font-size: 24px; } .wrap { padding: 0 14px 60px; } }
+</style>
+</head>
+<body>
+<header class="page">
+  <div class="header-inner">
+    <div class="breadcrumb">GARAMwiki › <b>트렌드</b> › AI·테크 / 벤처빌딩</div>
+    <h1>주간 경쟁사·시장 모니터링 리포트</h1>
+    <div class="meta">작성일 2026년 6월 8일 (월) · 대상 기간 6/1~6/8</div>
+    <div class="tags">
+      <span class="tag">#AI</span>
+      <span class="tag">#테크스타트업</span>
+      <span class="tag">#company-builder</span>
+      <span class="tag">#벤처빌딩</span>
+      <span class="tag">#주간리포트</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="summary">
+    <h2>이번 주 핵심 변화 요약</h2>
+    마이크로소프트가 Build 2026에서 자체 MAI 모델군(코딩·음성·이미지 7종)을 공개하며 "탈OpenAI" 전략을 본격화했고, 구글·MS가 코딩/에이전트 시장에서 Anthropic·OpenAI를 정면 추격 중입니다. 펀딩 시장은 Ramp($750M, 440억 달러 밸류)를 비롯한 메가라운드가 다발적으로 터지며 5월 글로벌 투자 920억 달러(역대 2위)를 기록, AI가 분기 투자의 80%를 흡수하는 쏠림이 심화됐습니다. 챗봇 점유율은 ChatGPT 우위 속 Gemini·Claude의 빠른 추격 구도가 재확인됐습니다.
+  </div>
+
+  <section class="block">
+    <h2 class="sec"><span class="num">01</span>주요 AI 기업 — 제품·가격·전략</h2>
+
+    <div class="item">
+      <h3>Microsoft — 자체 모델군 전면 공개 (6/2, Build 2026)</h3>
+      <p>MAI-Thinking-1, MAI-Code-1-Flash(50억 파라미터, VS Code·GitHub Copilot CLI 특화), MAI-Image-2.5, MAI-Voice-2 등 7종 발표. OpenAI 의존도 축소와 개발자 비용 인하를 동시에 노렸습니다. GitHub Copilot을 자율 개발 에이전트로 재포지셔닝하고, 웨어러블 기반 'Project Solara'도 공개.</p>
+      <div class="src">출처: <a href="https://www.cnbc.com/2026/06/02/microsoft-unveils-new-ai-models-lessen-reliance-on-openai-lower-costs.html">CNBC</a> · <a href="https://fortune.com/2026/06/02/microsoft-moves-to-remain-ais-center-of-gravity/">Fortune</a></div>
+    </div>
+
+    <div class="item">
+      <h3>Google — Gemini 3.5 Pro 출시 임박</h3>
+      <p>5/19 I/O에서 Gemini 3.5 Flash를 GA 전환($1.50/$9.00 per M tokens). Pichai가 "다음 달 안에 제공"이라 예고한 3.5 Pro가 6월 임박. 멀티에이전트 병렬 실행 'Antigravity 2.0'으로 에이전트 경쟁 강화.</p>
+      <div class="src">출처: <a href="https://fortune.com/2026/05/20/google-i-o-2026/">Fortune</a> · <a href="https://www.axios.com/2026/05/21/google-ai-anthropic-openai-war">Axios</a></div>
+    </div>
+
+    <div class="item">
+      <h3>OpenAI — 수익화 가속</h3>
+      <p>에이전트용 실시간 오디오·번역 모델 출시로 라이브 음성·다국어 활용 확대. ChatGPT 내 셀프서브 광고 플랫폼 도입으로 수익 모델 다각화.</p>
+      <div class="src">출처: <a href="https://wavespeed.ai/blog/posts/june-2026-ai-launch-wave/">WaveSpeed</a></div>
+    </div>
+
+    <div class="item">
+      <h3>Anthropic — 파트너 생태계 확장</h3>
+      <p>Project Glasswing 확대와 함께 Claude Partner Network에 Services Track·Partner Hub 신설. 엔터프라이즈 head-to-head 딜에서 OpenAI 대비 ~70% 승률로 B2B 강세 유지.</p>
+      <div class="src">출처: <a href="https://www.anthropic.com/news">Anthropic</a> · <a href="https://intuitionlabs.ai/articles/claude-vs-chatgpt-vs-copilot-vs-gemini-enterprise-comparison">IntuitionLabs</a></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="sec"><span class="num">02</span>펀딩 · M&A · 파트너십</h2>
+
+    <div class="item">
+      <h3>메가라운드 다발 (6/5 주간)</h3>
+      <p>Ramp $750M(밸류 440억 달러, Iconiq·GIC·온타리오교직원연금) 선두. Supabase $500M(105억 달러), Flourish $500M(뇌 모방 AI, 베이조스·Lux·GV), Impulse Space $500M 동률 2위. Helion $465M(핵융합, 155억 달러), Suno $400M(54억 달러), AlphaSense $350M(75억 달러, IPO 논의) 마감.</p>
+      <div class="src">출처: <a href="https://news.crunchbase.com/venture/biggest-funding-rounds-june-5-2026/">Crunchbase</a></div>
+    </div>
+
+    <div class="item">
+      <h3>거시 자금 흐름</h3>
+      <p>5월 글로벌 스타트업 투자 920억 달러(역대 2위 월간), Q1 3,000억 달러 중 AI가 80% 차지. OpenAI·Anthropic·xAI·Waymo 4개 라운드가 글로벌 VC의 약 63% 흡수. Anthropic은 Series H로 포스트머니 약 9,650억 달러에 도달해 OpenAI(8,520억 달러) 추월.</p>
+      <div class="src">출처: <a href="https://news.crunchbase.com/venture/record-breaking-funding-ai-global-q1-2026/">Crunchbase</a> · <a href="https://blog.mean.ceo/ai-startup-funding-news-june-2026/">mean.ceo</a></div>
+    </div>
+
+    <div class="item">
+      <h3>파트너십</h3>
+      <p>MS·Google·OpenAI·Anthropic이 리눅스재단 산하 <b>에이전틱 AI 얼라이언스</b>를 결성, AI 에이전트 오픈소스 표준 제정 추진(경쟁사 간 표준 공조). Microsoft–Mayo Clinic 헬스케어 협력도 발표.</p>
+      <div class="src">출처: <a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/microsoft-google-openai-and-anthropic-join-forces-to-form-agentic-ai-alliance-according-to-report-organization-backed-by-the-linux-foundation-is-set-to-create-open-source-standards-for-ai-agents">Tom's Hardware</a></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="sec"><span class="num">03</span>시장 지표 · 경쟁 데이터</h2>
+
+    <div class="item">
+      <h3>챗봇 점유율 (6월 기준)</h3>
+      <p>ChatGPT 웹 방문 점유율 약 54.7%로 1위, Gemini 27.4%, Claude 8.2%. ChatGPT는 2025년 초 87%→56.7%(12개월 -30%p)로 하락, Gemini는 6%→25%대 최대폭 상승. Claude는 분기(~4월) 웹 방문 +306%(2.03억→8.24억)로 성장률 1위.</p>
+      <div class="src">출처: <a href="https://firstpagesage.com/reports/top-generative-ai-chatbots/">First Page Sage</a> · <a href="https://vertu.com/lifestyle/ai-chatbot-market-share-2026-chatgpt-drops-to-68-as-google-gemini-surges-to-18-2">Vertu</a></div>
+    </div>
+
+    <div class="item">
+      <h3>참여도</h3>
+      <p>Claude는 일 세션 평균 34.7분(최고), 이탈률 26%(최저), 방문당 4.34페이지로 트래픽 대비 참여도 최우수. ChatGPT는 9억 사용자·연 매출(ARR) 약 250억 달러 규모로 보도.</p>
+      <div class="src">출처: <a href="https://technologychecker.io/blog/chatgpt-statistics">TechnologyChecker</a> · <a href="https://intuitionlabs.ai/articles/claude-vs-chatgpt-vs-copilot-vs-gemini-enterprise-comparison">IntuitionLabs</a></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="sec"><span class="num">04</span>신규 부상 플레이어 · 위협</h2>
+
+    <div class="item">
+      <h3>유럽·검색 챌린저</h3>
+      <p>Mistral AI(파리, 오픈소스·엔터프라이즈 LLM)가 유럽 대표 주자로 부상, Perplexity(MAU 1천만+)는 구글 검색 독점 위협. Anysphere(Cursor) 등 코딩 툴 강세.</p>
+      <div class="src">출처: <a href="https://wellows.com/blog/ai-startups/">Wellows</a></div>
+    </div>
+
+    <div class="item">
+      <h3>투자 무게중심 이동</h3>
+      <p>신규 파운데이션 모델보다 <b>버티컬 SW·코딩 툴·AI 보안·피지컬 AI(로보틱스)</b>로 자금 이동. 칩 시장에선 Cerebras·AMD 부상과 Anthropic의 TPU 베팅으로 NVIDIA 독점에 균열 조짐.</p>
+      <div class="src">출처: <a href="https://foundationcapital.com/ideas/where-ai-is-headed-in-2026">Foundation Capital</a></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="sec"><span class="num">05</span>Company Builder · 벤처빌딩</h2>
+
+    <div class="item">
+      <h3>Merantix Capital (베를린) — €103M AI 펀드 클로징</h3>
+      <p>약 40개 프리시드·시드 유럽 AI-네이티브 스타트업 대상. 자체 벤처스튜디오 발굴 founder와 직접투자에 자금을 절반씩 배분하는 <b>스튜디오+직접투자 하이브리드</b> 모델이 특징.</p>
+      <div class="src">출처: <a href="https://techstartups.com/2026/06/03/venture-capital-startup-funding-roundup-june-3-2026/">Tech Startups</a></div>
+    </div>
+
+    <div class="item">
+      <h3>신규 진입 빌더</h3>
+      <p>ARK Invest + spARK Labs가 AI·로보틱스·블록체인·에너지·멀티오믹스 대상 초기단계 펀드+엔젤네트워크를 "수 주 내" 출범 예고. 미시간 WAVE Ventures는 딥테크 전문 벤처스튜디오 신설 발표.</p>
+      <div class="src">출처: <a href="https://stpetecatalyst.com/ark-invest-and-spark-labs-to-launch-early-stage-venture-fund/">St Pete Catalyst</a> · <a href="https://michiganvca.org/wave-ventures-to-launch-a-new-deep-tech-venture-studio/">Michigan VCA</a></div>
+    </div>
+
+    <div class="item">
+      <h3>대표 스튜디오 <span class="nochange">변동 없음</span></h3>
+      <p>Hexa(구 eFounders, 파리 B2B SaaS·AI, 30+개사·유니콘 3곳)와 Atomic(마이애미/SF, 소비자 테크) 등 기존 플레이어는 이번 주 신규 공식 발표 없음.</p>
+      <div class="src">출처: <a href="https://www.hexa.com/">Hexa</a> · <a href="https://waveup.com/blog/top-9-venture-studios-that-help-build-and-fund-startups/">Waveup</a></div>
+    </div>
+
+    <div class="item">
+      <h3>한국·아시아</h3>
+      <p>중기부가 2026 스타트업 패키지(딥테크 트랙)를 가동하고 실리콘밸리 Startup Venture Campus 개소, K-Startup Grand Challenge 2026 접수 시작(7월~). AI혁신펀드·KIF 등 6월까지 약 1.98조원 재원 확대 추진. "10,000 AI·딥테크 스타트업, 유니콘 50곳, 연 40조원 투자" 목표 재확인.</p>
+      <div class="src">출처: <a href="https://koreatechdesk.com/korea-startup-playbook-top-venture-industry-report">KoreaTechDesk</a> · <a href="https://www.businesswire.com/news/home/20260604794426/en/K-Startup-Grand-Challenge-2026-Koreas-Full-Cycle-Launchpad-for-Global-Startups">BusinessWire</a></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="sec" style="border-color: var(--accent);">전략적 시사점 / 우리가 주목해야 할 점</h2>
+    <ul class="takeaways">
+      <li><b>빅테크의 수직통합이 빌더에게 양날의 검:</b> MS가 자체 모델로 OpenAI 의존을 끊고 코딩 에이전트를 OS·툴체인에 내재화하는 흐름은, "모델 위 얇은 래퍼"가 빠르게 잠식됨을 시사. 빌딩 테마는 <b>버티컬 SW·AI 보안·피지컬 AI</b> 등 빅테크가 직접 들어오기 어려운 영역에 집중할 필요.</li>
+      <li><b>스튜디오 모델 표준이 '스튜디오+직접투자 하이브리드'로 수렴:</b> Merantix(자체 founder vs 직접투자 50:50)가 보여주듯, 단일 빌딩보다 펀드 결합 구조가 자금조달·리스크 분산에서 우위. 우리 펀드 구조 설계 시 벤치마크 가치 있음.</li>
+      <li><b>자금 쏠림 양극화 대응 포지셔닝:</b> AI가 VC의 80%를 흡수하나 소수 트랙션 보유 기업에 집중. 한국은 정책자금(1.98조원, K-Startup·딥테크 패키지)이 풍부 → <b>정책자금 레버리지 + 글로벌(SVC 실리콘밸리) 연결</b>이 차별화 기회.</li>
+    </ul>
+  </section>
+
+  <footer class="note">
+    본 리포트는 WebSearch 기반 공개 자료를 교차 확인해 작성되었으며, 일부 수치(밸류에이션·점유율)는 출처별 추정치로 변동 가능성이 있습니다. · GARAMwiki 트렌드 아카이브
+  </footer>
+
+</div>
+</body>
+</html>
