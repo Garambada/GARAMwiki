@@ -175,6 +175,10 @@ ARTICLE_META = {
         "tags":  ["공공기관", "AX", "철도공단", "항만공사", "Company Builder"],
     },
     # 사업 현안
+    "2026-04_AI도입_AI성숙도사다리_섹시하지않은진실_TuringPost.html": {
+        "title": "AI 도입의 섹시하지 않은 진실 — AI 성숙도 사다리 L0~L5<br>조직 재설계와 '지루한 기초 공사'의 중요성 (Turing Post Korea)",
+        "tags":  ["AI 성숙도", "Maturity Ladder", "가독화", "데이터 신뢰", "조직 재설계"],
+    },
     "2026-05_KRNA_설계도면_AI_검증_프로젝트_미팅보고.html": {
         "title": "KRNA 설계도면 수량·공사비 산출 AI 검증 프로젝트<br>5/27 미팅 보고 및 심층 대응 전략 — WISE42",
         "tags":  ["KRNA", "WISE42", "설계도면 AI", "3-Layer Architecture", "Living System"],

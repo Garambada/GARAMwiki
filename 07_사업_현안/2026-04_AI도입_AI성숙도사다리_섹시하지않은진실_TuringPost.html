@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 도입의 섹시하지 않은 진실 — AI 성숙도 사다리 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0c0e14;
+    --surface: #141720;
+    --surface2: #1c2030;
+    --border: #2a2f3e;
+    --text: #e8eaf0;
+    --muted: #7a8099;
+    --accent: #f97316;
+    --accent-soft: rgba(249,115,22,0.10);
+    --accent-border: rgba(249,115,22,0.30);
+    --blue: #3b82f6;
+    --blue-soft: rgba(59,130,246,0.10);
+    --green: #10b981;
+    --green-soft: rgba(16,185,129,0.10);
+    --purple: #a78bfa;
+    --purple-soft: rgba(167,139,250,0.10);
+    --red: #ef4444;
+    --red-soft: rgba(239,68,68,0.10);
+    --yellow: #f59e0b;
+    --yellow-soft: rgba(245,158,11,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12,14,20,0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 56px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .nav-logo {
+    font-size: 1rem; font-weight: 800;
+    background: linear-gradient(90deg, #f97316, #fb923c);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
+  }
+  .nav-sep { color: var(--border); }
+  .nav-title { font-size: 0.82rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 500px; }
+  .nav-back { margin-left: auto; font-size: 0.78rem; color: var(--muted); text-decoration: none; }
+  .nav-back:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0c0e14 0%, #1a1008 50%, #0c0e14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 40px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%);
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; position: relative; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    font-size: 0.72rem; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px;
+    margin-bottom: 18px; letter-spacing: 0.4px;
+  }
+  .hero h1 {
+    font-size: 2rem; font-weight: 800;
+    line-height: 1.3; letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(90deg, #f97316, #fb923c);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 1rem; color: var(--muted); margin-bottom: 24px; line-height: 1.6;
+  }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    font-size: 0.78rem; color: var(--muted);
+  }
+  .meta-chip {
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 3px 10px; border-radius: 20px; white-space: nowrap;
+  }
+  .meta-chip b { color: var(--text); }
+
+  /* STATS STRIP */
+  .stats-strip {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex; gap: 0; flex-wrap: wrap;
+  }
+  .stat {
+    flex: 1; min-width: 160px;
+    padding: 8px 20px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+  .stat-label { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+  .c-orange { color: var(--accent); }
+  .c-red    { color: var(--red); }
+  .c-green  { color: var(--green); }
+  .c-blue   { color: var(--blue); }
+  .c-purple { color: var(--purple); }
+  .c-yellow { color: var(--yellow); }
+
+  /* LAYOUT */
+  .layout {
+    max-width: 1200px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 0;
+    padding: 0 40px;
+  }
+
+  /* SIDEBAR TOC */
+  .toc {
+    padding: 32px 24px 32px 0;
+    position: sticky; top: 56px;
+    max-height: calc(100vh - 56px);
+    overflow-y: auto;
+    align-self: start;
+    border-right: 1px solid var(--border);
+  }
+  .toc-title {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .toc a {
+    display: block; font-size: 0.78rem; color: var(--muted);
+    text-decoration: none; padding: 5px 0;
+    border-left: 2px solid transparent;
+    padding-left: 10px;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+  .toc a:hover { color: var(--accent); border-left-color: var(--accent); }
+  .toc a.sub { padding-left: 20px; font-size: 0.72rem; }
+
+  /* CONTENT */
+  .content {
+    padding: 40px 0 80px 40px;
+  }
+
+  h2 {
+    font-size: 1.3rem; font-weight: 700;
+    margin: 48px 0 16px;
+    padding-top: 8px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  h2:first-child { margin-top: 0; }
+  h3 {
+    font-size: 1.05rem; font-weight: 700;
+    margin: 32px 0 12px; color: var(--text);
+  }
+
+  p { margin-bottom: 16px; font-size: 0.93rem; line-height: 1.8; }
+
+  /* CALLOUT */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .callout.blue { border-color: var(--blue); background: var(--blue-soft); }
+  .callout.green { border-color: var(--green); background: var(--green-soft); }
+  .callout.purple { border-color: var(--purple); background: var(--purple-soft); }
+  .callout.red { border-color: var(--red); background: var(--red-soft); }
+
+  /* QUOTE */
+  .quote {
+    border-left: 3px solid var(--yellow);
+    padding: 12px 20px;
+    margin: 20px 0;
+    font-style: italic;
+    color: #d4b896;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  thead th {
+    padding: 10px 14px;
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+  tbody tr:hover { background: var(--surface2); }
+  td { padding: 12px 14px; vertical-align: top; line-height: 1.55; }
+  td:first-child { white-space: nowrap; }
+
+  /* LADDER CARDS */
+  .ladder {
+    display: grid; gap: 10px; margin: 20px 0;
+  }
+  .ladder-row {
+    display: grid;
+    grid-template-columns: 60px 120px 1fr;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .ladder-row:hover { border-color: rgba(249,115,22,0.3); }
+  .ladder-row.highlight { border-color: var(--accent); }
+  .ladder-level {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; font-weight: 900;
+    border-right: 1px solid var(--border);
+    padding: 16px 8px;
+    flex-direction: column; gap: 2px;
+  }
+  .level-sub { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .ladder-name {
+    padding: 16px 16px;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .lname { font-weight: 700; font-size: 0.85rem; }
+  .lname-en { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+  .ladder-desc {
+    padding: 16px 20px;
+    font-size: 0.84rem; color: #c5cce0;
+    display: flex; align-items: center;
+  }
+
+  /* TRANSITION CARD */
+  .trans-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+  .trans-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .trans-arrow {
+    font-size: 1.1rem; font-weight: 900; color: var(--accent);
+  }
+  .trans-title { font-size: 0.95rem; font-weight: 700; }
+  .trans-tag {
+    margin-left: auto; font-size: 0.7rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 10px;
+  }
+  .trans-body { padding: 20px; }
+  .trans-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px; margin-bottom: 16px;
+  }
+  .trans-cell {
+    background: var(--surface2);
+    border-radius: 8px; padding: 14px 16px;
+    font-size: 0.82rem;
+  }
+  .cell-label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .cell-text { color: #c5cce0; line-height: 1.6; }
+  .label-red { color: var(--red); }
+  .label-orange { color: var(--accent); }
+  .label-green { color: var(--green); }
+
+  .case-box {
+    background: rgba(249,115,22,0.05);
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.82rem;
+    margin-top: 4px;
+  }
+  .case-label {
+    font-size: 0.68rem; font-weight: 700; color: var(--accent);
+    letter-spacing: 0.5px; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .case-text { color: #c5cce0; line-height: 1.65; }
+
+  /* VS GRID */
+  .vs-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin: 20px 0;
+  }
+  .vs-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .vs-card h4 {
+    font-size: 0.9rem; font-weight: 700;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .vs-item {
+    display: flex; gap: 8px;
+    font-size: 0.82rem;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .vs-dot { flex-shrink: 0; margin-top: 5px; width: 5px; height: 5px; border-radius: 50%; }
+
+  /* INSIGHT GRID */
+  .insight-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 14px; margin: 20px 0;
+  }
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 18px;
+  }
+  .ins-num {
+    font-size: 0.68rem; font-weight: 700;
+    color: var(--accent); letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .ins-title { font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; }
+  .ins-body { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  /* KEYWORD PILLS */
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+  .pill {
+    font-size: 0.72rem; padding: 3px 10px;
+    border-radius: 20px; background: var(--surface2);
+    border: 1px solid var(--border); color: var(--muted);
+  }
+  .pill.accent { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    font-size: 0.75rem; color: var(--muted);
+    text-align: center;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; padding: 0 16px; }
+    .toc { display: none; }
+    .content { padding: 32px 0 60px; }
+    .hero { padding: 36px 16px 28px; }
+    nav { padding: 0 16px; }
+    .stats-strip { padding: 16px; }
+    .trans-row { grid-template-columns: 1fr; }
+    .vs-grid, .insight-grid { grid-template-columns: 1fr; }
+    .ladder-row { grid-template-columns: 50px 100px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">GARAMwiki</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">AI 도입의 섹시하지 않은 진실 — AI 성숙도 사다리</span>
+  <a class="nav-back" href="../index.html">← 인덱스</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🏢 사업 현안</div>
+    <h1>AI 도입, <em>섹시하지 않은</em> 성공 법칙<br>— AI 성숙도 사다리와 조직 재설계</h1>
+    <p class="hero-sub">화려한 기술보다 중요한 '지루한 기초 공사' — AI 성숙도를 완성하는 조직 재설계의 방향<br>Turing Post Korea | Ksenia Se &amp; Ben Eum</p>
+    <div class="hero-meta">
+      <span class="meta-chip">📅 <b>2026-04-27</b></span>
+      <span class="meta-chip">✍ <b>Turing Post Korea</b></span>
+      <span class="meta-chip">🔗 <a href="https://turingpost.co.kr/p/unsexy-truth-of-ai-adoption" target="_blank" style="color:var(--accent)">원문 보기</a></span>
+      <span class="meta-chip">📂 <b>07_사업_현안</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat">
+    <div class="stat-num c-orange">6</div>
+    <div class="stat-label">AI 성숙도 레벨 (L0~L5)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num c-red">88%</div>
+    <div class="stat-label">엔터프라이즈 에이전트 파일럿 실패율</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num c-yellow">6주</div>
+    <div class="stat-label">L1→L2 업무 명문화에 실제 소요 기간(사례)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num c-green">94.5%</div>
+    <div class="stat-label">AI 인보이스 추출 정확도 (L2→L3 사례)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num c-blue">20%</div>
+    <div class="stat-label">Tezlab AI 지원 시스템 서버비 절감(L3→L4)</div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-title">목차</div>
+    <a href="#overview">핵심 요약</a>
+    <a href="#ladder">AI 성숙도 사다리</a>
+    <a href="#gap">중간 단계를 건너뛸 수 없는 이유</a>
+    <a href="#l1l2">L1→L2: 가독화 (가장 고통)</a>
+    <a class="sub" href="#l1l2">├ 사례: 식당 장부 관리 업체</a>
+    <a class="sub" href="#l1l2">└ 사례: 건설회사 개발자 퇴사</a>
+    <a href="#l2l3">L2→L3: 데이터 신뢰 (가장 과소평가)</a>
+    <a href="#l3l4">L3→L4: 시스템 행동 (가장 거품)</a>
+    <a class="sub" href="#l3l4">└ 사례: Tezlab</a>
+    <a href="#l4l5">L4→L5: 조직 근간 변화 (가장 거대)</a>
+    <a href="#bigvs">대기업 vs 스타트업</a>
+    <a href="#insight">GARAMbada 인사이트</a>
+  </aside>
+
+  <!-- CONTENT -->
+  <article class="content">
+
+    <!-- 핵심 요약 -->
+    <section id="overview">
+      <h2>📌 핵심 요약 — 왜 이 글이 중요한가</h2>
+
+      <div class="callout">
+        AI 도입의 성패는 최신 모델 선택이 아닌 <strong>조직의 기초 체력</strong>에 달려 있다. 에이전트 데모가 화려해도 현장에 투입되면 6개월 안에 조용히 사라지는 이유는 <strong>성숙도 중간 단계(L2~L3)를 건너뛰려 했기 때문</strong>이다. WISE42가 FDE로 고객사에 접근할 때, 이 성숙도 진단이 핵심 진입점이다.
+      </div>
+
+      <p>Turing Post Korea의 Ksenia Se &amp; Ben Eum이 분석한 이 글은, AI 도입에서 가장 과소평가되는 "지루한 기초 공사"의 실체를 6단계 성숙도 사다리로 정확히 해부한다. 기업들이 꿈꾸는 자율 에이전트와 실제 현실의 간극이 어디서 발생하는지, 그리고 그 간극을 메우기 위한 조직 재설계 방향을 사례 중심으로 제시한다.</p>
+
+      <div class="pills">
+        <span class="pill accent">AI 성숙도</span>
+        <span class="pill accent">조직 재설계</span>
+        <span class="pill accent">L1→L2 가독화</span>
+        <span class="pill accent">데이터 신뢰</span>
+        <span class="pill">Turing Post Korea</span>
+        <span class="pill">FDE 진단</span>
+        <span class="pill">Pilot Purgatory</span>
+        <span class="pill">에이전트 거버넌스</span>
+        <span class="pill">암묵지 명문화</span>
+      </div>
+
+      <div class="quote">
+        "최후의 승자는 2026년에 가장 비싼 AI 모델을 쓴 기업이 아닐 겁니다. AI가 제 실력을 발휘할 수 있도록 조직의 기초 체력을 다지는, '섹시하지 않은 작업'을 묵묵히 해낸 기업이 될 것입니다."
+        <br><span style="font-style:normal;font-size:0.78rem;color:var(--muted)">— Ksenia Se &amp; Ben Eum, Turing Post Korea</span>
+      </div>
+    </section>
+
+    <!-- AI 성숙도 사다리 -->
+    <section id="ladder">
+      <h2>🪜 AI 성숙도 사다리 (AI Maturity Ladder)</h2>
+
+      <p>가트너·맥킨지의 선형 AI 성숙도 모델과 달리, 실제 기업 환경에서는 <strong>'의존성의 적층(Stack of Dependencies)'</strong> 구조가 더 정확하다. 아래 층이 부실하면 위 층은 절대 올릴 수 없다. 겉으로는 올린 것처럼 보여도 데모용일 뿐 — 현장 6개월 후 사라진다.</p>
+
+      <div class="ladder">
+        <div class="ladder-row">
+          <div class="ladder-level c-muted" style="color:#555e7a;background:var(--surface2)">
+            <span>L0</span>
+            <span class="level-sub" style="color:#555e7a">Tribal</span>
+          </div>
+          <div class="ladder-name">
+            <span class="lname">관습</span>
+            <span class="lname-en">Tribal</span>
+          </div>
+          <div class="ladder-desc">개인의 경험과 습관에 의존해 주먹구구식으로 운영됨. 핵심 노하우는 서너 명의 머릿속에만 존재.</div>
+        </div>
+
+        <div class="ladder-row">
+          <div class="ladder-level" style="color:var(--blue);background:var(--blue-soft)">
+            <span>L1</span>
+            <span class="level-sub" style="color:var(--blue)">Exp.</span>
+          </div>
+          <div class="ladder-name">
+            <span class="lname">실험</span>
+            <span class="lname-en">Experimenting</span>
+          </div>
+          <div class="ladder-desc">각자 AI 도구(챗GPT·코파일럿·회의 요약)를 쓰긴 하지만, 조직 차원의 성과로 쌓이지 않음. '개인기' 단계.</div>
+        </div>
+
+        <div class="ladder-row highlight">
+          <div class="ladder-level" style="color:var(--yellow);background:var(--yellow-soft)">
+            <span>L2</span>
+            <span class="level-sub" style="color:var(--yellow)">Leg.</span>
+          </div>
+          <div class="ladder-name">
+            <span class="lname">가독</span>
+            <span class="lname-en">Legible</span>
+          </div>
+          <div class="ladder-desc"><strong style="color:var(--yellow)">↑ 가장 고통스러운 구간.</strong> 업무 프로세스를 기계가 알아들을 수 있게 설명할 수 있음. 암묵지를 명문화하는 단계.</div>
+        </div>
+
+        <div class="ladder-row highlight">
+          <div class="ladder-level" style="color:var(--accent);background:var(--accent-soft)">
+            <span>L3</span>
+            <span class="level-sub" style="color:var(--accent)">Know.</span>
+          </div>
+          <div class="ladder-name">
+            <span class="lname">지식</span>
+            <span class="lname-en">Knowledgeable</span>
+          </div>
+          <div class="ladder-desc"><strong style="color:var(--accent)">↑ 가장 과소평가된 구간.</strong> 조직이 무엇을 아는지 파악하고 있으며, 데이터로 증명 가능함. 데이터 신뢰 확립.</div>
+        </div>
+
+        <div class="ladder-row">
+          <div class="ladder-level" style="color:var(--green);background:var(--green-soft)">
+            <span>L4</span>
+            <span class="level-sub" style="color:var(--green)">Adap.</span>
+          </div>
+          <div class="ladder-name">
+            <span class="lname">적응</span>
+            <span class="lname-en">Adaptive</span>
+          </div>
+          <div class="ladder-desc"><strong style="color:var(--red)">↑ 가장 거품이 낀 구간.</strong> 시스템이 상황을 먼저 읽고 알아서 대응하기 시작함. 권력 구조 재설계 필요.</div>
+        </div>
+
+        <div class="ladder-row">
+          <div class="ladder-level" style="color:var(--purple);background:var(--purple-soft)">
+            <span>L5</span>
+            <span class="level-sub" style="color:var(--purple)">Self</span>
+          </div>
+          <div class="ladder-name">
+            <span class="lname">자율개선</span>
+            <span class="lname-en">Self-Improving</span>
+          </div>
+          <div class="ladder-desc"><strong style="color:var(--purple)">↑ 가장 거대한 변화.</strong> 운영 과정에서 스스로 학습하며 시스템 고도화. 선순환 피드백 루프 완성. AI가 조직 설계 파트너.</div>
+        </div>
+      </div>
+
+      <div class="callout blue">
+        <strong>진단 포인트:</strong> "우리 회사는 몇 단계인가?"보다 중요한 질문은 <strong>"어느 부분이 꽉 막혀서 우리 발목을 잡고 있는가?"</strong>다. 엔지니어링 팀이 L4여도 재무팀이 L1이면 전사 AI는 L1이다. 불균형은 지극히 정상 — 어느 병목을 먼저 해결할지 우선순위 설정이 핵심.
+      </div>
+    </section>
+
+    <!-- 중간 단계를 건너뛸 수 없는 이유 -->
+    <section id="gap">
+      <h2>🚧 왜 '중간 과정'을 건너뛸 수 없는가</h2>
+
+      <div class="quote">
+        "많은 기업이 챗GPT로 메일이나 쓰는 단계에서 곧바로 '자율 에이전트'로 점프하고 싶어 합니다. 하지만 도입의 성패를 가르는 이 '중간 단계'를 건너뛰려는 계획은 반드시 실패합니다."
+      </div>
+
+      <p>리더들이 AI 에이전트 데모를 보고 "우리도 당장 저거 합시다!"라고 하는 순간, 조직 내부는 여전히 관습과 임기응변으로 돌아가고 있다. 핵심 노하우는 수면 아래 감춰진 암묵지이고, 팀마다 용어가 다르며 데이터는 파편화되어 있다.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>리더가 원하는 것</th>
+              <th>실제 조직의 현실</th>
+              <th>결과</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>자율 에이전트 즉시 도입</td>
+              <td>업무 프로세스가 머릿속에만 존재</td>
+              <td style="color:var(--red)">데모 성공 → 현장 6개월 후 소멸</td>
+            </tr>
+            <tr>
+              <td>AI가 보고서 작성·추천</td>
+              <td>데이터가 파편화·중복 집계됨</td>
+              <td style="color:var(--red)">출력값 신뢰 불가 → 사용 안 함</td>
+            </tr>
+            <tr>
+              <td>AI가 고객 문의 자동 처리</td>
+              <td>권한 체계가 AI 행동 속도보다 느림</td>
+              <td style="color:var(--red)">결과는 나오는데 실행 불가</td>
+            </tr>
+            <tr>
+              <td>AI가 조직 개선 제안</td>
+              <td>기계의 제안을 수용할 리더십 준비 안 됨</td>
+              <td style="color:var(--red)">내부 저항으로 프로젝트 중단</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- L1 → L2 -->
+    <section id="l1l2">
+      <h2>⚙️ L1 → L2: 가독화 — 가장 고통스러운 구간</h2>
+
+      <div class="trans-card">
+        <div class="trans-header">
+          <span class="trans-arrow">L1</span>
+          <span style="color:var(--muted)">→</span>
+          <span class="trans-arrow">L2</span>
+          <span class="trans-title">조직이 '데이터로 읽히게' 만들기</span>
+          <span class="trans-tag" style="background:var(--yellow-soft);border:1px solid rgba(245,158,11,0.3);color:var(--yellow)">가장 고통스러운 구간</span>
+        </div>
+        <div class="trans-body">
+          <div class="trans-row">
+            <div class="trans-cell">
+              <div class="cell-label label-red">❌ 오해</div>
+              <div class="cell-text">AI 전략을 짜고 좋은 도구를 도입해야 해.</div>
+            </div>
+            <div class="trans-cell">
+              <div class="cell-label label-orange">⚠️ 진짜 장벽</div>
+              <div class="cell-text">우리 조직이 어떻게 돌아가는지 우리도 설명하지 못함. 암묵지는 정보 독점을 위한 의도적 관리인 경우도 많음.</div>
+            </div>
+            <div class="trans-cell">
+              <div class="cell-label label-green">✅ 보상</div>
+              <div class="cell-text">AI 없이도 신입 사원 적응이 빨라지고 조직이 단단해짐. '좋은 조직 관리'를 AI 덕분에 비로소 시작하게 됨.</div>
+            </div>
+          </div>
+
+          <div class="case-box" style="margin-bottom:12px">
+            <div class="case-label">📋 사례 1 — 식당 장부 관리 업체</div>
+            <div class="case-text">AI로 데이터 입력 자동화 시도 → 업체마다 배송비·보증금 처리 방식이 다 다르고 정리 규칙조차 없었음. AI 가동 전 <strong>프로세스 명문화에만 6주 소요</strong>. 그동안 사람 직원들이 기계는 이해할 수 없는 '모호함'을 온몸으로 흡수하며 운영해왔음이 드러남.</div>
+          </div>
+
+          <div class="case-box">
+            <div class="case-label">📋 사례 2 — 건설회사 개발자 퇴사</div>
+            <div class="case-text">한 개발자가 1년 넘게 만든 시스템이 퇴사 즉시 마비. 모든 데이터 연결 규칙이 그 사람 머릿속에만 있었음. '배관 공사'가 회계 시스템에서 왜 다른 코드로 불리는지 아무도 몰랐음. → <strong>지식의 소유권 = 권력</strong>이라는 조직 역학의 민낯 노출.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- L2 → L3 -->
+    <section id="l2l3">
+      <h2>🔍 L2 → L3: 데이터 신뢰 — 가장 과소평가된 구간</h2>
+
+      <div class="trans-card">
+        <div class="trans-header">
+          <span class="trans-arrow">L2</span>
+          <span style="color:var(--muted)">→</span>
+          <span class="trans-arrow">L3</span>
+          <span class="trans-title">우리 데이터를 진짜로 믿을 수 있는가?</span>
+          <span class="trans-tag" style="background:var(--accent-soft);border:1px solid var(--accent-border);color:var(--accent)">가장 과소평가된 구간</span>
+        </div>
+        <div class="trans-body">
+          <div class="trans-row">
+            <div class="trans-cell">
+              <div class="cell-label label-red">❌ 오해</div>
+              <div class="cell-text">RAG(검색 증강 생성) 기술만 있으면 돼.</div>
+            </div>
+            <div class="trans-cell">
+              <div class="cell-label label-orange">⚠️ 진짜 장벽</div>
+              <div class="cell-text">결과물을 검증할 수 없으면 아무도 그 결과에 따라 움직이지 않음. <strong>데이터 연결은 기술의 문제지만, 신뢰는 심리의 문제.</strong></div>
+            </div>
+            <div class="trans-cell">
+              <div class="cell-label label-green">✅ 보상</div>
+              <div class="cell-text">1시간 걸리던 자료 조사가 5초 만에 끝남. 조직이 드디어 '우리가 무엇을 알고 있는지' 완벽히 파악하게 됨.</div>
+            </div>
+          </div>
+
+          <div class="case-box" style="margin-bottom:12px">
+            <div class="case-label">📋 사례 1 — 미디어 분석 업체</div>
+            <div class="case-text">AI를 붙이고서야 플랫폼마다 사용자 ID가 달라 데이터가 <strong>중복 집계</strong>되고 있었음을 발견. 그동안 사람은 눈치껏 머릿속에서 맞춰가며 일해온 것이 드러남.</div>
+          </div>
+
+          <div class="case-box">
+            <div class="case-label">📋 사례 2 — 금융 서비스 기업 인보이스 추출</div>
+            <div class="case-text">AI 인보이스 추출기 정확도 <strong>94.5%</strong> 달성. 그런데 오답 대부분이 AI의 실수가 아니라 <strong>과거 사람이 손으로 입력한 오타</strong>였음. 직원들은 AI 답변의 출처(근거)를 일일이 확인할 수 있게 되기 전까지 시스템을 신뢰하지 않음 → <strong>설명 가능성(Explainability)이 채택률을 결정</strong>한다는 현실.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- L3 → L4 -->
+    <section id="l3l4">
+      <h2>🤖 L3 → L4: 시스템 행동 — 가장 거품이 낀 구간</h2>
+
+      <div class="trans-card">
+        <div class="trans-header">
+          <span class="trans-arrow">L3</span>
+          <span style="color:var(--muted)">→</span>
+          <span class="trans-arrow">L4</span>
+          <span class="trans-title">시스템이 판단하고 행동하기 시작하다</span>
+          <span class="trans-tag" style="background:var(--red-soft);border:1px solid rgba(239,68,68,0.3);color:var(--red)">가장 거품이 낀 구간</span>
+        </div>
+        <div class="trans-body">
+          <div class="trans-row">
+            <div class="trans-cell">
+              <div class="cell-label label-red">❌ 오해</div>
+              <div class="cell-text">에이전트만 도입하면 끝이야.</div>
+            </div>
+            <div class="trans-cell">
+              <div class="cell-label label-orange">⚠️ 진짜 장벽</div>
+              <div class="cell-text">실무자에게 정보와 권한이 쏠리는 <strong>'권력의 이동'</strong>을 리더십이 감당하지 못함. 조직도·권한 체계가 통째로 바뀌어야 함.</div>
+            </div>
+            <div class="trans-cell">
+              <div class="cell-label label-green">✅ 보상</div>
+              <div class="cell-text">병목 현상이 사라지고, 인간은 오직 '판단'이라는 고차원적 가치에만 집중하게 됨.</div>
+            </div>
+          </div>
+
+          <div class="case-box">
+            <div class="case-label">📋 사례 — Tezlab 차량 데이터 앱 고객지원</div>
+            <div class="case-text">문의 메일이 오자마자 AI가 코드를 뒤져 원인 자동 파악 → 사람 상담원은 AI가 차려놓은 밥상에서 결정만. <strong>서버 운영비 20% 절감</strong>. 단, 이것이 가능하려면 상담원이 엔지니어링 문제를 개발자에게 부탁하지 않고 <strong>직접 수정할 수 있는 권한</strong>을 가져야 했음. → 조직 구조 개편이 선행 조건.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- L4 → L5 -->
+    <section id="l4l5">
+      <h2>🔄 L4 → L5: 조직 근간 변화 — 가장 거대한 변화</h2>
+
+      <div class="trans-card">
+        <div class="trans-header">
+          <span class="trans-arrow">L4</span>
+          <span style="color:var(--muted)">→</span>
+          <span class="trans-arrow">L5</span>
+          <span class="trans-title">시스템이 조직의 근간을 바꾸다</span>
+          <span class="trans-tag" style="background:var(--purple-soft);border:1px solid rgba(167,139,250,0.3);color:var(--purple)">가장 거대한 변화</span>
+        </div>
+        <div class="trans-body">
+          <div class="trans-row">
+            <div class="trans-cell">
+              <div class="cell-label label-red">❌ 오해</div>
+              <div class="cell-text">자율 주행처럼 알아서 다 돌아가겠지.</div>
+            </div>
+            <div class="trans-cell">
+              <div class="cell-label label-orange">⚠️ 진짜 장벽</div>
+              <div class="cell-text">전문가의 머릿속 노하우를 시스템으로 피드백하는 과정이 아주 힘듦. "기계가 시키는 대로 사람을 뽑으라고?"라는 <strong>인간의 거부감</strong>.</div>
+            </div>
+            <div class="trans-cell">
+              <div class="cell-label label-green">✅ 보상</div>
+              <div class="cell-text">조직의 지능이 특정 개인에게 머물지 않고 <strong>영구적인 자산</strong>이 됨. 지식의 제도화.</div>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:0">
+            L5에서는 AI가 실행을 넘어 <strong>조직 설계의 핵심 파트너</strong>가 된다: "현재 프로젝트 속도를 보니 이런 역량을 가진 사람이 더 필요합니다" / "채용 공고 내용을 이렇게 바꾸는 게 좋겠습니다". 여기서 중요한 것은 기술이 아니라 <strong>리더십의 경영적 결단</strong>이다.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 대기업 vs 스타트업 -->
+    <section id="bigvs">
+      <h2>⚖️ 대기업 vs 스타트업 — 누가 이기는가</h2>
+
+      <p>이 모든 단계를 관통하는 진실: <strong>"조직을 기계가 이해할 수 있게 만드는 과정 = 사람이 일하기 좋은 조직을 만드는 과정"</strong>이다. 검색 가능한 기록, 명확한 근거, 표준화된 데이터, 투명한 규칙 — AI뿐만 아니라 신입 사원에게도 필요한 것들.</p>
+
+      <div class="vs-grid">
+        <div class="vs-card">
+          <h4 style="color:var(--blue)">🏢 대기업</h4>
+          <div class="vs-item">
+            <div class="vs-dot" style="background:var(--red)"></div>
+            <div>'거대 비만 조직의 전신 수술'과 같이 고통스럽고 오래 걸림</div>
+          </div>
+          <div class="vs-item">
+            <div class="vs-dot" style="background:var(--red)"></div>
+            <div>기존 권력 구조와 정보 독점 해체 과정에서 거센 내부 저항</div>
+          </div>
+          <div class="vs-item">
+            <div class="vs-dot" style="background:var(--red)"></div>
+            <div>AI 도입에 저항하는 진짜 이유 = 자신들의 무질서와 불투명함이 드러날 두려움</div>
+          </div>
+          <div class="vs-item">
+            <div class="vs-dot" style="background:var(--green)"></div>
+            <div>성공만 하면 파괴력은 어마어마함 — 규모의 이점 극대화 가능</div>
+          </div>
+        </div>
+
+        <div class="vs-card">
+          <h4 style="color:var(--green)">🚀 스타트업 / 소규모 팀</h4>
+          <div class="vs-item">
+            <div class="vs-dot" style="background:var(--green)"></div>
+            <div>군더더기가 없어 곧바로 L3, L4로 치고 나갈 수 있음</div>
+          </div>
+          <div class="vs-item">
+            <div class="vs-dot" style="background:var(--green)"></div>
+            <div>창업 초기에 올바른 기록·체계를 잡으면 영속적인 강점</div>
+          </div>
+          <div class="vs-item">
+            <div class="vs-dot" style="background:var(--red)"></div>
+            <div>성장하면서 기록·체계를 게을리하면 금세 대기업과 똑같은 늪</div>
+          </div>
+          <div class="vs-item">
+            <div class="vs-dot" style="background:var(--accent)"></div>
+            <div>AI가 체급 차이를 무너뜨리는 기회 — 단, 성숙도 기초 체력이 전제</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout green">
+        <strong>결론:</strong> 최후의 승자는 2026년 최고 성능 모델 사용 기업이 아니다. <strong>AI가 제 실력을 발휘할 수 있도록 조직의 '섹시하지 않은 기초 공사'를 묵묵히 해낸 기업</strong>이다. 다음 에피소드에서는 대기업과 소규모 팀의 구체적 실행 전략을 다룬다.
+      </div>
+    </section>
+
+    <!-- GARAMbada 인사이트 -->
+    <section id="insight">
+      <h2>💡 GARAMbada 인사이트 — WISE42 적용 관점</h2>
+
+      <div class="insight-grid">
+        <div class="insight-card">
+          <div class="ins-num">INSIGHT 01</div>
+          <div class="ins-title">FDE 진입점 = L1→L2 전환 지원</div>
+          <div class="ins-body">WISE42의 FDE 모델에서 가장 강력한 진입점은 고객사의 L1→L2 전환이다. "업무를 기계가 읽을 수 있게 만든다"는 것이 Ontology First 전략의 본질. KRNA 설계도면 프로젝트에서도 도면 도메인 지식을 온톨로지화하는 것이 곧 L2 달성 과정이다.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="ins-num">INSIGHT 02</div>
+          <div class="ins-title">Pilot Purgatory = 성숙도 점프 시도의 결과</div>
+          <div class="ins-body">기업이 에이전트 파일럿 88% 실패하는 이유가 이 글에서 명확히 설명된다. L2·L3 기초 없이 L4 데모에 뛰어드는 구조. 고객사 진단 시 "성숙도 어디 막혔나"를 첫 번째 질문으로 설정해야 한다.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="ins-num">INSIGHT 03</div>
+          <div class="ins-title">암묵지 명문화 = 권력 재편 = 변화관리</div>
+          <div class="ins-body">L1→L2 전환의 진짜 저항은 기술이 아닌 정치다. 업무 가독화는 "대체 불가능한 사람"의 정보 독점을 해체하는 과정. HBR Blueprint의 Delta Team(업무전문가+AI엔지니어+변화관리)이 필요한 이유가 여기 있다.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="ins-num">INSIGHT 04</div>
+          <div class="ins-title">Owned Intelligence = L5의 기업 버전</div>
+          <div class="ins-body">MS WTI 2026의 Owned Intelligence 개념이 L5와 동일하다. 개인의 노하우가 조직의 영구 학습 자산이 되는 것. WISE42가 고객사에 제안하는 Living System 운영모델의 최종 목표이기도 하다.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="ins-num">INSIGHT 05</div>
+          <div class="ins-title">소규모 팀 = AI 격차 역전 기회</div>
+          <div class="ins-body">대기업이 L1→L2 전환에 수개월~수년이 걸리는 동안, 초기부터 올바른 체계를 잡은 소규모 팀은 L3·L4를 선점할 수 있다. WISE42 Founders Studio 모델이 노리는 정확한 기회 창이다.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="ins-num">INSIGHT 06</div>
+          <div class="ins-title">부서별 성숙도 격차 = 우선순위 결정의 근거</div>
+          <div class="ins-body">엔지니어링 팀 L4, 재무팀 L1 → 전사 AI 성과는 L1에 제한된다. 고객사 AX 진단 시 부서별 성숙도 매핑이 선행되어야 하며, 병목이 되는 부서를 먼저 끌어올리는 것이 전체 ROI를 극대화한다.</div>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:8px">
+        <strong>핵심 액션:</strong> 고객사 AI 도입 컨설팅 진입 시 첫 단계로 <strong>"AI 성숙도 사다리 진단 워크숍"</strong>을 제안하라. 어느 레벨에 있는지가 아니라, <strong>어느 전환 구간이 막혀 있는지</strong>를 찾아내는 것이 WISE42 FDE의 가치다.
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<footer>
+  GARAMwiki · 사업 현안 아카이브 · 원문: <a href="https://turingpost.co.kr/p/unsexy-truth-of-ai-adoption" target="_blank">Turing Post Korea</a> (Ksenia Se &amp; Ben Eum, 2026-04-27) · WISE42 내부 분석용
+</footer>
+
+</body>
+</html>
