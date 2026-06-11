@@ -153,6 +153,10 @@ ARTICLE_META = {
         "tags":  ["AI 한계", "시스템 사고", "C-레벨 인사이트"],
     },
     # 모델 트래커
+    "2026-06_Claude_Opus48_Fable5_AI경쟁_EP99_AI_Frontier.html": {
+        "title": "Claude Opus 4.8 · Fable 5 · AI 경쟁 2026<br>EP99: 모델보다 운용 구조가 경쟁을 결정한다 (AI Frontier)",
+        "tags":  ["Claude Opus 4.8", "Fable 5", "Mythos 5", "Dynamic Workflows", "AI 경쟁"],
+    },
     "2026-05_Google_IO2026_풀스택AI_에이전트시대.html": {
         "title": "Google I/O 2026 — 풀스택 AI에서<br>에이전트 시대로 (DH Shin 심층 보고서)",
         "tags":  ["Google I/O 2026", "Gemini 3.5", "Antigravity 2.0", "Gemini Spark", "TPU 8세대"],

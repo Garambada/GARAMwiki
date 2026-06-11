@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Opus 4.8 · Fable 5 · AI 경쟁 2026-06 | GARAMwiki 모델트래커</title>
+<style>
+  :root {
+    --accent: #a78bfa;
+    --accent-dark: #7c3aed;
+    --accent-light: #ede9fe;
+    --bg: #0f0f1a;
+    --bg-card: #1a1a2e;
+    --bg-card2: #16213e;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #2d2d4e;
+    --red: #f87171;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --blue: #60a5fa;
+    --orange: #fb923c;
+    --pink: #f472b6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  /* HEADER */
+  .wiki-header {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1a1a2e 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 2.5rem 2rem 2rem;
+    position: relative; overflow: hidden;
+  }
+  .wiki-header::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(167,139,250,0.15) 0%, transparent 70%);
+  }
+  .header-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .badge { font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .badge-model { background: rgba(167,139,250,0.2); color: var(--accent); border: 1px solid rgba(167,139,250,0.4); }
+  .badge-ep { background: rgba(96,165,250,0.15); color: var(--blue); border: 1px solid rgba(96,165,250,0.3); }
+  .badge-new { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .badge-date { background: rgba(148,163,184,0.1); color: var(--text-muted); border: 1px solid var(--border); }
+  .wiki-title { font-size: 1.85rem; font-weight: 800; line-height: 1.25; margin-bottom: 0.6rem; }
+  .wiki-subtitle { font-size: 0.95rem; color: var(--text-muted); max-width: 700px; }
+  .ep-box {
+    margin-top: 1.5rem; display: flex; align-items: center; gap: 1rem;
+    background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem 1.5rem;
+  }
+  .ep-thumb { font-size: 2.5rem; }
+  .ep-info { flex: 1; }
+  .ep-title { font-size: 0.95rem; font-weight: 700; color: var(--accent); }
+  .ep-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .ep-link { font-size: 0.75rem; color: var(--blue); text-decoration: none; margin-top: 0.3rem; display: inline-block; }
+  .ep-link:hover { text-decoration: underline; }
+
+  /* MAIN */
+  .container { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* SECTION HEADING */
+  .section-title {
+    font-size: 1.05rem; font-weight: 800; letter-spacing: 0.03em;
+    color: var(--accent); text-transform: uppercase;
+    border-left: 4px solid var(--accent); padding-left: 0.75rem;
+    margin: 2.5rem 0 1.25rem;
+  }
+
+  /* STAT STRIP */
+  .stat-strip { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .stat-card {
+    flex: 1; min-width: 120px; background: var(--bg-card);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 1rem; text-align: center;
+  }
+  .stat-val { font-size: 1.6rem; font-weight: 900; color: var(--accent); }
+  .stat-lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+  /* CARDS */
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+
+  /* MODEL TABLE */
+  .model-table-wrap { overflow-x: auto; margin-bottom: 1.5rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  thead th { background: rgba(167,139,250,0.15); color: var(--accent); font-weight: 700; padding: 0.7rem 1rem; text-align: left; border-bottom: 2px solid var(--accent); white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:hover { background: rgba(167,139,250,0.05); }
+  tbody td { padding: 0.65rem 1rem; color: var(--text); vertical-align: middle; }
+  .highlight-row td { background: rgba(167,139,250,0.08); }
+  .model-name { font-weight: 700; }
+  .tag { font-size: 0.68rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; margin-left: 0.3rem; }
+  .tag-new { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .tag-invite { background: rgba(251,191,36,0.15); color: var(--yellow); border: 1px solid rgba(251,191,36,0.3); }
+  .tag-default { background: rgba(96,165,250,0.15); color: var(--blue); border: 1px solid rgba(96,165,250,0.3); }
+
+  /* BENCHMARK TABLE */
+  .bench-bar-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+  .bench-label { width: 200px; font-size: 0.82rem; flex-shrink: 0; font-weight: 600; }
+  .bench-bar-wrap { flex: 1; background: rgba(255,255,255,0.06); border-radius: 6px; height: 20px; overflow: hidden; }
+  .bench-bar { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 0.5rem; font-size: 0.72rem; font-weight: 700; color: white; white-space: nowrap; }
+  .bench-val { width: 50px; text-align: right; font-size: 0.82rem; font-weight: 700; flex-shrink: 0; }
+
+  /* FEATURE PILLS GRID */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  .feature-card {
+    background: var(--bg-card2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.25rem; border-top: 3px solid;
+  }
+  .feature-card .f-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .feature-card .f-title { font-size: 0.9rem; font-weight: 800; margin-bottom: 0.4rem; }
+  .feature-card .f-body { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+  .feature-card .f-quote { margin-top: 0.6rem; padding: 0.5rem 0.75rem; background: rgba(0,0,0,0.2); border-left: 3px solid; border-radius: 0 8px 8px 0; font-size: 0.78rem; font-style: italic; color: #c4b5fd; }
+
+  /* TIER CARDS */
+  .tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .tier-card {
+    border-radius: 16px; padding: 1.5rem;
+    border: 1px solid; position: relative; overflow: hidden;
+  }
+  .tier-card::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 120px; height: 120px; border-radius: 50%;
+    filter: blur(30px); opacity: 0.3;
+  }
+  .tier-card.elite { background: linear-gradient(135deg, #1a0a2e, #2d1a54); border-color: #a78bfa; }
+  .tier-card.elite::before { background: #a78bfa; }
+  .tier-card.secret { background: linear-gradient(135deg, #1a0a00, #2d1a00); border-color: #fbbf24; }
+  .tier-card.secret::before { background: #fbbf24; }
+  .tier-card.standard { background: linear-gradient(135deg, #0a1a2e, #0d2545); border-color: #60a5fa; }
+  .tier-card.standard::before { background: #60a5fa; }
+  .tier-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .tier-model { font-size: 1.1rem; font-weight: 900; margin-bottom: 0.75rem; }
+  .tier-row { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .tier-row:last-child { border-bottom: none; }
+  .tier-key { color: var(--text-muted); }
+  .tier-val { font-weight: 600; text-align: right; }
+
+  /* INSIGHT CARDS */
+  .insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+  .insight-card {
+    background: var(--bg-card2); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+    border-left: 4px solid var(--accent);
+  }
+  .insight-card .i-num { font-size: 0.68rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4rem; }
+  .insight-card .i-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .insight-card .i-body { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+  .insight-card .i-action {
+    margin-top: 0.75rem; padding: 0.4rem 0.75rem;
+    background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 8px; font-size: 0.75rem; color: var(--accent); font-weight: 600;
+  }
+  .insight-card .i-action::before { content: '→ '; }
+
+  /* EP THEMES */
+  .theme-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .theme-item {
+    display: flex; gap: 1rem; align-items: flex-start;
+    background: var(--bg-card2); border: 1px solid var(--border); border-radius: 10px; padding: 1rem;
+  }
+  .theme-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .theme-content {}
+  .theme-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .theme-body { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* COMPETITION */
+  .comp-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .comp-card {
+    flex: 1; min-width: 200px; border-radius: 10px; padding: 1rem;
+    background: var(--bg-card2); border: 1px solid var(--border);
+  }
+  .comp-card .comp-name { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .comp-card .comp-score { font-size: 1.4rem; font-weight: 900; }
+  .comp-card .comp-detail { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .comp-card.winner { border-color: var(--accent); }
+  .comp-card.winner .comp-score { color: var(--accent); }
+
+  /* FOOTER */
+  .wiki-footer {
+    text-align: center; padding: 2rem; border-top: 1px solid var(--border);
+    font-size: 0.78rem; color: var(--text-muted); margin-top: 3rem;
+  }
+  .wiki-footer a { color: var(--accent); text-decoration: none; }
+  .wiki-footer a:hover { text-decoration: underline; }
+
+  /* QUOTE BLOCK */
+  .quote-block {
+    border-left: 4px solid var(--accent); padding: 1rem 1.5rem;
+    background: rgba(167,139,250,0.06); border-radius: 0 10px 10px 0;
+    font-style: italic; color: #c4b5fd; margin: 1rem 0;
+    font-size: 0.9rem; line-height: 1.7;
+  }
+  .quote-src { font-style: normal; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+  /* PARADIGM SHIFT */
+  .shift-card {
+    background: linear-gradient(135deg, #0f0f1a, #1a0a2e);
+    border: 1px solid rgba(167,139,250,0.3); border-radius: 16px; padding: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .shift-arrow { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
+  .shift-from { flex: 1; min-width: 140px; text-align: center; padding: 0.75rem; background: rgba(255,255,255,0.05); border-radius: 10px; font-size: 0.85rem; color: var(--text-muted); }
+  .shift-arrow-icon { font-size: 1.5rem; color: var(--accent); flex-shrink: 0; }
+  .shift-to { flex: 1; min-width: 140px; text-align: center; padding: 0.75rem; background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.3); border-radius: 10px; font-size: 0.85rem; color: var(--accent); font-weight: 700; }
+
+  @media (max-width: 640px) {
+    .wiki-title { font-size: 1.35rem; }
+    .stat-strip { gap: 0.6rem; }
+    .stat-val { font-size: 1.3rem; }
+    .bench-label { width: 140px; font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="wiki-header">
+  <div class="header-meta">
+    <span class="badge badge-model">모델 트래커</span>
+    <span class="badge badge-ep">AI Frontier EP99</span>
+    <span class="badge badge-new">Fable 5 출시</span>
+    <span class="badge badge-date">2026-06-09 기준</span>
+  </div>
+  <h1 class="wiki-title">Claude Opus 4.8 · Fable 5 · AI 경쟁 2026<br>
+    <span style="font-size:0.75em; color:var(--accent);">모델보다 운용 구조가 경쟁을 결정한다</span>
+  </h1>
+  <p class="wiki-subtitle">
+    AI Frontier EP99 「Opus 4.8 출시, 요즘 AI 경쟁과 인간의 일」을 중심으로
+    Claude Opus 4.8·Fable 5·Mythos 5·Gemini 3.5 Flash·GPT-5.5 비교 및 2026년 AI 경쟁 구도 분석
+  </p>
+  <div class="ep-box">
+    <div class="ep-thumb">🎙️</div>
+    <div class="ep-info">
+      <div class="ep-title">AI Frontier · EP99 「Opus 4.8 출시, 요즘 AI 경쟁과 인간의 일」</div>
+      <div class="ep-meta">노정석 · 최승준 · 2026-06-07 · 50분 37초</div>
+      <a class="ep-link" href="https://www.youtube.com/watch?v=5CaOXPstq_8" target="_blank">▶ YouTube에서 보기</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- STAT STRIP -->
+  <div class="stat-strip">
+    <div class="stat-card">
+      <div class="stat-val">69.2%</div>
+      <div class="stat-lbl">Opus 4.8 SWE-bench Pro</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">4×↓</div>
+      <div class="stat-lbl">코드 결함 미보고율 감소</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">1M</div>
+      <div class="stat-lbl">컨텍스트 토큰 (Opus 4.8)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">5종</div>
+      <div class="stat-lbl">현행 Claude 모델 계층</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">$5/$25</div>
+      <div class="stat-lbl">Opus 4.8 가격 (In/Out MTok)</div>
+    </div>
+  </div>
+
+  <!-- EP99 핵심 테제 -->
+  <div class="section-title">EP99 핵심 테제</div>
+  <div class="quote-block">
+    "Google I/O와 Opus 4.8 발표를 계기로 AI 모델 발전 주기가 얼마나 빨라지고 있는지 살펴봅니다.
+    Gemini 3.5 Flash, Anthropic Dynamic Workflows, code as harness, 장기 실행 에이전트를 통해
+    <strong>모델 자체보다 운용 구조와 비용, latency가 더 중요해지는 변화</strong>를 짚습니다."
+    <div class="quote-src">— AI Frontier EP99 에피소드 설명, 2026-06-07</div>
+  </div>
+
+  <!-- 패러다임 전환 시각화 -->
+  <div class="shift-card">
+    <div class="card-title" style="font-size:1rem; font-weight:800;">📐 패러다임 전환: 2025 → 2026</div>
+    <div class="shift-arrow">
+      <div class="shift-from">
+        <div style="font-size:1.2rem; margin-bottom:0.3rem;">🏆</div>
+        <div style="font-weight:700; color:var(--text);">모델 성능 경쟁</div>
+        <div style="font-size:0.78rem; margin-top:0.3rem;">벤치마크 · MMLU · HumanEval</div>
+      </div>
+      <div class="shift-arrow-icon">→</div>
+      <div class="shift-to">
+        <div style="font-size:1.2rem; margin-bottom:0.3rem;">⚙️</div>
+        <div>운용 구조 경쟁</div>
+        <div style="font-size:0.78rem; margin-top:0.3rem; font-weight:400; color:#c4b5fd;">비용·latency·에이전트 아키텍처</div>
+      </div>
+    </div>
+    <p style="font-size:0.83rem; color:var(--text-muted);">
+      Opus 4.8 출시 시점, 최상위 모델들의 실제 SWE-bench 격차는 10~15%p 이내로 좁혀졌다.
+      이제 기업의 AI 경쟁력은 <strong style="color:var(--text);">어떤 모델을 쓰느냐</strong>보다
+      <strong style="color:var(--accent);">어떻게 실행하느냐</strong>—Dynamic Workflows, 장기 실행 에이전트, Managed Agents,
+      비용·latency 최적화—에서 갈린다.
+    </p>
+  </div>
+
+  <!-- CLAUDE Opus 4.8 심층 -->
+  <div class="section-title">Claude Opus 4.8 심층 분석</div>
+  <div class="card">
+    <div class="card-title">📋 기본 스펙</div>
+    <div class="model-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>값</th>
+            <th>비고</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight-row">
+            <td>API ID</td>
+            <td><code>claude-opus-4-8</code></td>
+            <td>최신 안정 버전</td>
+          </tr>
+          <tr>
+            <td>출시일</td>
+            <td>2026-05-28</td>
+            <td>GA 공개</td>
+          </tr>
+          <tr>
+            <td>컨텍스트 윈도우</td>
+            <td>1M 토큰</td>
+            <td>약 750만 단어</td>
+          </tr>
+          <tr>
+            <td>최대 출력</td>
+            <td>128,000 토큰</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>지식 기준일</td>
+            <td>2026년 1월</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>입력 가격</td>
+            <td>$5 / MTok</td>
+            <td>Opus 4.7 대비 동일</td>
+          </tr>
+          <tr>
+            <td>출력 가격</td>
+            <td>$25 / MTok</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SWE-bench 벤치마크 -->
+  <div class="card">
+    <div class="card-title">📊 SWE-bench Pro 벤치마크 비교</div>
+    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1.25rem;">
+      SWE-bench Pro: 실제 GitHub 이슈 기반 소프트웨어 엔지니어링 벤치마크 (2026-05 기준)
+    </p>
+
+    <div class="bench-bar-row">
+      <div class="bench-label" style="color:var(--accent);">Claude Opus 4.8 🏆</div>
+      <div class="bench-bar-wrap">
+        <div class="bench-bar" style="width:69.2%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">69.2%</div>
+      </div>
+      <div class="bench-val" style="color:var(--accent);">69.2%</div>
+    </div>
+    <div class="bench-bar-row">
+      <div class="bench-label" style="color:#94a3b8;">Claude Opus 4.7</div>
+      <div class="bench-bar-wrap">
+        <div class="bench-bar" style="width:64.3%; background: linear-gradient(90deg, #4c1d95, #7c3aed);">64.3%</div>
+      </div>
+      <div class="bench-val">64.3%</div>
+    </div>
+    <div class="bench-bar-row">
+      <div class="bench-label" style="color:#94a3b8;">GPT-5.5</div>
+      <div class="bench-bar-wrap">
+        <div class="bench-bar" style="width:58.6%; background: linear-gradient(90deg, #1d4ed8, #3b82f6);">58.6%</div>
+      </div>
+      <div class="bench-val">58.6%</div>
+    </div>
+    <div class="bench-bar-row">
+      <div class="bench-label" style="color:#94a3b8;">Gemini 3.1 Pro</div>
+      <div class="bench-bar-wrap">
+        <div class="bench-bar" style="width:54.2%; background: linear-gradient(90deg, #065f46, #059669);">54.2%</div>
+      </div>
+      <div class="bench-val">54.2%</div>
+    </div>
+
+    <div style="margin-top:1rem; padding:0.75rem 1rem; background:rgba(167,139,250,0.08); border-radius:8px; font-size:0.82rem; color:var(--text-muted);">
+      <strong style="color:var(--text);">해석:</strong> Opus 4.8은 Opus 4.7 대비 +4.9%p 향상.
+      2위 GPT-5.5와는 +10.6%p 격차로 코딩 벤치마크 최상위를 유지.
+      하지만 주요 모델들의 SWE-bench 격차는 15%p 이내로 수렴 중 — 모델 선택보다 운용 구조가 실질 차이를 만든다.
+    </div>
+  </div>
+
+  <!-- 3대 핵심 개선 -->
+  <div class="section-title">3대 핵심 개선사항</div>
+  <div class="feature-grid">
+    <div class="feature-card" style="border-top-color: var(--green);">
+      <div class="f-icon">🎯</div>
+      <div class="f-title" style="color:var(--green);">정직성 (Honesty) 강화</div>
+      <div class="f-body">
+        Opus 4.8의 가장 주목할 변화. 코드 결함을 사용자에게 보고하지 않는 '과잉 순응(sycophancy)' 행동이
+        <strong style="color:var(--text);">Opus 4.7 대비 4배 감소</strong>.
+        에이전트가 장기 실행될수록 인간이 체크하는 횟수가 줄어드는데, 이때 AI의 정직성이 결과 품질을 좌우한다.
+      </div>
+      <div class="f-quote">
+        "발견된 버그를 말하지 않는 AI는 디버깅보다 더 큰 비용을 만든다"
+      </div>
+    </div>
+    <div class="feature-card" style="border-top-color: var(--accent);">
+      <div class="f-icon">🔀</div>
+      <div class="f-title" style="color:var(--accent);">Dynamic Workflows</div>
+      <div class="f-body">
+        수십만 줄 규모의 코드베이스 마이그레이션 등 거대 작업을 AI가 자동으로 병렬 분할.
+        수백 개의 서브에이전트를 동시 실행하는 구조를 관리.
+        인간이 설계할 수 없는 복잡도의 워크플로우를 AI가 스스로 아키텍처링.
+      </div>
+      <div class="f-quote" style="border-color: var(--accent);">
+        Code as harness: 코드가 결과물이 아니라 에이전트를 묶는 뼈대가 된다
+      </div>
+    </div>
+    <div class="feature-card" style="border-top-color: var(--blue);">
+      <div class="f-icon">⚡</div>
+      <div class="f-title" style="color:var(--blue);">Effort Control</div>
+      <div class="f-body">
+        claude.ai와 Cowork 환경에서 응답 '노력 수준'을 조절 가능.
+        기본값은 high. 빠른 답변이 필요한 경우 low/medium으로 낮춰 latency·비용 최적화.
+        Adaptive Thinking(적응형 사고)은 상시 활성화.
+      </div>
+      <div class="f-quote" style="border-color: var(--blue);">
+        운용 비용과 응답 품질의 트레이드오프를 조직이 직접 제어
+      </div>
+    </div>
+    <div class="feature-card" style="border-top-color: var(--orange);">
+      <div class="f-icon">🤝</div>
+      <div class="f-title" style="color:var(--orange);">Managed Agents</div>
+      <div class="f-body">
+        기업 경계 내에서 에이전트를 안전하게 실행하는 관리 계층.
+        외부 클라우드에 데이터가 나가지 않고 기업 인프라 내에서 자율 에이전트 워크플로우를 구현.
+        Enterprise Agentic Platform 전쟁에서 Anthropic의 핵심 무기.
+      </div>
+      <div class="f-quote" style="border-color: var(--orange);">
+        데이터 주권 + 에이전트 자율성의 동시 달성 시도
+      </div>
+    </div>
+  </div>
+
+  <!-- Claude 모델 전체 계층 -->
+  <div class="section-title">Claude 전체 모델 계층 (2026-06-09 기준)</div>
+  <div class="tier-grid">
+    <div class="tier-card secret">
+      <div class="tier-label" style="color:var(--yellow);">🔒 초대 전용 · Project Glasswing</div>
+      <div class="tier-model" style="color:var(--yellow);">Claude Mythos 5</div>
+      <div class="tier-row">
+        <span class="tier-key">API ID</span>
+        <span class="tier-val" style="color:var(--yellow); font-size:0.75rem;">claude-mythos-5</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">출시</span>
+        <span class="tier-val">2026-06-09</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">가격</span>
+        <span class="tier-val" style="color:var(--yellow);">$10 / $50 per MTok</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">컨텍스트</span>
+        <span class="tier-val">1M 토큰</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">최대 출력</span>
+        <span class="tier-val">128k 토큰</span>
+      </div>
+      <div style="margin-top:0.75rem; font-size:0.75rem; color:var(--text-muted);">
+        Claude Mythos Preview: 방어적 사이버보안 연구 프리뷰 별도 존재
+      </div>
+    </div>
+
+    <div class="tier-card elite">
+      <div class="tier-label" style="color:var(--accent);">✨ GA 공개 최상위 <span class="tag tag-new" style="font-size:0.6rem;">NEW</span></div>
+      <div class="tier-model" style="color:var(--accent);">Claude Fable 5</div>
+      <div class="tier-row">
+        <span class="tier-key">API ID</span>
+        <span class="tier-val" style="color:var(--accent); font-size:0.75rem;">claude-fable-5</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">출시</span>
+        <span class="tier-val">2026-06-09</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">가격</span>
+        <span class="tier-val" style="color:var(--accent);">$10 / $50 per MTok</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">컨텍스트</span>
+        <span class="tier-val">1M 토큰</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">최대 출력</span>
+        <span class="tier-val">128k 토큰</span>
+      </div>
+      <div style="margin-top:0.75rem; font-size:0.75rem; color:#c4b5fd;">
+        Adaptive Thinking 항상 활성화 · 일반 공개 최상위 모델
+      </div>
+    </div>
+
+    <div class="tier-card standard">
+      <div class="tier-label" style="color:var(--blue);">🔷 엔터프라이즈 코딩</div>
+      <div class="tier-model" style="color:var(--blue);">Claude Opus 4.8</div>
+      <div class="tier-row">
+        <span class="tier-key">API ID</span>
+        <span class="tier-val" style="color:var(--blue); font-size:0.75rem;">claude-opus-4-8</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">출시</span>
+        <span class="tier-val">2026-05-28</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">가격</span>
+        <span class="tier-val" style="color:var(--blue);">$5 / $25 per MTok</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">컨텍스트</span>
+        <span class="tier-val">1M 토큰</span>
+      </div>
+      <div class="tier-row">
+        <span class="tier-key">SWE-bench Pro</span>
+        <span class="tier-val" style="color:var(--accent);">69.2%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 전체 모델 비교표 -->
+  <div class="card" style="margin-top:1.25rem;">
+    <div class="card-title">📋 Claude 전체 라인업 (2026-06)</div>
+    <div class="model-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>모델</th>
+            <th>API ID</th>
+            <th>Input</th>
+            <th>Output</th>
+            <th>컨텍스트</th>
+            <th>최대출력</th>
+            <th>지식기준</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="model-name" style="color:var(--yellow);">Claude Mythos 5</span> <span class="tag tag-invite">초대전용</span></td>
+            <td><code style="font-size:0.72rem;">claude-mythos-5</code></td>
+            <td>$10</td>
+            <td>$50</td>
+            <td>1M</td>
+            <td>128k</td>
+            <td>—</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><span class="model-name" style="color:var(--accent);">Claude Fable 5</span> <span class="tag tag-new">NEW</span></td>
+            <td><code style="font-size:0.72rem;">claude-fable-5</code></td>
+            <td>$10</td>
+            <td>$50</td>
+            <td>1M</td>
+            <td>128k</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><span class="model-name" style="color:var(--blue);">Claude Opus 4.8</span></td>
+            <td><code style="font-size:0.72rem;">claude-opus-4-8</code></td>
+            <td>$5</td>
+            <td>$25</td>
+            <td>1M</td>
+            <td>128k</td>
+            <td>2026-01</td>
+          </tr>
+          <tr>
+            <td><span class="model-name">Claude Sonnet 4.6</span> <span class="tag tag-default">기본</span></td>
+            <td><code style="font-size:0.72rem;">claude-sonnet-4-6</code></td>
+            <td>$3</td>
+            <td>$15</td>
+            <td>1M</td>
+            <td>64k</td>
+            <td>2025-08</td>
+          </tr>
+          <tr>
+            <td><span class="model-name">Claude Haiku 4.5</span></td>
+            <td><code style="font-size:0.72rem;">claude-haiku-4-5-20251001</code></td>
+            <td>$1</td>
+            <td>$5</td>
+            <td>200k</td>
+            <td>64k</td>
+            <td>2025-02</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.75rem;">
+      * 가격 단위: $ per MTok (100만 토큰) | Fable 5·Mythos 5: 지식기준일 미공개
+    </p>
+  </div>
+
+  <!-- Gemini vs GPT 경쟁 -->
+  <div class="section-title">AI 경쟁 구도: Gemini 3.5 Flash · GPT-5.5</div>
+  <div class="card">
+    <div class="card-title">⚔️ 주요 경쟁 모델 현황 (EP99 분석 기준)</div>
+    <div class="comp-row">
+      <div class="comp-card winner">
+        <div class="comp-name">🟣 Claude Fable 5 / Opus 4.8</div>
+        <div class="comp-score">69.2%</div>
+        <div class="comp-detail">SWE-bench Pro | Managed Agents + Dynamic Workflows<br>정직성 개선, Effort Control</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-name">🟢 Gemini 3.5 Flash</div>
+        <div class="comp-score">~Low-60s</div>
+        <div class="comp-detail">Google I/O 2026 공개 | 프론티어 성능 + 저지연<br>토큰 처리량 3.2Q/월 (480T→6.6배 증가)</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-name">🔵 GPT-5.5</div>
+        <div class="comp-score">58.6%</div>
+        <div class="comp-detail">OpenAI 기본 모델 전환<br>GPT-5.5 Instant: 저비용 빠른 응답 특화</div>
+      </div>
+    </div>
+    <div style="margin-top:1rem; padding:1rem; background:rgba(167,139,250,0.06); border-radius:10px; font-size:0.83rem; color:var(--text-muted);">
+      <strong style="color:var(--text);">EP99 핵심 논점:</strong> Google I/O에서 Gemini 3.5 Flash가 "프론티어 성능 + 저지연"을 표방하며 출시.
+      토큰 처리량이 6.6배 폭증한 것은 기업 도입 규모가 이미 새로운 차원에 진입했음을 의미.
+      이제 경쟁은 모델 점수 0.x% 개선이 아니라, <strong style="color:var(--accent);">얼마나 싸게·빠르게·안전하게 대규모 실행하느냐</strong>의 싸움.
+    </div>
+  </div>
+
+  <!-- EP99 주요 논점 -->
+  <div class="section-title">EP99 주요 논점 정리</div>
+  <div class="theme-list">
+    <div class="theme-item">
+      <div class="theme-icon">🚀</div>
+      <div class="theme-content">
+        <div class="theme-title">AI 모델 발전 주기 가속</div>
+        <div class="theme-body">
+          Opus 4.8, Fable 5, Gemini 3.5, GPT-5.5가 수주 간격으로 출시되는 시대.
+          2025년까지는 6개월 사이클이었다면 2026년은 수주~1개월 단위.
+          기업 의사결정 속도가 AI 출시 주기를 따라가지 못하는 구조적 문제 발생.
+          "우리가 도입을 검토하는 사이 모델이 두 번 바뀐다."
+        </div>
+      </div>
+    </div>
+    <div class="theme-item">
+      <div class="theme-icon">🔧</div>
+      <div class="theme-content">
+        <div class="theme-title">Code as Harness — 코드는 에이전트의 뼈대다</div>
+        <div class="theme-body">
+          EP99에서 노정석이 강조한 개념. 소프트웨어 3.0 시대에서 코드는 더 이상 최종 결과물이 아니라
+          에이전트들을 연결하는 하네스(harness, 뼈대·장치).
+          수십~수백 개의 서브에이전트가 병렬 실행될 때, 코드는 그 흐름을 제어하는 오케스트레이션 레이어가 된다.
+          Dynamic Workflows는 이 패러다임의 첫 번째 상용 구현.
+        </div>
+      </div>
+    </div>
+    <div class="theme-item">
+      <div class="theme-icon">⏱️</div>
+      <div class="theme-content">
+        <div class="theme-title">장기 실행 에이전트: 운용 구조가 진짜 경쟁력</div>
+        <div class="theme-body">
+          단발성 질문-응답을 넘어, 수시간~수일에 걸쳐 자율 실행되는 에이전트가 실제 산업에 투입 중.
+          이때 모델 점수보다 중요한 것은 ①비용 예측 가능성, ②latency 안정성, ③실패 복구 메커니즘,
+          ④인간 개입 지점 설계. Enterprise Agentic Platform 전쟁의 본질.
+        </div>
+      </div>
+    </div>
+    <div class="theme-item">
+      <div class="theme-icon">👤</div>
+      <div class="theme-content">
+        <div class="theme-title">인간의 일이 바뀐다 — 주의력 자원의 재배분</div>
+        <div class="theme-body">
+          에이전트가 루틴 업무를 대체할수록, 인간의 희귀 자원은 '시간'이 아닌 '주의력(attention)'.
+          Brockman(OpenAI)이 언급한 "인간 주의력이 병목"과 같은 맥락.
+          조직 내 AI화가 깊어질수록, C레벨의 집중 영역과 의사결정 빈도가 근본적으로 달라져야 한다.
+          "AI를 더 잘 쓰는 인간"이 아니라 "AI가 실행하는 동안 인간이 무엇을 할지" 설계가 핵심.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GARAMbada 인사이트 -->
+  <div class="section-title">GARAMbada 인사이트 (WISE42 관점)</div>
+  <div class="insight-grid">
+    <div class="insight-card">
+      <div class="i-num">인사이트 01</div>
+      <div class="i-title">Opus 4.8 = 즉시 활용 가능한 수준</div>
+      <div class="i-body">
+        SWE-bench Pro 69.2% + 코드 결함 미보고 4배 감소는 WISE42의 KRNA 프로젝트처럼
+        '검증 정확도'가 핵심인 B2B 에이전트에 직접적 영향.
+        정직성 강화는 단순 성능 향상이 아니라 신뢰 기반 자동화의 기반.
+      </div>
+      <div class="i-action">Managed Agents로 KRNA 에이전트 아키텍처 업그레이드 검토</div>
+    </div>
+    <div class="insight-card">
+      <div class="i-num">인사이트 02</div>
+      <div class="i-title">Fable 5 = 새 가격 구간 진입 검토</div>
+      <div class="i-body">
+        Fable 5가 $10/$50으로 GA 공개됨에 따라, Opus 계열($5/$25)과 Fable 계열($10/$50) 사이
+        실질 성능 차이 검증이 필요. 운용 비용이 2배인 만큼 ROI 기준을 명확히 설정해야 함.
+        초대 전용 Mythos 5는 당분간 관망.
+      </div>
+      <div class="i-action">Fable 5 vs Opus 4.8 A/B 테스트 설계</div>
+    </div>
+    <div class="insight-card">
+      <div class="i-num">인사이트 03</div>
+      <div class="i-title">Dynamic Workflows = Founders Studio 핵심 인프라</div>
+      <div class="i-body">
+        수백 개 서브에이전트 병렬 실행 구조는 WISE42 Founders Studio의 '다사업 동시 운영'
+        가설과 직결. 사람이 조율하던 업무 흐름을 Dynamic Workflows로 대체하면
+        창업자 1인이 관리 가능한 사업 수가 현실적으로 확대된다.
+      </div>
+      <div class="i-action">Founders Studio MVP에 Dynamic Workflows 아키텍처 적용 검토</div>
+    </div>
+    <div class="insight-card">
+      <div class="i-num">인사이트 04</div>
+      <div class="i-title">Code as Harness → FDE 설계 원칙 업데이트</div>
+      <div class="i-body">
+        코드가 '결과'가 아닌 '에이전트 뼈대'라는 관점은 FDE(Field Deployment Engine)
+        설계 원칙에 통합이 필요. 기능 구현 코드를 짜는 것이 아니라
+        에이전트 실행 흐름을 정의하는 오케스트레이션 레이어를 설계하는 역량이 핵심.
+      </div>
+      <div class="i-action">FDE 기술 스택에 에이전트 오케스트레이션 레이어 추가</div>
+    </div>
+    <div class="insight-card">
+      <div class="i-num">인사이트 05</div>
+      <div class="i-title">모델 선택 = 비용·latency 최적화 문제</div>
+      <div class="i-body">
+        Haiku($1/$5) → Sonnet($3/$15) → Opus($5/$25) → Fable($10/$50) 4단계 계층에서
+        각 업무 유형별 최적 모델 매핑이 실질 운영 비용을 3~10배 차이 낸다.
+        Effort Control을 활용하면 동일 모델 내에서도 비용·품질 트레이드오프 가능.
+      </div>
+      <div class="i-action">업무 유형 × 모델 매핑표 작성 및 월별 비용 모니터링 체계 구축</div>
+    </div>
+    <div class="insight-card">
+      <div class="i-num">인사이트 06</div>
+      <div class="i-title">주의력 감사 (Attention Audit) 우선</div>
+      <div class="i-body">
+        EP99의 "인간의 일 변화" 논점은 WISE42 내부에도 적용 가능.
+        에이전트가 처리하는 업무가 늘어날수록, C레벨이 집중해야 할 '주의력 영역'을 명시적으로 정의하지 않으면
+        관리 비용은 줄지 않고 의사결정 품질만 낮아지는 역효과 발생.
+      </div>
+      <div class="i-action">분기 단위 조직 주의력 감사 (Attention Audit) 도입</div>
+    </div>
+  </div>
+
+  <!-- 소스 -->
+  <div class="section-title">소스 & 참고</div>
+  <div class="card" style="font-size:0.83rem;">
+    <div style="display:flex; flex-direction:column; gap:0.6rem;">
+      <div>📺 <strong>AI Frontier EP99</strong> — <a href="https://www.youtube.com/watch?v=5CaOXPstq_8" target="_blank" style="color:var(--blue);">youtube.com/watch?v=5CaOXPstq_8</a> | 2026-06-07 | 노정석·최승준</div>
+      <div>📄 <strong>Anthropic 공식 릴리즈 노트: Claude Opus 4.8</strong> — <a href="https://www.anthropic.com/news/claude-opus-4-8" target="_blank" style="color:var(--blue);">anthropic.com/news/claude-opus-4-8</a> | 2026-05-28</div>
+      <div>📄 <strong>Anthropic 모델 페이지: Fable 5 · Mythos 5 GA</strong> — <a href="https://docs.anthropic.com/en/docs/about-claude/models/overview" target="_blank" style="color:var(--blue);">docs.anthropic.com/models/overview</a> | 2026-06-09</div>
+      <div>📺 <strong>Google I/O 2026</strong> — Gemini 3.5 Flash 출시, 토큰 처리량 6.6배 증가 | 2026-05-19</div>
+      <div>🔗 <strong>Anthropic 공개 가격표</strong> — <a href="https://www.anthropic.com/pricing" target="_blank" style="color:var(--blue);">anthropic.com/pricing</a></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="wiki-footer">
+  <div>GARAMwiki · 모델 트래커 | Claude Opus 4.8 · Fable 5 · AI 경쟁 2026</div>
+  <div style="margin-top:0.3rem;">최종 업데이트: 2026-06-09 | <a href="../index.html">← 전체 위키 목록</a></div>
+</div>
+
+</body>
+</html>
