@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Governance Platform 사업 진출 전략 v03 — 법무법인 린 × Wise42 | GARAMwiki</title>
+<style>
+:root {
+  --bg: #0c0e14; --bg2: #131620; --bg3: #1a1e2e;
+  --border: rgba(255,255,255,0.07);
+  --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b;
+  --accent: #f97316; --accent-bg: rgba(249,115,22,0.08); --accent-glow: rgba(249,115,22,0.20);
+  --biz: #f59e0b; --trend: #3b82f6; --insight: #10b981;
+  --model: #a78bfa; --tech: #06b6d4; --discourse: #e879f9;
+  --radius: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;line-height:1.7;font-size:15px}
+a{color:var(--accent);text-decoration:none}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(12,14,20,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:6px;height:52px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-home{color:var(--muted);font-size:13px;white-space:nowrap;padding:4px 8px;border-radius:6px}
+.nav-home:hover{color:var(--accent)}
+.nav-sep{color:var(--dim);font-size:12px}
+.nav-link{color:var(--muted);font-size:12px;white-space:nowrap;padding:4px 10px;border-radius:6px;border:1px solid transparent;transition:all .2s}
+.nav-link:hover{color:var(--accent);border-color:rgba(249,115,22,0.3);background:var(--accent-bg)}
+
+main{max-width:1100px;margin:0 auto;padding:40px 24px 80px}
+
+/* HERO */
+.hero{margin-bottom:40px}
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:.4px}
+.badge-biz{background:rgba(249,115,22,0.15);color:#fb923c;border:1px solid rgba(249,115,22,0.3)}
+.badge-conf{background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
+.badge-ver{background:rgba(16,185,129,0.12);color:#34d399;border:1px solid rgba(16,185,129,0.3)}
+.badge-date{background:rgba(148,163,184,0.1);color:var(--muted);border:1px solid var(--border)}
+.hero-title{font-size:clamp(22px,4vw,34px);font-weight:800;line-height:1.25;margin-bottom:10px;letter-spacing:-0.5px}
+.hero-title .hl{color:var(--accent)}
+.hero-sub{font-size:15px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.hero-tagline{display:inline-block;font-size:16px;font-weight:700;color:var(--text);background:var(--accent-bg);border:1px solid rgba(249,115,22,0.35);border-left:4px solid var(--accent);border-radius:8px;padding:12px 20px;margin-bottom:0;font-style:italic}
+
+/* STAT STRIP */
+.stat-strip{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0}
+.stat-card{flex:1;min-width:120px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center}
+.stat-num{font-size:22px;font-weight:800;color:var(--accent);line-height:1.1;margin-bottom:3px}
+.stat-label{font-size:11px;color:var(--muted);line-height:1.4}
+
+/* SECTIONS */
+.sec{margin:36px 0}
+.sec-title{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sec-h2{font-size:20px;font-weight:700;color:var(--text);margin-bottom:14px}
+.sec-h3{font-size:15px;font-weight:700;color:var(--text);margin:16px 0 8px}
+
+/* CARDS GRID */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:14px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.card-accent{border-color:rgba(249,115,22,0.3);background:var(--accent-bg)}
+.card-title{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.card-body{font-size:13.5px;color:var(--muted);line-height:1.65}
+
+/* PARTNER CARDS */
+.partner-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin-bottom:14px}
+.partner-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+.partner-left{border-color:rgba(249,115,22,0.35)}
+.partner-right{border-color:rgba(59,130,246,0.35)}
+.partner-center{display:flex;align-items:center;justify-content:center;width:60px;flex-shrink:0}
+.partner-x{font-size:24px;font-weight:800;color:var(--dim)}
+.partner-name{font-size:15px;font-weight:800;margin-bottom:10px}
+.partner-name.orange{color:var(--accent)}
+.partner-name.blue{color:var(--trend)}
+.partner-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-bottom:10px}
+.partner-tag.orange{background:rgba(249,115,22,0.15);color:#fb923c}
+.partner-tag.blue{background:rgba(59,130,246,0.15);color:#60a5fa}
+.partner-items{font-size:12.5px;color:var(--muted);line-height:1.8}
+.partner-items li{list-style:none;padding:2px 0}
+.partner-items li::before{content:"• ";color:var(--accent)}
+
+/* OPPORTUNITY CARDS */
+.opp-list{display:grid;gap:10px;margin-bottom:14px}
+.opp-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.opp-icon{font-size:20px;margin-top:2px}
+.opp-text{font-size:13.5px;color:var(--muted);line-height:1.6}
+.opp-text strong{color:var(--text)}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th{background:rgba(249,115,22,0.1);color:var(--accent);font-weight:700;padding:10px 14px;text-align:left;border-bottom:2px solid rgba(249,115,22,0.25)}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,0.02)}
+td strong{color:var(--text)}
+.tbl-alt th{background:rgba(59,130,246,0.1);color:#60a5fa;border-bottom-color:rgba(59,130,246,0.25)}
+.tbl-green th{background:rgba(16,185,129,0.1);color:#34d399;border-bottom-color:rgba(16,185,129,0.25)}
+
+/* MARKET FUNNEL */
+.market-funnel{display:grid;gap:0;margin-bottom:14px}
+.funnel-row{display:grid;grid-template-columns:100px 1fr 160px;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.funnel-label{font-size:12px;font-weight:700;color:var(--muted);text-align:right}
+.funnel-bar-wrap{position:relative;height:32px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden}
+.funnel-bar{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:12px;font-size:12px;font-weight:700}
+.funnel-tam{background:linear-gradient(90deg,rgba(249,115,22,0.5),rgba(249,115,22,0.25));color:#fb923c;width:100%}
+.funnel-sam{background:linear-gradient(90deg,rgba(59,130,246,0.5),rgba(59,130,246,0.25));color:#60a5fa;width:15%}
+.funnel-som{background:linear-gradient(90deg,rgba(16,185,129,0.5),rgba(16,185,129,0.25));color:#34d399;width:4%}
+.funnel-val{font-size:13px;font-weight:700;text-align:right}
+.funnel-val.orange{color:var(--accent)}
+.funnel-val.blue{color:var(--trend)}
+.funnel-val.green{color:var(--insight)}
+
+/* PHASE TIMELINE */
+.phase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.phase-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.ph0::before{background:var(--dim)}
+.ph1::before{background:var(--accent)}
+.ph2::before{background:var(--trend)}
+.ph3::before{background:var(--model)}
+.phase-num{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.ph0 .phase-num{color:var(--dim)}
+.ph1 .phase-num{color:var(--accent)}
+.ph2 .phase-num{color:var(--trend)}
+.ph3 .phase-num{color:var(--model)}
+.phase-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.phase-period{font-size:11px;color:var(--muted);margin-bottom:10px}
+.phase-items{font-size:12px;color:var(--muted);line-height:1.7}
+.phase-items li{list-style:none;padding:1px 0}
+.ph1 .phase-items li::before{content:"▶ ";color:var(--accent)}
+.ph2 .phase-items li::before{content:"▶ ";color:var(--trend)}
+.ph3 .phase-items li::before{content:"▶ ";color:var(--model)}
+.ph0 .phase-items li::before{content:"▶ ";color:var(--dim)}
+.phase-kpi{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px}
+.phase-kpi-label{color:var(--dim);font-size:10px;font-weight:700;letter-spacing:.5px;margin-bottom:4px}
+
+/* TIER TABLE */
+.tier-wrap{display:grid;gap:10px;margin-bottom:14px}
+.tier-row{display:grid;grid-template-columns:110px 1fr auto;gap:14px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px}
+.tier-name{font-size:12px;font-weight:700;color:var(--text)}
+.tier-price{font-size:18px;font-weight:800;color:var(--accent);white-space:nowrap}
+.tier-price span{font-size:11px;color:var(--muted);font-weight:400}
+.tier-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.tier-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+
+/* SWOT */
+.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.swot-cell{background:var(--bg2);padding:18px}
+.swot-label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.swot-S .swot-label{color:var(--insight)}
+.swot-W .swot-label{color:#f59e0b}
+.swot-O .swot-label{color:var(--trend)}
+.swot-T .swot-label{color:#f87171}
+.swot-items{font-size:12.5px;color:var(--muted);line-height:1.75}
+.swot-items li{list-style:none;padding:1px 0}
+
+/* COMPETITOR */
+.vs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.vs-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.vs-type{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.vs-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px}
+.vs-pro{color:var(--insight);font-size:12px;margin-bottom:4px}
+.vs-con{color:#f87171;font-size:12px}
+
+/* BENCHMARK CARDS */
+.bench-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:14px}
+.bench-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.bench-co{font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px}
+.bench-val{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:8px}
+.bench-learn{font-size:12px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:8px;margin-top:8px}
+
+/* AI LAW MAPPING */
+.law-list{display:grid;gap:8px;margin-bottom:14px}
+.law-row{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:12.5px}
+.law-duty{color:var(--text);font-weight:600}
+.law-lin{color:var(--accent)}
+.law-wise{color:var(--trend)}
+
+/* v03 NEW */
+.v03-badge{display:inline-block;background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.35);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.4px;margin-left:8px;vertical-align:middle}
+
+/* PUBLIC AX */
+.ax-highlight{background:linear-gradient(135deg,rgba(249,115,22,0.08),rgba(16,185,129,0.06));border:1px solid rgba(249,115,22,0.25);border-radius:var(--radius);padding:20px 24px;margin-bottom:14px}
+.ax-quote{font-size:15px;font-weight:700;color:var(--text);line-height:1.6;margin-bottom:10px}
+.ax-source{font-size:12px;color:var(--muted)}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center}
+.kpi-val{font-size:20px;font-weight:800;color:var(--accent);margin-bottom:3px}
+.kpi-label{font-size:11px;color:var(--muted);line-height:1.4}
+
+/* REVENUE MODEL */
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.rev-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.rev-pct{font-size:28px;font-weight:800;margin-bottom:6px}
+.rev-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px}
+.rev-desc{font-size:11.5px;color:var(--muted);line-height:1.5}
+
+/* RISK MATRIX */
+.risk-list{display:grid;gap:8px;margin-bottom:14px}
+.risk-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px}
+.risk-name{font-size:13px;color:var(--text);font-weight:600}
+.risk-chip{font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;white-space:nowrap}
+.risk-A{background:rgba(248,113,113,0.15);color:#f87171}
+.risk-B{background:rgba(251,191,36,0.15);color:#fbbf24}
+.risk-desc{font-size:12px;color:var(--muted);grid-column:1/-1;margin-top:4px;display:none}
+
+/* INSIGHT */
+.insight-box{background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(16,185,129,0.04));border:1px solid rgba(249,115,22,0.2);border-radius:var(--radius);padding:24px;margin-top:12px}
+.insight-title{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.insight-list{display:grid;gap:12px}
+.insight-item{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}
+.insight-num{width:28px;height:28px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0}
+.insight-text{font-size:13.5px;color:var(--muted);line-height:1.65;padding-top:4px}
+.insight-text strong{color:var(--text)}
+
+/* VISION */
+.vision-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.vision-cell{background:var(--bg2);padding:18px;text-align:center}
+.vision-year{font-size:20px;font-weight:800;color:var(--accent);margin-bottom:6px}
+.vision-id{font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px}
+.vision-cap{font-size:11.5px;color:var(--muted);line-height:1.5}
+
+/* PROC PROGRESS BAR */
+.progress-rows{display:grid;gap:8px;margin-bottom:14px}
+.progress-row{display:grid;grid-template-columns:160px 1fr 80px;gap:12px;align-items:center}
+.progress-label{font-size:12.5px;color:var(--muted);text-align:right}
+.progress-bar-bg{background:rgba(255,255,255,0.06);border-radius:6px;height:22px;overflow:hidden}
+.progress-bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:10px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.8);transition:width .6s ease}
+.progress-val{font-size:13px;font-weight:700;text-align:left}
+
+footer{text-align:center;font-size:12px;color:var(--dim);padding:24px;border-top:1px solid var(--border)}
+
+@media(max-width:700px){
+  .partner-grid{grid-template-columns:1fr;}.partner-center{display:none}
+  .swot-grid{grid-template-columns:1fr}.vs-grid{grid-template-columns:1fr}
+  .rev-grid{grid-template-columns:1fr}.vision-grid{grid-template-columns:1fr 1fr}
+  .law-row{grid-template-columns:1fr}
+  .progress-row{grid-template-columns:1fr;}.progress-label{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-home">🏠 GARAMwiki</a>
+    <span class="nav-sep">›</span>
+    <a href="#" class="nav-link">📋 사업_현안</a>
+    <span class="nav-sep">›</span>
+    <span class="nav-link" style="color:var(--text)">AI Governance Platform v03</span>
+  </div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badges">
+    <span class="badge badge-biz">📋 사업_현안</span>
+    <span class="badge badge-conf">🔒 대외비 · 파트너 한정</span>
+    <span class="badge badge-ver">✅ v03</span>
+    <span class="badge badge-date">📅 2026년 6월</span>
+  </div>
+  <div class="hero-title">
+    AI Governance Platform<br>
+    <span class="hl">법무법인 린 × Wise42</span> 사업 진출 전략
+  </div>
+  <div class="hero-sub">공공·중견기업 AX 시장 기반 신사업 모델 구축 방안 · v03 공공기관 AX 심층 분석 신규 추가</div>
+  <div class="hero-tagline">
+    "AI를 구축하는 기업은 많다. AI를 <strong>신뢰할 수 있게 만드는</strong> 기업은 아직 없다."
+  </div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-card">
+    <div class="stat-num">9.9조</div>
+    <div class="stat-label">2026 정부 AI 예산</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">2.4조</div>
+    <div class="stat-label">AX 부문 예산</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">3~5조</div>
+    <div class="stat-label">AI Governance TAM</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">90~150억</div>
+    <div class="stat-label">3개년 누적 매출 목표</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">2027 H1</div>
+    <div class="stat-label">BEP 달성 목표</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">국내 전무</div>
+    <div class="stat-label">법률×기술 융합 플레이어</div>
+  </div>
+</div>
+
+<!-- PARTNERSHIP OVERVIEW -->
+<div class="sec">
+  <div class="sec-title">파트너십 개요</div>
+  <div class="partner-grid">
+    <div class="partner-card partner-left">
+      <div class="partner-name orange">법무법인 린</div>
+      <div class="partner-tag orange">Legal Trust</div>
+      <ul class="partner-items">
+        <li>AI Governance 법제도 설계</li>
+        <li>규제 자문 · AI Audit 인증</li>
+        <li>법적 신뢰 기반 제공</li>
+        <li>ICT·데이터·플랫폼 전문성</li>
+        <li>공공기관 법률자문 레퍼런스</li>
+      </ul>
+    </div>
+    <div class="partner-center"><div class="partner-x">×</div></div>
+    <div class="partner-card partner-right">
+      <div class="partner-name blue">Wise42</div>
+      <div class="partner-tag blue">Tech Execution</div>
+      <ul class="partner-items">
+        <li>AI 플랫폼 기술 개발·운영</li>
+        <li>AX 솔루션 구축 · SaaS 운영</li>
+        <li>클라우드 인프라 · API 개발</li>
+        <li>공공·기업 AI 도입 레퍼런스</li>
+        <li>기존 AX 고객사 Cross-sell</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="text-align:center;background:rgba(249,115,22,0.04);border-color:rgba(249,115,22,0.2)">
+    <div style="font-size:13px;color:var(--muted);line-height:1.7">
+      <strong style="color:var(--text)">공동 역할:</strong> 브랜드 구축 · 사업개발 · 고객 획득 · 컨소시엄 구성<br>
+      <strong style="color:var(--accent)">린의 포지셔닝:</strong> 대형 로펌 → "AI 전문 법률 자문" / <strong>린+Wise42 →</strong> "AI Governance 플랫폼 기업"
+    </div>
+  </div>
+</div>
+
+<!-- CORE OPPORTUNITIES -->
+<div class="sec">
+  <div class="sec-title">핵심 기회 — 골든타임이 열렸다</div>
+  <div class="opp-list">
+    <div class="opp-item">
+      <div class="opp-icon">⚖️</div>
+      <div class="opp-text">
+        <strong>AI 기본법 2026.1.22 전면 시행 (세계 최초)</strong> — 고영향 AI 거버넌스 의무화. 최소 1년 계도기간(벌칙 미적용)이 선제 구축 수요의 골든타임
+      </div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-icon">💰</div>
+      <div class="opp-text">
+        <strong>2026 정부 AI 예산 9.9조 원</strong> (전년 3.3조의 3배), 이 중 <strong>AX 부문 2.4조 원</strong> — 공공 AX 발주 폭증 예고
+      </div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-icon">🏛️</div>
+      <div class="opp-text">
+        <strong>공공조달 시장 연 225조 원</strong>이 'AI 첫 구매자'로 전환 — 나라장터 진입요건 완화, 입찰 우대·수의계약 확대, 디지털서비스 전문계약 2주 조달
+      </div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-icon">📊</div>
+      <div class="opp-text">
+        <strong>공공기관·지방공기업 경영평가 AI 활용 가점 신설(2026)</strong> — 전 공공기관에 AX 도입의 구조적 강제 유인 발생
+      </div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-icon">🎯</div>
+      <div class="opp-text">
+        <strong>법률 × 기술 융합 플레이어 국내 전무</strong> — 선점 창이 열려 있음. AI가 만든 결과물의 법적 신뢰성 보증 주체는 법무법인
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3YR ROADMAP + INVESTMENT -->
+<div class="sec">
+  <div class="sec-title">3개년 사업 목표 · 투자 요약</div>
+  <div class="phase-grid">
+    <div class="phase-card ph1">
+      <div class="phase-num">Phase 1 · Pilot</div>
+      <div class="phase-title">레퍼런스 확보</div>
+      <div class="phase-period">2026년</div>
+      <ul class="phase-items">
+        <li>레퍼런스 3건 확보</li>
+        <li>플랫폼 MVP 출시</li>
+        <li>AI 기본법 가이드북 배포</li>
+        <li>공공기관 무료 진단 3곳</li>
+      </ul>
+      <div class="phase-kpi">
+        <div class="phase-kpi-label">매출 목표</div>
+        <div style="font-size:18px;font-weight:800;color:var(--accent)">5~10억 원</div>
+      </div>
+    </div>
+    <div class="phase-card ph2">
+      <div class="phase-num">Phase 2 · Scale</div>
+      <div class="phase-title">구독 50개 달성</div>
+      <div class="phase-period">2027년</div>
+      <ul class="phase-items">
+        <li>구독 고객 50개</li>
+        <li>정부지원사업 2건 수주</li>
+        <li>AI Audit 서비스 런칭</li>
+        <li>ISO 42001 컨설팅 출시</li>
+      </ul>
+      <div class="phase-kpi">
+        <div class="phase-kpi-label">매출 목표</div>
+        <div style="font-size:18px;font-weight:800;color:var(--trend)">20~35억 원</div>
+      </div>
+    </div>
+    <div class="phase-card ph3">
+      <div class="phase-num">Phase 3 · Platform</div>
+      <div class="phase-title">표준 선점</div>
+      <div class="phase-period">2028년~</div>
+      <ul class="phase-items">
+        <li>ARR 30억+ 달성</li>
+        <li>JV 법인 설립 검토</li>
+        <li>인증 표준 선점</li>
+        <li>아시아 시장 탐색</li>
+      </ul>
+      <div class="phase-kpi">
+        <div class="phase-kpi-label">매출 목표</div>
+        <div style="font-size:18px;font-weight:800;color:var(--model)">60~100억 원</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-title">💵 초기 투자</div>
+      <div class="card-body">약 <strong style="color:var(--text)">15~20억 원</strong><br>플랫폼 개발 + 인력 + 영업<br><br>플랫폼 MVP 개발: 3~5억<br>인력 채용: 4~6억<br>마케팅·브랜딩: 1~2억</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📈 수익 구조</div>
+      <div style="display:grid;gap:6px;margin-top:4px">
+        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Consulting</span><span style="color:var(--accent);font-weight:700">30%</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Audit</span><span style="color:var(--accent);font-weight:700">30%</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">SaaS Subscription</span><span style="color:var(--accent);font-weight:700">40%</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 BEP 분석</div>
+      <div class="card-body">
+        BEP 달성: <strong style="color:var(--text)">2027 H1</strong><br>월 고정비: 1.2~1.5억<br>평균 거래 단가: 5,000만<br>월 BEP 거래 수: 약 3건/월
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MARKET SIZE -->
+<div class="sec">
+  <div class="sec-title">시장 규모 분석 — TAM / SAM / SOM</div>
+  <div class="market-funnel">
+    <div class="funnel-row">
+      <div class="funnel-label">TAM</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar funnel-tam">AI Governance Horizontal Market</div>
+      </div>
+      <div class="funnel-val orange">3~5조 원</div>
+    </div>
+    <div class="funnel-row">
+      <div class="funnel-label">SAM</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar funnel-sam" style="width:55%">공공350 + 금융200 + 중견5,500</div>
+      </div>
+      <div class="funnel-val blue">5,000억~1조</div>
+    </div>
+    <div class="funnel-row">
+      <div class="funnel-label">SOM</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar funnel-som" style="width:20%">3년 내 1~2%</div>
+      </div>
+      <div class="funnel-val green">60~100억</div>
+    </div>
+  </div>
+  <div class="sec-h3">글로벌 AI Governance 시장 성장률 (연 +37%)</div>
+  <table>
+    <tr><th>연도</th><th>시장 규모 (USD)</th><th>YoY</th></tr>
+    <tr><td>2024</td><td>약 38억 달러</td><td>—</td></tr>
+    <tr><td>2025</td><td>약 52억 달러</td><td><span style="color:var(--insight)">+37%</span></td></tr>
+    <tr><td>2026</td><td>약 71억 달러</td><td><span style="color:var(--insight)">+37%</span></td></tr>
+    <tr><td>2027</td><td>약 97억 달러</td><td><span style="color:var(--insight)">+37%</span></td></tr>
+    <tr><td>2028</td><td>약 133억 달러</td><td><span style="color:var(--insight)">+37%</span></td></tr>
+  </table>
+</div>
+
+<!-- SWOT -->
+<div class="sec">
+  <div class="sec-title">법무법인 린 SWOT 분석</div>
+  <div class="swot-grid">
+    <div class="swot-cell swot-S">
+      <div class="swot-label">💪 강점 Strengths</div>
+      <ul class="swot-items">
+        <li>ICT·데이터 전문성</li>
+        <li>민첩한 조직 구조</li>
+        <li>스타트업 네트워크</li>
+        <li>Wise42 기술 파트너십</li>
+        <li>공공기관 법률자문 레퍼런스</li>
+      </ul>
+    </div>
+    <div class="swot-cell swot-W">
+      <div class="swot-label">⚠️ 약점 Weaknesses</div>
+      <ul class="swot-items">
+        <li>브랜드 인지도 한계</li>
+        <li>대규모 프로젝트 레퍼런스 부족</li>
+        <li>AI 기술 자체 역량</li>
+      </ul>
+    </div>
+    <div class="swot-cell swot-O">
+      <div class="swot-label">🚀 기회 Opportunities</div>
+      <ul class="swot-items">
+        <li>AI 기본법 시행</li>
+        <li>공공 AI 거버넌스 수요 급증</li>
+        <li>대형 로펌의 플랫폼 진입 지연</li>
+        <li>글로벌 표준 도입</li>
+        <li>경영평가 AI 가점 신설</li>
+      </ul>
+    </div>
+    <div class="swot-cell swot-T">
+      <div class="swot-label">🛡️ 위협 Threats</div>
+      <ul class="swot-items">
+        <li>딜로이트·KPMG 진입</li>
+        <li>기술기업의 법률 영역 침투</li>
+        <li>규제 불확실성</li>
+        <li>계도기간 중 수요 지연</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- COMPETITIVE LANDSCAPE -->
+<div class="sec">
+  <div class="sec-title">경쟁 환경 · 차별화 포지션</div>
+  <div class="vs-grid">
+    <div class="vs-card">
+      <div class="vs-type">대형 로펌</div>
+      <div class="vs-name">김앤장·태평양·광장·율촌</div>
+      <div class="vs-pro">✅ 브랜드·대기업 네트워크</div>
+      <div class="vs-con">❌ 플랫폼·SaaS 전환 의지 없음<br>❌ 자문 중심으로 고착</div>
+    </div>
+    <div class="vs-card">
+      <div class="vs-type">컨설팅·회계법인</div>
+      <div class="vs-name">딜로이트·KPMG·삼일PwC</div>
+      <div class="vs-pro">✅ 글로벌 방법론·ESG 경험</div>
+      <div class="vs-con">❌ AI 기술 역량 부족<br>❌ 법률 전문성 취약</div>
+    </div>
+    <div class="vs-card">
+      <div class="vs-type">기술기업</div>
+      <div class="vs-name">국내 AI 스타트업·클라우드벤더</div>
+      <div class="vs-pro">✅ 기술력·인프라</div>
+      <div class="vs-con">❌ 법적 신뢰성 없음<br>❌ 로컬 규제 대응 미흡</div>
+    </div>
+  </div>
+  <div class="ax-highlight">
+    <div class="ax-quote">⭐ 린 + Wise42의 유일한 포지션: <span style="color:var(--accent)">법률 신뢰성 + 기술 실행력</span>을 동시에 보유한 국내 유일 플레이어</div>
+    <div class="ax-source">차별화 메시지: "AI를 도입해 드립니다" → <strong style="color:var(--text)">"감사·규제·평가를 통과하는 AI를 도입해 드립니다"</strong></div>
+  </div>
+  <div class="sec-h3">글로벌 벤치마킹</div>
+  <div class="bench-grid">
+    <div class="bench-card">
+      <div class="bench-co">🇺🇸 OneTrust</div>
+      <div class="bench-val">기업가치 $55억 · 유니콘</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Privacy + Trust + AI 거버넌스 통합 SaaS</div>
+      <div class="bench-learn">린 적용: 법률 자문을 플랫폼에 탑재하는 방식 참고</div>
+    </div>
+    <div class="bench-card">
+      <div class="bench-co">🇺🇸 Credo AI</div>
+      <div class="bench-val">AI 거버넌스 전문 SaaS</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">AI 모델 등록, 정책 관리, 리스크 평가 자동화</div>
+      <div class="bench-learn">린 적용: Layer별 플랫폼 구조 설계에 참고</div>
+    </div>
+    <div class="bench-card">
+      <div class="bench-co">🌍 Baker McKenzie</div>
+      <div class="bench-val">법무법인 + RegTech 협업</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">법무법인이 기술파트너와 Compliance 플랫폼 공동 판매</div>
+      <div class="bench-learn">린 적용: 수익 배분·브랜딩 모델 직접 참고 가능</div>
+    </div>
+    <div class="bench-card">
+      <div class="bench-co">🇺🇸 IBM OpenPages</div>
+      <div class="bench-val">AI·GRC 통합 엔터프라이즈</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">대기업·금융기관 대상 GRC 통합 플랫폼</div>
+      <div class="bench-learn">린 적용: 공공·금융 부문 신뢰도 확보 경로 참고</div>
+    </div>
+  </div>
+</div>
+
+<!-- AI 기본법 매핑 -->
+<div class="sec">
+  <div class="sec-title">AI 기본법 조항별 비즈니스 기회 매핑</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:14px">AI 기본법(2026.1.22 전면 시행) — 모든 의무가 린+Wise42 서비스로 직결</div>
+  <div class="law-list">
+    <div style="background:rgba(249,115,22,0.08);border-radius:8px;padding:10px 16px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;font-size:11px;font-weight:700;color:var(--muted)">
+      <div>AI 기본법 의무</div><div style="color:var(--accent)">린 역할</div><div style="color:var(--trend)">Wise42 역할</div><div>서비스명</div>
+    </div>
+    <div class="law-row">
+      <div class="law-duty">고영향 AI 등록·신고</div>
+      <div class="law-lin">법적 판단 기준 제공</div>
+      <div class="law-wise">평가 자동화 툴</div>
+      <div style="font-size:12px;color:var(--muted)">AI Risk Classifier</div>
+    </div>
+    <div class="law-row">
+      <div class="law-duty">투명성 의무 고지</div>
+      <div class="law-lin">법적 고지문 설계</div>
+      <div class="law-wise">시스템 연동</div>
+      <div style="font-size:12px;color:var(--muted)">AI Disclosure Kit</div>
+    </div>
+    <div class="law-row">
+      <div class="law-duty">안전성·위험관리 체계</div>
+      <div class="law-lin">정책·절차 설계</div>
+      <div class="law-wise">대시보드 구현</div>
+      <div style="font-size:12px;color:var(--muted)">AI RMS Platform</div>
+    </div>
+    <div class="law-row">
+      <div class="law-duty">설명가능성 (XAI)</div>
+      <div class="law-lin">설명 의무 기준</div>
+      <div class="law-wise">XAI 기술 구현</div>
+      <div style="font-size:12px;color:var(--muted)">AI Explainability Suite</div>
+    </div>
+    <div class="law-row">
+      <div class="law-duty">책임체계 구축</div>
+      <div class="law-lin">계약서·내규 작성</div>
+      <div class="law-wise">이력 추적 시스템</div>
+      <div style="font-size:12px;color:var(--muted)">AI Accountability Record</div>
+    </div>
+    <div class="law-row">
+      <div class="law-duty">개인정보 연계 규제</div>
+      <div class="law-lin">법적 적합성 검토</div>
+      <div class="law-wise">자동 점검 툴</div>
+      <div style="font-size:12px;color:var(--muted)">AI Privacy Check</div>
+    </div>
+  </div>
+</div>
+
+<!-- PLATFORM TIER -->
+<div class="sec">
+  <div class="sec-title">AI Governance Platform — 서비스 Tier 구성</div>
+  <div class="tier-wrap">
+    <div class="tier-row">
+      <div>
+        <div class="tier-name">Basic · AI Check</div>
+        <span class="tier-badge" style="background:rgba(148,163,184,0.12);color:var(--muted)">중소기업</span>
+      </div>
+      <div class="tier-desc">규제 모니터링 + 위험 스캔</div>
+      <div class="tier-price">100만<span>원/월</span></div>
+    </div>
+    <div class="tier-row" style="border-color:rgba(249,115,22,0.25)">
+      <div>
+        <div class="tier-name">Standard · AI Guard</div>
+        <span class="tier-badge" style="background:rgba(249,115,22,0.12);color:#fb923c">중견기업·공공기관</span>
+      </div>
+      <div class="tier-desc">Basic + 정책 생성 + 분기 점검</div>
+      <div class="tier-price" style="color:var(--accent)">300만<span>원/월</span></div>
+    </div>
+    <div class="tier-row" style="border-color:rgba(167,139,250,0.3)">
+      <div>
+        <div class="tier-name">Premium · AI Governance</div>
+        <span class="tier-badge" style="background:rgba(167,139,250,0.12);color:#a78bfa">대기업·금융</span>
+      </div>
+      <div class="tier-desc">Standard + Audit + 전담 변호사</div>
+      <div class="tier-price" style="color:var(--model)">700만<span>원/월</span></div>
+    </div>
+    <div class="tier-row" style="border-color:rgba(16,185,129,0.3)">
+      <div>
+        <div class="tier-name">Enterprise · Full Suite</div>
+        <span class="tier-badge" style="background:rgba(16,185,129,0.12);color:#34d399">대형 공공기관</span>
+      </div>
+      <div class="tier-desc">전체 + 전용 인스턴스 + 컨설팅 무제한</div>
+      <div class="tier-price" style="color:var(--insight)">협의</div>
+    </div>
+  </div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-pct" style="color:var(--accent)">30%</div>
+      <div class="rev-name">Consulting</div>
+      <div class="rev-desc">린 60% / Wise42 40%<br>법률 자문 주도</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-pct" style="color:var(--trend)">30%</div>
+      <div class="rev-name">AI Audit</div>
+      <div class="rev-desc">린 55% / Wise42 45%<br>공동 수행</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-pct" style="color:var(--insight)">40%</div>
+      <div class="rev-name">SaaS Subscription</div>
+      <div class="rev-desc">린 30% / Wise42 70%<br>기술 운영 주도</div>
+    </div>
+  </div>
+</div>
+
+<!-- 공공기관 AX 시장 심층 분석 v03 신규 -->
+<div class="sec">
+  <div class="sec-title">공공기관 AX 시장 심층 분석 <span class="v03-badge">v03 신규 제12장</span></div>
+
+  <div class="ax-highlight">
+    <div class="ax-quote">🎯 핵심 통찰: 기관이 AX를 도입하는 순간, AI 기본법상 <span style="color:var(--accent)">거버넌스 의무가 동시에 발생</span>한다.</div>
+    <div class="ax-source">AX 도입'과 '거버넌스 의무'의 동시성이 린+Wise42의 진입 기회</div>
+  </div>
+
+  <div class="sec-h3">3축 동시 작동 — '권장'에서 '의무·평가'로</div>
+  <div class="grid3">
+    <div class="card" style="border-color:rgba(249,115,22,0.3)">
+      <div class="card-title">⚖️ 법제도 축</div>
+      <div class="card-body">AI 기본법 <strong style="color:var(--text)">2026.1.22 전면 시행</strong> (세계 최초). 고영향 AI: 의료·채용·금융·에너지·교통·사법. 1년+ 계도기간 = 골든타임</div>
+    </div>
+    <div class="card" style="border-color:rgba(59,130,246,0.3)">
+      <div class="card-title">💰 예산 축</div>
+      <div class="card-body">2026 정부 AI 예산 <strong style="color:var(--text)">9.9조</strong> (전년 3.3조의 3배). AX 부문 <strong style="color:var(--text)">2.4조</strong>. 공공서비스 개선 명분으로 발주 본격화</div>
+    </div>
+    <div class="card" style="border-color:rgba(16,185,129,0.3)">
+      <div class="card-title">📊 평가·통제 축</div>
+      <div class="card-body"><strong style="color:var(--text)">경영평가에 AI 활용 가점 신설(2026)</strong> — 기재부·행안부 편람 동시 개정. 전 공공기관에 구조적 AX 도입 강제 유인</div>
+    </div>
+  </div>
+
+  <div class="sec-h3">공공 AX 조달 진입 경로</div>
+  <table>
+    <tr><th>조달 경로</th><th>소요 기간</th><th>린+Wise42 적합도</th></tr>
+    <tr><td><strong>일반 경쟁입찰 (나라장터)</strong></td><td>3개월+</td><td style="color:var(--muted)">컨소시엄 참여</td></tr>
+    <tr><td><strong style="color:var(--accent)">디지털서비스 전문계약 ★</strong></td><td style="color:var(--insight)"><strong>약 2주</strong></td><td style="color:var(--accent)">SaaS 플랫폼 직접 등재 — 최우선</td></tr>
+    <tr><td><strong>혁신제품·수의계약</strong></td><td>단축</td><td style="color:var(--muted)">플랫폼 혁신제품 지정 추진</td></tr>
+  </table>
+
+  <div class="sec-h3">AX × AI Governance 결합 — 차별화 논리</div>
+  <table>
+    <tr><th>구분</th><th>일반 AX 사업자</th><th style="color:var(--accent)">린 + Wise42</th></tr>
+    <tr>
+      <td>제공 가치</td>
+      <td>AI 시스템을 만들어 준다</td>
+      <td style="color:var(--accent)"><strong>감사·규제·평가를 통과하는 AI를 만들어 준다</strong></td>
+    </tr>
+    <tr>
+      <td>종료 지점</td>
+      <td>시스템 납품 시점</td>
+      <td>거버넌스 체계 + 연간 Audit까지</td>
+    </tr>
+    <tr>
+      <td>고객의 진짜 두려움</td>
+      <td>대응 못 함</td>
+      <td style="color:var(--text)">"도입한 AI가 법적 문제를 일으키는 것" 보증</td>
+    </tr>
+    <tr>
+      <td>핵심 자산</td>
+      <td>기술 구현력</td>
+      <td><span style="color:var(--accent)">법적 신뢰성(린)</span> + <span style="color:var(--trend)">거버넌스 자동화(Wise42)</span></td>
+    </tr>
+  </table>
+
+  <div class="sec-h3">기관 유형별 공략 우선순위</div>
+  <table>
+    <tr><th>기관군</th><th>AX 성숙도</th><th>경영평가 압력</th><th>우선순위</th></tr>
+    <tr><td><strong>중앙부처 (행안부·과기부)</strong></td><td>높음</td><td>정책 주도</td><td style="color:var(--accent);font-weight:700">A — 표준 선점</td></tr>
+    <tr><td><strong>대형 공기업 (한전·LH·건보·국민연금)</strong></td><td>중~높음</td><td>높음</td><td style="color:var(--accent);font-weight:700">A — 번들 거래</td></tr>
+    <tr><td><strong>금융 공공기관 (산은·기은·예보)</strong></td><td>중</td><td>높음</td><td style="color:var(--accent);font-weight:700">A</td></tr>
+    <tr><td>지방공기업·지자체</td><td>낮음</td><td>높음 (가점 신설)</td><td style="color:var(--trend)">B — 표준화 패키지</td></tr>
+    <tr><td>소규모 준정부기관</td><td>낮음</td><td>중</td><td style="color:var(--muted)">C — SaaS 구독</td></tr>
+  </table>
+
+  <div class="sec-h3">공공 진입 실행 시사점</div>
+  <div class="insight-box">
+    <div class="insight-list">
+      <div class="insight-item">
+        <div class="insight-num">①</div>
+        <div class="insight-text"><strong>디지털서비스 전문계약 카탈로그 등재</strong>를 2026 최우선 과제로 — 2주 조달 채널로 대형 SI 우회</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">②</div>
+        <div class="insight-text"><strong>경영평가 AI 가점</strong>을 핵심 영업 후크로 — "가점받는 AX" 메시지로 기관장·기획조정실 직접 공략</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">③</div>
+        <div class="insight-text"><strong>AX-Governance 통합 번들</strong> 표준 상품화: AX 5억 → AX+Governance 7~8억, 거버넌스 레이어 2~3억이 순수 신규 매출</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">④</div>
+        <div class="insight-text"><strong>N2SF 대응 패키지</strong>: 18년 만에 개편된 국가망보안체계 — 등급 분류 + 거버넌스 동시 해결로 차별화</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">⑤</div>
+        <div class="insight-text"><strong>1호 공공 레퍼런스</strong>를 2026 H1 무료 실증으로 확보 — 이후 모든 입찰 자격의 출발점</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GTM -->
+<div class="sec">
+  <div class="sec-title">Go-to-Market — 고객 세그먼트별 전략</div>
+  <div class="grid3">
+    <div class="card" style="border-color:rgba(249,115,22,0.3)">
+      <div class="card-title">🏛️ Segment A — 공공기관</div>
+      <div class="card-body">
+        <div style="color:var(--accent);font-size:11px;font-weight:700;margin-bottom:6px">우선순위 A</div>
+        행안부·과기부 AI 정책 선행 연구 → 공신력 확보<br><br>
+        RFP 이전 단계 컨설팅 진입 → 제안서 구조 영향력<br><br>
+        공공기관 AI 감사 필요성 이슈화
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(59,130,246,0.3)">
+      <div class="card-title">🏦 Segment A — 금융기관</div>
+      <div class="card-body">
+        <div style="color:var(--trend);font-size:11px;font-weight:700;margin-bottom:6px">우선순위 A</div>
+        금융위·금감원 AI 내부통제 가이드라인 사전 연구<br><br>
+        은행연합회·보험개발원 업권 세미나<br><br>
+        CISO·CRO 대상 워크숍 → 결재권자 직접 접근
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(167,139,250,0.3)">
+      <div class="card-title">🏢 Segment B — 중견기업</div>
+      <div class="card-body">
+        <div style="color:var(--model);font-size:11px;font-weight:700;margin-bottom:6px">우선순위 B</div>
+        AI Factory Package (AX+Governance 번들)<br><br>
+        정부지원사업 연계 진입 장벽 최소화<br><br>
+        기업 부담 최소화: 총 1.5~3억 중 정부 50~70%
+      </div>
+    </div>
+  </div>
+  <div class="sec-h3">공동 브랜드 옵션</div>
+  <div class="grid2">
+    <div class="card card-accent" style="border-color:rgba(249,115,22,0.4)">
+      <div class="card-title">⭐ TrustLayer (권고)</div>
+      <div class="card-body">AI 신뢰 계층 구축 컨셉. JV 법인화 고려 시 최선호. 법률 신뢰성 + 기술 실행력 동시 표현</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🛡️ AI-GUARD</div>
+      <div class="card-body">AI 보호·감시 컨셉. 공공기관 대상 강한 보안 이미지. 규제 대응 + 감사 키워드 강조</div>
+    </div>
+  </div>
+</div>
+
+<!-- 재무 모델 -->
+<div class="sec">
+  <div class="sec-title">재무 모델 — 3개년 손익 전망</div>
+  <table>
+    <tr><th>구분</th><th>2026</th><th>2027</th><th>2028</th></tr>
+    <tr><td>AI Governance Consulting</td><td>3~5억</td><td>8~12억</td><td>15~20억</td></tr>
+    <tr><td>AI Audit Service</td><td>1~2억</td><td>4~6억</td><td>10~15억</td></tr>
+    <tr><td>Platform SaaS Subscription</td><td>0.5~1억</td><td>5~8억</td><td>20~30억</td></tr>
+    <tr><td>정부지원사업</td><td>0.5~2억</td><td>3~9억</td><td>10~15억</td></tr>
+    <tr><td>AI Certification</td><td>—</td><td>1~2억</td><td>5~8억</td></tr>
+    <tr style="background:rgba(249,115,22,0.06)">
+      <td><strong style="color:var(--text)">매출 합계</strong></td>
+      <td><strong style="color:var(--accent)">5~10억</strong></td>
+      <td><strong style="color:var(--trend)">21~37억</strong></td>
+      <td><strong style="color:var(--insight)">60~88억</strong></td>
+    </tr>
+    <tr>
+      <td><strong>영업이익률</strong></td>
+      <td style="color:var(--muted)">-10~10%</td>
+      <td style="color:var(--trend)">15~28%</td>
+      <td style="color:var(--insight)">33~45%</td>
+    </tr>
+  </table>
+</div>
+
+<!-- KPI -->
+<div class="sec">
+  <div class="sec-title">KPI 프레임워크</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-val">10건</div>
+      <div class="kpi-label">2026 신규 고객</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">50개</div>
+      <div class="kpi-label">2027 구독 고객</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">ARR 30억</div>
+      <div class="kpi-label">2028 목표</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">5%</div>
+      <div class="kpi-label">2028 국내 점유율</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">80%+</div>
+      <div class="kpi-label">구독 갱신율 목표</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">NPS 40+</div>
+      <div class="kpi-label">고객 만족도</div>
+    </div>
+  </div>
+</div>
+
+<!-- 리스크 -->
+<div class="sec">
+  <div class="sec-title">리스크 관리 — 우선순위 A</div>
+  <div class="risk-list">
+    <div class="risk-row">
+      <div>
+        <div class="risk-name">대형 로펌 플랫폼 진입</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">대응: 속도 전략, 레퍼런스 선점, 가격 경쟁력 (SaaS 구독)</div>
+      </div>
+      <div class="risk-chip risk-A">우선순위 A</div>
+      <div style="font-size:12px;color:var(--muted)">영향도: 높음</div>
+    </div>
+    <div class="risk-row">
+      <div>
+        <div class="risk-name">Wise42 파트너십 균열</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">대응: 명확한 계약 구조, JV 조기 전환 추진</div>
+      </div>
+      <div class="risk-chip risk-A">우선순위 A</div>
+      <div style="font-size:12px;color:var(--muted)">영향도: 매우높음</div>
+    </div>
+    <div class="risk-row">
+      <div>
+        <div class="risk-name">기술 개발 지연</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">대응: MVP 최소화, 외주 개발 병행</div>
+      </div>
+      <div class="risk-chip risk-A">우선순위 A</div>
+      <div style="font-size:12px;color:var(--muted)">영향도: 높음</div>
+    </div>
+    <div class="risk-row">
+      <div>
+        <div class="risk-name">보안·개인정보 사고</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">대응: ISMS-P 인증, 보안 설계 선행, 보험 가입</div>
+      </div>
+      <div class="risk-chip risk-A">우선순위 A</div>
+      <div style="font-size:12px;color:var(--muted)">영향도: 매우높음</div>
+    </div>
+    <div class="risk-row">
+      <div>
+        <div class="risk-name">AI 기본법 계도기간 수요 지연</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">대응: 경영평가 가점·민간 수요로 견인, 계도기간 종료 대비</div>
+      </div>
+      <div class="risk-chip risk-B">우선순위 B</div>
+      <div style="font-size:12px;color:var(--muted)">영향도: 중</div>
+    </div>
+  </div>
+</div>
+
+<!-- 장기 비전 -->
+<div class="sec">
+  <div class="sec-title">장기 비전 — Digital Trust Infrastructure Company</div>
+  <div class="vision-grid">
+    <div class="vision-cell">
+      <div class="vision-year">2026</div>
+      <div class="vision-id">전문 파트너십</div>
+      <div class="vision-cap">AI Governance 컨설팅 + MVP 플랫폼</div>
+    </div>
+    <div class="vision-cell">
+      <div class="vision-year">2027</div>
+      <div class="vision-id">플랫폼 기업</div>
+      <div class="vision-cap">SaaS · Audit · 인증 구독 중심 성장</div>
+    </div>
+    <div class="vision-cell">
+      <div class="vision-year">2028</div>
+      <div class="vision-id">ARR 기업</div>
+      <div class="vision-cap">ARR 30억+ · 표준 선점 · JV 설립</div>
+    </div>
+    <div class="vision-cell">
+      <div class="vision-year">2030</div>
+      <div class="vision-id">Digital Trust Co.</div>
+      <div class="vision-cap">국내 표준 선점 · 아시아 확장</div>
+    </div>
+  </div>
+  <div class="ax-highlight">
+    <div class="ax-quote">林 린의 최종 목적지: 대한민국에서 가장 큰 로펌이 아니라, <span style="color:var(--accent)">AI 시대에 가장 신뢰받는 기관</span></div>
+    <div class="ax-source">AI에 대체되는 법무법인이 아니라 → AI를 신뢰하게 만드는 법무법인으로</div>
+  </div>
+</div>
+
+<!-- GARAM INSIGHT -->
+<div class="insight-box">
+  <div class="insight-title">⚡ GARAMbada 인사이트</div>
+  <div class="insight-list">
+    <div class="insight-item">
+      <div class="insight-num">1</div>
+      <div class="insight-text">
+        <strong>AI 기본법은 법률시장의 지각변동이다.</strong> 고영향 AI 의무사항이 의료·채용·금융·에너지·사법을 동시에 커버 — 공공기관 전체가 잠재 고객이 된다. 계도기간 1년이 골든타임.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">2</div>
+      <div class="insight-text">
+        <strong>'AX 도입'과 '거버넌스 의무'의 동시성이 핵심 레버리지다.</strong> 기관이 AX 예산을 집행하는 순간 거버넌스 수요가 자동 생성 — 별도 예산이 아니라 AX 예산에 올라타는 Add-on 전략이 공공시장 최적해.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">3</div>
+      <div class="insight-text">
+        <strong>디지털서비스 전문계약이 게임체인저다.</strong> 3개월 나라장터 입찰 대신 2주 SaaS 카탈로그 등재 — 대형 SI 텃세를 우회하는 유일한 공공 진입 고속도로. 2026년 최우선 과제.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">4</div>
+      <div class="insight-text">
+        <strong>경영평가 가점이 즉각 수요를 만든다.</strong> 기관장의 KPI에 AI 활용이 직접 연결 — "가점받는 AX"라는 메시지 하나가 기획조정실 예산 편성을 당긴다. 세일즈 훅 중 단연 1위.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">5</div>
+      <div class="insight-text">
+        <strong>SaaS Subscription 40% 비중이 밸류에이션을 바꾼다.</strong> ARR 기반 구독 매출은 법무법인 모델에서 유례없는 구조 — 투자자 유치, 기업가치 제고, JV 설립 시 협상력 모두 구독 비중에 달려 있다.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">6</div>
+      <div class="insight-text">
+        <strong>회계법인의 ESG 선점 전례가 가장 강력한 벤치마크다.</strong> 2015~2018년 중견 회계법인이 대형 법인보다 빠르게 ESG 시장을 선점했다. AI Governance = AI 시대의 ESG — 규모가 아닌 속도와 정의(定義) 능력이 승패를 가른다.
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>GARAMwiki · AI Governance Platform 사업전략 v03 · 법무법인 린 × Wise42 · 2026년 6월 · Claude Cowork와 함께</footer>
+</body>
+</html>

@@ -203,6 +203,10 @@ ARTICLE_META = {
         "title": "Enterprise AX 사업 운영 전략<br>Founders Studio × WISE42 — FDE 네트워크",
         "tags":  ["FDE", "Palantir 모델", "크로스 도메인 플랫폼", "Micro Unit", "WISE42"],
     },
+    "2026-06_AI_Governance_Platform_린_Wise42_사업전략_v03.html": {
+        "title": "AI Governance Platform 사업 진출 전략 v03 — 법무법인 린 × Wise42<br>공공·중견기업 AX 시장 기반 신사업 · AI 기본법 · 3~5조 TAM · 공공기관 AX 심층 분석",
+        "tags":  ["AI Governance", "법무법인 린", "Wise42", "AI 기본법", "공공 AX", "TrustLayer"],
+    },
     # 모델 트래커 (EP100)
     "2026-06_Claude_Fable5_Mythos5_수출통제_EP100_AI_Frontier.html": {
         "title": "Claude Fable 5 · Mythos 5 · 수출통제 D+3<br>EP100: 출시 3일 만에 美수출통제 — 다음 국면은? (AI Frontier)",
