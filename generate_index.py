@@ -203,6 +203,11 @@ ARTICLE_META = {
         "title": "Enterprise AX 사업 운영 전략<br>Founders Studio × WISE42 — FDE 네트워크",
         "tags":  ["FDE", "Palantir 모델", "크로스 도메인 플랫폼", "Micro Unit", "WISE42"],
     },
+    # 모델 트래커 (EP100)
+    "2026-06_Claude_Fable5_Mythos5_수출통제_EP100_AI_Frontier.html": {
+        "title": "Claude Fable 5 · Mythos 5 · 수출통제 D+3<br>EP100: 출시 3일 만에 美수출통제 — 다음 국면은? (AI Frontier)",
+        "tags":  ["Claude Fable 5", "Mythos 5", "수출통제", "Project Glasswing", "SWE-Bench Pro 80.3%"],
+    },
     # 담론 등등
     "2025-06_이병한_뉴노멀탐문_3부작_피터틸_기술공화국.html": {
         "title": "이병한 뉴노멀탐문 3부작 — 피터 틸·기술공화국·퍼스트코리아<br>아메리카·테크노차이나·대한민국 문명 탐문",
