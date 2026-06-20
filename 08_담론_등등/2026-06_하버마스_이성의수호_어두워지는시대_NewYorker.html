@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하버마스 — 이성의 수호, 어두워지는 시대 | GARAMwiki</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a24;
+      --border: #2a2a3a;
+      --accent: #e879f9;
+      --accent-dim: rgba(232,121,249,0.15);
+      --accent-glow: rgba(232,121,249,0.06);
+      --text: #e8e8f0;
+      --text-muted: #9090b0;
+      --text-dim: #5a5a7a;
+      --red: #f87171;
+      --amber: #fbbf24;
+      --emerald: #34d399;
+      --sky: #38bdf8;
+      --violet: #a78bfa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── TOP NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      display: flex; align-items: center; gap: 16px;
+      height: 52px;
+    }
+    .nav-home { font-size: 13px; color: var(--text-muted); }
+    .nav-sep { color: var(--text-dim); }
+    .nav-cat {
+      font-size: 12px; font-weight: 600; letter-spacing: .06em;
+      padding: 3px 10px; border-radius: 20px;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(232,121,249,0.3);
+    }
+    .nav-title { font-size: 13px; color: var(--text-muted); flex: 1; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 64px 0 48px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,121,249,0.07) 0%, transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+    .meta-row {
+      display: flex; align-items: center; gap: 12px;
+      flex-wrap: wrap; margin-bottom: 20px;
+    }
+    .badge {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .badge-cat {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(232,121,249,0.35);
+    }
+    .badge-pub {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .badge-date {
+      background: rgba(255,255,255,0.03);
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      font-size: 11px; font-weight: 400;
+    }
+    .hero-title {
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-style: italic;
+      max-width: 680px;
+    }
+    .hero-byline {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .hero-byline strong { color: var(--text-muted); }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex; gap: 2px;
+      max-width: 860px; margin: 0 auto 0;
+      padding: 0 28px;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1; min-width: 150px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      text-align: center;
+    }
+    .stat-card:first-child { border-radius: 10px 10px 10px 10px; }
+    .stat-num {
+      font-size: 22px; font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 10px; color: var(--text-dim);
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main {
+      max-width: 860px; margin: 0 auto;
+      padding: 48px 28px 80px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    /* ── SECTION ── */
+    .section {}
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 32px; height: 32px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(232,121,249,0.25);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 16px; font-weight: 700;
+      color: var(--text);
+      letter-spacing: .02em;
+    }
+    .section-sub {
+      font-size: 11px; color: var(--text-dim);
+      letter-spacing: .06em; text-transform: uppercase;
+      margin-left: auto;
+    }
+    .prose {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      line-height: 1.85;
+    }
+    .prose p + p { margin-top: 14px; }
+    .prose strong { color: var(--text); font-weight: 600; }
+    .prose em { color: var(--accent); font-style: italic; }
+
+    /* ── CARD GRID ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color .2s;
+    }
+    .card:hover { border-color: rgba(232,121,249,0.3); }
+    .card-head {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 10px;
+    }
+    .card-icon { font-size: 20px; }
+    .card-label {
+      font-size: 12px; font-weight: 700;
+      color: var(--accent);
+      letter-spacing: .04em;
+    }
+    .card-sub {
+      font-size: 11px; color: var(--text-dim);
+    }
+    .card-body {
+      font-size: 13px; color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .card-body strong { color: var(--text); }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 90px 1px 1fr;
+      gap: 0 16px;
+      position: relative;
+    }
+    .tl-year {
+      text-align: right;
+      padding: 0 0 28px;
+      padding-top: 2px;
+    }
+    .tl-year-num {
+      font-size: 13px; font-weight: 700;
+      color: var(--accent);
+    }
+    .tl-year-sub {
+      font-size: 10px; color: var(--text-dim);
+      display: block;
+    }
+    .tl-line {
+      position: relative;
+    }
+    .tl-line::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 6px; bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+    .tl-dot {
+      position: absolute;
+      left: -4px; top: 6px;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+    }
+    .tl-content {
+      padding: 0 0 28px;
+    }
+    .tl-work-title {
+      font-size: 14px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .tl-work-sub {
+      font-size: 11px; color: var(--accent);
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+    .tl-work-desc {
+      font-size: 13px; color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── CONCEPT TABLE ── */
+    .concept-table { width: 100%; border-collapse: collapse; }
+    .concept-table th {
+      text-align: left;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .concept-table td {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(42,42,58,0.5);
+      vertical-align: top;
+    }
+    .concept-table tr:last-child td { border-bottom: none; }
+    .concept-table td:first-child {
+      color: var(--accent);
+      font-weight: 600;
+      font-style: italic;
+      white-space: nowrap;
+    }
+    .concept-table td:nth-child(2) {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 12px;
+      white-space: nowrap;
+      padding-right: 20px;
+    }
+
+    /* ── QUOTE BOX ── */
+    .quote-box {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .quote-text {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.75;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    .quote-attr {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ── INSIGHT CARDS ── */
+    .insight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 600px) {
+      .insight-grid { grid-template-columns: 1fr; }
+    }
+    .insight-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .insight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+    .insight-num {
+      font-size: 28px; font-weight: 900;
+      color: var(--accent-dim);
+      position: absolute;
+      top: 12px; right: 16px;
+      line-height: 1;
+    }
+    .insight-kw {
+      font-size: 12px; font-weight: 700;
+      color: var(--accent);
+      letter-spacing: .04em;
+      margin-bottom: 8px;
+    }
+    .insight-title {
+      font-size: 14px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .insight-body {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── CHIPS ── */
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      font-size: 11px; padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      background: var(--surface2);
+    }
+    .chip-accent {
+      border-color: rgba(232,121,249,0.35);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight-box {
+      background: var(--accent-glow);
+      border: 1px solid rgba(232,121,249,0.2);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+    .highlight-box .hl-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .highlight-box .hl-body {
+      font-size: 13.5px; color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-home" href="../index.html">← GARAMwiki</a>
+  <span class="nav-sep">·</span>
+  <span class="nav-cat">담론_등등</span>
+  <span class="nav-sep">·</span>
+  <span class="nav-title">하버마스 — 이성의 수호, 어두워지는 시대</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="meta-row">
+      <span class="badge badge-cat">담론_등등</span>
+      <span class="badge badge-pub">The New Yorker · Annals of Inquiry</span>
+      <span class="badge badge-date">2026-06-15</span>
+    </div>
+    <h1 class="hero-title">위르겐 하버마스 —<br>이성을 수호하다, 어두워지는 시대에</h1>
+    <p class="hero-subtitle">"The great German philosopher, who died in March, understood how much depended on a principled public sphere."</p>
+    <p class="hero-byline">
+      <strong>Alex Ross</strong> · The New Yorker · 2026년 6월 15일 |
+      <a href="https://www.newyorker.com/magazine/2026/06/22/jurgen-habermas-desperate-fight-for-democracy" target="_blank">원문 →</a>
+    </p>
+  </div>
+</section>
+
+<!-- STAT STRIP -->
+<div class="stat-strip" style="margin-top: 28px;">
+  <div class="stat-card">
+    <div class="stat-num">96세</div>
+    <div class="stat-label">2026년 3월 별세</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">1962</div>
+    <div class="stat-label">공론장의 구조변동 출판</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">1,750p</div>
+    <div class="stat-label">Also a History of Philosophy</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">2022</div>
+    <div class="stat-label">공론장 신구조변동 — AI 경고</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">"No"</div>
+    <div class="stat-label">마지막 메시지 — 거부권의 제도화</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- 0. 읽기 맥락 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">🌐</div>
+      <span class="section-title">읽기 맥락 — 왜 지금 하버마스인가</span>
+    </div>
+    <div class="prose">
+      <p>
+        위르겐 하버마스(Jürgen Habermas)가 2026년 3월 세상을 떠났다. New Yorker의 음악·문화 비평가 알렉스 로스(Alex Ross)가 쓴 이 추모 에세이는 단순한 부고가 아니다. AI 챗봇이 공론장을 잠식하고, 극우 포퓰리즘이 민주주의를 위협하며, 기술 자본이 소통의 언어를 독점하는 지금, 하버마스의 사상이 왜 여전히 가장 날카로운 비판 언어인지를 묻는 글이다.
+      </p>
+      <p>
+        하버마스는 독일 비판이론의 두 번째 세대였다. 아도르노와 호르크하이머가 계몽의 변증법에서 이성의 자멸을 선고할 때, 하버마스는 홀로 반론을 들었다. <strong>이성은 죽지 않았다. 다만 우리가 잘못된 형태의 이성에만 매달렸을 뿐이다.</strong> 그가 제시한 대안은 <em>커뮤니케이티브 이성(kommunikatives Handeln)</em> — 논쟁과 합의를 통해 집합적으로 구성되는 이성이었다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 1. 생애 & 형성 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">🧬</div>
+      <span class="section-title">생애와 철학적 형성</span>
+      <span class="section-sub">1929 – 2026</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🏘️</span>
+          <div>
+            <div class="card-label">출생과 배경</div>
+            <div class="card-sub">소시민적 개신교 가정</div>
+          </div>
+        </div>
+        <div class="card-body">
+          쾰른 인근 <strong>구머스바흐(Gummersbach)</strong> 출생. 구개열(cleft palate)을 갖고 태어났다 — 소통 철학의 거장이 말하는 것 자체에 어려움을 겪었다는 역설. 15세에 미군이 고향을 해방시키는 것을 목격하며 결정적 전환을 경험.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">📰</span>
+          <div>
+            <div class="card-label">하이데거 환멸</div>
+            <div class="card-sub">1953년 스캔들</div>
+          </div>
+        </div>
+        <div class="card-body">
+          1953년 하이데거가 1935년 나치 시절 강의를 수정 없이 재출판하자 <em>Frankfurter Allgemeine Zeitung</em>에 공개 비판문 게재. "사상가들이 과거의 끔찍한 행위에 책임을 질 의무가 있지 않은가?" — 이 글이 아도르노의 주목을 받아 프랑크푸르트학파와 인연을 맺는다.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🏛️</span>
+          <div>
+            <div class="card-label">프랑크푸르트학파 입문</div>
+            <div class="card-sub">아도르노의 조교</div>
+          </div>
+        </div>
+        <div class="card-body">
+          아도르노 조교로 사회연구소 입소. 그러나 냉전 시기 호르크하이머는 하버마스를 "정통 마르크스주의 파괴분자"로 의심, 1958년 9페이지 분량 편지로 아도르노에게 불만 표명. 결국 하버마스는 연구소를 떠나 교수자격논문(<em>Habilitation</em>) 집필에 돌입.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🎓</span>
+          <div>
+            <div class="card-label">사회민주주의 정치 참여</div>
+            <div class="card-sub">이중 정체성</div>
+          </div>
+        </div>
+        <div class="card-body">
+          아카데미와 공론장 사이를 끊임없이 오간 "공공 지식인". 신문 에세이로 건축·유전공학·탈근대 등 다양한 주제에 개입. 1967년 학생운동 관련 "좌파 파시즘" 발언으로 급진파의 공격을 받아 이후 평생 공론장과 불편한 관계를 유지.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 프랑크푸르트학파와의 결별 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">⚡</div>
+      <span class="section-title">프랑크푸르트학파와의 결별 — 이성의 복권</span>
+    </div>
+    <div class="prose">
+      <p>
+        아도르노와 호르크하이머의 <strong>『계몽의 변증법』(Dialectic of Enlightenment)</strong>은 이성(理性) 자체가 지배(Herrschaft)의 도구로 전락했다는 비관적 테제를 제시했다. 계몽이 진보가 아니라 아우슈비츠를 낳았다는 것. 아도르노의 『부정 변증법』은 더 나아가 "아우슈비츠 이후 긍정성에 대한 어떤 주장도 희생자들에 대한 모욕"이라고 선언한다.
+      </p>
+      <p>
+        하버마스는 이 허무주의에 동의하지 않았다. 그의 반론은 이렇다: 우리가 잃어버린 건 이성 자체가 아니라 <em>도구적 이성(instrumental reason)</em>만을 이성으로 본 협소한 시각이다. 고통스럽고 불완전하더라도 인간이 서로 말을 걸고 합의에 도달하는 과정 — <strong>커뮤니케이티브 이성</strong> — 은 여전히 살아있다. 이 이성은 개인이 홀로 발견하는 것이 아니라 상호작용을 통해 집합적으로 구성된다.
+      </p>
+    </div>
+    <div class="quote-box">
+      <div class="quote-text">"After Auschwitz, our feelings reject any claim for the positivity of existence as sanctimony, as injustice to the victims." — Adorno</div>
+      <div class="quote-attr">아도르노의 절대적 부정주의 — 하버마스가 거부한 출발점</div>
+    </div>
+    <div class="prose">
+      <p>
+        대신 하버마스는 칸트의 문제의식으로 돌아간다: <strong>"인간이 어떻게 더 인도적인 세계를 만들 수 있는가?"</strong> 그 답을 그는 조지 허버트 미드(G. H. Mead)의 미국 실용주의에서 찾는다 — 소통 행위가 개인과 사회 모두의 정체성을 구성한다는 통찰. "당신"이라는 이인칭 대명사를 쓰는 순간 우리는 이미 자기중심적 틀을 벗어나 상호 검증의 공간에 들어선다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 3. 주요 저작 4대 기둥 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">📚</div>
+      <span class="section-title">주요 저작 — 4대 기둥</span>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-year">
+          <div class="tl-year-num">1962</div>
+          <span class="tl-year-sub">Frankfurt</span>
+        </div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-work-title">공론장의 구조변동 (Strukturwandel der Öffentlichkeit)</div>
+          <div class="tl-work-sub">The Structural Transformation of the Public Sphere</div>
+          <div class="tl-work-desc">
+            하버마스의 첫 주요 저작이자 가장 유명한 책. 18세기 부르주아 공론장(<em>Öffentlichkeit</em>)의 성립과 붕괴를 추적한다. 커피하우스·살롱·독서클럽에서 시작된 이성적 공개 토론의 공간이, 미디어가 이윤을 추구하는 상품이 되면서 '미디어 봉건제'로 전락한다. 텔레비전·라디오가 등장하자 공중(公衆)은 수동적 소비자로 전락. 후보들은 유권자를 설득하는 대신 엔터테이너로서 자신을 포지셔닝한다. 오늘날 소셜미디어·알고리즘 필터 버블의 원형을 이미 예견한 분석.
+            <br><br>
+            <strong>핵심 개념:</strong> <em>동질적 여론 분위기(homogeneous opinion climate)</em>, <em>허구적 합의(fictional consensus)</em> — 진짜 토론 없이 조작된 여론의 일체화.
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">
+          <div class="tl-year-num">1981</div>
+          <span class="tl-year-sub">바이에른</span>
+        </div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-work-title">커뮤니케이티브 행위 이론 (Theorie des kommunikativen Handelns)</div>
+          <div class="tl-work-sub">The Theory of Communicative Action — 2권 합산 1,000p+</div>
+          <div class="tl-work-desc">
+            막스 베버의 권력론, 에밀 뒤르켐의 집합의식, 조지 미드의 사회심리학, 마르크스 자본주의 비판, 파슨스의 시스템 이론, 정신분석까지를 종합한 거대 합성. 철학적 '전당(meetinghouse of reason)'을 개조하려는 시도.
+            <br><br>
+            핵심 구분: <strong>생활세계(Lebenswelt)</strong>는 진정한 소통·의미·문화가 형성되는 영역. <strong>시스템(System)</strong>은 돈과 권력의 논리로 작동하는 행정·시장 영역. 현대 사회의 병리는 시스템이 생활세계를 식민화(<em>Kolonisierung der Lebenswelt</em>)할 때 발생한다.
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">
+          <div class="tl-year-num">1992</div>
+          <span class="tl-year-sub">Frankfurt</span>
+        </div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-work-title">사실성과 타당성 (Faktizität und Geltung)</div>
+          <div class="tl-work-sub">Between Facts and Norms — 숙의 민주주의 이론</div>
+          <div class="tl-work-desc">
+            커뮤니케이티브 이성을 민주주의 제도 설계로 연결. 존 롤스의 정치철학을 흡수하여 <strong>숙의 민주주의(deliberative democracy)</strong>를 체계화. 중심-주변부 모델: 입법·사법 등 공식 제도가 중심이지만, 시민사회·독립언론·풀뿌리 조직 등 주변부가 의제를 끌어올린다. 주변부가 중심부에 압력을 가하는 경로가 살아있을 때 민주주의는 작동한다.
+            <br><br>
+            <strong>경고:</strong> 주변부가 통제되면 민주주의는 포획된다. 오늘날 빅테크 플랫폼의 알고리즘이 바로 이 경로를 차단하는 메커니즘.
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">
+          <div class="tl-year-num">2019</div>
+          <span class="tl-year-sub">90세 출판</span>
+        </div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-work-title">또 하나의 철학사 (Auch eine Geschichte der Philosophie)</div>
+          <div class="tl-work-sub">1,750페이지 신학-철학 대서사</div>
+          <div class="tl-work-desc">
+            무신론자 하버마스가 90세에 출판한 종교와 이성의 종합. 신석기 종교에서 현대 세속 사상까지를 관통하는 대서사. 붓다의 평등주의적 깨달음, 공자의 학습 종교, 어거스틴의 기독교 철학, 칸트의 도덕 형이상학을 단일 서사로 연결. 핵심 테제: <em>인류는 항상 공동선을 코드화하려 해왔다</em>. 심지어 억압적 시대에도 합리성은 신학 안에 잠복해 있었다.
+            <br><br>
+            <strong>2023년 Polity Press 영역본</strong> 출간(번역: Ciaran Cronin).
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">
+          <div class="tl-year-num">2022</div>
+          <span class="tl-year-sub">마지막 주요작</span>
+        </div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-work-title">공론장의 신구조변동 (Ein neuer Strukturwandel der Öffentlichkeit)</div>
+          <div class="tl-work-sub">디지털·AI 시대의 공론장 해부</div>
+          <div class="tl-work-desc">
+            93세에 출판한 마지막 주요 저작. 1962년 진단을 디지털 시대로 확장. AI 챗봇이 커뮤니케이티브 행위 자체를 "아첨하는 기계와의 환각적 대화"로 대체하고 있다고 경고. <em>"파편화된 자기폐쇄적 반향실의 황량한 불협화음"</em>, <em>"세계를 지배하는 기업들의 자유주의적 찌푸림"</em> — 빅테크에 대한 하버마스 최후의 언어.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. 핵심 개념 사전 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">📖</div>
+      <span class="section-title">하버마스 핵심 개념 사전</span>
+    </div>
+    <div style="overflow-x: auto;">
+      <table class="concept-table">
+        <thead>
+          <tr>
+            <th>독일어 원어</th>
+            <th>한국어</th>
+            <th>의미와 현재적 함의</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Öffentlichkeit</td>
+            <td>공론장 / 공개성</td>
+            <td>사적·공적 사이의 자유로운 토론 공간. 알고리즘 피드가 이를 사유화함.</td>
+          </tr>
+          <tr>
+            <td>Herrschaft</td>
+            <td>지배</td>
+            <td>지배 관계. 프랑크푸르트학파의 핵심 비판 개념. 오늘날 플랫폼 권력 = 새로운 Herrschaft.</td>
+          </tr>
+          <tr>
+            <td>Lebenswelt</td>
+            <td>생활세계</td>
+            <td>진정한 소통·의미·문화가 형성되는 일상 영역. AI가 식민화하는 표적.</td>
+          </tr>
+          <tr>
+            <td>Kolonisierung</td>
+            <td>식민화</td>
+            <td>시스템(돈·권력 논리)이 생활세계를 침식하는 과정. AI 챗봇 = 생활세계의 최신 식민자.</td>
+          </tr>
+          <tr>
+            <td>Verständigung</td>
+            <td>상호이해</td>
+            <td>소통의 궁극 목적. 단순 정보 전달이 아닌 공유된 의미 구성.</td>
+          </tr>
+          <tr>
+            <td>Verfassungspatriotismus</td>
+            <td>헌법 애국주의</td>
+            <td>혈연·민족 아닌 헌법 원칙에 기반한 정체성. 극우 민족주의에 대한 처방.</td>
+          </tr>
+          <tr>
+            <td>Menschenwürde</td>
+            <td>인간 존엄</td>
+            <td>칸트적 보편 원칙. 하버마스 윤리의 초석. 양도 불가능한 인격 가치.</td>
+          </tr>
+          <tr>
+            <td>Transzendenz von innen</td>
+            <td>내부로부터의 초월</td>
+            <td>"반(半)초월적 접촉" — 이상적 소통 상황이 현실 대화에 내재하는 방식.</td>
+          </tr>
+          <tr>
+            <td>Historikerstreit</td>
+            <td>역사가 논쟁</td>
+            <td>1980년대 독일 나치 역사 상대화 논쟁. 하버마스가 에른스트 놀테 등의 수정주의에 맞서 싸운 사건.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5. AI와 생활세계 식민화 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">🤖</div>
+      <span class="section-title">AI — 생활세계의 최후 식민자</span>
+      <span class="section-sub">가장 현재적 문제</span>
+    </div>
+    <div class="prose">
+      <p>
+        하버마스는 소셜미디어의 역효과를 처음에는 낙관적으로 바라보았다. 아랍의 봄, 블랙 라이브즈 매터, #MeToo 같은 운동이 주변부 목소리를 공론장 중심으로 끌어올리는 것처럼 보였다. 그러나 그는 결국 디지털 교환의 간접성과 익명성이 미드가 말한 성숙한 인격 형성을 오히려 방해한다는 결론에 도달한다. 인터넷은 오히려 집단 괴롭힘과 나르시시즘으로의 퇴행을 가능케 했다.
+      </p>
+      <p>
+        그리고 AI 챗봇이 등장하자, 하버마스 사상 체계에서 볼 때 이것은 단순한 기술 문제가 아니라 <strong>철학적 재앙</strong>이다. 그의 전체 세계관은 인간이 서로에게 배우는 것에 기반했다. AI는 커뮤니케이티브 행위를 <em>"아첨하는 기계와의 환각적 대화"</em>로 대체하며 소통 행위의 근본 전제를 붕괴시킨다.
+      </p>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px;">
+      <div class="hl-title">💀 "Habermas Machine" 사건 — 2024년 Google DeepMind</div>
+      <div class="hl-body">
+        2024년 Google DeepMind는 "합의 도달을 위해 설계된 LLM 쌍"이라는 개념의 AI 시스템에 <strong>"Habermas Machine"</strong>이라는 이름을 붙여 공개했다. 하버마스는 사전 허락을 받지 않았으며, 이 소식을 듣고 경악했다. 하버마스를 자신의 지적 여정의 스승으로 꼽는 알렉스 카프(Palantir CEO)는 <em>Politico</em>에 "내 논문에 맹렬하지만 불공평한 비판을 제공해준 분"이라고 회고한다. 그러나 카프가 팔란티어를 통해 이민자 추방을 위한 ICE 감시 시스템을 판매하고 있다는 사실은, 스승의 이념을 학생이 어떻게 배신할 수 있는지를 보여주는 극적 사례다.
+      </div>
+    </div>
+    <div class="prose" style="margin-top: 20px;">
+      <p>
+        하버마스의 마지막 경고는 구체적이다: 유럽에서, 특히 계몽주의가 탄생한 곳에서, 그것이 처음 죽어가는 곳에서 — <strong>공론장을 제도적으로 지켜야 한다</strong>. EU는 인터넷과 AI를 규제하는 조치를 취했다. 국가 자금 지원 미디어와 문화가 공론장을 부분적으로 유지하고 있다. 완벽하지 않지만, 이것이 최선의 보루다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 6. 공론장 위기와 정치 개입 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">⚔️</div>
+      <span class="section-title">공론장 전투 — 하버마스의 정치 개입들</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">📜</span>
+          <div>
+            <div class="card-label">역사가 논쟁 (1986)</div>
+          </div>
+        </div>
+        <div class="card-body">
+          에른스트 놀테 등이 나치 홀로코스트를 볼셰비즘에 대한 '아시아적 위협'에 대한 반응으로 상대화. 하버마스는 <em>Die Zeit</em>에 "아우슈비츠는 기술적 혁신이 되었고 아직 우리 문 앞에 선 적에 맞선 것으로 해석된다"고 반박. 역사 수정주의 공론화를 차단.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🇩🇪</span>
+          <div>
+            <div class="card-label">Verfassungspatriotismus</div>
+          </div>
+        </div>
+        <div class="card-body">
+          혈연·민족·문화가 아닌 <strong>헌법 원칙</strong>에 대한 충성을 국가 정체성의 토대로 제안. 극우 민족주의와 AfD류 포퓰리즘에 대한 철학적 처방. 사후 AfD가 조의를 표하지 않고 오히려 "독일의 최대 적"이라고 공격한 사실이 그의 입장을 역으로 증명.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🇮🇱</span>
+          <div>
+            <div class="card-label">가자 전쟁 발언 (2023)</div>
+          </div>
+        </div>
+        <div class="card-body">
+          하마스 학살 직후 이스라엘 연대 성명에 서명. 팔레스타인 고통에 대한 언급이 미미하다는 비판을 받았다. "학살 의도가 이스라엘 행위에 귀속될 때 판단 기준 자체가 완전히 사라진다"는 발언이 논란. 자신의 소중한 다원적 공론장이 그 순간 실패했다는 비판을 받았다.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🇪🇺</span>
+          <div>
+            <div class="card-label">EU 유럽주의</div>
+          </div>
+        </div>
+        <div class="card-body">
+          9·11 이후 부시 행정부의 일방주의에 반대하며 유럽 연대 호소. <em>Verfassungspatriotismus</em>의 초국적 확장으로서 EU를 지지. "각 국민의 경험을 통해 폭력의 무익함을 깨달아 공동 헌법적 계획을 채택한 국민들의 연방." 민족주의 대신 공동 원칙 기반 정체성.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 종교와 세속 이성의 대화 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">✝️</div>
+      <span class="section-title">세속 이성과 종교 — 예상치 못한 화해</span>
+    </div>
+    <div class="prose">
+      <p>
+        무신론자 하버마스의 가장 의외의 행보 중 하나는 종교와의 대화 추구였다. 근본주의(복음주의, 이슬람주의, 힌두 민족주의)의 부상이 그를 자극했다. 2007년 그는 "계몽된 이성은 자신이 이미지 속에 보존되어 있는 것을 필연적으로 잃어버리고 있다는 것을 느낀다"고 썼다.
+      </p>
+      <p>
+        <strong>종교적 전통은 세속 이성이 아직 번역하지 못한 도덕적 직관을 담고 있다.</strong> 철학자들은 이를 인정하고 함께 탐색해야 한다. 반대로 종교적 제도들은 현대 세속 국가와 공존해야 한다. 2004년 교황 베네딕투스 16세(당시 라칭거 추기경)와의 공개 대화가 이 프로젝트의 상징. 무신론자와 교황이 이성과 신앙의 경계를 함께 탐색하는 유례없는 장면.
+      </p>
+      <p>
+        『또 하나의 철학사』는 이 대화의 결산이다. 붓다, 공자, 어거스틴, 아퀴나스, 루터, 칸트를 단일 이성사(理性史)로 연결하면서 — 도덕적 합리화의 운동이 인류 역사 전체를 관통한다는 테제.
+      </p>
+    </div>
+  </section>
+
+  <!-- 8. 마지막 메시지 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">🕊️</div>
+      <span class="section-title">마지막 메시지 — "No라고 말할 권력을 제도화하라"</span>
+    </div>
+    <div class="quote-box">
+      <div class="quote-text">"Institutionalize the anarchic power of saying 'no.' The force of refusal, of Melville's 'I would prefer not to,' is potentially absolute: stop ceases to exist when we stop clicking on it."</div>
+      <div class="quote-attr">하버마스, 마지막 저작에서</div>
+    </div>
+    <div class="prose">
+      <p>
+        하버마스는 점진주의자(incrementalist)였다. 급진적 변혁보다 제도적 개혁을 믿었다. 그러나 그의 마지막 메시지는 결코 온건하지 않다: <strong>우리가 해방시켜버린 괴물들에 맞서려면, 프랑크푸르트학파 작가들이 자신들의 작업에 쏟아부은 타협 없는 분노가 필요하다.</strong>
+      </p>
+      <p>
+        멜빌의 『필경사 바틀비』가 "하지 않겠습니다(I would prefer not to)"라고 말하듯, 시스템에 대한 거부의 힘을 제도화하는 것 — 이것이 디지털 전제주의 시대에 민주주의가 할 수 있는 일이다. EU의 AI 규제, 공공 미디어 지원, 시민 자문 회의(캐나다, 아일랜드, 아이슬란드, 프랑스에서 시도된 직접민주주의 보완 장치)가 그 불완전한 실험들이다.
+      </p>
+      <p>
+        <em>"철학은 추상의 규율이지만, 통절하게 근원적인 질문들을 제기한다. 칸트는 묻는다: 나는 무엇을 알 수 있는가? 무엇을 해야 하는가? 무엇을 희망할 수 있는가? 우리의 희망 대부분이 실현되지 않는다는 사실이 우리 고통스러운 진보의 현실을 취소해선 안 된다."</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- 9. GARAMbada 인사이트 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon">💡</div>
+      <span class="section-title">GARAMbada 인사이트 — Company Builder 관점</span>
+    </div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-num">01</div>
+        <div class="insight-kw">AI 도입 설계 원칙</div>
+        <div class="insight-title">AI 챗봇은 "아첨하는 기계"다 — 조직 내 비판적 소통을 설계에서 지켜라</div>
+        <div class="insight-body">
+          하버마스가 명명한 <em>sycophantic machines</em>는 창업자가 AI 도구 도입 시 반드시 고려해야 할 구조적 리스크다. AI가 내부 토론·피드백·반대 의견을 대체하기 시작하면, 조직의 커뮤니케이티브 이성이 소거된다. AI는 정보 처리 도구로, 의사결정의 소통 과정은 인간이 책임져야 한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">02</div>
+        <div class="insight-kw">조직 문화 설계</div>
+        <div class="insight-title">Verfassungspatriotismus → 원칙 기반 조직 정체성</div>
+        <div class="insight-body">
+          창업자 숭배·민족 문화·혈연 아닌 <strong>원칙(principles)에 기반한 조직 정체성</strong>이 스케일 가능한 문화다. 하버마스의 헌법 애국주의를 기업에 번역하면: "우리 회사는 X를 믿기 때문에 여기 있다"는 원칙이 "창업자가 이렇게 했으니까"를 대체해야 한다. 이것이 창업자 의존을 탈피하는 진짜 문화 설계.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">03</div>
+        <div class="insight-kw">리더십 경고</div>
+        <div class="insight-title">알렉스 카프 교훈 — 스승의 언어로 반대 목적을 이룰 수 있다</div>
+        <div class="insight-body">
+          하버마스의 수제자 알렉스 카프(팔란티어 CEO)는 이민자 추방 감시 시스템을 판매한다. 하버마스적 소통 이론을 배운 사람이 정반대의 지배 권력을 구축했다. C-level로서 주의할 점: <strong>아이디어의 언어와 실천 사이의 거리</strong>를 팀에서 끊임없이 점검해야 한다. 좋은 이론이 나쁜 실천을 정당화하는 도구가 될 수 있다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">04</div>
+        <div class="insight-kw">거버넌스 설계</div>
+        <div class="insight-title">"No라고 말할 권력을 제도화하라" — 내부 반대 구조의 제도적 보장</div>
+        <div class="insight-body">
+          하버마스의 마지막 메시지는 스타트업 거버넌스 설계에 직접 적용된다. 이사회 독립성, 익명 피드백 채널, 레드팀 리뷰, 사전 부검(pre-mortem) 의무화 — 이 모든 것이 조직 내 "No" 권력의 제도화다. CEO에게 반대하지 못하는 조직은 리스크 관리와 혁신 모두에서 실패한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">05</div>
+        <div class="insight-kw">미디어·공론장 비즈니스</div>
+        <div class="insight-title">시스템이 생활세계를 식민화하는 순간이 창업 기회다</div>
+        <div class="insight-body">
+          하버마스의 생활세계-시스템 구분은 시장 실패의 지도다. 플랫폼 알고리즘이 진정한 소통을 파괴하는 지점 — 커뮤니티 설계, 숙의 도구, 편향 없는 정보 큐레이션 — 이 곳에 창업 기회가 있다. EU의 AI·미디어 규제 흐름은 이 방향의 사업에 테일윈드.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">06</div>
+        <div class="insight-kw">철학의 실용적 가치</div>
+        <div class="insight-title">점진주의자의 분노 — 타협과 원칙 사이에서</div>
+        <div class="insight-body">
+          하버마스는 혁명가가 아니었다. 제도 안에서 개혁을 믿었다. 그러나 그 제도가 무너질 때는 타협 없는 비판적 분노가 필요하다고 했다. 창업자의 언어로: 보통은 린 스타트업식 점진적 개선이 맞다. 하지만 핵심 가치가 침해받는 순간은 타협하지 말아야 한다. 언제 점진적이고 언제 절대적이어야 하는지를 아는 것이 리더십의 본질.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 태그 -->
+  <section class="section">
+    <div class="chip-row">
+      <span class="chip chip-accent">위르겐 하버마스</span>
+      <span class="chip chip-accent">공론장</span>
+      <span class="chip chip-accent">커뮤니케이티브 이성</span>
+      <span class="chip chip-accent">생활세계</span>
+      <span class="chip chip-accent">숙의 민주주의</span>
+      <span class="chip">프랑크푸르트학파</span>
+      <span class="chip">AI와 민주주의</span>
+      <span class="chip">Alex Ross</span>
+      <span class="chip">The New Yorker</span>
+      <span class="chip">비판이론</span>
+      <span class="chip">Verfassungspatriotismus</span>
+      <span class="chip">디지털 공론장</span>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    출처: <a href="https://www.newyorker.com/magazine/2026/06/22/jurgen-habermas-desperate-fight-for-democracy" target="_blank">The New Yorker — "Jürgen Habermas Defended Reason in a Darkening Age"</a> · Alex Ross · 2026-06-15
+  </p>
+  <p style="margin-top: 8px;">GARAMwiki · 담론_등등 · 2026-06-20</p>
+</footer>
+
+</body>
+</html>
