@@ -86,6 +86,10 @@ ARTICLE_META = {
         "title": "Anthropic이 SMB를 공략하는<br>진짜 이유 — 나의 인사이트",
         "tags":  ["Claude for SMB", "유통 채널 전쟁", "버티컬 AI", "GTM", "신뢰 설계"],
     },
+    "2026-06_MattPocock_grillme_AI에이전트정렬기법_인사이트.html": {
+        "title": "grill-me — AI 에이전트 정렬의 기술<br>Matt Pocock Skills 135k★ · 3문장이 바꾸는 워크플로",
+        "tags":  ["grill-me", "Matt Pocock", "AI 에이전트 정렬", "Claude Code Skills", "공유 언어", "숙의 프로세스"],
+    },
     # 트렌드 인텔리전스
     "2026-02_HBR_Google_Cloud_Agentic_AI_Blueprint.html": {
         "title": "HBR × Google Cloud — 전사 에이전틱 AI 전환 블루프린트<br>3가지 치명적 실수와 첫 번째 행동",

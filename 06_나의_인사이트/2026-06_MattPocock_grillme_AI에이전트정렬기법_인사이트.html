@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>grill-me — AI 에이전트 정렬의 기술 | GARAMwiki</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a24;
+      --border: #2a2a3a;
+      --accent: #10b981;
+      --accent-dim: rgba(16,185,129,0.15);
+      --accent-glow: rgba(16,185,129,0.06);
+      --text: #e8e8f0;
+      --text-muted: #9090b0;
+      --text-dim: #5a5a7a;
+      --red: #f87171;
+      --amber: #fbbf24;
+      --sky: #38bdf8;
+      --violet: #a78bfa;
+      --fuchsia: #e879f9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      display: flex; align-items: center; gap: 16px;
+      height: 52px;
+    }
+    .nav-home { font-size: 13px; color: var(--text-muted); }
+    .nav-sep { color: var(--text-dim); }
+    .nav-cat {
+      font-size: 12px; font-weight: 600; letter-spacing: .06em;
+      padding: 3px 10px; border-radius: 20px;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(16,185,129,0.3);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 60px 0 44px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(16,185,129,0.08) 0%, transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+    .meta-row {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap; margin-bottom: 20px;
+    }
+    .badge {
+      font-size: 11px; font-weight: 700; letter-spacing: .07em;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .badge-cat { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(16,185,129,0.3); }
+    .badge-src { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-date { background: transparent; color: var(--text-dim); border: 1px solid var(--border); font-weight: 400; }
+
+    .hero-title {
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 800; line-height: 1.25;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: 15px; color: var(--text-muted);
+      margin-bottom: 24px; max-width: 680px; line-height: 1.65;
+    }
+    .hero-byline { font-size: 13px; color: var(--text-dim); }
+    .hero-byline strong { color: var(--text-muted); }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex; gap: 2px;
+      max-width: 860px; margin: 28px auto 0;
+      padding: 0 28px; flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1; min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 16px; text-align: center;
+    }
+    .stat-num { font-size: 22px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 10px; color: var(--text-dim); letter-spacing: .05em; text-transform: uppercase; }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 860px; margin: 0 auto;
+      padding: 48px 28px 80px;
+      display: grid; gap: 40px;
+    }
+
+    /* ── SECTION ── */
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 32px; height: 32px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .section-title { font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: .02em; }
+    .section-sub { font-size: 11px; color: var(--text-dim); letter-spacing: .06em; text-transform: uppercase; margin-left: auto; }
+
+    .prose { font-size: 14.5px; color: var(--text-muted); line-height: 1.85; }
+    .prose p + p { margin-top: 14px; }
+    .prose strong { color: var(--text); font-weight: 600; }
+    .prose em { color: var(--accent); font-style: italic; }
+
+    /* ── CODE BOX ── */
+    .code-box {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .code-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+    }
+    .code-filename { font-size: 12px; color: var(--text-dim); font-family: monospace; }
+    .code-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: .06em;
+      padding: 2px 8px; border-radius: 4px;
+      background: var(--accent-dim); color: var(--accent);
+      margin-left: auto;
+    }
+    .code-body {
+      padding: 20px;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px; line-height: 1.75;
+      color: #c9d1d9;
+      white-space: pre-wrap;
+    }
+    .code-comment { color: #6e7681; }
+    .code-key { color: var(--accent); }
+    .code-val { color: #79c0ff; }
+
+    /* ── CARD GRID ── */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px;
+      transition: border-color .2s;
+    }
+    .card:hover { border-color: rgba(16,185,129,0.3); }
+    .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .card-icon { font-size: 20px; }
+    .card-label { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .04em; }
+    .card-sub { font-size: 10px; color: var(--text-dim); }
+    .card-body { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+    .card-body strong { color: var(--text); }
+
+    /* ── FAILURE MODE TABLE ── */
+    .fm-table { width: 100%; border-collapse: collapse; }
+    .fm-table th {
+      text-align: left; font-size: 10px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-dim); padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .fm-table td {
+      font-size: 13px; color: var(--text-muted);
+      padding: 14px 14px; border-bottom: 1px solid rgba(42,42,58,0.5);
+      vertical-align: top;
+    }
+    .fm-table tr:last-child td { border-bottom: none; }
+    .fm-table td:first-child { font-size: 20px; width: 40px; text-align: center; }
+    .fm-table td:nth-child(2) { color: var(--amber); font-weight: 600; width: 200px; }
+    .fm-table td:nth-child(3) { color: var(--red); font-size: 12px; }
+    .fm-table td:nth-child(4) { color: var(--accent); font-weight: 600; font-size: 12px; font-family: monospace; }
+
+    /* ── QUOTE ── */
+    .quote-box {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 24px; margin: 16px 0;
+    }
+    .quote-text { font-size: 14px; color: var(--text); line-height: 1.75; font-style: italic; margin-bottom: 8px; }
+    .quote-attr { font-size: 12px; color: var(--text-dim); }
+
+    /* ── HIGHLIGHT ── */
+    .highlight-box {
+      background: var(--accent-glow);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 12px; padding: 20px 24px;
+    }
+    .hl-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .hl-body { font-size: 13.5px; color: var(--text-muted); line-height: 1.75; }
+    .hl-body strong { color: var(--text); }
+
+    /* ── INSIGHT CARDS ── */
+    .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .insight-grid { grid-template-columns: 1fr; } }
+    .insight-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px;
+      position: relative; overflow: hidden;
+    }
+    .insight-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(90deg, var(--accent), transparent);
+    }
+    .insight-num { font-size: 28px; font-weight: 900; color: var(--accent-dim); position: absolute; top: 12px; right: 16px; line-height: 1; }
+    .insight-kw { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .04em; margin-bottom: 8px; }
+    .insight-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+    .insight-body { font-size: 12.5px; color: var(--text-muted); line-height: 1.65; }
+
+    /* ── STEP FLOW ── */
+    .step-flow { display: flex; flex-direction: column; gap: 4px; }
+    .step-item {
+      display: grid; grid-template-columns: 36px 1fr;
+      gap: 14px; align-items: start;
+    }
+    .step-num {
+      width: 36px; height: 36px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: var(--accent);
+      flex-shrink: 0;
+    }
+    .step-content { padding: 6px 0; }
+    .step-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+    .step-connector {
+      width: 1px; height: 20px;
+      background: var(--border); margin-left: 17px;
+    }
+
+    /* ── CHIPS ── */
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); color: var(--text-muted); background: var(--surface2); }
+    .chip-accent { border-color: rgba(16,185,129,0.35); color: var(--accent); background: var(--accent-dim); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px; text-align: center;
+      font-size: 12px; color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-home" href="../index.html">← GARAMwiki</a>
+  <span class="nav-sep">·</span>
+  <span class="nav-cat">나의_인사이트</span>
+  <span class="nav-sep">·</span>
+  <span style="font-size:13px;color:var(--text-muted)">Matt Pocock / grill-me — AI 에이전트 정렬의 기술</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="meta-row">
+      <span class="badge badge-cat">나의_인사이트</span>
+      <span class="badge badge-src">github.com/mattpocock/skills</span>
+      <span class="badge badge-date">2026-06-22</span>
+    </div>
+    <h1 class="hero-title">grill-me —<br>AI 에이전트 정렬의 기술</h1>
+    <p class="hero-subtitle">3문장, 135k 스타, 11.7k 포크. 가장 작은 스킬이 가장 큰 문제를 푼다 — "에이전트가 내가 원하는 걸 하지 않는다"는 모든 실패의 근원에 맞서는 Matt Pocock의 방법론.</p>
+    <p class="hero-byline">
+      <strong>Matt Pocock</strong> · Total TypeScript 창시자 ·
+      <a href="https://github.com/mattpocock/skills" target="_blank">github.com/mattpocock/skills →</a>
+    </p>
+  </div>
+</section>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-card">
+    <div class="stat-num">135k</div>
+    <div class="stat-label">GitHub Stars</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">11.7k</div>
+    <div class="stat-label">Forks</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">3문장</div>
+    <div class="stat-label">grill-me 스킬 전문</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">4개</div>
+    <div class="stat-label">에이전트 실패 모드</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">#1</div>
+    <div class="stat-label">가장 인기 있는 스킬</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- 0. 맥락 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🎯</div>
+      <span class="section-title">왜 grill-me인가 — 배경과 맥락</span>
+    </div>
+    <div class="prose">
+      <p>
+        Matt Pocock은 TypeScript 교육 플랫폼 Total TypeScript로 유명한 영국 개발자다. 그가 자신의 일상 워크플로에서 사용하는 AI 에이전트 스킬을 공개한 <a href="https://github.com/mattpocock/skills" target="_blank">mattpocock/skills</a> 저장소는 공개 직후 <strong>135k 스타, 11.7k 포크</strong>를 기록하며 GitHub 역사상 가장 빠르게 성장한 리포지토리 중 하나가 되었다.
+      </p>
+      <p>
+        이 저장소의 철학은 명확하다: <em>"GSD, BMAD, Spec-Kit 같은 거대한 AI 워크플로 프레임워크는 프로세스를 장악해버린다. 프로세스에 버그가 생기면 고치기도 어렵다. 우리의 스킬은 작고, 쉽게 적응 가능하며, 조합 가능해야 한다."</em> 그리고 그 모든 스킬 중 가장 작고, 가장 인기 있고, 가장 먼저 사용해야 할 것이 바로 <strong>grill-me</strong>다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 1. 스킬 전문 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">📋</div>
+      <span class="section-title">grill-me — 스킬 전문 (3문장)</span>
+      <span class="section-sub">skills/productivity/grill-me/SKILL.md</span>
+    </div>
+    <div class="code-box">
+      <div class="code-header">
+        <span class="code-filename">SKILL.md</span>
+        <span class="code-badge">전문(全文)</span>
+      </div>
+      <div class="code-body"><span class="code-comment">---
+name: grill-me
+description: Interview the user relentlessly about a plan or design until reaching
+             shared understanding, resolving each branch of the decision tree.
+---</span>
+
+<span class="code-key">Interview me relentlessly</span> about every aspect of this plan until we reach a
+shared understanding. Walk down each branch of the design tree, resolving
+dependencies between decisions one-by-one. For each question, <span class="code-val">provide your
+recommended answer.</span>
+
+Ask the questions <span class="code-key">one at a time.</span>
+
+If a question can be answered by exploring the codebase, explore the codebase instead.</div>
+    </div>
+    <div class="prose">
+      <p>
+        이게 전부다. 이 3문장 스킬이 135k 스타를 받는다. 이 단순함이 오히려 메시지다 — <strong>가장 강력한 AI 워크플로 개입은 가장 작은 것에서 온다.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. 3문장 해부 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🔬</div>
+      <span class="section-title">3문장 해부 — 무엇이 특별한가</span>
+    </div>
+    <div class="step-flow">
+      <div class="step-item">
+        <div class="step-num">①</div>
+        <div class="step-content">
+          <div class="step-title">"Interview me relentlessly" — 지칠 줄 모르는 인터뷰</div>
+          <div class="step-desc">
+            핵심 단어는 <strong>relentlessly</strong>. 에이전트가 "이 정도면 됐겠지"라고 판단하고 넘어가지 않도록 한다. 분명하지 않은 부분이 하나라도 있으면 계속 파고든다. "너무 자세하게 묻는 것 아닌가"라는 에이전트의 경향을 명시적으로 차단한다.
+          </div>
+        </div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item">
+        <div class="step-num">②</div>
+        <div class="step-content">
+          <div class="step-title">"Walk down each branch of the design tree" — 결정 트리 탐색</div>
+          <div class="step-desc">
+            모든 결정에는 <strong>의존 관계(dependencies)</strong>가 있다. A를 결정하기 전에 B가 해결되어야 한다. 에이전트가 이 의존 관계를 인식하고 순서 있게 탐색하도록 지시한다. 무작위 질문 폭탄이 아니라 트리 탐색 — 부모 노드를 해결한 뒤 자식 노드로.
+          </div>
+        </div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item">
+        <div class="step-num">③</div>
+        <div class="step-content">
+          <div class="step-title">"Provide your recommended answer" — 빈 질문 금지</div>
+          <div class="step-desc">
+            이것이 핵심 차별점이다. "A와 B 중 어느 것이 좋으시겠어요?"가 아니라 <strong>"A를 추천합니다. 왜냐하면 X 때문입니다. 이에 동의하시나요?"</strong> 방식. 에이전트가 자신의 판단을 제시하기 때문에 사용자는 덜 생각하면서도 더 좋은 결정에 도달한다. 부담을 주는 질문이 아니라, 생각을 정리해주는 질문.
+          </div>
+        </div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item">
+        <div class="step-num">④</div>
+        <div class="step-content">
+          <div class="step-title">"One at a time" — 1문 1답</div>
+          <div class="step-desc">
+            에이전트의 기본 경향 중 하나는 여러 질문을 한꺼번에 던지는 것. Matt Pocock은 이를 <strong>"당혹스럽다(bewildering)"</strong>고 표현한다(grilling 스킬에서). 한 번에 하나씩 — 인지 부하를 최소화하고, 각 결정이 완전히 해결된 후 다음으로 넘어간다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 4대 실패 모드 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">⚡</div>
+      <span class="section-title">Matt Pocock이 진단하는 AI 에이전트 4대 실패 모드</span>
+    </div>
+    <div style="overflow-x: auto;">
+      <table class="fm-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>실패 모드</th>
+            <th>증상 / 문제</th>
+            <th>처방 스킬</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>😤</td>
+            <td>#1 미정렬<br><small>에이전트가 원하는 걸 안 한다</small></td>
+            <td>"결국 내가 원한 게 이게 아니었어." 의도와 결과 사이의 간극. 가장 흔하고 가장 비싼 실패.</td>
+            <td>/grill-me<br>/grill-with-docs</td>
+          </tr>
+          <tr>
+            <td>📚</td>
+            <td>#2 과잉 언어<br><small>에이전트가 너무 장황하다</small></td>
+            <td>1개 단어로 될 걸 20개 단어로. 팀 내 도메인 언어가 없어서 에이전트가 매번 처음부터 설명. 컨텍스트 낭비.</td>
+            <td>CONTEXT.md<br>(공유 언어 구축)</td>
+          </tr>
+          <tr>
+            <td>💥</td>
+            <td>#3 코드가 망가진다<br><small>에이전트 결과물이 작동 안 한다</small></td>
+            <td>피드백 루프 없이 코딩. 타입, 테스트, 브라우저 검증 없이 날아가는 에이전트. "맹목적으로 비행".</td>
+            <td>/tdd<br>/diagnosing-bugs</td>
+          </tr>
+          <tr>
+            <td>🏚️</td>
+            <td>#4 진흙 덩어리<br><small>코드베이스가 무너진다</small></td>
+            <td>에이전트는 코딩 속도를 가속시키지만 소프트웨어 엔트로피도 가속시킨다. 복잡성이 전례 없는 속도로 쌓인다.</td>
+            <td>/improve-codebase-architecture</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose" style="margin-top: 16px;">
+      <p>
+        주목할 점: 이 4가지 실패 모드는 AI 시대의 새로운 문제가 아니다. Pragmatic Programmer, DDD(도메인 주도 설계), TDD, XP(익스트림 프로그래밍) 등 수십 년간 축적된 SW 엔지니어링 원칙을 AI 에이전트 맥락에 재적용한 것이다. <strong>SW 엔지니어링 기본기는 AI 시대에 더욱 중요해진다.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- 4. grill-with-docs — 심화 버전 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">📖</div>
+      <span class="section-title">grill-with-docs — 코드 프로젝트를 위한 심화 버전</span>
+    </div>
+    <div class="prose">
+      <p>
+        grill-me의 코드 전용 확장판. 질문하면서 동시에 <strong>프로젝트의 도메인 언어(CONTEXT.md)를 구축</strong>한다. Eric Evans의 DDD(Domain-Driven Design) 개념인 유비쿼터스 언어(Ubiquitous Language)를 AI 워크플로에 연결한 것.
+      </p>
+    </div>
+    <div class="card-grid" style="margin-top: 16px;">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">📝</span>
+          <div>
+            <div class="card-label">CONTEXT.md 즉각 업데이트</div>
+          </div>
+        </div>
+        <div class="card-body">
+          결정이 내려지는 순간 즉시 용어집에 반영. 배치 처리 금지 — "capture them as they happen." CONTEXT.md는 글로사리(용어집)일 뿐, 스펙이나 구현 메모가 아니다.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">⚠️</span>
+          <div>
+            <div class="card-label">용어 충돌 즉시 지적</div>
+          </div>
+        </div>
+        <div class="card-body">
+          사용자가 기존 용어집과 다른 단어를 쓰면 즉각 도전. <strong>"글로사리에서 'cancellation'은 X인데 지금 Y를 의미하는 것 같다 — 어느 쪽인가?"</strong> 언어의 드리프트를 막는 능동적 수호.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🔍</span>
+          <div>
+            <div class="card-label">코드 교차 검증</div>
+          </div>
+        </div>
+        <div class="card-body">
+          사용자 주장이 코드와 맞는지 검증. <strong>"당신 코드는 전체 Order를 취소하는데, 부분 취소가 가능하다고 했다 — 어느 게 맞나?"</strong> 말과 코드의 불일치를 표면화.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">📌</span>
+          <div>
+            <div class="card-label">ADR — 아끼고 또 아껴라</div>
+          </div>
+        </div>
+        <div class="card-body">
+          ADR(Architecture Decision Record) 작성 조건: <strong>①되돌리기 어렵고 ②맥락 없이 의아하며 ③진짜 트레이드오프 선택</strong>. 세 조건 중 하나라도 빠지면 ADR 없이 진행. 과잉 문서화를 명시적으로 방지.
+        </div>
+      </div>
+    </div>
+    <div class="quote-box" style="margin-top: 20px;">
+      <div class="quote-text">"With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model."</div>
+      <div class="quote-attr">Eric Evans, Domain-Driven Design — Matt Pocock이 grill-with-docs의 철학적 근거로 인용</div>
+    </div>
+  </section>
+
+  <!-- 5. 스킬 생태계 전체 지도 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🗺️</div>
+      <span class="section-title">스킬 생태계 전체 지도</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🔥</span>
+          <div>
+            <div class="card-label">grill-me</div>
+            <div class="card-sub">Productivity · User-invoked</div>
+          </div>
+        </div>
+        <div class="card-body">비코드 범용 그릴링. 계획·설계·의사결정 전 필수. 3문장, 최강 임팩트.</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">📚</span>
+          <div>
+            <div class="card-label">grill-with-docs</div>
+            <div class="card-sub">Engineering · User-invoked</div>
+          </div>
+        </div>
+        <div class="card-body">코드 프로젝트용 그릴링 + CONTEXT.md 구축 + ADR. 도메인 언어 동시 설계.</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🧪</span>
+          <div>
+            <div class="card-label">tdd</div>
+            <div class="card-sub">Engineering · Model-invoked</div>
+          </div>
+        </div>
+        <div class="card-body">Red-Green-Refactor 루프. 실패 테스트 먼저, 수정 후 통과. 코드 품질 피드백 루프.</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🐛</span>
+          <div>
+            <div class="card-label">diagnosing-bugs</div>
+            <div class="card-sub">Engineering · Model-invoked</div>
+          </div>
+        </div>
+        <div class="card-body">재현 → 최소화 → 가설 → 계측 → 수정 → 회귀테스트. 체계적 버그 진단 루프.</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🏗️</span>
+          <div>
+            <div class="card-label">improve-codebase-architecture</div>
+            <div class="card-sub">Engineering · User-invoked</div>
+          </div>
+        </div>
+        <div class="card-body">진흙 덩어리 코드베이스 구출. "깊은 모듈" 기회 스캔 → HTML 리포트 → 선택해서 그릴링.</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">📋</span>
+          <div>
+            <div class="card-label">to-prd / to-issues</div>
+            <div class="card-sub">Engineering · User-invoked</div>
+          </div>
+        </div>
+        <div class="card-body">대화 → PRD 변환. PRD → 수직 슬라이스 이슈 분해. 기획을 실행 단위로 압축.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. GARAMbada 인사이트 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">💡</div>
+      <span class="section-title">GARAMbada 인사이트 — Company Builder 관점</span>
+    </div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-num">01</div>
+        <div class="insight-kw">AI 워크플로 설계 원칙</div>
+        <div class="insight-title">가장 작은 개입, 가장 큰 정렬 효과</div>
+        <div class="insight-body">
+          3문장이 135k 스타. 이것은 단순히 인기 있는 것이 아니라 <strong>올바른 추상화 레벨</strong>을 찾았다는 증거다. AI 도구 도입 시 복잡한 프레임워크보다 작고 조합 가능한 단위가 팀에 더 잘 침투한다. 우리 조직의 AI 워크플로도 같은 원칙으로 설계해야 한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">02</div>
+        <div class="insight-kw">제품 개발 / 팀 운영</div>
+        <div class="insight-title">/grill-me 원칙은 C-level 커뮤니케이션에도 적용된다</div>
+        <div class="insight-body">
+          "추천안을 함께 제시하는 질문"은 팀원에게 방향을 묻는 방식에도 그대로 적용된다. 빈 질문("어떻게 하면 좋을까요?") 대신 <strong>"A안을 추천합니다. 이유는 X. 어떻게 생각하세요?"</strong>가 더 좋은 결정을 더 빠르게 만든다. 1문 1답 원칙도 마찬가지 — 회의에서 여러 질문을 한꺼번에 던지면 아무것도 해결되지 않는다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">03</div>
+        <div class="insight-kw">공유 언어 / 조직 운영</div>
+        <div class="insight-title">CONTEXT.md = 스타트업의 유비쿼터스 언어</div>
+        <div class="insight-body">
+          팀이 커질수록 같은 단어가 다른 의미로 쓰이는 비용이 기하급수적으로 늘어난다. CONTEXT.md처럼 <strong>조직의 핵심 용어를 명문화하는 작업</strong>은 AI와 인간 모두의 소통 효율을 올린다. "백로그"가 도구인지 작업 목록인지조차 명확히 해놔야 한다. GARAMbada 조직에서 이 문서를 만들어볼 것.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">04</div>
+        <div class="insight-kw">AI 도입 전략</div>
+        <div class="insight-title">에이전트 실패는 기술 문제가 아닌 소통 문제</div>
+        <div class="insight-body">
+          Matt Pocock의 핵심 진단: <em>"No-one knows exactly what they want"</em>. 에이전트 실패의 가장 큰 원인은 모델의 능력이 아니라 <strong>의도 전달의 실패</strong>다. 따라서 AI 도입 성과를 높이려면 더 좋은 모델보다 더 좋은 프롬프팅·정렬 프로세스가 먼저다. 이건 조직 역량 문제다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">05</div>
+        <div class="insight-kw">리스크 관리</div>
+        <div class="insight-title">에이전트 가속 → 엔트로피 가속 — 설계에 투자하라</div>
+        <div class="insight-body">
+          Matt Pocock의 경고: 에이전트는 코딩 속도만 가속시키는 게 아니라 <strong>소프트웨어 엔트로피도 가속</strong>시킨다. AI가 빠르게 만든 코드는 빠르게 복잡해진다. 코드베이스 아키텍처 점검을 "며칠에 한 번" 루틴으로 삼으라는 권고. 비즈니스에 적용: AI로 사업 속도를 올릴수록 조직의 복잡성도 함께 관리해야 한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">06</div>
+        <div class="insight-kw">즉시 적용 가능</div>
+        <div class="insight-title">지금 당장 Claude에 붙여넣기</div>
+        <div class="insight-body">
+          grill-me의 핵심 지시문을 Claude Code나 어떤 AI 에이전트에도 바로 사용할 수 있다. 새 기능 기획, 사업 계획 검토, 프레젠테이션 구조 설계 전에 먼저 <strong>"/grill-me"를 실행</strong>하거나 동일 프롬프트를 붙여넣어라. 5분의 그릴링이 5일의 재작업을 막는다.
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 20px;">
+      <div class="hl-title">🚀 즉시 적용 — GARAMbada 실천 플레이북</div>
+      <div class="hl-body">
+        <strong>① 새 기능·사업 기획 전:</strong> "/grill-me" 또는 grill-me 프롬프트 실행. 결정 트리가 완전히 해소될 때까지 계속.<br><br>
+        <strong>② 팀 소통 방식 개선:</strong> 빈 질문 대신 "A를 추천합니다 + 이유 + 동의하시나요?" 형식 적용. 회의 시간 단축.<br><br>
+        <strong>③ 조직 언어 명문화:</strong> GARAMbada의 핵심 용어 20개를 CONTEXT.md 형식으로 문서화. AI와 팀원 모두의 소통 효율 향상.<br><br>
+        <strong>④ ADR 기준 적용:</strong> 중요 결정을 문서화할 때 Matt Pocock 기준 사용 — 되돌리기 어렵고 + 의아하며 + 진짜 선택. 그 외는 문서 생략.
+      </div>
+    </div>
+  </section>
+
+  <!-- 태그 -->
+  <section>
+    <div class="chip-row">
+      <span class="chip chip-accent">grill-me</span>
+      <span class="chip chip-accent">Matt Pocock</span>
+      <span class="chip chip-accent">AI 에이전트 정렬</span>
+      <span class="chip chip-accent">Claude Code Skills</span>
+      <span class="chip">공유 언어</span>
+      <span class="chip">CONTEXT.md</span>
+      <span class="chip">숙의 프로세스</span>
+      <span class="chip">결정 트리</span>
+      <span class="chip">TDD</span>
+      <span class="chip">DDD</span>
+      <span class="chip">에이전트 실패 모드</span>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    출처: <a href="https://github.com/mattpocock/skills" target="_blank">github.com/mattpocock/skills</a> · Matt Pocock · v1.0.1 (2026-06-17)
+  </p>
+  <p style="margin-top: 8px;">GARAMwiki · 나의_인사이트 · 2026-06-22</p>
+</footer>
+
+</body>
+</html>
