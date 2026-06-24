@@ -216,6 +216,10 @@ ARTICLE_META = {
         "title": "Claude Fable 5 · Mythos 5 · 수출통제 D+3<br>EP100: 출시 3일 만에 美수출통제 — 다음 국면은? (AI Frontier)",
         "tags":  ["Claude Fable 5", "Mythos 5", "수출통제", "Project Glasswing", "SWE-Bench Pro 80.3%"],
     },
+    "2026-06_Sakana_Fugu_오케스트레이션모델_모델트래커.html": {
+        "title": "🐡 Sakana Fugu / Fugu Ultra — One Model to Command Them All<br>오케스트레이션 모델 · AI 주권 · 프런티어급 성능 · 단일 API",
+        "tags":  ["Sakana AI", "Fugu Ultra", "오케스트레이션 모델", "AI 주권", "멀티에이전트", "ICLR 2026"],
+    },
     # 담론 등등
     "2025-06_이병한_뉴노멀탐문_3부작_피터틸_기술공화국.html": {
         "title": "이병한 뉴노멀탐문 3부작 — 피터 틸·기술공화국·퍼스트코리아<br>아메리카·테크노차이나·대한민국 문명 탐문",

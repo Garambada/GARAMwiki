@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sakana Fugu / Fugu Ultra — 오케스트레이션 모델 | GARAMwiki</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a24;
+      --border: #2a2a3a;
+      --accent: #a78bfa;
+      --accent-dim: rgba(167,139,250,0.15);
+      --accent-glow: rgba(167,139,250,0.06);
+      --text: #e8e8f0;
+      --text-muted: #9090b0;
+      --text-dim: #5a5a7a;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --sky: #38bdf8;
+      --fuchsia: #e879f9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      display: flex; align-items: center; gap: 16px;
+      height: 52px;
+    }
+    .nav-home { font-size: 13px; color: var(--text-muted); }
+    .nav-sep { color: var(--text-dim); }
+    .nav-cat {
+      font-size: 12px; font-weight: 600; letter-spacing: .06em;
+      padding: 3px 10px; border-radius: 20px;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(167,139,250,0.3);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 60px 0 44px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(167,139,250,0.09) 0%, transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner { max-width: 900px; margin: 0 auto; padding: 0 28px; }
+    .meta-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .badge {
+      font-size: 11px; font-weight: 700; letter-spacing: .07em;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .badge-cat { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(167,139,250,0.3); }
+    .badge-co { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-new { background: rgba(52,211,153,0.15); color: var(--emerald); border: 1px solid rgba(52,211,153,0.3); }
+    .badge-date { background: transparent; color: var(--text-dim); border: 1px solid var(--border); font-weight: 400; }
+
+    .hero-title {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 800; line-height: 1.2; margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-tagline {
+      font-size: 16px; color: var(--accent); font-weight: 600;
+      margin-bottom: 12px; font-style: italic;
+    }
+    .hero-subtitle { font-size: 14.5px; color: var(--text-muted); max-width: 720px; line-height: 1.7; margin-bottom: 24px; }
+    .hero-byline { font-size: 13px; color: var(--text-dim); }
+    .hero-byline strong { color: var(--text-muted); }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex; gap: 2px;
+      max-width: 900px; margin: 28px auto 0; padding: 0 28px; flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1; min-width: 130px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px 16px; text-align: center;
+    }
+    .stat-num { font-size: 20px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 10px; color: var(--text-dim); letter-spacing: .05em; text-transform: uppercase; }
+
+    /* ── MAIN ── */
+    .main { max-width: 900px; margin: 0 auto; padding: 48px 28px 80px; display: grid; gap: 40px; }
+
+    /* ── SECTION ── */
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 32px; height: 32px; background: var(--accent-dim);
+      border: 1px solid rgba(167,139,250,0.25); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .section-title { font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: .02em; }
+    .section-sub { font-size: 11px; color: var(--text-dim); letter-spacing: .06em; text-transform: uppercase; margin-left: auto; }
+
+    .prose { font-size: 14.5px; color: var(--text-muted); line-height: 1.85; }
+    .prose p + p { margin-top: 14px; }
+    .prose strong { color: var(--text); font-weight: 600; }
+    .prose em { color: var(--accent); font-style: italic; }
+
+    /* ── MODEL COMPARE CARDS ── */
+    .model-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 600px) { .model-cards { grid-template-columns: 1fr; } }
+    .model-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px; position: relative; overflow: hidden;
+    }
+    .model-card.ultra { border-color: rgba(167,139,250,0.4); }
+    .model-card.ultra::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: linear-gradient(90deg, var(--accent), var(--fuchsia));
+    }
+    .model-card.base::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: linear-gradient(90deg, var(--sky), var(--accent));
+    }
+    .model-name { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+    .model-tier {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px; margin-bottom: 14px;
+      letter-spacing: .07em;
+    }
+    .model-tier.ultra { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(167,139,250,0.3); }
+    .model-tier.base { background: rgba(56,189,248,0.12); color: var(--sky); border: 1px solid rgba(56,189,248,0.3); }
+    .model-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 14px; }
+    .model-use { font-size: 12px; color: var(--text-dim); }
+    .model-use strong { color: var(--text-muted); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+    /* ── BENCHMARK ── */
+    .bench-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+    .bench-item {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .bench-name { font-size: 11px; color: var(--text-dim); margin-bottom: 6px; letter-spacing: .04em; }
+    .bench-bar-wrap { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; margin-bottom: 6px; }
+    .bench-bar { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--fuchsia)); }
+    .bench-score { font-size: 16px; font-weight: 800; color: var(--accent); }
+    .bench-vs { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+    /* ── HIGHLIGHT ── */
+    .highlight-box {
+      background: var(--accent-glow); border: 1px solid rgba(167,139,250,0.2);
+      border-radius: 12px; padding: 20px 24px;
+    }
+    .hl-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .hl-body { font-size: 13.5px; color: var(--text-muted); line-height: 1.75; }
+    .hl-body strong { color: var(--text); }
+
+    /* ── QUOTE ── */
+    .quote-box {
+      background: var(--surface2); border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0; padding: 18px 24px; margin: 8px 0;
+    }
+    .quote-text { font-size: 13.5px; color: var(--text); line-height: 1.75; font-style: italic; margin-bottom: 8px; }
+    .quote-attr { font-size: 11px; color: var(--text-dim); }
+
+    /* ── CARD GRID ── */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px; transition: border-color .2s;
+    }
+    .card:hover { border-color: rgba(167,139,250,0.3); }
+    .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .card-icon { font-size: 20px; }
+    .card-label { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .04em; }
+    .card-sub { font-size: 10px; color: var(--text-dim); }
+    .card-body { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+    .card-body strong { color: var(--text); }
+
+    /* ── INSIGHT CARDS ── */
+    .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .insight-grid { grid-template-columns: 1fr; } }
+    .insight-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px; position: relative; overflow: hidden;
+    }
+    .insight-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(90deg, var(--accent), transparent);
+    }
+    .insight-num { font-size: 28px; font-weight: 900; color: var(--accent-dim); position: absolute; top: 12px; right: 16px; line-height: 1; }
+    .insight-kw { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .04em; margin-bottom: 8px; }
+    .insight-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+    .insight-body { font-size: 12.5px; color: var(--text-muted); line-height: 1.65; }
+
+    /* ── ARCH DIAGRAM ── */
+    .arch-box {
+      background: #0d1117; border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px; font-family: monospace;
+    }
+    .arch-layer {
+      border: 1px solid rgba(167,139,250,0.25); border-radius: 8px;
+      padding: 12px 16px; margin-bottom: 8px; position: relative;
+    }
+    .arch-layer-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .08em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
+    }
+    .arch-layer-content { font-size: 12px; color: var(--text-muted); }
+    .arch-arrow { text-align: center; color: var(--text-dim); font-size: 18px; margin: 2px 0; }
+    .arch-pool {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-top: 8px;
+    }
+    .arch-model {
+      background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2);
+      border-radius: 6px; padding: 8px 10px; font-size: 11px; color: var(--text-muted); text-align: center;
+    }
+    .arch-model.restricted { border-color: rgba(248,113,113,0.3); color: var(--red); background: rgba(248,113,113,0.05); }
+
+    /* ── CHIPS ── */
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); color: var(--text-muted); background: var(--surface2); }
+    .chip-accent { border-color: rgba(167,139,250,0.35); color: var(--accent); background: var(--accent-dim); }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 28px; text-align: center; font-size: 12px; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-home" href="../index.html">← GARAMwiki</a>
+  <span class="nav-sep">·</span>
+  <span class="nav-cat">모델_트래커</span>
+  <span class="nav-sep">·</span>
+  <span style="font-size:13px;color:var(--text-muted)">Sakana Fugu — One Model to Command Them All</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="meta-row">
+      <span class="badge badge-cat">모델_트래커</span>
+      <span class="badge badge-co">Sakana AI · 일본</span>
+      <span class="badge badge-new">🆕 GA 2026-06-22</span>
+      <span class="badge badge-date">2026-06-22</span>
+    </div>
+    <h1 class="hero-title">🐡 Sakana Fugu / Fugu Ultra</h1>
+    <div class="hero-tagline">"One Model to Command Them All" — 오케스트레이션 모델의 새 패러다임</div>
+    <p class="hero-subtitle">
+      단일 API로 접근하는 멀티에이전트 오케스트레이션 시스템. Fugu Ultra는 Fable 5·Mythos Preview와 동등한 성능을 달성하면서도 수출통제 리스크 없이 작동한다. 단일 벤더 의존을 구조적으로 제거한 <strong>AI 주권(AI Sovereignty)</strong> 설계.
+    </p>
+    <p class="hero-byline">
+      <strong>Sakana AI</strong> (도쿄) ·
+      <a href="https://sakana.ai/fugu-release/" target="_blank">공식 발표 →</a> ·
+      <a href="https://arxiv.org/abs/2606.21228" target="_blank">기술 보고서 →</a> ·
+      <a href="https://sakana.ai/fugu/" target="_blank">프로덕트 →</a>
+    </p>
+  </div>
+</section>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-card">
+    <div class="stat-num">Fugu Ultra</div>
+    <div class="stat-label">Fable5·Mythos Preview 동급</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">500+</div>
+    <div class="stat-label">베타 사용자</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">ICLR 2026</div>
+    <div class="stat-label">Trinity + Conductor 논문</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">OpenAI</div>
+    <div class="stat-label">호환 단일 API</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">0</div>
+    <div class="stat-label">단일 벤더 의존도</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- 0. 한 줄 요약 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🎯</div>
+      <span class="section-title">한 줄 요약 — Fugu가 무엇인가</span>
+    </div>
+    <div class="highlight-box">
+      <div class="hl-title">🐡 핵심 정의</div>
+      <div class="hl-body">
+        Sakana Fugu는 <strong>멀티에이전트 시스템처럼 행동하되 단일 모델처럼 보이는</strong> 오케스트레이션 AI다. 하나의 API 엔드포인트에 요청을 보내면 Fugu가 내부적으로 최적 모델 조합을 선택·위임·검증·종합한다. 사용자는 멀티에이전트의 복잡성 없이 프런티어 수준 성능을 얻는다. Fugu 자체도 언어 모델이며, 재귀적으로 자기 자신을 호출할 수 있다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. 두 모델 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">⚖️</div>
+      <span class="section-title">두 가지 모델 — Fugu vs. Fugu Ultra</span>
+    </div>
+    <div class="model-cards">
+      <div class="model-card base">
+        <div class="model-name">🐡 Fugu</div>
+        <div class="model-tier base">STANDARD</div>
+        <div class="model-desc">
+          고성능과 저지연(latency)의 균형. 일상 업무의 기본 선택. 코드 리뷰, 코딩 도구(Codex 연동), 챗봇·인터랙티브 서비스에 적합. 데이터·프라이버시·컴플라이언스 요건에 따라 특정 에이전트를 풀에서 제외하는 옵션 제공.
+        </div>
+        <div class="model-use">
+          <strong>주요 사용 사례</strong>
+          코딩 · 코드 리뷰 · 챗봇 · 일상 업무 자동화
+        </div>
+      </div>
+      <div class="model-card ultra">
+        <div class="model-name">🐡⚡ Fugu Ultra</div>
+        <div class="model-tier ultra">ULTRA · FRONTIER-MATCH</div>
+        <div class="model-desc">
+          난이도 높은 다단계 문제에서 최고 품질의 답변을 위해 조정됨. 더 깊은 전문 에이전트 풀을 연동. 정확도와 깊이가 최우선인 작업에 최적화. <strong>Fable 5·Mythos Preview와 동급 성능</strong>이면서 수출통제 리스크 없음.
+        </div>
+        <div class="model-use">
+          <strong>주요 사용 사례</strong>
+          AI 연구 · 논문 재현 · 사이버보안 분석 · 특허/문헌 조사 · 금융 시계열 예측
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 아키텍처 다이어그램 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🏗️</div>
+      <span class="section-title">아키텍처 — "하나의 API, 내부는 에코시스템"</span>
+    </div>
+    <div class="arch-box">
+      <div class="arch-layer" style="border-color: rgba(167,139,250,0.5);">
+        <div class="arch-layer-label">🌐 사용자 레이어 (단일 엔드포인트)</div>
+        <div class="arch-layer-content">OpenAI 호환 API → <code>POST /v1/chat/completions</code> — 사용자는 멀티에이전트 복잡성을 전혀 인지하지 않음</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer" style="border-color: rgba(167,139,250,0.6); background: rgba(167,139,250,0.05);">
+        <div class="arch-layer-label">🧠 Fugu 오케스트레이터 (학습된 조율 모델)</div>
+        <div class="arch-layer-content">언제 위임할지 · 에이전트 간 통신 방법 · 결과 종합 방법을 자체 학습. 단순 태스크는 직접 처리, 복잡 태스크는 에이전트 팀 편성. 자기 자신을 재귀적으로 호출 가능.</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">🤖 에이전트 풀 (교체 가능)</div>
+        <div class="arch-pool">
+          <div class="arch-model">GPT-5.5</div>
+          <div class="arch-model">Gemini 3.1 Pro</div>
+          <div class="arch-model">Opus 4.8</div>
+          <div class="arch-model">Sakana 자체 모델</div>
+          <div class="arch-model">오픈 모델</div>
+          <div class="arch-model restricted">Fable 5 ⚠️<br><small>수출통제</small></div>
+          <div class="arch-model restricted">Mythos ⚠️<br><small>수출통제</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top: 16px;">
+      <p>
+        <strong>핵심 설계 원칙:</strong> 에이전트 풀은 완전히 교체 가능(swappable)하다. Fable 5·Mythos Preview처럼 수출통제로 접근이 차단된 모델은 풀에서 제외되고, Fugu가 자동으로 우회 라우팅한다. 새 프런티어 모델이 출시되면 풀에 추가된다 — 사용자는 아무 코드 변경 없이 최신 성능을 얻는다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 3. 벤치마크 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <span class="section-title">벤치마크 성능</span>
+      <span class="section-sub">vs. 프런티어 모델 비교</span>
+    </div>
+    <div class="bench-grid">
+      <div class="bench-item">
+        <div class="bench-name">AutoResearch</div>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:92%"></div></div>
+        <div class="bench-score">🥇 1위</div>
+        <div class="bench-vs">Gemini 3.1 Pro · Opus 4.8 · GPT 5.5 초과</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-name">SWE-Bench (Mini)</div>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:88%"></div></div>
+        <div class="bench-score">프런티어급</div>
+        <div class="bench-vs">Fable 5 · Mythos Preview 동급</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-name">코드 리뷰 품질</div>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:95%"></div></div>
+        <div class="bench-score">20+ 버그</div>
+        <div class="bench-vs">GPT-5.5 대비 유의미하게 우수</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-name">금융 시계열 예측</div>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:87%"></div></div>
+        <div class="bench-score">🥇 1위</div>
+        <div class="bench-vs">Gemini 3.1 · Opus 4.8 초과</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-name">One-Shot Chess</div>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:84%"></div></div>
+        <div class="bench-score">🥇 1위</div>
+        <div class="bench-vs">멀티에이전트 협조 효과</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-name">보안 분석 (엔드투엔드)</div>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:90%"></div></div>
+        <div class="bench-score">완전 자율</div>
+        <div class="bench-vs">recon → 취약점 → 리포트 자동화</div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top: 14px;">
+      <p>
+        <strong>주의:</strong> Fable 5·Mythos Preview는 현재 수출통제로 일반 접근 불가 → Fugu의 에이전트 풀에 미포함 상태. 위 성능은 나머지 모델만으로 달성한 결과. Fable/Mythos 없이도 이 수준이면, 풀이 복원되면 더 높아진다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 4. 실사용 후기 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">💬</div>
+      <span class="section-title">베타 사용자 500명 — 실사용 후기</span>
+    </div>
+    <div class="quote-box">
+      <div class="quote-text">"코드 리뷰에서 Fugu Ultra는 GPT-5.5보다 월등히 우수하다. 다른 도구들이 3건 정도 문제를 지적할 때 Fugu는 20건 이상을 찾아냈다. 이제 모든 리뷰를 Fugu로 돌린다."</div>
+      <div class="quote-attr">— 소프트웨어 엔지니어 (코딩·코드리뷰)</div>
+    </div>
+    <div class="quote-box">
+      <div class="quote-text">"원시 출력 품질은 최상위 프런티어 모델과 동등하다. 더 놀라운 건 페르소나 안정성 — 장시간 세션에서 다른 모델들이 정체성을 잃어갈 때 Fugu는 흔들리지 않았다. 에이전트 프로덕트에서 이것은 벤치마크 점수보다 더 중요할 수 있다."</div>
+      <div class="quote-attr">— 엔터프라이즈 플랫폼 기업 임원 (오케스트레이션 품질)</div>
+    </div>
+    <div class="quote-box">
+      <div class="quote-text">"단 하나의 지시로 Fugu가 정찰 → XSS/SQLi 검사 → 인증 리뷰 → 증거·재테스트 절차가 담긴 리포트까지, 보안 평가 전 과정을 자율 수행했다. 지정된 범위를 벗어나지 않았고, 파괴적 행동도 없었다."</div>
+      <div class="quote-attr">— 사이버보안 엔지니어 (보안 평가 분석)</div>
+    </div>
+  </section>
+
+  <!-- 5. 연구 기반 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">📄</div>
+      <span class="section-title">연구 기반 — ICLR 2026 발표 논문 2편</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🔮</span>
+          <div>
+            <div class="card-label">TRINITY</div>
+            <div class="card-sub">ICLR 2026 · arXiv 2512.04695</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <strong>An Evolved LLM Coordinator.</strong> 진화 알고리즘으로 학습된 LLM 조율자. 여러 모델을 협조시켜 집합 지능을 이끌어내는 방법론의 기초 연구. Xu, Sun, Schwendeman, Nielsen, Cetin, Tang 공저.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🎼</span>
+          <div>
+            <div class="card-label">Conductor</div>
+            <div class="card-sub">ICLR 2026 · arXiv 2512.04388</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <strong>Learning to Orchestrate Agents in Natural Language.</strong> 자연어로 에이전트 오케스트레이션을 학습하는 방법론. "Conductor"가 에이전트들에게 자연어 지시를 내리고 결과를 조율. Nielsen, Cetin, Schwendeman, Sun, Xu, Tang 공저.
+        </div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top: 16px;">
+      <p>
+        두 논문 모두 <strong>"학습된 오케스트레이션(learned orchestration)"</strong> 개념을 기반으로 한다 — 고정된 워크플로가 아니라 어떻게 위임하고 조율할지를 에이전트가 <em>스스로 학습</em>한다는 원리. 이것이 Fugu가 새 모델이 출시될 때마다 자동으로 성능이 향상되는 이유다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 6. 지정학 / AI 주권 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🌏</div>
+      <span class="section-title">지정학적 맥락 — AI 주권과 수출통제 대응</span>
+    </div>
+    <div class="prose">
+      <p>
+        Sakana AI는 Fugu를 단순한 기술 제품이 아니라 <strong>지정학적 헷지(geopolitical hedge)</strong>로 명시적으로 포지셔닝한다. 2026년 6월 미국 정부의 수출통제로 Fable 5·Mythos Preview가 비미국인에게 차단된 사건을 직접 언급하며, 이를 출시 배경으로 제시한다.
+      </p>
+      <p>
+        핵심 주장: <em>"AI 인프라, 금융, 행정을 단일 회사의 API에 의존하는 것은 물질적 취약성이다."</em> 수출통제·외교정책·규제 변화로 하룻밤 새 접근이 차단될 수 있다. Fugu의 교체 가능한 에이전트 풀 구조는 이 리스크에 대한 구조적 답변이다.
+      </p>
+    </div>
+    <div class="highlight-box" style="margin-top: 16px;">
+      <div class="hl-title">🛡️ AI 주권 (AI Sovereignty) 설계 원칙</div>
+      <div class="hl-body">
+        <strong>① 멀티벤더 풀:</strong> 특정 모델 접근 차단 시 자동 우회 라우팅<br>
+        <strong>② 단일 API 추상화:</strong> 내부 교체가 사용자 코드에 영향 없음<br>
+        <strong>③ 자체 모델 통합:</strong> 장기적으로 Sakana 자체 모델 비중 증가<br>
+        <strong>④ 오픈 모델 지원:</strong> 오픈소스 모델도 풀에 통합 가능<br>
+        → 특정 국가·정부·기업의 정책 결정에 종속되지 않는 AI 인프라
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. GARAMbada 인사이트 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">💡</div>
+      <span class="section-title">GARAMbada 인사이트 — Company Builder 관점</span>
+    </div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-num">01</div>
+        <div class="insight-kw">AI 전략 패러다임 전환</div>
+        <div class="insight-title">스케일이 아닌 오케스트레이션 — 다음 프런티어</div>
+        <div class="insight-body">
+          Fugu의 성공은 단일 거대 모델 스케일링 시대의 종언을 알린다. <strong>어떤 모델을 쓰는가보다 어떻게 조율하는가</strong>가 성능을 결정하는 시대. Anthropic·OpenAI가 더 큰 모델을 만드는 동안, Sakana는 조율 방법을 학습시켰다. 어느 방향이 더 빠를지 모를 레이스가 시작됐다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">02</div>
+        <div class="insight-kw">벤더 리스크 관리</div>
+        <div class="insight-title">AI 인프라 멀티벤더화 — 한국 기업 긴급 전략 과제</div>
+        <div class="insight-body">
+          Fable 5·Mythos 수출통제 사건은 단일 AI 벤더 의존의 BCP(업무연속성) 리스크를 현실화했다. GARAMbada 사업 운영에서도 AI 인프라를 단일 API에 의존하는 것은 리스크다. <strong>멀티벤더 API 추상화 레이어</strong>를 지금 설계해야 한다. Fugu 자체가 그 해법이 될 수도 있다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">03</div>
+        <div class="insight-kw">에이전트 프로덕트 설계</div>
+        <div class="insight-title">페르소나 안정성 — 장시간 세션의 숨겨진 핵심 지표</div>
+        <div class="insight-body">
+          베타 사용자가 언급한 "페르소나 안정성"은 새로운 중요 지표다. 벤치마크 점수가 같아도 장시간 에이전트 워크플로에서 정체성이 흔들리는 모델은 프로덕션에서 실패한다. <strong>에이전트 제품 평가 시 장시간 세션 일관성을 반드시 테스트</strong>해야 한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">04</div>
+        <div class="insight-kw">비즈니스 모델 참고</div>
+        <div class="insight-title">단일 API 추상화 → SaaS 비즈니스 설계 원칙</div>
+        <div class="insight-body">
+          Fugu의 사업 모델: 내부 복잡성(멀티에이전트)을 완전히 숨기고 단순한 단일 API를 판매. 사용자는 내부를 모른다 — 알 필요도 없다. <strong>AI 도구를 활용한 서비스 사업에도 동일 원칙 적용</strong>: 내부 오케스트레이션 복잡성을 고객에게 노출하지 말고 결과만 전달하라.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">05</div>
+        <div class="insight-kw">일본 AI 생태계</div>
+        <div class="insight-title">Sakana AI의 포지셔닝 — 집합지능 vs. 거대모델</div>
+        <div class="insight-body">
+          Sakana AI는 David Chalmers·Jeff Clune 등 세계 최정상 AI 연구자들이 참여한 일본 기반 스타트업. 자연계 진화·집합 지능에서 영감을 얻은 고유 철학으로 차별화. <strong>미국 빅테크의 스케일링과 다른 경로</strong>로 프런티어 성능에 도달하는 것을 증명한 사례. 한국 AI 스타트업에 참고가 되는 포지셔닝 전략.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">06</div>
+        <div class="insight-kw">즉시 활용 가능성</div>
+        <div class="insight-title">Fugu Ultra로 즉시 대체 가능한 워크플로</div>
+        <div class="insight-body">
+          코드 리뷰 · 특허/문헌 조사 · 사이버보안 취약점 분석 · AI 연구 자동화 · 복잡한 다단계 문서 작성. 이 중 <strong>특허 조사와 문헌 리뷰</strong>는 GARAMbada 사업 운영에서 즉시 비용 절감 가능한 영역. 콘솔(<a href="https://console.sakana.ai" target="_blank">console.sakana.ai</a>)에서 바로 시작 가능.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 태그 -->
+  <section>
+    <div class="chip-row">
+      <span class="chip chip-accent">Sakana AI</span>
+      <span class="chip chip-accent">Fugu Ultra</span>
+      <span class="chip chip-accent">오케스트레이션 모델</span>
+      <span class="chip chip-accent">AI 주권</span>
+      <span class="chip chip-accent">멀티에이전트</span>
+      <span class="chip">TRINITY</span>
+      <span class="chip">Conductor</span>
+      <span class="chip">ICLR 2026</span>
+      <span class="chip">수출통제 대응</span>
+      <span class="chip">단일 API</span>
+      <span class="chip">집합지능</span>
+      <span class="chip">일본 AI</span>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    출처: <a href="https://sakana.ai/fugu-release/" target="_blank">Sakana AI — "Sakana Fugu: One Model to Command Them All"</a> · 2026-06-22
+  </p>
+  <p style="margin-top: 8px;">
+    Technical Report: <a href="https://arxiv.org/abs/2606.21228" target="_blank">arXiv 2606.21228</a> ·
+    TRINITY: <a href="https://arxiv.org/abs/2512.04695" target="_blank">arXiv 2512.04695</a> ·
+    Conductor: <a href="https://arxiv.org/abs/2512.04388" target="_blank">arXiv 2512.04388</a>
+  </p>
+  <p style="margin-top: 8px;">GARAMwiki · 모델_트래커 · 2026-06-22</p>
+</footer>
+
+</body>
+</html>
