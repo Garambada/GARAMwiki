@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>세계에서 가장 많이 사람을 죽이는 동물을, 코드로 잡는다 | GARAMwiki</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a24;
+      --border: #2a2a3a;
+      --accent: #e879f9;
+      --accent-dim: rgba(232,121,249,0.15);
+      --accent-glow: rgba(232,121,249,0.06);
+      --text: #e8e8f0;
+      --text-muted: #9090b0;
+      --text-dim: #5a5a7a;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --sky: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      line-height: 1.75; min-height: 100vh;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px; display: flex; align-items: center; gap: 16px; height: 52px;
+    }
+    .nav-home { font-size: 13px; color: var(--text-muted); }
+    .nav-sep { color: var(--text-dim); }
+    .nav-cat {
+      font-size: 12px; font-weight: 600; letter-spacing: .06em;
+      padding: 3px 10px; border-radius: 20px;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid rgba(232,121,249,0.3);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 60px 0 44px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,121,249,0.08) 0%, transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+    .meta-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .badge {
+      font-size: 11px; font-weight: 700; letter-spacing: .07em;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .badge-cat { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(232,121,249,0.3); }
+    .badge-pub { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-date { background: transparent; color: var(--text-dim); border: 1px solid var(--border); font-weight: 400; }
+
+    .hero-title {
+      font-size: clamp(22px, 4vw, 34px); font-weight: 800; line-height: 1.25; margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle { font-size: 16px; color: var(--accent); font-weight: 600; margin-bottom: 14px; font-style: italic; }
+    .hero-desc { font-size: 14.5px; color: var(--text-muted); max-width: 680px; line-height: 1.7; margin-bottom: 22px; }
+    .hero-byline { font-size: 13px; color: var(--text-dim); }
+    .hero-byline strong { color: var(--text-muted); }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex; gap: 2px;
+      max-width: 860px; margin: 28px auto 0; padding: 0 28px; flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1; min-width: 130px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px 16px; text-align: center;
+    }
+    .stat-num { font-size: 20px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 10px; color: var(--text-dim); letter-spacing: .05em; text-transform: uppercase; }
+
+    /* ── MAIN ── */
+    .main { max-width: 860px; margin: 0 auto; padding: 48px 28px 80px; display: grid; gap: 40px; }
+
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 32px; height: 32px; background: var(--accent-dim);
+      border: 1px solid rgba(232,121,249,0.25); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .section-title { font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: .02em; }
+    .section-sub { font-size: 11px; color: var(--text-dim); letter-spacing: .06em; text-transform: uppercase; margin-left: auto; }
+
+    .prose { font-size: 14.5px; color: var(--text-muted); line-height: 1.85; }
+    .prose p + p { margin-top: 14px; }
+    .prose strong { color: var(--text); font-weight: 600; }
+    .prose em { color: var(--accent); font-style: italic; }
+
+    /* ── HIGHLIGHT ── */
+    .highlight-box {
+      background: var(--accent-glow); border: 1px solid rgba(232,121,249,0.2);
+      border-radius: 12px; padding: 20px 24px;
+    }
+    .hl-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .hl-body { font-size: 13.5px; color: var(--text-muted); line-height: 1.75; }
+    .hl-body strong { color: var(--text); }
+
+    /* ── QUOTE ── */
+    .quote-box {
+      background: var(--surface2); border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0; padding: 18px 24px; margin: 12px 0;
+    }
+    .quote-text { font-size: 14.5px; color: var(--text); line-height: 1.75; font-style: italic; margin-bottom: 8px; }
+    .quote-attr { font-size: 12px; color: var(--text-dim); }
+
+    /* ── CARD GRID ── */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px; transition: border-color .2s;
+    }
+    .card:hover { border-color: rgba(232,121,249,0.3); }
+    .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .card-icon { font-size: 20px; }
+    .card-label { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .04em; }
+    .card-sub { font-size: 10px; color: var(--text-dim); }
+    .card-body { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+    .card-body strong { color: var(--text); }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; }
+    .tl-item { display: grid; grid-template-columns: 80px 1px 1fr; gap: 0 16px; }
+    .tl-year { text-align: right; padding: 0 0 24px; padding-top: 2px; }
+    .tl-year-num { font-size: 13px; font-weight: 700; color: var(--accent); }
+    .tl-year-sub { font-size: 10px; color: var(--text-dim); display: block; }
+    .tl-line { position: relative; }
+    .tl-line::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 0;
+      width: 1px; background: var(--border);
+    }
+    .tl-dot {
+      position: absolute; left: -4px; top: 6px;
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent); border: 2px solid var(--bg);
+    }
+    .tl-content { padding: 0 0 24px; }
+    .tl-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .tl-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+
+    /* ── RESULT TABLE ── */
+    .result-table { width: 100%; border-collapse: collapse; }
+    .result-table th {
+      text-align: left; font-size: 10px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-dim); padding: 8px 14px; border-bottom: 1px solid var(--border);
+    }
+    .result-table td {
+      font-size: 13px; color: var(--text-muted); padding: 13px 14px;
+      border-bottom: 1px solid rgba(42,42,58,0.5); vertical-align: top;
+    }
+    .result-table tr:last-child td { border-bottom: none; }
+    .result-table td:first-child { color: var(--accent); font-weight: 700; }
+    .result-big { font-size: 20px; font-weight: 800; color: var(--emerald); }
+
+    /* ── INSIGHT CARDS ── */
+    .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .insight-grid { grid-template-columns: 1fr; } }
+    .insight-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px; position: relative; overflow: hidden;
+    }
+    .insight-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(90deg, var(--accent), transparent);
+    }
+    .insight-num { font-size: 28px; font-weight: 900; color: var(--accent-dim); position: absolute; top: 12px; right: 16px; line-height: 1; }
+    .insight-kw { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .04em; margin-bottom: 8px; }
+    .insight-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+    .insight-body { font-size: 12.5px; color: var(--text-muted); line-height: 1.65; }
+
+    /* ── CHIP ── */
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); color: var(--text-muted); background: var(--surface2); }
+    .chip-accent { border-color: rgba(232,121,249,0.35); color: var(--accent); background: var(--accent-dim); }
+
+    /* ── FOOTNOTE ── */
+    .footnote-box {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 20px;
+    }
+    .footnote-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+    .footnote-item { font-size: 12px; color: var(--text-dim); line-height: 1.65; margin-bottom: 6px; }
+    .footnote-item:last-child { margin-bottom: 0; }
+    .footnote-item strong { color: var(--text-muted); }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 28px; text-align: center; font-size: 12px; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-home" href="../index.html">← GARAMwiki</a>
+  <span class="nav-sep">·</span>
+  <span class="nav-cat">담론_등등</span>
+  <span class="nav-sep">·</span>
+  <span style="font-size:13px;color:var(--text-muted)">구글이 모기를 키우는 이유 — 오즈의 지식토킹</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="meta-row">
+      <span class="badge badge-cat">담론_등등</span>
+      <span class="badge badge-pub">오즈의 지식토킹 · 안광섭</span>
+      <span class="badge badge-date">2026-06-13</span>
+    </div>
+    <h1 class="hero-title">세계에서 가장 많이 사람을 죽이는 동물을,<br>코드로 잡는다</h1>
+    <div class="hero-subtitle">구글이 모기를 키우는 이유</div>
+    <p class="hero-desc">
+      매년 100만 명을 죽이는 모기. 구글 Debug는 3,200만 마리의 모기를 야생에 풀겠다는 EPA 허가를 신청했다. 적으로 적을 잡는 역설 — 이건 생물학 실험이 아니라 <strong>스케일 엔지니어링 문제</strong>다.
+    </p>
+    <p class="hero-byline">
+      <strong>안광섭</strong> (세종대 경영학과 교수 · OBF 리드 컨설턴트) ·
+      <a href="https://maily.so/oz.talking/posts/wjzdxvk0r3p" target="_blank">원문 →</a>
+    </p>
+  </div>
+</section>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-card">
+    <div class="stat-num">100만</div>
+    <div class="stat-label">연간 모기 매개 사망자</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">3,200만</div>
+    <div class="stat-label">구글 EPA 허가 신청 마리 수</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">95%</div>
+    <div class="stat-label">프레스노 2018 암컷 감소율</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">70%↑</div>
+    <div class="stat-label">싱가포르 뎅기열 발병 감소</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">3.3억$</div>
+    <div class="stat-label">싱가포르 절감 추산 경제효과</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- 0. 핵심 역설 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🦟</div>
+      <span class="section-title">핵심 역설 — 모기로 모기를 잡는다</span>
+    </div>
+    <div class="highlight-box">
+      <div class="hl-title">🔑 한 줄 요약</div>
+      <div class="hl-body">
+        구글 Debug는 <strong>볼바키아(Wolbachia) 세균에 감염된 수컷 모기</strong>를 야생에 방사한다. 이 수컷과 교미한 암컷의 알은 부화하지 않는다 → 세대가 지날수록 개체수 감소. 수컷은 피를 빨지 않으므로 방사된 모기 자체는 무해하다. <strong>원리는 70년 된 생물학, 구글이 더한 것은 산업적 스케일링</strong>이다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. 왜 모기인가 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">⚠️</div>
+      <span class="section-title">왜 모기인가 — 인류 최대의 포식자</span>
+    </div>
+    <div class="prose">
+      <p>
+        세계에서 가장 많은 사람을 죽이는 동물은 상어도, 뱀도, 사자도 아니다. <strong>모기다.</strong> 매년 약 70만~100만 명이 모기가 옮기는 질병으로 사망한다. 말라리아만으로 2023년에 59만 7천 명이 사망했고, 뎅기열은 매년 1억~4억 건의 감염을 일으킨다.
+      </p>
+      <p>
+        기존 방법은 두 가지였다. <strong>살충제 살포</strong>와 <strong>서식지(고인 물) 제거</strong>. 둘 다 한계에 다다랐다. 살충제는 내성을 유발하고 꿀벌 같은 유익 곤충도 죽인다. 서식지 제거는 현실적으로 불가능에 가깝다 — 이집트숲모기는 화분 받침대, 타이어 안쪽 같은 초소형 물웅덩이에도 알을 낳는다.
+      </p>
+      <p>
+        이것이 먼 나라 이야기만도 아니다. 뎅기열을 옮기는 <strong>흰줄숲모기는 이미 한국 전역에 서식</strong>하고 있다. 2024년 국내 유입 모기 매개 감염병 환자 약 205명 (대부분 동남아 여행 후 뎅기열). 기후변화로 아열대 모기 서식 범위가 북상 중이며, 질병관리청은 '토착화 방지'를 핵심 과제로 삼고 있다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. 볼바키아 메커니즘 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🔬</div>
+      <span class="section-title">볼바키아 메커니즘 — 원리는 단순하다</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🦠</span>
+          <div>
+            <div class="card-label">볼바키아 (Wolbachia)</div>
+            <div class="card-sub">자연계 곤충 60%에 존재하는 세균</div>
+          </div>
+        </div>
+        <div class="card-body">
+          특정 볼바키아 균주에 감염된 수컷이 비감염 암컷과 교미하면 암컷의 알이 부화하지 않는다. 이를 <strong>세포질 불화합성(cytoplasmic incompatibility)</strong>이라 한다. 항생제·방사선 없이 자연 세균으로 번식 차단.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">♂️</span>
+          <div>
+            <div class="card-label">수컷만 방사</div>
+            <div class="card-sub">질병 전파 위험 없음</div>
+          </div>
+        </div>
+        <div class="card-body">
+          피를 빠는 건 암컷뿐이다. 방사되는 건 수컷만이므로, 방사된 모기 자체가 질병을 전파할 위험이 없다. 이것이 기존 살충제 방식과의 결정적 차이 — <strong>목표만 타격, 부수 피해 없음.</strong>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">📉</span>
+          <div>
+            <div class="card-label">세대 감소 메커니즘</div>
+            <div class="card-sub">지속 방사 → 점진 소멸</div>
+          </div>
+        </div>
+        <div class="card-body">
+          볼바키아 수컷이 야생 암컷과 교미 → 알 부화 실패 → 다음 세대 개체수 감소 → 반복. 지속적으로 방사하면 지역 내 특정 모기 종의 개체수를 억제할 수 있다.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-icon">🕰️</span>
+          <div>
+            <div class="card-label">70년 된 기술</div>
+            <div class="card-sub">불임 곤충 기법 (SIT)</div>
+          </div>
+        </div>
+        <div class="card-body">
+          1950년대 미국 농무부(USDA)가 나사벌레파리를 방사선 불임 처리 수컷으로 박멸. 매주 수천만 마리 항공 방사 → <strong>1966년 미국 본토 완전 박멸</strong>. 원리는 60년 전이 발명, 구글은 스케일을 발명했다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 구글이 더한 것 — 스케일 엔지니어링 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <span class="section-title">구글이 더한 것 — 스케일 엔지니어링의 3가지 병목</span>
+    </div>
+    <div class="prose">
+      <p>
+        볼바키아 방식으로 모기를 억제하려면 세 가지 기술적 병목이 있다. 구글 Debug는 이 세 병목을 소프트웨어·하드웨어·AI로 해결했다.
+      </p>
+    </div>
+    <div style="margin-top: 20px;">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">
+            <div class="tl-year-num">병목 ①</div>
+          </div>
+          <div class="tl-line"><div class="tl-dot"></div></div>
+          <div class="tl-content">
+            <div class="tl-title">대량 사육 — 자동화 사육 시스템</div>
+            <div class="tl-desc">
+              수백만 마리의 모기를 균일한 품질로 안정적으로 키워야 한다. Debug는 자동화된 사육 시스템을 직접 설계. 소프트웨어 엔지니어, 하드웨어 엔지니어, 모기 생물학자가 <strong>한 팀</strong>으로 일한다. 기술이 생물학을 만나는 지점.
+            </div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">
+            <div class="tl-year-num">병목 ②</div>
+          </div>
+          <div class="tl-line"><div class="tl-dot"></div></div>
+          <div class="tl-content">
+            <div class="tl-title">암수 분류 — AI 컴퓨터 비전 (핵심)</div>
+            <div class="tl-desc">
+              이것이 진짜 병목이다. <strong>암컷이 단 한 마리라도 섞이면 오히려 개체수를 늘린다.</strong> Debug는 기계적 체(sieve)로 1차 선별 → AI 컴퓨터 비전으로 개체별 해부학적 특징 검사 → 2차 정밀 검증. 이중 구조. 여기서 쓰인 AI는 GPT-4나 Claude 같은 LLM이 아니다 — 이미지 분류 모델이다.
+            </div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">
+            <div class="tl-year-num">병목 ③</div>
+          </div>
+          <div class="tl-line"><div class="tl-dot"></div></div>
+          <div class="tl-content">
+            <div class="tl-title">정확한 방사 — 경로 최적화 소프트웨어</div>
+            <div class="tl-desc">
+              적절한 장소에 적절한 숫자를 풀어야 효과가 난다. 싱가포르처럼 고층 아파트가 밀집한 환경에서는 배치 경로 최적화가 물류 문제가 된다. 여기에도 소프트웨어가 투입된다. 공중보건이 공급망 최적화 문제가 되는 순간.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="quote-box" style="margin-top: 8px;">
+      <div class="quote-text">"구글이 한 일은 생물학적 원리를 발명한 게 아니라, 그 원리를 산업적 규모로 작동하게 만드는 엔지니어링 시스템을 구축한 것이다."</div>
+      <div class="quote-attr">— 안광섭, 오즈의 지식토킹</div>
+    </div>
+  </section>
+
+  <!-- 4. Debug 10년 여정 & 실적 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <span class="section-title">Debug 10년 여정 & 현장 실적</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year"><div class="tl-year-num">2016</div></div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Google X 문샷 프로젝트 출범</div>
+          <div class="tl-desc">Alphabet 문샷 팩토리에서 시작. 이후 Verily(생명과학 자회사)로 이전.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year"><div class="tl-year-num">2017~19</div></div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">캘리포니아 프레스노 현장 실험</div>
+          <div class="tl-desc">이집트숲모기 암컷 개체수 감소: 2017년 68%, 2018년 <strong>95%</strong>, 2019년 84%. 2020년 Nature Biotechnology 논문 발표.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year"><div class="tl-year-num">2018~</div></div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">싱가포르 국가환경청(NEA) '프로젝트 볼바키아'</div>
+          <div class="tl-desc">매주 1,000만 마리 이상 방사. 이집트숲모기 <strong>80~90% 억제</strong>, 뎅기열 발병률 방사 6~12개월 후 <strong>70% 이상 감소</strong>. 경제 절감 효과 추산 3억 2,940만 달러.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year"><div class="tl-year-num">2024</div></div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">구글 본체로 재인수</div>
+          <div class="tl-desc">Verily에서 Google 본체로 재통합. 10년 만에 귀환.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year"><div class="tl-year-num">2026</div></div>
+        <div class="tl-line"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">미국 EPA 허가 신청 — 열대집모기, 플로리다+캘리포니아</div>
+          <div class="tl-desc">대상: 열대집모기(Culex quinquefasciatus) — 웨스트나일 바이러스, 세인트루이스 뇌염 매개체. 규모: 연간 1,600만 마리, 2년간 총 3,200만 마리. EPA는 매년 1,300건+ 중증 사례·130명+ 사망하는 웨스트나일 바이러스에 대한 대응.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 오스왈드의 시선 (핵심 인사이트) -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🎯</div>
+      <span class="section-title">오스왈드의 시선 — "적절한 기술을 적절한 규모로"</span>
+    </div>
+    <div class="prose">
+      <p>
+        안광섭 교수가 이 사례에서 가장 주목하는 건 모기가 아니다. <strong>기술 적정화(technology appropriateness)의 문제</strong>다. GTM 전략 수립 경험에서, "최신 기술이 모든 문제를 해결할 것이다"는 전제가 얼마나 자주 틀리는지 봐왔다는 것이다.
+      </p>
+      <p>
+        구글이 모기 암수를 구별하는 데 쓴 AI는 <strong>컴퓨터 비전 기반의 분류 모델</strong>이다. GPT-4나 Claude 같은 범용 언어 모델이 아니다. 센서, 카메라, 자동화 라인, 그리고 비교적 단순한 이미지 인식 모델의 조합이다.
+      </p>
+    </div>
+    <div class="quote-box" style="margin-top: 16px;">
+      <div class="quote-text">"이 사례가 흥미로운 건, 'AI가 세상을 바꾼다'는 서사의 대부분이 거대한 언어 모델과 범용 지능에 집중된 지금, 정작 가장 많은 생명을 구할 수 있는 AI는 모기 암수를 구별하는 카메라일 수 있다는 점이다."</div>
+      <div class="quote-attr">— 안광섭, 오즈의 지식토킹</div>
+    </div>
+    <div class="prose" style="margin-top: 16px;">
+      <p>
+        다만 안 교수는 한 가지 유보도 남긴다. 볼바키아로 특정 종을 억제했을 때 생태적 빈자리를 다른 종이 채우거나 예상치 못한 생태계 변화가 생길 가능성은 열려 있다. <strong>기술이 문제를 해결할 수 있다는 것</strong>과 <strong>그 해결이 새로운 문제를 만들지 않는다는 것</strong>은 다른 이야기다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 6. GARAMbada 인사이트 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">💡</div>
+      <span class="section-title">GARAMbada 인사이트 — Company Builder 관점</span>
+    </div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-num">01</div>
+        <div class="insight-kw">기술 선택 원칙</div>
+        <div class="insight-title">LLM이 아닌 컴퓨터 비전이 100만 명을 살린다</div>
+        <div class="insight-body">
+          AI 도구 선택 시 "가장 최신·가장 큰 모델"이 기본값이 되는 경향이 있다. 구글 Debug는 반례다. <strong>문제를 정확히 정의하면 적합한 도구가 보인다</strong> — 암수 분류에는 이미지 분류가, 경로 최적화에는 물류 알고리즘이 답이다. GARAMbada 사업에서 AI 도입 시 "이 문제에 LLM이 필요한가?"를 먼저 물어야 한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">02</div>
+        <div class="insight-kw">사업 모델 설계</div>
+        <div class="insight-title">원리 발명 vs. 스케일 발명 — 구글의 선택</div>
+        <div class="insight-body">
+          볼바키아 원리는 1950년대에 이미 있었다. 구글은 70년 된 원리에 자동화·AI·물류 시스템을 얹어 산업화했다. <strong>새로운 원리를 발명하지 않아도 스케일 엔지니어링이 사업이 된다.</strong> AI Governance Platform, 에이전트 서비스 등 GARAMbada 사업에서도 원리보다 실행 시스템을 먼저 설계해야 한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">03</div>
+        <div class="insight-kw">장기 투자 관점</div>
+        <div class="insight-title">Google X → Verily → Google, 10년의 여정</div>
+        <div class="insight-body">
+          문샷 프로젝트에서 시작해 10년 만에 Google 본체로 재통합됐다. 이 과정에서 여러 조직 재편과 투자 지속이 있었다. <strong>임팩트 있는 기술 사업은 짧은 회수 기간을 기대하면 안 된다.</strong> 특히 공공보건·규제 승인이 필요한 영역은 더 그렇다. R&D 투자 결정 시 10년 타임라인을 전제로 해야 한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">04</div>
+        <div class="insight-kw">파트너십 전략</div>
+        <div class="insight-title">정부 기관 파트너십 없이는 규모화가 없다</div>
+        <div class="insight-body">
+          싱가포르 NEA, 미국 EPA — Debug의 규모화는 모두 정부 기관과의 공식 파트너십 위에서 이루어졌다. 공공 문제를 민간 기술로 해결하는 사업에서 <strong>정부 파트너십은 선택이 아닌 필수</strong>다. GARAMbada의 AI Governance Platform 사업에서 공공기관 파트너십 우선 전략의 근거가 된다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">05</div>
+        <div class="insight-kw">비용 효과 분석</div>
+        <div class="insight-title">모기 키우는 비용 &lt; 모기 잡는 비용 — 예방의 경제학</div>
+        <div class="insight-body">
+          싱가포르 사례: 볼바키아 프로그램 비용 대비 3억 2,940만 달러 절감 추산. <strong>예방이 치료보다 저렴하다는 원칙이 수억 달러 단위에서 증명됐다.</strong> AI 거버넌스 사업에서도 같은 논리 적용: 사후 컴플라이언스 해결보다 사전 AI 감사·거버넌스 구축 비용이 훨씬 저렴하다. GTM 메시지에 활용할 것.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">06</div>
+        <div class="insight-kw">리스크 관리</div>
+        <div class="insight-title">2차 효과의 함정 — 단기 성과 ≠ 장기 안전</div>
+        <div class="insight-body">
+          안광섭 교수의 유보: 6~12개월 효과가 인상적이지만 10~20년 생태계 영향은 모른다. <strong>어떤 시스템 개입에도 2차 효과가 존재한다.</strong> AI 도입 사업에서 단기 효율성 지표만 보면 안 된다. 조직 소통 구조, 의사결정 품질, 직원 역량 등 장기 생태계 영향을 함께 모니터링해야 한다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 용어 사전 -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">📖</div>
+      <span class="section-title">핵심 용어 정리</span>
+    </div>
+    <div class="footnote-box">
+      <div class="footnote-title">각주 & 개념</div>
+      <div class="footnote-item"><strong>[이집트숲모기 Aedes aegypti]</strong> 뎅기열·지카·치쿤구니야·황열을 전파. 낮에 물고, 초소형 고인 물에서 번식. 한국 미발견, 그러나 흰줄숲모기는 전국 서식.</div>
+      <div class="footnote-item"><strong>[볼바키아 Wolbachia]</strong> 자연계 곤충 60%에 존재하는 세균. 감염 수컷 × 비감염 암컷 → 세포질 불화합성(알 부화 실패). 항생제·방사선 불필요.</div>
+      <div class="footnote-item"><strong>[불임 곤충 기법 SIT]</strong> 1950년대 USDA가 나사벌레파리에 처음 실용화. 방사선 불임 처리 수컷 방사 → 1966년 미국 본토 완전 박멸.</div>
+      <div class="footnote-item"><strong>[열대집모기 Culex quinquefasciatus]</strong> 웨스트나일 바이러스·세인트루이스 뇌염 매개. 미국 남부 광범위 분포. 이번 EPA 허가 신청의 대상 종.</div>
+    </div>
+  </section>
+
+  <!-- 태그 -->
+  <section>
+    <div class="chip-row">
+      <span class="chip chip-accent">구글 Debug</span>
+      <span class="chip chip-accent">볼바키아</span>
+      <span class="chip chip-accent">공중보건 AI</span>
+      <span class="chip chip-accent">스케일 엔지니어링</span>
+      <span class="chip">오즈의 지식토킹</span>
+      <span class="chip">안광섭</span>
+      <span class="chip">기술 적정화</span>
+      <span class="chip">모기 매개 질병</span>
+      <span class="chip">싱가포르 NEA</span>
+      <span class="chip">EPA 허가</span>
+      <span class="chip">컴퓨터 비전</span>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    출처: <a href="https://maily.so/oz.talking/posts/wjzdxvk0r3p" target="_blank">오즈의 지식토킹 — "세계에서 가장 많이 사람을 죽이는 동물을, 코드로 잡는다"</a> · 안광섭 · 2026-06-13
+  </p>
+  <p style="margin-top: 8px;">GARAMwiki · 담론_등등 · 2026-06-22</p>
+</footer>
+
+</body>
+</html>

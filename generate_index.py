@@ -237,6 +237,10 @@ ARTICLE_META = {
         "title": "위르겐 하버마스 — 이성의 수호, 어두워지는 시대<br>공론장·커뮤니케이티브 이성·AI와 민주주의 (The New Yorker · Alex Ross)",
         "tags":  ["하버마스", "공론장", "커뮤니케이티브 이성", "생활세계", "숙의 민주주의", "AI와 민주주의"],
     },
+    "2026-06_구글Debug_모기코드로잡는다_오즈지식토킹.html": {
+        "title": "세계에서 가장 많이 사람을 죽이는 동물을, 코드로 잡는다<br>구글 Debug · 볼바키아 · 스케일 엔지니어링 (오즈의 지식토킹 · 안광섭)",
+        "tags":  ["구글 Debug", "볼바키아", "공중보건 AI", "스케일 엔지니어링", "기술 적정화", "오즈의 지식토킹"],
+    },
     # 심화 기술
     "2026-05_Paperclip_AI_Agent_Orchestration_Platform.html": {
         "title": "📎 Paperclip — AI 에이전트 오케스트레이션 플랫폼<br>Zero-Human Company 구현 심층 분석",
