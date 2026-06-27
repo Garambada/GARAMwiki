@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPT-5.6 Sol · Terra · Luna — OpenAI 차세대 모델 패밀리 | GARAMwiki</title>
+<style>
+  :root {
+    --accent: #a78bfa;
+    --accent-dim: rgba(167,139,250,0.15);
+    --accent-border: rgba(167,139,250,0.35);
+    --bg: #0f0f13;
+    --surface: #1a1a22;
+    --surface2: #22222e;
+    --text: #e8e8f0;
+    --text-dim: #9090a8;
+    --sol: #f59e0b;
+    --sol-dim: rgba(245,158,11,0.12);
+    --terra: #34d399;
+    --terra-dim: rgba(52,211,153,0.12);
+    --luna: #60a5fa;
+    --luna-dim: rgba(96,165,250,0.12);
+    --danger: #f87171;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 2rem 1rem 4rem;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* ── HEADER ── */
+  .wiki-header {
+    border-left: 4px solid var(--accent);
+    padding: 1.5rem 1.5rem 1.5rem 1.8rem;
+    background: var(--surface);
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+  }
+  .wiki-header .badge {
+    display: inline-block;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 0.8rem;
+  }
+  .wiki-header h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  .wiki-header h1 span { color: var(--accent); }
+  .wiki-header .subtitle {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+  .meta-row { display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--text-dim); }
+  .meta-row span { display: flex; align-items: center; gap: 0.3rem; }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: 2rem; }
+  .section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--accent-border);
+  }
+
+  /* ── PARADOX BOX ── */
+  .paradox-box {
+    background: var(--surface);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .paradox-box::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+  .paradox-box .paradox-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .paradox-box .paradox-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+  .paradox-box p { color: var(--text-dim); font-size: 0.88rem; }
+
+  /* ── MODEL TIER CARDS ── */
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 600px) { .tier-grid { grid-template-columns: 1fr; } }
+  .tier-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .tier-card.sol { border-color: rgba(245,158,11,0.35); }
+  .tier-card.terra { border-color: rgba(52,211,153,0.35); }
+  .tier-card.luna { border-color: rgba(96,165,250,0.35); }
+  .tier-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .tier-card.sol::before { background: var(--sol); }
+  .tier-card.terra::before { background: var(--terra); }
+  .tier-card.luna::before { background: var(--luna); }
+  .tier-icon { font-size: 2rem; margin-bottom: 0.4rem; }
+  .tier-name { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.2rem; }
+  .tier-card.sol .tier-name { color: var(--sol); }
+  .tier-card.terra .tier-name { color: var(--terra); }
+  .tier-card.luna .tier-name { color: var(--luna); }
+  .tier-role { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.8rem; }
+  .tier-price {
+    font-size: 0.85rem;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+    margin-bottom: 0.5rem;
+  }
+  .tier-price strong { color: #fff; }
+  .tier-price .price-label { color: var(--text-dim); font-size: 0.72rem; }
+  .tier-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.6rem; }
+  .tier-tag {
+    font-size: 0.68rem;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .sol .tier-tag { background: var(--sol-dim); color: var(--sol); }
+  .terra .tier-tag { background: var(--terra-dim); color: var(--terra); }
+  .luna .tier-tag { background: var(--luna-dim); color: var(--luna); }
+
+  /* ── CAPABILITY CARDS ── */
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 640px) { .cap-grid { grid-template-columns: 1fr; } }
+  .cap-card {
+    background: var(--surface);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius);
+    padding: 1.1rem;
+  }
+  .cap-card .cap-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .cap-card .cap-title { font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+  .cap-card .cap-bench {
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+    background: var(--accent-dim);
+    padding: 2px 7px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 0.4rem;
+  }
+  .cap-card p { font-size: 0.82rem; color: var(--text-dim); }
+
+  /* ── REASONING MODES ── */
+  .mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 540px) { .mode-grid { grid-template-columns: 1fr; } }
+  .mode-card {
+    background: var(--surface);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+  }
+  .mode-card .mode-label {
+    font-family: monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-dim);
+    padding: 3px 10px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 0.6rem;
+  }
+  .mode-card h3 { font-size: 0.95rem; color: #fff; margin-bottom: 0.4rem; }
+  .mode-card p { font-size: 0.83rem; color: var(--text-dim); }
+
+  /* ── SAFETY STACK ── */
+  .safety-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .safety-layer {
+    background: var(--surface);
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+  .safety-layer .layer-num {
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 800;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .safety-layer .layer-content strong { display: block; font-size: 0.88rem; color: #fff; margin-bottom: 2px; }
+  .safety-layer .layer-content span { font-size: 0.8rem; color: var(--text-dim); }
+  .safety-stat {
+    background: var(--surface2);
+    border: 1px solid rgba(248,113,113,0.25);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    font-size: 0.83rem;
+    color: var(--text-dim);
+    margin-top: 0.5rem;
+  }
+  .safety-stat strong { color: var(--danger); }
+
+  /* ── TIMELINE / LINEAGE ── */
+  .timeline { position: relative; padding-left: 1.5rem; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 6px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 0.8rem;
+    padding: 0.8rem 1rem;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--surface2);
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -1.55rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .tl-item.retired::before { background: var(--text-dim); }
+  .tl-item.new::before { background: var(--sol); box-shadow: 0 0 8px var(--sol); }
+  .tl-date { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 2px; }
+  .tl-name { font-size: 0.9rem; font-weight: 700; color: #fff; }
+  .tl-desc { font-size: 0.78rem; color: var(--text-dim); }
+  .tl-item.retired .tl-name { color: var(--text-dim); text-decoration: line-through; }
+
+  /* ── PRICING TABLE ── */
+  .pricing-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+  .pricing-table th {
+    background: var(--surface2);
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: .05em;
+    padding: 0.6rem 1rem;
+    text-align: left;
+  }
+  .pricing-table td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--surface2);
+    color: var(--text);
+  }
+  .pricing-table tr:last-child td { border-bottom: none; }
+  .pricing-table tr:hover td { background: var(--surface2); }
+  .pricing-table .model-sol { color: var(--sol); font-weight: 700; }
+  .pricing-table .model-terra { color: var(--terra); font-weight: 700; }
+  .pricing-table .model-luna { color: var(--luna); font-weight: 700; }
+  .pricing-table .tier-badge {
+    font-size: 0.68rem;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+  .pricing-table .flagship { background: var(--sol-dim); color: var(--sol); }
+  .pricing-table .balanced { background: var(--terra-dim); color: var(--terra); }
+  .pricing-table .fast { background: var(--luna-dim); color: var(--luna); }
+
+  /* ── INSIGHTS ── */
+  .insight-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .insight-item {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    border-left: 3px solid var(--accent);
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+  .insight-num {
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 800;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .insight-content strong { display: block; font-size: 0.92rem; color: #fff; margin-bottom: 3px; }
+  .insight-content span { font-size: 0.82rem; color: var(--text-dim); }
+
+  /* ── TAGS ── */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.5rem; }
+  .tag {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── FOOTER ── */
+  .wiki-footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--surface2);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .info-box {
+    background: var(--surface2);
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.83rem;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+  .info-box strong { color: #fff; }
+  .highlight { color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="wiki-header">
+    <div class="badge">🔬 모델 트래커 · OpenAI</div>
+    <h1><span>GPT-5.6</span> Sol · Terra · Luna<br>OpenAI 차세대 모델 패밀리 전격 해부</h1>
+    <div class="subtitle">챗봇을 넘어 에이전트로 — 능력 도약이 정부 검열을 불렀다</div>
+    <div class="meta-row">
+      <span>📅 발표 2026-06-26</span>
+      <span>🏢 OpenAI</span>
+      <span>📍 Limited Preview (정부 협의 후 전면 출시 예정)</span>
+      <span>🔗 <a href="https://openai.com/index/previewing-gpt-5-6-sol/" target="_blank">공식 발표</a></span>
+    </div>
+  </div>
+
+  <!-- 핵심 역설 -->
+  <div class="section">
+    <div class="section-title">⚡ 핵심 역설</div>
+    <div class="paradox-box">
+      <div class="paradox-label">The Core Paradox</div>
+      <div class="paradox-text">"더 강력해질수록, 더 좁게 푼다"<br>— GPT-5.6, 백악관의 요청으로 제한 출시</div>
+      <p>GPT-5.6 Sol은 역대 OpenAI 최고 성능 모델이지만, 동시에 처음으로 미국 정부의 공식 요청으로 일반 공개가 제한된 모델이다. 코딩·생물학·사이버보안에서의 능력 도약이 안전 임계점을 건드린 것. "더 좋은 모델을 더 적은 사람에게" — AI 능력 성장과 접근성 민주화의 모순이 정면으로 충돌했다.</p>
+    </div>
+    <div class="paradox-box" style="border-color: rgba(248,113,113,0.3);">
+      <div class="paradox-label" style="color: var(--danger);">The Government Signal</div>
+      <div class="paradox-text" style="font-size:1rem;">"Cyber Critical 임계점은 안 넘었다 — 하지만 그 바로 직전이다"</div>
+      <p>OpenAI Preparedness Framework 기준으로 GPT-5.6 Sol은 Cyber Critical을 <strong>넘지 않았다</strong>. Chromium·Firefox에서 취약점 식별·익스플로잇 원시 요소(primitive) 생성은 가능하지만, 완전한 end-to-end 익스플로잇 자동 생성은 실패. 그러나 능력의 계단형 상승이 위협 인식을 바꿨다.</p>
+    </div>
+  </div>
+
+  <!-- GPT-5.6 3종 패밀리 -->
+  <div class="section">
+    <div class="section-title">☀️ GPT-5.6 패밀리 — Sol · Terra · Luna</div>
+    <div class="info-box" style="margin-bottom:1rem;">
+      <strong>새로운 네이밍 시스템:</strong> 숫자(5.6) = 세대 식별자 / Sol·Terra·Luna = 능력 티어 (각자의 속도로 독립 진화 가능)
+    </div>
+    <div class="tier-grid">
+      <!-- SOL -->
+      <div class="tier-card sol">
+        <div class="tier-icon">☀️</div>
+        <div class="tier-name">Sol</div>
+        <div class="tier-role">플래그십 모델 — 최고 지능</div>
+        <div class="tier-price">
+          <div class="price-label">INPUT / 1M tokens</div>
+          <strong>$5.00</strong>
+        </div>
+        <div class="tier-price">
+          <div class="price-label">OUTPUT / 1M tokens</div>
+          <strong>$30.00</strong>
+        </div>
+        <div class="tier-tags">
+          <span class="tier-tag">max reasoning</span>
+          <span class="tier-tag">ultra mode</span>
+          <span class="tier-tag">ExploitBench SOTA</span>
+        </div>
+      </div>
+      <!-- TERRA -->
+      <div class="tier-card terra">
+        <div class="tier-icon">🌍</div>
+        <div class="tier-name">Terra</div>
+        <div class="tier-role">균형형 모델 — 일상 업무</div>
+        <div class="tier-price">
+          <div class="price-label">INPUT / 1M tokens</div>
+          <strong>$2.50</strong>
+        </div>
+        <div class="tier-price">
+          <div class="price-label">OUTPUT / 1M tokens</div>
+          <strong>$15.00</strong>
+        </div>
+        <div class="tier-tags">
+          <span class="tier-tag">GPT-5.5 동등 성능</span>
+          <span class="tier-tag">2× 저렴</span>
+        </div>
+      </div>
+      <!-- LUNA -->
+      <div class="tier-card luna">
+        <div class="tier-icon">🌙</div>
+        <div class="tier-name">Luna</div>
+        <div class="tier-role">경량·고속 모델 — 최저 비용</div>
+        <div class="tier-price">
+          <div class="price-label">INPUT / 1M tokens</div>
+          <strong>$1.00</strong>
+        </div>
+        <div class="tier-price">
+          <div class="price-label">OUTPUT / 1M tokens</div>
+          <strong>$6.00</strong>
+        </div>
+        <div class="tier-tags">
+          <span class="tier-tag">최저가</span>
+          <span class="tier-tag">고속</span>
+          <span class="tier-tag">ExploitGym 강력</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3대 능력 영역 -->
+  <div class="section">
+    <div class="section-title">🎯 핵심 능력 3대 영역</div>
+    <div class="cap-grid">
+      <div class="cap-card">
+        <div class="cap-icon">💻</div>
+        <div class="cap-title">코딩 · 에이전틱 워크플로우</div>
+        <div class="cap-bench">Terminal-Bench 2.1 SOTA</div>
+        <p>커맨드라인 기반 복잡한 계획·반복·도구 조정 워크플로우 테스트. GPT-5.6 Sol이 새로운 최고점 달성. 단순 코드 생성이 아닌 장기 에이전트 루프 능력 측정.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🧬</div>
+        <div class="cap-title">생물학 · 유전체 분석</div>
+        <div class="cap-bench">GeneBench v1 향상</div>
+        <p>장기 유전체학·정량 생물학 분석 평가. GPT-5.5 대비 성능 향상 + 토큰 사용량 감소. 과학 연구 에이전트로서의 능력 입증.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🛡️</div>
+        <div class="cap-title">사이버보안 · 취약점 연구</div>
+        <div class="cap-bench">ExploitBench · ExploitGym</div>
+        <p>취약점 연구·익스플로잇 작업 장기 수행 능력. Mythos Preview 대비 동등 성능을 <strong>토큰 1/3</strong>으로 달성. UC Berkeley · OpenAI 협업 벤치마크.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 새로운 추론 모드 -->
+  <div class="section">
+    <div class="section-title">🧠 새로운 추론 모드 — max & ultra</div>
+    <div class="mode-grid">
+      <div class="mode-card">
+        <div class="mode-label">reasoning_effort: "max"</div>
+        <h3>깊은 단일 사고 — Max 모드</h3>
+        <p>Sol에게 최대한 오랜 시간 추론을 허용. 단일 에이전트가 복잡한 문제를 끝까지 파고드는 모드. 속도보다 정확도와 깊이 우선.</p>
+      </div>
+      <div class="mode-card" style="border-color: rgba(245,158,11,0.4);">
+        <div class="mode-label" style="color:var(--sol);background:var(--sol-dim);">reasoning_effort: "ultra"</div>
+        <h3>멀티에이전트 병렬 — Ultra 모드</h3>
+        <p>단일 에이전트의 한계를 넘어 <strong>서브에이전트</strong>를 동원해 복잡한 작업 가속. 에이전트 오케스트레이션이 API 레벨에서 내장된 최초 공식 모드.</p>
+      </div>
+    </div>
+    <div class="info-box">
+      <strong>🚀 Cerebras 파트너십:</strong> GPT-5.6 Sol을 Cerebras 인프라에서 최대 <span class="highlight">750 tokens/sec</span>으로 제공 예정 (2026년 7월 한정 선출시). 실시간 에이전트 루프가 현실적으로 가능해지는 속도.
+    </div>
+  </div>
+
+  <!-- 안전장치 스택 -->
+  <div class="section">
+    <div class="section-title">🔐 5개 레이어 안전장치 스택</div>
+    <div class="safety-layers">
+      <div class="safety-layer">
+        <div class="layer-num">1</div>
+        <div class="layer-content">
+          <strong>모델 레벨 거부 훈련</strong>
+          <span>금지된 사이버 지원 요청 거부 학습. 위장 의도·탈옥 시도 포함 대응. 첫 번째 방어선.</span>
+        </div>
+      </div>
+      <div class="safety-layer">
+        <div class="layer-num">2</div>
+        <div class="layer-content">
+          <strong>실시간 사이버·생물학 오용 분류기</strong>
+          <span>생성 중 출력 평가. 위험 감지 시 생성 일시 중지 → 대형 추론 모델이 맥락 검토 → 금지 판단 시 응답 차단.</span>
+        </div>
+      </div>
+      <div class="safety-layer">
+        <div class="layer-num">3</div>
+        <div class="layer-content">
+          <strong>계정 레벨 교차 대화 검토</strong>
+          <span>플래그된 활동은 관련 대화 전체 및 위험 신호 종합 검토. 일회성 오용 vs 지속적 악의 행위 구분.</span>
+        </div>
+      </div>
+      <div class="safety-layer">
+        <div class="layer-num">4</div>
+        <div class="layer-content">
+          <strong>차별화된 접근 제어</strong>
+          <span>민감 기능은 기본 공개 없이 신뢰할 수 있는 파트너에게만 제공. 제한 출시 자체가 안전장치.</span>
+        </div>
+      </div>
+      <div class="safety-layer">
+        <div class="layer-num">5</div>
+        <div class="layer-content">
+          <strong>자동화 레드팀 + 인간 전문가 테스트</strong>
+          <span>범용 탈옥(Universal Jailbreak) 대응 특화. 알려진 공격 넘어서는 패턴 탐색.</span>
+        </div>
+      </div>
+    </div>
+    <div class="safety-stat">
+      자동화 레드팀에 투입된 컴퓨팅: <strong>700,000 A100-equivalent GPU 시간</strong> — 단일 안전 평가에 투입된 역대 최대 규모
+    </div>
+  </div>
+
+  <!-- 모델 계보 타임라인 -->
+  <div class="section">
+    <div class="section-title">📅 OpenAI 2026 모델 계보</div>
+    <div class="timeline">
+      <div class="tl-item retired">
+        <div class="tl-date">2026-06-12 퇴역</div>
+        <div class="tl-name">GPT-5.2 시리즈</div>
+        <div class="tl-desc">Instant · Thinking · Pro — ChatGPT 및 Custom GPTs에서 종료</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026년 상반기</div>
+        <div class="tl-name">GPT-5.3-Codex</div>
+        <div class="tl-desc">최강 에이전틱 코딩 모델. Codex + GPT-5 훈련 스택 통합. 기존 대비 ~25% 빠름. 주요 벤치마크 신기록.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026년 상반기</div>
+        <div class="tl-name">GPT-5.4</div>
+        <div class="tl-desc">추론·코딩·에이전틱 워크플로우 통합. 스프레드시트·프레젠테이션·문서 작업 강화.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026-04-23</div>
+        <div class="tl-name">GPT-5.5</div>
+        <div class="tl-desc">GPT-5.6 직전 세대. Terra가 GPT-5.5 동등 성능을 2× 낮은 비용으로 제공.</div>
+      </div>
+      <div class="tl-item retired">
+        <div class="tl-date">2026-06-26 퇴역</div>
+        <div class="tl-name">GPT-4.5</div>
+        <div class="tl-desc">ChatGPT 및 Custom GPTs에서 종료</div>
+      </div>
+      <div class="tl-item new">
+        <div class="tl-date">2026-06-26 발표 ★ NOW</div>
+        <div class="tl-name">GPT-5.6 Sol · Terra · Luna</div>
+        <div class="tl-desc">차세대 3-티어 패밀리. 정부 협의 → 제한 프리뷰. 수 주 내 전면 출시 예정.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 가격 및 캐싱 -->
+  <div class="section">
+    <div class="section-title">💰 가격 및 캐싱 정책</div>
+    <table class="pricing-table">
+      <thead>
+        <tr>
+          <th>모델</th>
+          <th>포지션</th>
+          <th>Input /1M</th>
+          <th>Output /1M</th>
+          <th>특징</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="model-sol">GPT-5.6 Sol <span class="tier-badge flagship">Flagship</span></td>
+          <td>최고 지능</td>
+          <td>$5.00</td>
+          <td>$30.00</td>
+          <td>max·ultra 모드, ExploitBench SOTA</td>
+        </tr>
+        <tr>
+          <td class="model-terra">GPT-5.6 Terra <span class="tier-badge balanced">Balanced</span></td>
+          <td>균형형</td>
+          <td>$2.50</td>
+          <td>$15.00</td>
+          <td>GPT-5.5 동등, 2× 저렴</td>
+        </tr>
+        <tr>
+          <td class="model-luna">GPT-5.6 Luna <span class="tier-badge fast">Fast</span></td>
+          <td>고속·경량</td>
+          <td>$1.00</td>
+          <td>$6.00</td>
+          <td>최저비용, 강한 사이버 능력</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="info-box" style="margin-top:0.8rem;">
+      <strong>신규 캐싱 정책 (GPT-5.6부터 적용):</strong>
+      명시적 캐시 브레이크포인트 지원 · 최소 캐시 유지 <span class="highlight">30분</span> · 캐시 쓰기 1.25× 입력 요금 부과 · 캐시 읽기 기존 90% 할인 유지
+    </div>
+  </div>
+
+  <!-- 하드웨어 참고 -->
+  <div class="section">
+    <div class="section-title">🔧 하드웨어 맥락 — Jalapeño</div>
+    <div class="paradox-box">
+      <div class="paradox-label">OpenAI × Broadcom</div>
+      <div class="paradox-text" style="font-size:1rem;">커스텀 AI 가속기 "Jalapeño" 공개</div>
+      <p>9개월의 집중 개발로 탄생한 OpenAI-Broadcom 공동 설계 칩. 소프트웨어-하드웨어 공동 최적화의 결과물. GPT-5.6 서비스 인프라의 경쟁력을 뒷받침하는 하드웨어 주권 전략의 일환.</p>
+    </div>
+  </div>
+
+  <!-- GARAMbada 인사이트 -->
+  <div class="section">
+    <div class="section-title">💡 GARAMbada 인사이트 — Company Builder 관점</div>
+    <div class="insight-list">
+      <div class="insight-item">
+        <div class="insight-num">1</div>
+        <div class="insight-content">
+          <strong>정부 검열 = 능력 임계점 신호</strong>
+          <span>백악관이 출시를 요청으로 제한했다는 사실 자체가 메시지다. GPT-5.6 Sol의 사이버보안 능력이 국가 안보 레벨의 임계점에 근접했다는 뜻. 다음 버전부터는 AI 모델이 진짜 전략 무기가 되는 시대. Company Builder로서 AI를 "도구"로 볼지 "역량 도약의 계기"로 볼지 지금 결정해야 한다.</span>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">2</div>
+        <div class="insight-content">
+          <strong>Sol/Terra/Luna 티어링 = B2B 가격 정책의 교과서</strong>
+          <span>동일 세대 내에서 3단계 능력·가격 분리. Terra가 GPT-5.5 동등 성능을 절반 가격으로 제공하면서도 Sol의 프리미엄을 보호. 우리가 운영하는 서비스에서도 핵심 기능에 3-티어 접근을 적용할 때다.</span>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">3</div>
+        <div class="insight-content">
+          <strong>ultra 모드 = 멀티에이전트가 API 표준이 된다</strong>
+          <span>서브에이전트 동원이 API 파라미터 하나로 가능해졌다. 이는 멀티에이전트 오케스트레이션이 이제 개발자가 직접 구축해야 하는 인프라가 아니라 모델이 제공하는 기본 기능이 됨을 의미한다. 에이전트 미들웨어 레이어의 차별화 포인트가 좁아진다.</span>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">4</div>
+        <div class="insight-content">
+          <strong>750 tok/sec = 실시간 에이전트 루프의 현실화</strong>
+          <span>Cerebras에서 750 tokens/sec. 이는 에이전트가 실시간 대화 속도로 긴 추론을 완료할 수 있다는 뜻. 에이전트 UX 디자인의 근본적 변화 — "로딩 중"이 사라지는 에이전트 인터페이스 설계가 지금부터 필요하다.</span>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">5</div>
+        <div class="insight-content">
+          <strong>사이버보안 도약 = 보안 AI 시장의 폭발</strong>
+          <span>방어자(defender)가 GPT-5.6 Sol로 취약점을 찾고 패치를 개발하는 속도가 공격자가 익스플로잇을 완성하는 속도보다 빠를 수 있다. 사이버보안 AI 도구 시장이 본격 성장하는 신호. 우리 솔루션의 보안 AI 접목을 선제적으로 검토해야 한다.</span>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">6</div>
+        <div class="insight-content">
+          <strong>프롬프트 캐싱 개선 = 장기 컨텍스트 비용 구조 변화</strong>
+          <span>명시적 캐시 브레이크포인트 + 30분 최소 캐시 유지. 장기 컨텍스트가 필요한 프로젝트 관리 에이전트, 지식베이스 기반 응답 서비스의 운영 비용이 구조적으로 낮아진다. 이제는 비용을 이유로 컨텍스트 크기를 줄이는 설계를 재검토할 때다.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAGS -->
+  <div class="tag-row">
+    <span class="tag">GPT-5.6</span>
+    <span class="tag">Sol</span>
+    <span class="tag">Terra</span>
+    <span class="tag">Luna</span>
+    <span class="tag">OpenAI</span>
+    <span class="tag">멀티에이전트</span>
+    <span class="tag">ultra mode</span>
+    <span class="tag">사이버보안 AI</span>
+    <span class="tag">정부 검열</span>
+    <span class="tag">Terminal-Bench</span>
+    <span class="tag">ExploitBench</span>
+    <span class="tag">Cerebras 750tok/s</span>
+    <span class="tag">Jalapeño 칩</span>
+    <span class="tag">Preparedness Framework</span>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="wiki-footer">
+    <span>📰 Source: <a href="https://openai.com/index/previewing-gpt-5-6-sol/" target="_blank">OpenAI — Previewing GPT-5.6 Sol</a> · <a href="https://9to5mac.com/2026/06/26/openai-upgrading-chatgpt-and-codex-with-new-gpt-5-6-models-in-limited-release/" target="_blank">9to5Mac</a></span>
+    <span>🗂️ GARAMwiki — 02_모델_트래커 | 작성 2026-06-27</span>
+  </div>
+
+</div>
+</body>
+</html>
