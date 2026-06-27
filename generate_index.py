@@ -57,6 +57,10 @@ ARTICLE_META = {
         "title": "YC 로보틱스 스타트업 98개<br>— 10개 카테고리 전체 지도",
         "tags":  ["YCombinator", "로보틱스", "휴머노이드", "방위드론", "데이터인프라"],
     },
+    "2026-07_MIT_TR_Korea_Vol27_AI에이전트_NextWorker.html": {
+        "title": "MIT Technology Review Korea Vol.27 — AI 에이전트 The Next Worker<br>챗봇 이후의 AI · 피지컬 AI · 멀티에이전트 위험 · 10대 키워드 (2026 7·8월호)",
+        "tags":  ["MIT TR Korea", "AI 에이전트", "The Next Worker", "피지컬 AI", "멀티에이전트", "AI 거버넌스"],
+    },
     # 나의 인사이트
     "2026-05_AI_Native_vs_Agent_Native_전략_분석.html": {
         "title": "AI-Native vs Agent-Native — 개념 정의·전략·실행 플랜<br>Garambada 심층 분석 보고서",
