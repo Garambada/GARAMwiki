@@ -219,6 +219,10 @@ ARTICLE_META = {
         "title": "AI Governance Platform 사업 진출 전략 v03 — 법무법인 린 × Wise42<br>공공·중견기업 AX 시장 기반 신사업 · AI 기본법 · 3~5조 TAM · 공공기관 AX 심층 분석",
         "tags":  ["AI Governance", "법무법인 린", "Wise42", "AI 기본법", "공공 AX", "TrustLayer"],
     },
+    "2026-06_AI_Governance_Platform_린Wise42_사업현안_v05.html": {
+        "title": "AI Governance Platform 사업 진출 전략 v05 — 법무법인 린 × Wise42<br>보안×컴플라이언스 통합 관문 · 업스테이지 Solar LLM · AIM Intelligence · AI TRiSM · TOP 7 즉각 실행",
+        "tags":  ["AI Governance", "법무법인 린", "Wise42", "보안×컴플라이언스 통합 관문", "N2SF", "ISMS-P", "AI TRiSM", "업스테이지", "AIM Intelligence", "Module 6", "Module 7", "국정원 15위협", "공공 AX", "v05"],
+    },
     # 모델 트래커 (EP100)
     "2026-06_Claude_Fable5_Mythos5_수출통제_EP100_AI_Frontier.html": {
         "title": "Claude Fable 5 · Mythos 5 · 수출통제 D+3<br>EP100: 출시 3일 만에 美수출통제 — 다음 국면은? (AI Frontier)",

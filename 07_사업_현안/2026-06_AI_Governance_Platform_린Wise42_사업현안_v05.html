@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Governance Platform 사업 진출 전략 v05 — 법무법인 린 × Wise42 | GARAMwiki</title>
+<style>
+:root {
+  --bg: #0c0e14; --bg2: #131620; --bg3: #1a1e2e;
+  --border: rgba(255,255,255,0.07);
+  --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b;
+  --accent: #f97316; --accent-bg: rgba(249,115,22,0.08); --accent-glow: rgba(249,115,22,0.20);
+  --biz: #f59e0b; --trend: #3b82f6; --insight: #10b981;
+  --model: #a78bfa; --tech: #06b6d4; --discourse: #e879f9;
+  --red: #ef4444; --violet: #8b5cf6;
+  --radius: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;line-height:1.7;font-size:15px}
+a{color:var(--accent);text-decoration:none}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(12,14,20,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:6px;height:52px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-home{color:var(--muted);font-size:13px;white-space:nowrap;padding:4px 8px;border-radius:6px}
+.nav-home:hover{color:var(--accent)}
+.nav-sep{color:var(--dim);font-size:12px}
+.nav-link{color:var(--muted);font-size:12px;white-space:nowrap;padding:4px 10px;border-radius:6px;border:1px solid transparent;transition:all .2s}
+.nav-link:hover{color:var(--accent);border-color:rgba(249,115,22,0.3);background:var(--accent-bg)}
+
+main{max-width:1100px;margin:0 auto;padding:40px 24px 80px}
+
+/* HERO */
+.hero{margin-bottom:40px}
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:.4px}
+.badge-biz{background:rgba(249,115,22,0.15);color:#fb923c;border:1px solid rgba(249,115,22,0.3)}
+.badge-conf{background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
+.badge-ver{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.3)}
+.badge-date{background:rgba(148,163,184,0.1);color:var(--muted);border:1px solid var(--border)}
+.badge-new{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)}
+.hero-title{font-size:clamp(22px,4vw,34px);font-weight:800;line-height:1.25;margin-bottom:10px;letter-spacing:-0.5px}
+.hero-title .hl{color:var(--accent)}
+.hero-title .hl2{color:#a78bfa}
+.hero-sub{font-size:15px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.hero-tagline{display:inline-block;font-size:16px;font-weight:700;color:var(--text);background:var(--accent-bg);border:1px solid rgba(249,115,22,0.35);border-left:4px solid var(--accent);border-radius:8px;padding:12px 20px;margin-bottom:12px;font-style:italic}
+.hero-tagline-v5{display:inline-block;font-size:15px;font-weight:700;color:var(--text);background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.35);border-left:4px solid #8b5cf6;border-radius:8px;padding:10px 20px;font-style:italic}
+
+/* STAT STRIP */
+.stat-strip{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0}
+.stat-card{flex:1;min-width:120px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center}
+.stat-num{font-size:22px;font-weight:800;color:var(--accent);line-height:1.1;margin-bottom:3px}
+.stat-label{font-size:11px;color:var(--muted);line-height:1.4}
+.stat-card.updated .stat-num{color:#a78bfa}
+
+/* V05 DELTA BOX */
+.delta-box{background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(249,115,22,0.05));border:1px solid rgba(139,92,246,0.3);border-radius:var(--radius);padding:20px 24px;margin-bottom:28px}
+.delta-title{font-size:11px;font-weight:700;letter-spacing:1px;color:#a78bfa;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.delta-list{display:grid;gap:10px}
+.delta-item{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.delta-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(139,92,246,0.2);color:#a78bfa;white-space:nowrap;margin-top:3px}
+.delta-text{font-size:13px;color:var(--muted);line-height:1.6}
+.delta-text strong{color:var(--text)}
+
+/* SECTIONS */
+.sec{margin:36px 0}
+.sec-title{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sec-title.violet{color:#a78bfa;border-color:rgba(139,92,246,0.2)}
+.sec-title.green{color:#34d399;border-color:rgba(16,185,129,0.2)}
+.sec-h2{font-size:20px;font-weight:700;color:var(--text);margin-bottom:14px}
+.sec-h3{font-size:15px;font-weight:700;color:var(--text);margin:16px 0 8px}
+
+/* CARDS GRID */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:14px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.card-accent{border-color:rgba(249,115,22,0.3);background:var(--accent-bg)}
+.card-violet{border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.05)}
+.card-green{border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.05)}
+.card-title{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.card-title.violet{color:#a78bfa}
+.card-title.green{color:#34d399}
+.card-body{font-size:13.5px;color:var(--muted);line-height:1.65}
+
+/* PARTNER CARDS */
+.partner-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin-bottom:14px}
+.partner-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+.partner-left{border-color:rgba(249,115,22,0.35)}
+.partner-right{border-color:rgba(59,130,246,0.35)}
+.partner-center{display:flex;align-items:center;justify-content:center;width:60px;flex-shrink:0}
+.partner-x{font-size:24px;font-weight:800;color:var(--dim)}
+.partner-name{font-size:15px;font-weight:800;margin-bottom:10px}
+.partner-name.orange{color:var(--accent)}
+.partner-name.blue{color:var(--trend)}
+.partner-name.violet{color:#a78bfa}
+.partner-name.green{color:#10b981}
+.partner-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-bottom:10px}
+.partner-tag.orange{background:rgba(249,115,22,0.15);color:#fb923c}
+.partner-tag.blue{background:rgba(59,130,246,0.15);color:#60a5fa}
+.partner-tag.violet{background:rgba(139,92,246,0.15);color:#a78bfa}
+.partner-tag.green{background:rgba(16,185,129,0.15);color:#34d399}
+.partner-items{font-size:12.5px;color:var(--muted);line-height:1.8}
+.partner-items li{list-style:none;padding:2px 0}
+.partner-items li::before{content:"• ";color:var(--accent)}
+
+/* OPPORTUNITY CARDS */
+.opp-list{display:grid;gap:10px;margin-bottom:14px}
+.opp-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.opp-item.highlight{border-color:rgba(249,115,22,0.3);background:var(--accent-bg)}
+.opp-icon{font-size:20px;margin-top:2px}
+.opp-text{font-size:13.5px;color:var(--muted);line-height:1.6}
+.opp-text strong{color:var(--text)}
+
+/* SECURITY GATE */
+.gate-flow{display:grid;gap:0;margin-bottom:14px}
+.gate-step{display:grid;grid-template-columns:40px 1fr;gap:0;align-items:stretch}
+.gate-node{display:flex;flex-direction:column;align-items:center}
+.gate-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;z-index:1}
+.gate-line{width:2px;flex:1;min-height:20px;background:var(--border)}
+.gate-content{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin:0 0 10px 12px}
+.gate-label{font-size:12px;font-weight:700;margin-bottom:4px}
+.gate-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th{background:rgba(249,115,22,0.1);color:var(--accent);font-weight:700;padding:10px 14px;text-align:left;border-bottom:2px solid rgba(249,115,22,0.25)}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,0.02)}
+td strong{color:var(--text)}
+.tbl-violet th{background:rgba(139,92,246,0.1);color:#a78bfa;border-bottom-color:rgba(139,92,246,0.25)}
+.tbl-green th{background:rgba(16,185,129,0.1);color:#34d399;border-bottom-color:rgba(16,185,129,0.25)}
+.tbl-blue th{background:rgba(59,130,246,0.1);color:#60a5fa;border-bottom-color:rgba(59,130,246,0.25)}
+
+/* MARKET FUNNEL */
+.market-funnel{display:grid;gap:0;margin-bottom:14px}
+.funnel-row{display:grid;grid-template-columns:100px 1fr 160px;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.funnel-label{font-size:12px;font-weight:700;color:var(--muted);text-align:right}
+.funnel-bar-wrap{position:relative;height:32px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden}
+.funnel-bar{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:12px;font-size:12px;font-weight:700}
+.funnel-tam{background:linear-gradient(90deg,rgba(249,115,22,0.5),rgba(249,115,22,0.25));color:#fb923c;width:100%}
+.funnel-sam{background:linear-gradient(90deg,rgba(59,130,246,0.5),rgba(59,130,246,0.25));color:#60a5fa;width:15%}
+.funnel-som{background:linear-gradient(90deg,rgba(16,185,129,0.5),rgba(16,185,129,0.25));color:#34d399;width:4%}
+.funnel-val{font-size:13px;font-weight:700;text-align:right}
+.funnel-val.orange{color:var(--accent)}
+.funnel-val.blue{color:var(--trend)}
+.funnel-val.green{color:var(--insight)}
+
+/* PHASE TIMELINE */
+.phase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.phase-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.ph0::before{background:var(--dim)}
+.ph1::before{background:var(--accent)}
+.ph2::before{background:var(--trend)}
+.ph3::before{background:var(--model)}
+.phase-num{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.ph0 .phase-num{color:var(--dim)}
+.ph1 .phase-num{color:var(--accent)}
+.ph2 .phase-num{color:var(--trend)}
+.ph3 .phase-num{color:var(--model)}
+.phase-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.phase-period{font-size:11px;color:var(--muted);margin-bottom:10px}
+.phase-items{font-size:12px;color:var(--muted);line-height:1.7}
+.phase-items li{list-style:none;padding:1px 0}
+.ph1 .phase-items li::before{content:"▶ ";color:var(--accent)}
+.ph2 .phase-items li::before{content:"▶ ";color:var(--trend)}
+.ph3 .phase-items li::before{content:"▶ ";color:var(--model)}
+.ph0 .phase-items li::before{content:"▶ ";color:var(--dim)}
+.phase-kpi{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px}
+.phase-kpi-label{color:var(--dim);font-size:10px;font-weight:700;letter-spacing:.5px;margin-bottom:4px}
+
+/* SWOT */
+.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.swot-cell{background:var(--bg2);padding:18px}
+.swot-label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.swot-S .swot-label{color:var(--insight)}
+.swot-W .swot-label{color:#f59e0b}
+.swot-O .swot-label{color:var(--trend)}
+.swot-T .swot-label{color:#f87171}
+.swot-items{font-size:12.5px;color:var(--muted);line-height:1.75}
+.swot-items li{list-style:none;padding:1px 0}
+
+/* 3+2 SECURITY STRUCTURE */
+.sec-struct{display:grid;gap:10px;margin-bottom:14px}
+.sec-row{display:grid;grid-template-columns:180px 1fr;gap:14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;align-items:start}
+.sec-row.direct{border-color:rgba(249,115,22,0.3);background:rgba(249,115,22,0.04)}
+.sec-row.aim{border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.04)}
+.sec-row.infra{border-color:rgba(100,116,139,0.3)}
+.sec-who{font-size:12px;font-weight:700}
+.sec-who.orange{color:var(--accent)}
+.sec-who.violet{color:#a78bfa}
+.sec-who.muted{color:var(--muted)}
+.sec-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;margin-top:4px;display:inline-block}
+.tag-prime{background:rgba(249,115,22,0.15);color:#fb923c}
+.tag-strat{background:rgba(139,92,246,0.15);color:#a78bfa}
+.tag-sub{background:rgba(100,116,139,0.12);color:var(--dim)}
+.sec-detail{font-size:12.5px;color:var(--muted);line-height:1.65}
+.sec-detail strong{color:var(--text)}
+
+/* MODULE CARDS */
+.module-grid{display:grid;gap:10px;margin-bottom:14px}
+.module-row{display:grid;grid-template-columns:90px 1fr auto;gap:14px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px}
+.module-row.new5{border-color:rgba(249,115,22,0.35);background:rgba(249,115,22,0.04)}
+.module-row.new5-2{border-color:rgba(139,92,246,0.35);background:rgba(139,92,246,0.04)}
+.module-id{font-size:13px;font-weight:700}
+.module-id.orange{color:var(--accent)}
+.module-id.violet{color:#a78bfa}
+.module-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.module-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.module-chip{font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;white-space:nowrap}
+.chip-new{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)}
+.chip-exist{background:rgba(100,116,139,0.1);color:var(--dim)}
+
+/* TRiSM LAYERS */
+.trism-grid{display:grid;gap:8px;margin-bottom:14px}
+.trism-row{display:grid;grid-template-columns:30px 120px 1fr auto;gap:12px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px}
+.trism-row.strong{border-color:rgba(16,185,129,0.3)}
+.trism-row.partial{border-color:rgba(139,92,246,0.3)}
+.trism-num{font-size:16px;font-weight:800;color:var(--dim)}
+.trism-layer{font-size:12px;font-weight:700;color:var(--text)}
+.trism-content{font-size:12px;color:var(--muted);line-height:1.5}
+.trism-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;white-space:nowrap}
+.status-strong{background:rgba(16,185,129,0.15);color:#34d399}
+.status-partial{background:rgba(139,92,246,0.15);color:#a78bfa}
+
+/* GLOBAL 3-AXIS */
+.axis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.axis-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.axis-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.axis-korea::before{background:var(--accent)}
+.axis-eu::before{background:#60a5fa}
+.axis-us::before{background:#34d399}
+.axis-flag{font-size:22px;margin-bottom:8px}
+.axis-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.axis-stance{font-size:10px;font-weight:700;letter-spacing:.5px;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:10px}
+.korea-stance{background:rgba(249,115,22,0.15);color:#fb923c}
+.eu-stance{background:rgba(96,165,250,0.15);color:#60a5fa}
+.us-stance{background:rgba(52,211,153,0.15);color:#34d399}
+.axis-action{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.axis-signal{font-size:11.5px;color:var(--text);background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 10px}
+
+/* TOP 7 */
+.top7-list{display:grid;gap:10px;margin-bottom:14px}
+.top7-item{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:start;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.top7-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.top7-1 .top7-num{background:rgba(249,115,22,0.2);color:var(--accent);border:2px solid rgba(249,115,22,0.4)}
+.top7-2 .top7-num{background:rgba(249,115,22,0.15);color:#fb923c}
+.top7-3 .top7-num{background:rgba(249,115,22,0.15);color:#fb923c}
+.top7-4 .top7-num{background:rgba(59,130,246,0.15);color:#60a5fa}
+.top7-5 .top7-num{background:rgba(139,92,246,0.2);color:#a78bfa;border:2px solid rgba(139,92,246,0.4)}
+.top7-6 .top7-num{background:rgba(139,92,246,0.15);color:#a78bfa}
+.top7-7 .top7-num{background:rgba(139,92,246,0.15);color:#a78bfa}
+.top7-title{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:3px}
+.top7-desc{font-size:12.5px;color:var(--muted);line-height:1.5}
+.top7-owner{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap;margin-top:2px}
+.owner-rin{background:rgba(249,115,22,0.15);color:#fb923c}
+.owner-wise{background:rgba(59,130,246,0.15);color:#60a5fa}
+.owner-joint{background:rgba(16,185,129,0.15);color:#34d399}
+.new5-tag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:6px;background:rgba(139,92,246,0.2);color:#a78bfa;display:inline-block;margin-left:6px;vertical-align:middle}
+
+/* COMPETITOR */
+.vs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.vs-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.vs-type{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.vs-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px}
+.vs-pro{color:var(--insight);font-size:12px;margin-bottom:4px}
+.vs-con{color:#f87171;font-size:12px}
+
+/* RISK MATRIX */
+.risk-list{display:grid;gap:8px;margin-bottom:14px}
+.risk-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px}
+.risk-name{font-size:13px;color:var(--text);font-weight:600}
+.risk-chip{font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;white-space:nowrap}
+.risk-A{background:rgba(248,113,113,0.15);color:#f87171}
+.risk-B{background:rgba(251,191,36,0.15);color:#fbbf24}
+.risk-sub{font-size:12px;color:var(--muted);grid-column:1/-1;margin-top:2px}
+
+/* INSIGHT */
+.insight-box{background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(16,185,129,0.04));border:1px solid rgba(249,115,22,0.2);border-radius:var(--radius);padding:24px;margin-top:12px}
+.insight-title{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.insight-list{display:grid;gap:12px}
+.insight-item{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}
+.insight-num{width:28px;height:28px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0}
+.insight-text{font-size:13.5px;color:var(--muted);line-height:1.65;padding-top:4px}
+.insight-text strong{color:var(--text)}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+.tag{font-size:11px;color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:3px 10px;border-radius:10px}
+
+/* AX HIGHLIGHT */
+.ax-highlight{background:linear-gradient(135deg,rgba(249,115,22,0.08),rgba(139,92,246,0.06));border:1px solid rgba(249,115,22,0.25);border-radius:var(--radius);padding:20px 24px;margin-bottom:14px}
+.ax-quote{font-size:15px;font-weight:700;color:var(--text);line-height:1.6;margin-bottom:10px}
+.ax-source{font-size:12px;color:var(--muted)}
+
+footer{text-align:center;font-size:12px;color:var(--dim);padding:24px;border-top:1px solid var(--border)}
+
+@media(max-width:700px){
+  .partner-grid{grid-template-columns:1fr}.partner-center{display:none}
+  .swot-grid{grid-template-columns:1fr}.vs-grid{grid-template-columns:1fr}
+  .axis-grid{grid-template-columns:1fr}
+  .sec-row{grid-template-columns:1fr}.module-row{grid-template-columns:1fr}
+  .trism-row{grid-template-columns:1fr}
+  .top7-item{grid-template-columns:44px 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-home">🏠 GARAMwiki</a>
+    <span class="nav-sep">›</span>
+    <a href="#" class="nav-link">📋 사업_현안</a>
+    <span class="nav-sep">›</span>
+    <span class="nav-link" style="color:var(--text)">AI Governance Platform v05</span>
+  </div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badges">
+    <span class="badge badge-biz">📋 사업_현안</span>
+    <span class="badge badge-conf">🔒 대외비 · 파트너 한정</span>
+    <span class="badge badge-ver">🔷 v05</span>
+    <span class="badge badge-date">📅 2026년 6월</span>
+    <span class="badge badge-new">✦ 보안×컴플라이언스 통합 관문</span>
+  </div>
+  <div class="hero-title">
+    AI Governance Platform<br>
+    <span class="hl">법무법인 린 × Wise42</span> 사업 진출 전략 <span class="hl2">v05</span>
+  </div>
+  <div class="hero-sub">공공·중견기업 AX 시장 기반 신사업 모델 구축 방안 · 보안×컴플라이언스 통합 관문 재구성 · 업스테이지·AIM Intelligence 협력 신설</div>
+  <div class="hero-tagline">
+    "AI를 구축하는 기업은 많다. AI를 <strong>신뢰할 수 있게 만드는</strong> 기업은 아직 없다."
+  </div><br>
+  <div class="hero-tagline-v5">
+    v05 핵심 메시지: "감사·규제·평가 — 그리고 <strong>보안까지</strong> 통과하는 AI를 도입해 드립니다."
+  </div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-card">
+    <div class="stat-num">9.9조</div>
+    <div class="stat-label">2026 정부 AI 예산</div>
+  </div>
+  <div class="stat-card updated">
+    <div class="stat-num">약 1.1조~</div>
+    <div class="stat-label">AX 관련 예산 (출처 재확인)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">3~5조</div>
+    <div class="stat-label">AI Governance TAM</div>
+  </div>
+  <div class="stat-card updated">
+    <div class="stat-num">25~67억</div>
+    <div class="stat-label">3개년 누적 목표 (재보정)</div>
+  </div>
+  <div class="stat-card updated">
+    <div class="stat-num">2028</div>
+    <div class="stat-label">BEP 전환 (조건부)</div>
+  </div>
+  <div class="stat-card updated">
+    <div class="stat-num">Fast Mover</div>
+    <div class="stat-label">공공 거버넌스 공백 선점</div>
+  </div>
+</div>
+
+<!-- V05 개정 요점 -->
+<div class="delta-box">
+  <div class="delta-title">🔷 v05 핵심 개정 요점 — 5대 변화</div>
+  <div class="delta-list">
+    <div class="delta-item">
+      <div class="delta-tag">D10/D11</div>
+      <div class="delta-text"><strong>보안×컴플라이언스 통합 관문 재구성</strong> — AI 규제·개인정보·지식재산·보안을 단일 관문으로 통합. 린·Wise42는 보증 레이어를 직접 보유하고 보안 엔지니어링은 전문사에 prime-sub 외주(3+2 하이브리드). N2SF 2026.5.1+ISMS-P 2026 대개편+ISO 27001+42001+국정원 15위협 제도 융합 반영.</div>
+    </div>
+    <div class="delta-item">
+      <div class="delta-tag">D12</div>
+      <div class="delta-text"><strong>Module 6 AI 보안점검 신설</strong> — KR 방법론·템플릿 패키지에 국정원 15위협·OWASP LLM Top10·MITRE ATLAS 기반 보안 점검 모듈 추가 (프롬프트 인젝션·데이터 오염 레드팀 포함).</div>
+    </div>
+    <div class="delta-item">
+      <div class="delta-tag">D13</div>
+      <div class="delta-text"><strong>플랫폼 자체 인증 게이트</strong> — 플랫폼 SaaS의 ISMS-P(의무화·과태료)+N2SF 대응+(선택)ISO 42001을 공공 구독 판매의 선행 게이트로 설정. SaaS 출시(2027+) 직전 과제로 배치.</div>
+    </div>
+    <div class="delta-item">
+      <div class="delta-tag">3.6 신설</div>
+      <div class="delta-text"><strong>업스테이지 Solar LLM 전략 협력</strong> — 공공용 sovereign 모델 레이어 확보. 독파모 1차 평가 통과 유일 벤처. 정부 지분투자 약 4억달러. 외산 의존 0의 "완전 국산 AI Trust 스택" 구성.</div>
+    </div>
+    <div class="delta-item">
+      <div class="delta-tag">3.7 신설</div>
+      <div class="delta-text"><strong>AIM Intelligence AI-네이티브 보안 협력</strong> — AIM Red(레드팀), AIM Guard(런타임 가드레일), AIM Supervisor(AI 결정 감독). Module 6/7의 런타임 갭 해소. 매쉬업벤처스 포트폴리오.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PARTNERSHIP OVERVIEW -->
+<div class="sec">
+  <div class="sec-title">파트너십 구조 — v05 확장판 (4자 생태계)</div>
+
+  <!-- 린 × Wise42 -->
+  <div class="partner-grid" style="margin-bottom:10px">
+    <div class="partner-card partner-left">
+      <div class="partner-name orange">법무법인 린</div>
+      <div class="partner-tag orange">Legal Trust · 단일 보증 주체</div>
+      <ul class="partner-items">
+        <li>AI Governance 법제도 설계 · 규제 자문</li>
+        <li>AI Audit 독립 검증 · 인증 의견</li>
+        <li>N2SF·ISMS-P 적합성 법적 보증</li>
+        <li>자기 법률·감사 용역 직접 청구(D2)</li>
+        <li>단일 책임주체 — 보안 산출물까지 포괄 보증</li>
+      </ul>
+    </div>
+    <div class="partner-center"><div class="partner-x">×</div></div>
+    <div class="partner-card partner-right">
+      <div class="partner-name blue">Wise42</div>
+      <div class="partner-tag blue">Tech Execution · 플랫폼 주체</div>
+      <ul class="partner-items">
+        <li>AI 거버넌스 플랫폼 개발·운영(SaaS 보유)</li>
+        <li>AX 구축 · 공공 Master Plan 수행 중</li>
+        <li>KR·FIPA warm path(기존 AX 채널)</li>
+        <li>플랫폼·SaaS 매출 Wise42 귀속(분리 구조)</li>
+        <li>N2SF 등급분류 워크스트림 삽입(KR·FIPA)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 업스테이지 × AIM Intelligence -->
+  <div class="grid2">
+    <div class="card card-violet">
+      <div class="card-title violet">🌐 업스테이지 (Upstage) — v05 신설</div>
+      <div class="card-body">
+        <strong style="color:#a78bfa">Sovereign 모델 레이어</strong><br>
+        Solar LLM(Solar Pro 2 31B·Solar-Open-100B) + Document AI. 정부 독자 AI 파운데이션 모델(독파모) 1차 평가 통과 3팀 중 유일 벤처. 정부 직접 지분투자 약 <strong style="color:var(--text)">4억 달러(5,600억)</strong>. 공공 AI에서 외산 LLM(GPT-4o/Claude) 의존을 Solar 주권 모델로 대체 → 외산 의존 0의 완전 국산 AI Trust 스택.
+      </div>
+    </div>
+    <div class="card card-green">
+      <div class="card-title green">🛡️ AIM Intelligence — v05 신설</div>
+      <div class="card-body">
+        <strong style="color:#34d399">AI-네이티브 보안 레이어</strong><br>
+        생성형 AI 탈옥(jailbreak) 정복·안전 AI 전문. 매쉬업벤처스 포트폴리오. ① <strong style="color:var(--text)">AIM Red</strong>(레드팀·취약점 진단·자동공격 프롬프트), ② <strong style="color:var(--text)">AIM Guard</strong>(런타임 가드레일·탈옥·위험생성 자동탐지·차단), ③ <strong style="color:var(--text)">AIM Supervisor</strong>(AI 결정 감독). Module 6/7의 런타임 갭을 정확히 해소.
+      </div>
+    </div>
+  </div>
+
+  <div class="ax-highlight">
+    <div class="ax-quote">🔑 최종 포지셔닝 (v05): AI Trust = 법무(린) + 거버넌스 자동화(Wise42) + Sovereign 모델(업스테이지) + AI-네이티브 보안(AIM Intelligence) — 단일 보증(린)</div>
+    <div class="ax-source">변호사법 제34조 준수 — 각 주체는 자기 용역분을 발주처에 직접 청구. 분리 정산 구조(D2)</div>
+  </div>
+</div>
+
+<!-- CORE OPPORTUNITIES -->
+<div class="sec">
+  <div class="sec-title">핵심 기회 — 보안·거버넌스가 단일 관문으로 융합됐다</div>
+  <div class="opp-list">
+    <div class="opp-item highlight">
+      <div class="opp-icon">🔒</div>
+      <div class="opp-text">
+        <strong>보안-컴플라이언스 제도 융합(2026) — v05 핵심 추가</strong> — N2SF 2026.5.1 개정(물리적 망분리 폐기, C/S/O 데이터 등급제, 생성형 AI 허용) + ISMS-P 2026 대개편(AI 거버넌스 영역 신설, 과태료 3천만원) + ISO 27001+42001 수렴(AI TRiSM) + 국정원 AI 보안 가이드북 15위협. 공공 AI 도입 = 보안등급+거버넌스+보안위협 대응을 <strong>하나의 관문에서 동시에 통과</strong>해야 한다.
+      </div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-icon">⚖️</div>
+      <div class="opp-text">
+        <strong>AI 기본법 2026.1.22 전면 시행 (세계 두 번째 포괄 AI 규제국)</strong> — EU AI Act 이미 발효, 한국은 실질적 첫 전면 적용국. 최소 1년 계도기간이 선제 구축 수요의 골든타임. 단 선점 창이 빠르게 닫히는 중 — 속도전 필요.
+      </div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-icon">🏛️</div>
+      <div class="opp-text">
+        <strong>공공기관 경영평가 AI 가점 신설(2026) — 가장 즉각적인 수요 후크</strong> — 전 공공기관에 AX 도입의 구조적 강제 유인. 가점 요건에 <strong>N2SF 준수 + 외부 검증 필수</strong>가 포함 → 린의 감사·인증 기회와 직결. EU 일정과 무관하게 매년 반복.
+      </div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-icon">💰</div>
+      <div class="opp-text">
+        <strong>2026년 정부 AI 예산 9.9조 원</strong> (전년 3.3조의 약 3배) — AX 관련 예산 약 1.1조~ (정의에 따라 상이, 출처 재확인 필요). 공공 AX 발주 폭증 예고. 연 225조 공공조달 시장이 'AI 첫 구매자'로 전환.
+      </div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-icon">🚀</div>
+      <div class="opp-text">
+        <strong>앵커 고객 warm path — KR(국가철도공단) 1호, FIPA(한국어촌어항공단) 2호</strong> — Wise42가 두 기관의 AX Master Plan 수행 중. KR은 경영평가 아주미흡 + N2SF 필요 + 고영향 안전 AI의 세 조건 동시 충족 → 통합 번들 첫 증명 케이스로 최적.
+      </div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-icon">🌍</div>
+      <div class="opp-text">
+        <strong>글로벌 3축(EU·미·한) 수렴 — 보안·거버넌스 융합은 구조적 방향</strong> — 규제 철학이 정반대인 세 축이 모두 보안과 AI 거버넌스를 묶는 방향으로 수렴. 미국 EO조차 "거버넌스(벤치마킹·사전 review·trusted partner 검증)"를 보안의 운영 방식으로 채택. 수요의 항구성 입증.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 보안 × 컴플라이언스 통합 관문 -->
+<div class="sec">
+  <div class="sec-title violet">🔒 보안 × 컴플라이언스 통합 관문 아키텍처 (v05 핵심)</div>
+  <p style="font-size:13.5px;color:var(--muted);margin-bottom:16px;line-height:1.7">2026년 이전에는 보안과 거버넌스가 <em>분리된 두 트랙</em>이었다. 2026년부터 세 층위에서 동시에 융합되어 <strong style="color:var(--text)">단일 통합 관문</strong>이 됐다. 공공이 AI를 도입하려면 이 하나의 관문을 통째로 통과해야 한다.</p>
+
+  <div class="gate-flow">
+    <div class="gate-step">
+      <div class="gate-node">
+        <div class="gate-dot" style="background:rgba(249,115,22,0.2);border:2px solid rgba(249,115,22,0.6);color:var(--accent)">1</div>
+        <div class="gate-line"></div>
+      </div>
+      <div class="gate-content" style="border-color:rgba(249,115,22,0.3)">
+        <div class="gate-label" style="color:var(--accent)">N2SF 등급분류 (보안 관문)</div>
+        <div class="gate-desc">N2SF 2026.5.1 개정 — C/S/O 데이터 등급 분류 선행 필수. 생성형 AI·외부 SaaS 활용 시 등급분류 미통과 = 도입 불가. <strong>Wise42 + 린(법적 적합성)</strong> + 보안 파트너(통제구현) 결합.</div>
+      </div>
+    </div>
+    <div class="gate-step">
+      <div class="gate-node">
+        <div class="gate-dot" style="background:rgba(59,130,246,0.2);border:2px solid rgba(59,130,246,0.6);color:#60a5fa">2</div>
+        <div class="gate-line"></div>
+      </div>
+      <div class="gate-content" style="border-color:rgba(59,130,246,0.3)">
+        <div class="gate-label" style="color:#60a5fa">AI 영향평가 · 거버넌스 (규제 관문)</div>
+        <div class="gate-desc">AI 기본법 고영향 판단 + ISMS-P 2026 AI 거버넌스 영역 신설 심사 + ISO 42001. <strong>린(법적 판단·영향평가) + Wise42(플랫폼 자동화)</strong>. 경영평가 가점 외부검증 이 관문에서 발행.</div>
+      </div>
+    </div>
+    <div class="gate-step">
+      <div class="gate-node">
+        <div class="gate-dot" style="background:rgba(139,92,246,0.2);border:2px solid rgba(139,92,246,0.6);color:#a78bfa">3</div>
+        <div class="gate-line"></div>
+      </div>
+      <div class="gate-content" style="border-color:rgba(139,92,246,0.3)">
+        <div class="gate-label" style="color:#a78bfa">AI 보안위협 점검 (Module 6 — 레드팀)</div>
+        <div class="gate-desc">국정원 15위협 + OWASP LLM Top10 + MITRE ATLAS 기반 체크리스트. 프롬프트 인젝션·데이터 오염 레드팀(<strong>AIM Red 실행, 린 검증</strong>). v05 신설(D12).</div>
+      </div>
+    </div>
+    <div class="gate-step">
+      <div class="gate-node">
+        <div class="gate-dot" style="background:rgba(16,185,129,0.2);border:2px solid rgba(16,185,129,0.6);color:#34d399">4</div>
+        <div class="gate-line" style="background:transparent"></div>
+      </div>
+      <div class="gate-content" style="border-color:rgba(16,185,129,0.3)">
+        <div class="gate-label" style="color:#34d399">컴플라이언스 감사 · 단일 보증 발행</div>
+        <div class="gate-desc">린의 독립 감사·법적 의견으로 보안+거버넌스+규제 컴플라이언스를 통합 보증. 경영평가 외부검증서 + N2SF 적합성 의견 + ISO 42001 대응 컨설팅 동시 제공.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="background:rgba(255,255,255,0.02);border-color:rgba(139,92,246,0.25);text-align:center;padding:14px">
+    <div style="font-size:13px;color:var(--muted)">규제가 먼저 보안과 거버넌스를 <strong style="color:var(--text)">한 문으로 합쳐놓았고</strong>, 본 사업은 그 문에 맞는 <strong style="color:#a78bfa">열쇠를 통째로 제공</strong>한다.</div>
+  </div>
+</div>
+
+<!-- 3+2 보안 운영 구조 -->
+<div class="sec">
+  <div class="sec-title violet">🏗️ 보안 운영 구조 — 3+2 하이브리드 (D10/D11)</div>
+  <div class="sec-struct">
+    <div class="sec-row direct">
+      <div>
+        <div class="sec-who orange">린 + Wise42 직접 보유</div>
+        <div class="sec-tag tag-prime">Prime · 단일 책임</div>
+      </div>
+      <div class="sec-detail">
+        <strong>보안-컴플라이언스 매핑·검증·감사 레이어 (3계층)</strong><br>
+        N2SF 등급분류 자문 / ISMS-P·AI거버넌스 갭 진단 / 위협 점검 결과 검증·법적 보증. 모든 보안 산출물을 린의 독립 감사·법적 의견이 포괄 보증. 보안 인력 내재화 없음(2026 채용 0, 인적출자 원칙과 정합).
+      </div>
+    </div>
+    <div class="sec-row aim">
+      <div>
+        <div class="sec-who violet">AIM Intelligence</div>
+        <div class="sec-tag tag-strat">AI-네이티브 전략 파트너</div>
+      </div>
+      <div class="sec-detail">
+        <strong>AIM Red</strong>(레드팀 진단·자동 공격 프롬프트 생성 → Module 6) + <strong>AIM Guard</strong>(런타임 가드레일·탈옥·위험생성 자동탐지 → Module 7) + <strong>AIM Supervisor</strong>(AI 결정 감독·human-in-the-loop). 비독점·프로젝트별. AIM Guard ↔ DLP 벤더 상보 운용(AIM=AI 출력 안전, DLP=민감정보 유출 차단).
+      </div>
+    </div>
+    <div class="sec-row infra">
+      <div>
+        <div class="sec-who muted">전통 보안사·DLP 벤더</div>
+        <div class="sec-tag tag-sub">인프라 풀 (Sub)</div>
+      </div>
+      <div class="sec-detail">
+        안랩·이글루·SK쉴더스 등 — 망구성·N2SF 통제구현·모의침투·ISMS-P 실증(TRiSM ④인프라). DLP 벤더: 소만사·지란지교 — 생성형 AI DLP 엔진 구현. 선정 기준: 공공/AI 보안 레퍼런스 + 자체 거버넌스 야망 없는 순수 보안사 + prime 하 협력 의향. 독점 lock-in 금지·프로젝트별.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLATFORM MODULES -->
+<div class="sec">
+  <div class="sec-title">📦 플랫폼 모듈 구조 (v05 — Module 6·7 신설)</div>
+  <div class="module-grid">
+    <div class="module-row">
+      <div class="module-id orange">Module 0</div>
+      <div>
+        <div class="module-name">AI Inventory (AI 등록부)</div>
+        <div class="module-desc">조직 내 모든 AI 시스템 등록·관리 (시스템·모델·데이터·위험등급·책임자). 섀도우 AI 탐지. 전 모듈의 데이터 기반 출발점.</div>
+      </div>
+      <div><span class="module-chip chip-exist">기존</span></div>
+    </div>
+    <div class="module-row">
+      <div class="module-id orange">Module 1</div>
+      <div>
+        <div class="module-name">Regulation Engine</div>
+        <div class="module-desc">AI 기본법·개인정보보호법·저작권법 실시간 모니터링. 법령 변경 시 영향 분석 자동 리포트. ISO 42001·EU AI Act 매핑.</div>
+      </div>
+      <div><span class="module-chip chip-exist">기존</span></div>
+    </div>
+    <div class="module-row">
+      <div class="module-id orange">Module 2</div>
+      <div>
+        <div class="module-name">Risk Engine</div>
+        <div class="module-desc">AI 시스템별 위험등급 자동 분류(고/중/저). NIST AI RMF 기반. 알고리즘 편향성 탐지 연동.</div>
+      </div>
+      <div><span class="module-chip chip-exist">기존</span></div>
+    </div>
+    <div class="module-row">
+      <div class="module-id orange">Module 3</div>
+      <div>
+        <div class="module-name">Audit Engine</div>
+        <div class="module-desc">AI 시스템 운영 이력 자동 수집·저장. 감사 체크리스트 자동화(린 법률팀 설계). 감사보고서 초안 자동 생성.</div>
+      </div>
+      <div><span class="module-chip chip-exist">기존</span></div>
+    </div>
+    <div class="module-row">
+      <div class="module-id orange">Module 4</div>
+      <div>
+        <div class="module-name">Policy Engine</div>
+        <div class="module-desc">기관 특성 맞춤 AI 윤리 가이드라인 자동 생성. 내부 AI 활용 정책 작성 지원. 직원 교육 콘텐츠 자동 큐레이션.</div>
+      </div>
+      <div><span class="module-chip chip-exist">기존</span></div>
+    </div>
+    <div class="module-row">
+      <div class="module-id orange">Module 5</div>
+      <div>
+        <div class="module-name">Executive Dashboard</div>
+        <div class="module-desc">기관 전체 AI 거버넌스 현황. 위험도별 색상 코딩(Red/Yellow/Green). 경영진 대상 월간 리포트 자동 생성.</div>
+      </div>
+      <div><span class="module-chip chip-exist">기존</span></div>
+    </div>
+    <div class="module-row new5">
+      <div class="module-id orange">Module 6</div>
+      <div>
+        <div class="module-name">AI 보안점검 (AI Security Check) <span class="new5-tag">v05 신설</span></div>
+        <div class="module-desc"><strong>국정원 15위협 + OWASP LLM Top10 + MITRE ATLAS</strong> 기반 체크리스트. 프롬프트 인젝션·학습데이터 오염·에이전틱 AI 오작동 등 레드팀. AIM Red 실행 → 린 검증·법적 보증. 보안 엔지니어링(망구성·모의침투)은 보안 파트너가 수행, 표준 양식으로 취합·검증(D10/D11).</div>
+      </div>
+      <div><span class="module-chip chip-new">NEW</span></div>
+    </div>
+    <div class="module-row new5-2">
+      <div class="module-id violet">Module 7</div>
+      <div>
+        <div class="module-name">런타임 검사·집행 (Runtime Inspection) <span class="new5-tag">v05 신설</span></div>
+        <div class="module-desc"><strong>기존 모델의 런타임 갭 → AIM Intelligence 협력으로 해소.</strong> AIM Guard(런타임 모더레이션 API: 탈옥·위험 생성 자동 탐지·차단) + AIM Supervisor(AI 결정 감독) + DLP(민감정보 유출 차단). "일회성 감사 → 상시 모니터링 구독"으로 진화. AI TRiSM ②계층 보완. 포지셔닝: "인증서는 시점, 신뢰는 상시(TRiSM)".</div>
+      </div>
+      <div><span class="module-chip chip-new">NEW</span></div>
+    </div>
+  </div>
+
+  <!-- D13 플랫폼 인증 게이트 -->
+  <div class="card card-accent" style="margin-top:4px">
+    <div class="card-title">🔐 플랫폼 자체 인증 게이트 (D13) — 공공 구독 판매의 선행 관문</div>
+    <div class="card-body">
+      플랫폼 SaaS의 <strong style="color:var(--text)">ISMS-P(의무화·과태료 3천만원) + N2SF 대응 + (선택)ISO 42001</strong>을 공공 구독 판매의 선행 게이트로 설정. SaaS 출시가 2027+이므로 인증은 구독 전환 직전 과제로 배치. 초기에는 보안 파트너의 인증 자산 활용해 게이트 통과 시점 앞당김. AI Cert Hub(ISO 27001+42001 통합 인증 대응)와 연결 — 린·Wise42가 통과한 인증 자산을 고객 인증 컨설팅으로 재판매하는 구조.
+    </div>
+  </div>
+</div>
+
+<!-- AI TRiSM 4계층 -->
+<div class="sec">
+  <div class="sec-title violet">🌐 AI TRiSM 4계층 매핑 — 글로벌 표준 언어</div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:12px">AI TRiSM(Gartner): "AI 시스템을 신뢰가능·안전·준수 상태로 유지하기 위한 지속적 모니터링·검증·집행 기술 역량의 묶음." 2026 baseline: ISO 27001(정보보안)+ISO 42001(AI 거버넌스) 수렴. Gartner 전망: TRiSM 조직, 2026년까지 AI 채택·수용도 50% 개선 / 시장 2032년 약 87억달러.</p>
+  <div class="trism-grid">
+    <div class="trism-row strong">
+      <div class="trism-num">①</div>
+      <div class="trism-layer">AI Governance</div>
+      <div class="trism-content">AI 카탈로그·평가·assurance(가시성·추적·책임). AI Inventory(Module 0)+영향평가+거버넌스 체계. 린(법적 판단)+Wise42(자동화)</div>
+      <div class="trism-status status-strong">✅ 강함</div>
+    </div>
+    <div class="trism-row partial">
+      <div class="trism-num">②</div>
+      <div class="trism-layer">Runtime Inspection</div>
+      <div class="trism-content">작동 중 실시간 모니터링·이상탐지·정책 집행. Module 7 — AIM Guard(가드레일)+AIM Supervisor+DLP. v05 AIM Intelligence 협력으로 보완.</div>
+      <div class="trism-status status-partial">◑ AIM 협력 보완</div>
+    </div>
+    <div class="trism-row strong">
+      <div class="trism-num">③</div>
+      <div class="trism-layer">Information Governance</div>
+      <div class="trism-content">데이터 품질·분류·접근통제. 개인정보·데이터 적법성·ISO 27701. 린(법령 매핑)+Wise42(DLP 설계)</div>
+      <div class="trism-status status-strong">✅ 강함</div>
+    </div>
+    <div class="trism-row strong">
+      <div class="trism-num">④</div>
+      <div class="trism-layer">Infrastructure & Stack</div>
+      <div class="trism-content">인프라·앱 보안. N2SF·ISMS-P·ISO 27001. 보안 파트너(sub) 결합. 린(N2SF 적합성 법적 보증).</div>
+      <div class="trism-status status-strong">✅ 보유</div>
+    </div>
+  </div>
+  <div style="font-size:12px;color:var(--dim);padding:10px 0">* 청중별 언어 분리 전략 — 공공 조달: N2SF·ISMS-P·AI기본법 언어 / 민간·대기업·글로벌·경영진: "AI TRiSM 구현 파트너" 언어</div>
+</div>
+
+<!-- 글로벌 3축 수렴 -->
+<div class="sec">
+  <div class="sec-title">🌏 글로벌 3축 수렴 — 보안·거버넌스 융합은 구조적 방향</div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:14px">규제 철학이 정반대인 EU·미국·한국 세 축이 2026 상반기 모두 보안과 AI 거버넌스를 묶는 방향으로 수렴했다. 이는 수요의 항구성을 입증한다.</p>
+  <div class="axis-grid">
+    <div class="axis-card axis-korea">
+      <div class="axis-flag">🇰🇷</div>
+      <div class="axis-name">한국 (선행 enforcement)</div>
+      <div class="axis-stance korea-stance">즉시 시행</div>
+      <div class="axis-action">AI 기본법 시행(1.22) + N2SF 개정(5.1) + ISMS-P 대개편 + 경영평가 가점. 보안등급·AI 거버넌스·외부검증이 한 관문으로 강제.</div>
+      <div class="axis-signal">⚑ "한국은 EU와 다르다 — 가점과 보안은 <em>지금</em>"</div>
+    </div>
+    <div class="axis-card axis-eu">
+      <div class="axis-flag">🇪🇺</div>
+      <div class="axis-name">EU (규제 우선)</div>
+      <div class="axis-stance eu-stance">고위험 2027.12 연기</div>
+      <div class="axis-action">Digital Omnibus on AI(EP 6.16) — 고위험 의무 연기하되 비동의 합성물·CSAM은 즉시 강화. "간소화하되 진짜 위험은 더 강하게."</div>
+      <div class="axis-signal">※ 연기 내러티브 차단 — 한국은 EU 일정과 무관, N2SF·ISMS-P 보안 의무는 애초에 연기 대상 아님</div>
+    </div>
+    <div class="axis-card axis-us">
+      <div class="axis-flag">🇺🇸</div>
+      <div class="axis-name">미국 (탈규제·혁신 우선)</div>
+      <div class="axis-stance us-stance">규제 No, 거버넌스 Yes</div>
+      <div class="axis-action">백악관 EO(6.2) — 강제 라이선스 거부하되 frontier model 벤치마킹·사전 review·trusted partner 검증 도입. 거버넌스를 보안의 핵심 운영 방식으로 채택.</div>
+      <div class="axis-signal">⇒ 미국식 "trusted partner 제3자 검증" 자리 = 린(독립 보증)+Wise42(기술)+보안 파트너 포지션과 정합</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3개년 로드맵 (재보정) -->
+<div class="sec">
+  <div class="sec-title">📅 3개년 사업 로드맵 (재보정 — v04/v05)</div>
+  <div class="phase-grid">
+    <div class="phase-card ph1">
+      <div class="phase-num">2026 · Phase 0</div>
+      <div class="phase-title">포지셔닝 (투자구간)</div>
+      <div class="phase-period">매출 목표: 0~2억 원 | 평가: 매출이 아닌 선행지표</div>
+      <ul class="phase-items">
+        <li>KR·FIPA Master Plan에 거버넌스·N2SF 워크스트림 삽입</li>
+        <li>KR 고영향 사전진단 킥오프(린 인적출자·무상)</li>
+        <li>변협 유권해석 의뢰(병렬 착수)</li>
+        <li>방법론 패키지 v1 골격 설계</li>
+        <li>보안 파트너 1차 접촉(TOP 7 ⑤⑥⑦)</li>
+      </ul>
+      <div class="phase-kpi">
+        <div class="phase-kpi-label">핵심 선행지표</div>
+        <div style="font-size:12px;color:var(--muted)">KR 1호 계약 진도 / 방법론 v1 완성 / 보안 파트너 MOU / 변협 의견서</div>
+      </div>
+    </div>
+    <div class="phase-card ph2">
+      <div class="phase-num">2027 · Phase 1</div>
+      <div class="phase-title">Scale (단일 앵커 출발)</div>
+      <div class="phase-period">매출 목표: 5~15억 원</div>
+      <ul class="phase-items">
+        <li>KR 1호 유상 레퍼런스 완성</li>
+        <li>방법론 패키지 복제 판매(2호 FIPA 등)</li>
+        <li>디지털서비스 전문계약 등재</li>
+        <li>Module 6/7 플랫폼 통합 및 AIM 결합</li>
+        <li>Solar LLM 공공 PoC 공동 제안</li>
+      </ul>
+      <div class="phase-kpi">
+        <div class="phase-kpi-label">핵심 KPI</div>
+        <div style="font-size:12px;color:var(--muted)">갱신율 목표(규제 캘린더 락인 설계 시) / 레퍼런스 2호 확보</div>
+      </div>
+    </div>
+    <div class="phase-card ph3">
+      <div class="phase-num">2028 · Phase 2</div>
+      <div class="phase-title">Platform (조건부)</div>
+      <div class="phase-period">매출 목표: 20~50억 원 (조건부)</div>
+      <ul class="phase-items">
+        <li>ARR 기반 구독 전환 성공</li>
+        <li>플랫폼 ISMS-P+N2SF+ISO 42001 인증 완료(D13)</li>
+        <li>AI Cert Hub — ISO 27001+42001 통합 인증 대응</li>
+        <li>인증 표준 선점 → ARR 40억+ 잠재</li>
+        <li>Module 7 런타임 상시 모니터링 구독화</li>
+      </ul>
+      <div class="phase-kpi">
+        <div class="phase-kpi-label">조건</div>
+        <div style="font-size:12px;color:var(--muted)">방법론 코드화 + 디지털서비스 전문계약 등재 + 구독 전환 성공 동시</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Market Funnel -->
+  <div class="market-funnel">
+    <div class="funnel-row">
+      <div class="funnel-label">TAM</div>
+      <div class="funnel-bar-wrap"><div class="funnel-bar funnel-tam">잠재 TAM 약 3~5조 원</div></div>
+      <div class="funnel-val orange">3~5조</div>
+    </div>
+    <div class="funnel-row">
+      <div class="funnel-label">SAM</div>
+      <div class="funnel-bar-wrap"><div class="funnel-bar funnel-sam">약 2,745억</div></div>
+      <div class="funnel-val blue">~2,745억</div>
+    </div>
+    <div class="funnel-row">
+      <div class="funnel-label">SOM(2028)</div>
+      <div class="funnel-bar-wrap"><div class="funnel-bar funnel-som">20~50억</div></div>
+      <div class="funnel-val green">20~50억</div>
+    </div>
+  </div>
+</div>
+
+<!-- 업스테이지 Solar 협력 -->
+<div class="sec">
+  <div class="sec-title violet">☀️ 업스테이지 협력 — Sovereign 모델 레이어 (3.6 v05 신설)</div>
+  <div class="ax-highlight">
+    <div class="ax-quote">핵심 포지션: Solar(국산 모델) + 린×Wise42(신뢰 보증) + 보안/DLP(국산) = 외산 의존 0의 "완전 국산 AI Trust 스택" — 외산 모델 기반 경쟁자가 복제 불가능한 공공 차별화.</div>
+    <div class="ax-source">업스테이지: 독파모 1차 평가 통과 3팀 중 유일 벤처 / 정부 직접 지분투자 약 4억달러(5,600억)</div>
+  </div>
+  <table class="tbl-violet">
+    <thead><tr><th>레이어</th><th>업스테이지</th><th>Wise42</th><th>린</th><th>보안 파트너</th></tr></thead>
+    <tbody>
+      <tr><td><strong>AI 모델·엔진</strong></td><td>★ Solar sovereign LLM·Document AI</td><td>연동·파인튜닝</td><td>—</td><td>—</td></tr>
+      <tr><td><strong>거버넌스 자동화</strong></td><td>—</td><td>★ 매핑 자동화</td><td>정책·기준 설계</td><td>—</td></tr>
+      <tr><td><strong>법적 보증·감사</strong></td><td>피검증 대상</td><td>증적 수집</td><td>★ 독립 보증·감사</td><td>—</td></tr>
+      <tr><td><strong>보안·DLP·N2SF</strong></td><td>모델 보안 협조</td><td>연동</td><td>법적 적합성</td><td>★ 엔지니어링</td></tr>
+      <tr><td><strong>공공 GTM</strong></td><td>★ 모델 신뢰·정부 관계</td><td>AX 채널</td><td>거버넌스 add-on·법적 권위</td><td>보안 신뢰</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px;color:var(--dim);margin-top:8px">협력 구조: MOU → Solar 탑재 거버넌스 플랫폼 PoC → 공공 공동 제안. 비독점·프로젝트별·멀티모델(공공=Solar 우선, 민간·글로벌=외산 병행). 독립성 충돌 주의 — AGP는 Upstage 모델 내부 인증 아님, 고객의 배포·거버넌스 검증.</p>
+</div>
+
+<!-- TOP 7 즉각 실행 -->
+<div class="sec">
+  <div class="sec-title">⚡ 즉각 실행 권고 — TOP 7 (30일 이내, v05 확장)</div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:14px">v04의 TOP 4에 보안×컴플라이언스 통합 액션 3건(⑤~⑦)을 추가하여 TOP 7로 확장(v05).</p>
+  <div class="top7-list">
+    <div class="top7-item top7-1">
+      <div class="top7-num">①</div>
+      <div>
+        <div class="top7-title">대한변협 사전 유권해석 의뢰</div>
+        <div class="top7-desc">리드타임이 길어 최우선 병렬 착수. 지분/로열티 상방용 — 1호 진입의 임계경로는 아님. 로톡·대륙아주 선례 참고. 갱신율 80% "규제 캘린더 락인" 설계 전제 시에만 유효.</div>
+      </div>
+      <div><span class="top7-owner owner-rin">린</span></div>
+    </div>
+    <div class="top7-item top7-2">
+      <div class="top7-num">②</div>
+      <div>
+        <div class="top7-title">두 Master Plan(KR·FIPA) 거버넌스 워크스트림 삽입</div>
+        <div class="top7-desc">Master Plan 확정(2026말) 전 데드라인. Wise42 기존 팀이 수행 중인 AX 플랜에 AI 거버넌스 워크스트림 add-on으로 삽입.</div>
+      </div>
+      <div><span class="top7-owner owner-wise">Wise42</span></div>
+    </div>
+    <div class="top7-item top7-3">
+      <div class="top7-num">③</div>
+      <div>
+        <div class="top7-title">KR 고영향 사전진단 킥오프</div>
+        <div class="top7-desc">린 인적출자·무상으로 진행. 1호 레퍼런스의 출발점(변호사법 제34조 안전). KR은 경영평가 아주미흡+N2SF 필요+고영향 안전 AI로 통합 번들 첫 증명 케이스.</div>
+      </div>
+      <div><span class="top7-owner owner-rin">린</span></div>
+    </div>
+    <div class="top7-item top7-4">
+      <div class="top7-num">④</div>
+      <div>
+        <div class="top7-title">방법론 패키지 골격 설계</div>
+        <div class="top7-desc">재사용 자산 v1 — 고영향 영향평가 + 경영평가 가점 대응 표준 방법론·템플릿의 뼈대. 기관 복제 판매의 핵심 자산. Customer-first: KR 실전 검증 후 MVP화 순서 준수.</div>
+      </div>
+      <div><span class="top7-owner owner-joint">공동</span></div>
+    </div>
+    <div class="top7-item top7-5">
+      <div class="top7-num">⑤</div>
+      <div>
+        <div class="top7-title">보안 파트너 1차 후보 선정·접촉 <span class="new5-tag">v05 신설</span></div>
+        <div class="top7-desc">KISA N2SF 컨소시엄 플레이어 중 "순수 보안 엔지니어링 + prime 하 sub 의향" 2~3곳 선정. 독점 lock-in 금지, 프로젝트별. AIM Intelligence(AI-네이티브)는 별도로 전략 협력 MOU.</div>
+      </div>
+      <div><span class="top7-owner owner-joint">공동</span></div>
+    </div>
+    <div class="top7-item top7-6">
+      <div class="top7-num">⑥</div>
+      <div>
+        <div class="top7-title">KR Master Plan에 N2SF 등급분류 워크스트림 추가 <span class="new5-tag">v05 신설</span></div>
+        <div class="top7-desc">통합 번들 첫 증명 케이스. Wise42 Master Plan에 기존 거버넌스 워크스트림에 더해 N2SF 등급분류 워크스트림 삽입. 보안 파트너(sub) 연계.</div>
+      </div>
+      <div><span class="top7-owner owner-wise">Wise42+보안사</span></div>
+    </div>
+    <div class="top7-item top7-7">
+      <div class="top7-num">⑦</div>
+      <div>
+        <div class="top7-title">방법론 패키지에 'AI 보안점검' 모듈 골격 추가 <span class="new5-tag">v05 신설</span></div>
+        <div class="top7-desc">국정원 15위협·OWASP LLM Top10·MITRE ATLAS 기반(Module 6·제16.6.5장). AIM Red 레드팀 프레임 통합. 린의 법적 검증 체크리스트 포함.</div>
+      </div>
+      <div><span class="top7-owner owner-joint">공동</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 리스크 매트릭스 -->
+<div class="sec">
+  <div class="sec-title">⚠️ 주요 리스크 매트릭스 (v05 업데이트)</div>
+  <div class="risk-list">
+    <div class="risk-row">
+      <div class="risk-name">변호사법 제34조 — 비변호사와 이익분배 금지</div>
+      <div><span class="risk-chip risk-A">A등급</span></div>
+      <div><span class="risk-chip" style="background:rgba(16,185,129,0.12);color:#34d399">관리중</span></div>
+      <div class="risk-sub">대응: 분리 정산 구조(D2) — 각자 발주처에 직접 청구, 배분 약정 없음. 1호 린 fee-for-service 진입. 변협 유권해석 병렬 의뢰(지분/로열티 상방용).</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-name">보안 엔지니어링 외주 의존 (D10)</div>
+      <div><span class="risk-chip risk-A">A등급</span></div>
+      <div><span class="risk-chip" style="background:rgba(251,191,36,0.12);color:#fbbf24">모니터링</span></div>
+      <div class="risk-sub">대응: 복수 파트너 풀·프로젝트별 운용(독점 lock-in 금지). 린 독립 감사로 품질 보증. 단일 책임주체 린 유지.</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-name">선점 창 조기 소멸 — 김앤장·광장·삼정·삼일 이미 진입</div>
+      <div><span class="risk-chip risk-A">A등급</span></div>
+      <div><span class="risk-chip" style="background:rgba(251,191,36,0.12);color:#fbbf24">속도전 대응</span></div>
+      <div class="risk-sub">대응: Customer-first(앵커 고객 검증 우선, 제품 선개발 폐기). 공공 거버넌스 공백 레이어 + 중견 미진출 시장 집중. Wise42 warm path 즉시 가동.</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-name">AIM Intelligence 단일 AI-네이티브 보안 파트너 집중</div>
+      <div><span class="risk-chip risk-B">B등급</span></div>
+      <div><span class="risk-chip" style="background:rgba(16,185,129,0.12);color:#34d399">관리중</span></div>
+      <div class="risk-sub">대응: 비독점·프로젝트별. 대체 AI보안사 풀 확보. 산출물은 린 검증. 런타임 갭은 AIM 협력으로 해소.</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-name">플랫폼 ISMS-P 취득 비용·기간 (D13)</div>
+      <div><span class="risk-chip risk-A">A등급</span></div>
+      <div><span class="risk-chip" style="background:rgba(251,191,36,0.12);color:#fbbf24">로드맵 조기 확보</span></div>
+      <div class="risk-sub">대응: 구독 매출의 선행 게이트 — 2027 조기 로드맵 확보. 초기에는 보안사 인증 자산 활용해 게이트 통과 시점 앞당김.</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-name">업스테이지 GTM 파트너십 ↔ 독립 감사 역할 충돌</div>
+      <div><span class="risk-chip risk-B">B등급</span></div>
+      <div><span class="risk-chip" style="background:rgba(16,185,129,0.12);color:#34d399">구조 분리</span></div>
+      <div class="risk-sub">대응: AGP는 Upstage 모델 내부를 인증하지 않고, 고객의 배포·거버넌스를 검증. GTM 파트너십과 독립 감사 기능 구조적 분리.</div>
+    </div>
+  </div>
+</div>
+
+<!-- GARAMbada 인사이트 -->
+<div class="insight-box">
+  <div class="insight-title">💡 GARAMbada 인사이트 — Company Builder 관점</div>
+  <div class="insight-list">
+    <div class="insight-item">
+      <div class="insight-num">1</div>
+      <div class="insight-text">
+        <strong>통합 관문이 새로운 SaaS 해자다.</strong> v05의 핵심은 "보안까지 통과"라는 메시지가 아니라, 그 메시지를 가능하게 하는 구조다 — N2SF·ISMS-P·AI기본법이 세 개의 별도 관문을 하나로 합쳐버렸다. 이것이 린+Wise42+업스테이지+AIM의 통합 번들을 경쟁사가 복제할 수 없게 만드는 진짜 해자다. 규제가 만들어준 자연독점 구조. Company Builder가 가장 좋아하는 패턴이다.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">2</div>
+      <div class="insight-text">
+        <strong>김앤장·광장이 들어온 것이 위협이 아니라 시장 존재 증명이다.</strong> v04 이전의 "국내 유일" 포지셔닝은 틀렸지만, 대형 로펌의 진입이 오히려 AI 거버넌스 시장이 실재함을 증명한다. 문제는 그들이 단가 때문에 가지 않는 중견 시장과, SI 컨소시엄이 빠뜨리는 거버넌스 레이어가 여전히 비어 있다는 것. 빈 시장 + warm path(Wise42 기존 채널) = Company Builder가 선택하는 최적 진입로.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">3</div>
+      <div class="insight-text">
+        <strong>Customer-first는 원칙이 아니라 생존 조건이다.</strong> KR 1호에서 방법론을 실전 검증하고, 검증된 것만 제품화하는 순서가 핵심이다. 이것은 Lean Startup의 validated learning 그대로다. 단 Company Builder 관점에서는 여기서 하나를 더 봐야 한다 — KR에서 나오는 재사용 방법론이 후속 기관 판매의 COGS를 0에 가깝게 만든다. 그게 Professional Services에서 Software로 비즈니스 모델이 전환되는 순간이다.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">4</div>
+      <div class="insight-text">
+        <strong>분리 정산 구조(D2)가 독립성의 해자다.</strong> 변호사법 제34조 준수를 위한 분리 청구 구조가 실은 린의 "독립 보증자" 포지션을 강화하는 전략적 자산이다. 회계감사 모델과 동일 — 외부 감사가 기업으로부터 독립적이기 때문에 신뢰받듯이, 린이 Wise42로부터 매출을 나눠받지 않기 때문에 법적 의견의 권위가 생긴다. 규제 리스크가 차별화 도구가 된 사례.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">5</div>
+      <div class="insight-text">
+        <strong>업스테이지+AIM Intelligence 파트너십은 플라이휠이다.</strong> Solar LLM으로 외산 의존을 없애고, AIM Guard로 런타임 보안을 채우면, 공공 AI 도입 전 과정에서 린+Wise42가 "끝까지 책임지는" 유일한 플레이어가 된다. 이 완결성이 Module 7의 "일회성 감사 → 상시 모니터링 구독" 전환을 만들고, 구독 모델이 ARR로 쌓이면 회사 가치가 급변한다. AI Governance는 AI와 함께 성장하는 Recurring Revenue 사업이다.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAGS -->
+<div class="tags">
+  <span class="tag">AI Governance Platform</span>
+  <span class="tag">법무법인 린</span>
+  <span class="tag">Wise42</span>
+  <span class="tag">보안×컴플라이언스 통합 관문</span>
+  <span class="tag">N2SF</span>
+  <span class="tag">ISMS-P 2026</span>
+  <span class="tag">AI TRiSM</span>
+  <span class="tag">업스테이지 Solar LLM</span>
+  <span class="tag">AIM Intelligence</span>
+  <span class="tag">국정원 15위협</span>
+  <span class="tag">OWASP LLM Top10</span>
+  <span class="tag">3+2 하이브리드</span>
+  <span class="tag">Module 6 AI보안점검</span>
+  <span class="tag">Module 7 런타임검사</span>
+  <span class="tag">국가철도공단 KR</span>
+  <span class="tag">AI 기본법</span>
+  <span class="tag">Fast Mover</span>
+  <span class="tag">v05</span>
+  <span class="tag">대외비</span>
+  <span class="tag">사업_현안</span>
+</div>
+
+</main>
+
+<footer>
+  GARAMwiki · 사업_현안 · AI Governance Platform v05 · 법무법인 린 × Wise42 · 2026년 6월 · 대외비(파트너 한정)
+</footer>
+
+</body>
+</html>
