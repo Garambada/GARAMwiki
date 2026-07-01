@@ -107,6 +107,10 @@ ARTICLE_META = {
         "title": "Microsoft 2026 Work Trend Index<br>— 에이전트 시대, 인간 주체성의 재정의",
         "tags":  ["Microsoft WTI", "Frontier Firm", "Transformation Paradox", "Learning System", "AI Agency"],
     },
+    "2026-07_Stanford_HAI_AI_Index_2026_연례보고서.html": {
+        "title": "Stanford HAI 2026 AI Index Report<br>— $581.7B 투자·SWE-bench 100%·개발자 -20%·미중 2.7% 격차 · 기술-거버넌스 비대칭 심화",
+        "tags":  ["Stanford HAI", "AI Index 2026", "AI 현황 보고서", "AI 투자", "미중 AI 경쟁", "AI 노동시장", "SWE-bench", "AI 거버넌스", "생성AI 보급", "환경비용"],
+    },
     "2026-05_KPMG_Venture_Pulse_Q1_2026_Global.html": {
         "title": "KPMG Venture Pulse Q1 2026<br>— 글로벌 VC 투자 역대 최고 $3,309억, AI 메가딜 집중",
         "tags":  ["KPMG Venture Pulse", "글로벌 VC", "OpenAI $122B", "AI 메가딜", "방산 테크"],

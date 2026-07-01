@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stanford HAI 2026 AI Index Report — AI가 할 수 있는 것 vs 관리할 수 있는 것의 격차 | GARAMwiki</title>
+<style>
+:root {
+  --bg: #0c0e14; --surface: #13151f; --surface2: #1a1d2e;
+  --border: #2a2d3e; --border2: rgba(255,255,255,0.07);
+  --accent: #3b82f6; --accent2: #60a5fa; --accent3: #93c5fd;
+  --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b;
+  --danger: #ef4444; --warning: #f59e0b; --success: #10b981;
+  --purple: #a78bfa; --orange: #f97316; --red: #f87171;
+  --radius: 12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;line-height:1.7;font-size:15px}
+a{color:var(--accent2);text-decoration:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(12,14,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-size:18px;font-weight:800;color:var(--accent);text-decoration:none}
+.nav-links{display:flex;gap:20px}
+.nav-links a{color:var(--muted);font-size:13px;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0a1628 0%,#0c1a3a 40%,#0c0e14 100%);border-bottom:1px solid var(--border);padding:72px 24px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;left:-20%;width:80%;height:200%;background:radial-gradient(ellipse,rgba(59,130,246,0.10) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.35);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;color:var(--accent2);letter-spacing:.5px;margin-bottom:24px;text-transform:uppercase}
+.hero h1{font-size:clamp(24px,4vw,40px);font-weight:800;line-height:1.25;color:#fff;margin-bottom:16px;letter-spacing:-0.5px}
+.hero h1 span{color:var(--accent2)}
+.hero-sub{font-size:16px;color:var(--muted);max-width:680px;margin:0 auto 28px;line-height:1.65}
+.hero-meta{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--muted)}
+.hero-chip strong{color:var(--text)}
+
+/* MAIN */
+main{max-width:1100px;margin:0 auto;padding:48px 24px 80px}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:40px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;text-align:center;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sc-blue::before{background:var(--accent)}
+.sc-green::before{background:var(--success)}
+.sc-orange::before{background:var(--orange)}
+.sc-red::before{background:var(--danger)}
+.sc-purple::before{background:var(--purple)}
+.sc-yellow::before{background:var(--warning)}
+.stat-num{font-size:clamp(20px,3vw,28px);font-weight:800;line-height:1.1;margin-bottom:5px}
+.sn-blue{color:var(--accent2)}
+.sn-green{color:var(--success)}
+.sn-orange{color:var(--orange)}
+.sn-red{color:var(--red)}
+.sn-purple{color:var(--purple)}
+.sn-yellow{color:var(--warning)}
+.stat-label{font-size:11px;color:var(--muted);line-height:1.4}
+.stat-delta{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-top:6px}
+.delta-up{background:rgba(16,185,129,0.15);color:#34d399}
+.delta-down{background:rgba(239,68,68,0.15);color:#f87171}
+
+/* SECTION */
+.sec{margin:44px 0}
+.sec-label{font-size:11px;font-weight:700;color:var(--accent2);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.sec-h2{font-size:21px;font-weight:800;color:#fff;margin-bottom:12px;letter-spacing:-0.3px}
+.sec-p{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:14px}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:16px}
+.card-grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.card.blue{border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.05)}
+.card.green{border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.05)}
+.card.orange{border-color:rgba(249,115,22,0.3);background:rgba(249,115,22,0.05)}
+.card.red{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.05)}
+.card.purple{border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.05)}
+.card.yellow{border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.05)}
+.card-icon{font-size:24px;margin-bottom:10px}
+.card-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
+.card-body{font-size:13px;color:var(--muted);line-height:1.65}
+.card-num{font-size:26px;font-weight:800;margin-bottom:4px;line-height:1}
+
+/* BENCH TABLE */
+.bench-list{display:grid;gap:8px;margin-bottom:16px}
+.bench-row{display:grid;grid-template-columns:220px 1fr 100px;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px}
+.bench-name{font-size:13px;font-weight:700;color:var(--text)}
+.bench-bar-wrap{height:24px;background:rgba(255,255,255,0.05);border-radius:6px;overflow:hidden;position:relative}
+.bench-bar{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9)}
+.bench-val{font-size:14px;font-weight:800;text-align:right}
+
+/* BAR CHART */
+.bar-chart{display:grid;gap:10px;margin-bottom:16px}
+.bar-row{display:grid;grid-template-columns:140px 1fr 100px;gap:10px;align-items:center}
+.bar-label{font-size:12.5px;color:var(--muted);text-align:right}
+.bar-wrap{height:26px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:700;color:rgba(255,255,255,0.85);transition:width .5s}
+.bar-val{font-size:13px;font-weight:700;text-align:left}
+
+/* HIGHLIGHT BOX */
+.highlight{background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(16,185,129,0.05));border:1px solid rgba(59,130,246,0.25);border-left:4px solid var(--accent);border-radius:var(--radius);padding:18px 22px;margin:14px 0}
+.highlight-text{font-size:14.5px;font-weight:600;color:var(--text);line-height:1.65}
+.highlight-sub{font-size:12.5px;color:var(--muted);margin-top:6px}
+
+/* AXIS CARDS */
+.axis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.axis-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden}
+.axis-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.axis-us::before{background:var(--accent)}
+.axis-cn::before{background:var(--danger)}
+.axis-flag{font-size:20px;margin-bottom:8px}
+.axis-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px}
+.axis-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);padding:4px 0;border-bottom:1px solid var(--border)}
+.axis-row:last-child{border-bottom:none}
+.axis-val{font-weight:700;color:var(--text)}
+.axis-val.blue{color:var(--accent2)}
+.axis-val.red{color:var(--red)}
+
+/* ENV CARDS */
+.env-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.env-card{background:var(--surface);border:1px solid rgba(239,68,68,0.25);border-radius:var(--radius);padding:16px;text-align:center}
+.env-num{font-size:24px;font-weight:800;color:var(--red);margin-bottom:4px}
+.env-label{font-size:12px;color:var(--muted);line-height:1.4}
+
+/* POLICY CARDS */
+.policy-list{display:grid;gap:8px;margin-bottom:14px}
+.policy-row{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px}
+.policy-icon{font-size:20px;margin-top:2px}
+.policy-text{font-size:13.5px;color:var(--muted);line-height:1.6}
+.policy-text strong{color:var(--text)}
+
+/* OPINION */
+.opinion-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.opinion-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.opinion-pct{font-size:30px;font-weight:800;margin-bottom:4px}
+.opinion-label{font-size:12px;color:var(--muted);line-height:1.4}
+.opinion-gap{background:var(--surface);border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.gap-title{font-size:12px;font-weight:700;color:var(--warning);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+.gap-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.gap-label{font-size:13px;color:var(--muted)}
+.gap-bar-outer{flex:1;height:18px;background:rgba(255,255,255,0.05);border-radius:6px;overflow:hidden;margin:0 12px}
+.gap-bar-inner{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.85)}
+.gap-val{font-size:13px;font-weight:700;min-width:36px;text-align:right}
+
+/* CHAPTERS TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th{background:rgba(59,130,246,0.1);color:var(--accent2);font-weight:700;padding:10px 14px;text-align:left;border-bottom:2px solid rgba(59,130,246,0.25)}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,0.02)}
+td strong{color:var(--text)}
+
+/* INSIGHT BOX */
+.insight-box{background:linear-gradient(135deg,rgba(59,130,246,0.06),rgba(16,185,129,0.04));border:1px solid rgba(59,130,246,0.2);border-radius:var(--radius);padding:24px;margin-top:12px}
+.insight-title{font-size:12px;font-weight:700;color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.insight-list{display:grid;gap:14px}
+.insight-item{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.insight-num{width:30px;height:30px;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--accent2);flex-shrink:0}
+.insight-text{font-size:13.5px;color:var(--muted);line-height:1.65;padding-top:4px}
+.insight-text strong{color:var(--text)}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+.tag{font-size:11px;color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:3px 10px;border-radius:10px}
+
+footer{text-align:center;font-size:12px;color:var(--dim);padding:24px;border-top:1px solid var(--border)}
+
+@media(max-width:700px){
+  .bench-row{grid-template-columns:1fr auto}.bar-row{grid-template-columns:1fr auto}
+  .axis-grid{grid-template-columns:1fr}.opinion-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">🏠 GARAMwiki</a>
+  <div class="nav-links">
+    <a href="#">📊 트렌드_인텔리전스</a>
+    <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report" target="_blank">↗ 원본 보고서</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📊 트렌드_인텔리전스 · 연례 보고서</div>
+  <h1>Stanford HAI <span>2026 AI Index Report</span><br>"할 수 있는 것" vs "관리할 수 있는 것"의 격차</h1>
+  <div class="hero-sub">7번째 연례 AI 현황 보고서 · 9개 챕터 · 기술 성능이 인간 기준선을 돌파하는 시대, AI 거버넌스·사회 준비는 한참 뒤처지고 있다</div>
+  <div class="hero-meta">
+    <div class="hero-chip"><strong>발행:</strong> 2026년 4월</div>
+    <div class="hero-chip"><strong>기관:</strong> Stanford HAI</div>
+    <div class="hero-chip"><strong>에디션:</strong> 7th Annual</div>
+    <div class="hero-chip"><strong>챕터:</strong> 9개 분야</div>
+    <div class="hero-chip"><strong>핵심 메시지:</strong> 기술-거버넌스 비대칭 심화</div>
+  </div>
+</div>
+
+<main>
+
+<!-- STAT GRID -->
+<div class="stat-grid">
+  <div class="stat-card sc-blue">
+    <div class="stat-num sn-blue">$581.7B</div>
+    <div class="stat-label">2025 글로벌 기업 AI 투자</div>
+    <div class="stat-delta delta-up">+130% YoY</div>
+  </div>
+  <div class="stat-card sc-blue">
+    <div class="stat-num sn-blue">53%</div>
+    <div class="stat-label">생성AI 글로벌 인구 보급률 (3년)</div>
+    <div class="stat-delta delta-up">PC·인터넷보다 빠름</div>
+  </div>
+  <div class="stat-card sc-green">
+    <div class="stat-num sn-green">88%</div>
+    <div class="stat-label">기업 조직 AI 도입률</div>
+    <div class="stat-delta delta-up">↑ 전년 대비</div>
+  </div>
+  <div class="stat-card sc-green">
+    <div class="stat-num sn-green">$172B</div>
+    <div class="stat-label">미국 소비자 생성AI 연간 잉여가치</div>
+    <div class="stat-delta delta-up">전년 $112B → 3배↑ (중간값)</div>
+  </div>
+  <div class="stat-card sc-orange">
+    <div class="stat-num sn-orange">~100%</div>
+    <div class="stat-label">SWE-bench Verified (코딩)</div>
+    <div class="stat-delta delta-up">1년 전 60% → 인간 수준 돌파</div>
+  </div>
+  <div class="stat-card sc-red">
+    <div class="stat-num sn-red">-20%</div>
+    <div class="stat-label">22~25세 소프트웨어 개발자 고용</div>
+    <div class="stat-delta delta-down">최초 AI 귀인 화이트칼라 감소</div>
+  </div>
+  <div class="stat-card sc-red">
+    <div class="stat-num sn-red">72,816</div>
+    <div class="stat-label">Grok 4 훈련 탄소 배출 (tCO₂eq)</div>
+    <div class="stat-delta delta-down">차량 17,000대 1년 배출</div>
+  </div>
+  <div class="stat-card sc-purple">
+    <div class="stat-num sn-purple">2.7%</div>
+    <div class="stat-label">미-중 AI 성능 격차 (2026.3)</div>
+    <div class="stat-delta delta-down">사실상 동급 — 1위 수시로 교체</div>
+  </div>
+</div>
+
+<!-- HIGHLIGHT -->
+<div class="highlight">
+  <div class="highlight-text">⚡ 핵심 메타 발견 — "AI가 할 수 있는 것"과 "AI를 관리할 수 있는 것" 사이의 간극이 전례 없이 빠르게 벌어지고 있다. 기술은 인간 기준선을 돌파했지만, 거버넌스 프레임워크·평가 체계·노동 정책·사회적 신뢰 구조는 한참 뒤처지고 있다.</div>
+  <div class="highlight-sub">Stanford HAI 2026 AI Index Report 핵심 논지</div>
+</div>
+
+<!-- TECHNICAL PERFORMANCE -->
+<div class="sec">
+  <div class="sec-label">🎯 기술 성능</div>
+  <div class="sec-h2">인간 기준선을 돌파했다</div>
+  <div class="sec-p">2025년 한 해 동안 AI는 PhD급 과학 문항에서 처음으로 인간 전문가를 초월했다. 코딩·수학·추론 전 분야에서 동시에 벤치마크 기록이 갱신됐다.</div>
+
+  <div class="bench-list">
+    <div class="bench-row">
+      <div class="bench-name">SWE-bench Verified<br><span style="font-size:11px;color:var(--dim)">실제 GitHub 이슈 기반 코딩</span></div>
+      <div class="bench-bar-wrap">
+        <div class="bench-bar" style="width:99%;background:linear-gradient(90deg,rgba(59,130,246,0.7),rgba(59,130,246,0.4))">~100% — 인간 수준 도달</div>
+      </div>
+      <div class="bench-val" style="color:var(--accent2)">~100%</div>
+    </div>
+    <div class="bench-row">
+      <div class="bench-name">Humanity's Last Exam<br><span style="font-size:11px;color:var(--dim)">PhD급 과학 전문가 시험</span></div>
+      <div class="bench-bar-wrap">
+        <div class="bench-bar" style="width:50%;background:linear-gradient(90deg,rgba(16,185,129,0.7),rgba(16,185,129,0.4))">최상위 모델 50%+ 달성</div>
+      </div>
+      <div class="bench-val" style="color:var(--success)">38→50%+</div>
+    </div>
+    <div class="bench-row">
+      <div class="bench-name">IMO 국제수학올림피아드<br><span style="font-size:11px;color:var(--dim)">Google Gemini Deep Think</span></div>
+      <div class="bench-bar-wrap">
+        <div class="bench-bar" style="width:95%;background:linear-gradient(90deg,rgba(245,158,11,0.7),rgba(245,158,11,0.4))">금메달 획득 — 최상위 수학 영재 수준</div>
+      </div>
+      <div class="bench-val" style="color:var(--warning)">🥇 금메달</div>
+    </div>
+    <div class="bench-row">
+      <div class="bench-name">PhD 과학 질문 벤치마크<br><span style="font-size:11px;color:var(--dim)">인간 전문가 기준선 대비</span></div>
+      <div class="bench-bar-wrap">
+        <div class="bench-bar" style="width:90%;background:linear-gradient(90deg,rgba(167,139,250,0.7),rgba(167,139,250,0.4))">최초로 인간 전문가 기준선 초과</div>
+      </div>
+      <div class="bench-val" style="color:var(--purple)">초과 달성</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card blue">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">에이전틱 AI — 새로운 벤치마크 프론티어</div>
+      <div class="card-body">Agentic AI(LangGraph 등) 스킬 클러스터가 2024→2025 기간 폭발적으로 성장. 이미지·영상·언어·음성·추론·로보틱스·에이전틱 시스템 전 분야에서 새 벤치마크 기록 갱신.</div>
+    </div>
+    <div class="card green">
+      <div class="card-icon">🔬</div>
+      <div class="card-title">과학 전 분야 침투 — 신설 챕터</div>
+      <div class="card-body">2026 AI Index에 '과학' 챕터 신설. 생물학·화학·물리학·천문학 전 영역에서 AI 역할 급확대. 로보틱스 분야에서 중국이 논문·특허·산업용 로봇 설치 수 세계 1위.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADOPTION & VALUE -->
+<div class="sec">
+  <div class="sec-label">🌐 채택 & 소비자 가치</div>
+  <div class="sec-h2">PC보다 빠른 보급, 3배로 뛴 사용자 가치</div>
+
+  <div class="card-grid3">
+    <div class="card blue">
+      <div class="card-num" style="color:var(--accent2)">53%</div>
+      <div class="card-title">글로벌 인구 생성AI 보급률</div>
+      <div class="card-body">단 3년 만에 달성 — PC(16년), 인터넷(7년)보다 빠른 역대 최단기 보급. 단, 속도는 국가별 GDP와 강한 양의 상관관계.</div>
+    </div>
+    <div class="card green">
+      <div class="card-num" style="color:var(--success)">88%</div>
+      <div class="card-title">기업 조직 AI 도입률</div>
+      <div class="card-body">전년 대비 급등. 4 in 5 대학생이 생성AI 사용. 조직 내 AI는 더 이상 선택이 아닌 기본값.</div>
+    </div>
+    <div class="card orange">
+      <div class="card-num" style="color:var(--orange)">$172B</div>
+      <div class="card-title">미국 소비자 연간 잉여가치</div>
+      <div class="card-body">2026년 초 기준 연간 $172B(전년 $112B). 사용자 중간값 가치 1년 사이 3배 급등. 생성AI가 만들어내는 경제적 현실 수치.</div>
+    </div>
+  </div>
+</div>
+
+<!-- INVESTMENT -->
+<div class="sec">
+  <div class="sec-label">💰 투자·자본 — $581.7B 시대</div>
+  <div class="sec-h2">글로벌 AI 투자가 130% 폭증했다</div>
+
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">글로벌 기업 투자</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,rgba(59,130,246,0.6),rgba(59,130,246,0.3))">$581.7B (+130%)</div></div>
+      <div class="bar-val" style="color:var(--accent2)">$581.7B</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">민간 투자 (Private)</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:59%;background:linear-gradient(90deg,rgba(16,185,129,0.6),rgba(16,185,129,0.3))">$344.7B (+127.5%)</div></div>
+      <div class="bar-val" style="color:var(--success)">$344.7B</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">미국 투자</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:49%;background:linear-gradient(90deg,rgba(249,115,22,0.6),rgba(249,115,22,0.3))">$285.9B (중국의 23.1배)</div></div>
+      <div class="bar-val" style="color:var(--orange)">$285.9B</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">중국 투자</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:8%;background:linear-gradient(90deg,rgba(239,68,68,0.6),rgba(239,68,68,0.3))">$12.4B</div></div>
+      <div class="bar-val" style="color:var(--red)">$12.4B</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">생성AI 비중</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:50%;background:linear-gradient(90deg,rgba(167,139,250,0.6),rgba(167,139,250,0.3))">전체 민간 AI 투자의 ~50% / +200%</div></div>
+      <div class="bar-val" style="color:var(--purple)">~50%</div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-text">💡 미국의 AI 투자는 중국의 23.1배. 그러나 기술 성능 격차는 이미 2.7%까지 좁혀졌다. 투자 비대칭이 성능 비대칭으로 이어지지 않는 세계가 열리고 있다.</div>
+  </div>
+</div>
+
+<!-- US-CHINA -->
+<div class="sec">
+  <div class="sec-label">⚔️ 미-중 경쟁 구도</div>
+  <div class="sec-h2">투자 23배 차이, 성능 격차는 2.7%</div>
+
+  <div class="axis-grid">
+    <div class="axis-card axis-us">
+      <div class="axis-flag">🇺🇸</div>
+      <div class="axis-name">미국 (투자 우위)</div>
+      <div class="axis-row"><span>기업 AI 투자</span><span class="axis-val blue">$285.9B</span></div>
+      <div class="axis-row"><span>상위 AI 모델 수</span><span class="axis-val blue">세계 최다</span></div>
+      <div class="axis-row"><span>AI 연구자·개발자 수</span><span class="axis-val blue">압도적 1위</span></div>
+      <div class="axis-row"><span>고영향 특허</span><span class="axis-val blue">질적 우위</span></div>
+      <div class="axis-row"><span>우려: 전문가 유입 속도</span><span class="axis-val red">급감 중</span></div>
+    </div>
+    <div class="axis-card axis-cn">
+      <div class="axis-flag">🇨🇳</div>
+      <div class="axis-name">중국 (출판·특허·로봇 우위)</div>
+      <div class="axis-row"><span>기업 AI 투자</span><span class="axis-val">$12.4B</span></div>
+      <div class="axis-row"><span>AI 논문 출판량</span><span class="axis-val red">세계 1위</span></div>
+      <div class="axis-row"><span>특허 출원 수</span><span class="axis-val red">세계 1위</span></div>
+      <div class="axis-row"><span>산업용 로봇 설치</span><span class="axis-val red">세계 1위</span></div>
+      <div class="axis-row"><span>최상위 모델 성능 격차</span><span class="axis-val red">2.7% (2026.3)</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="background:rgba(245,158,11,0.05);border-color:rgba(245,158,11,0.3)">
+    <div class="card-title" style="color:var(--warning)">⚠️ 2025년 이후 미-중 1위 수시 교체</div>
+    <div class="card-body">2025년 초 이후 미국과 중국 모델이 성능 순위 1위를 여러 차례 교환. 2026년 3월 기준 Anthropic 최상위 모델이 2.7% 우위이지만, 이는 언제든 역전 가능. "투자 비대칭 = 성능 비대칭"이라는 등식이 깨졌다.</div>
+  </div>
+</div>
+
+<!-- LABOR -->
+<div class="sec">
+  <div class="sec-label">👔 노동 시장 — 최초의 화이트칼라 충격</div>
+  <div class="sec-h2">첫 번째 화이트칼라 직업 감소가 측정됐다</div>
+
+  <div class="card-grid">
+    <div class="card red">
+      <div class="card-icon">📉</div>
+      <div class="card-title">엔트리레벨 소프트웨어 개발자 -20%</div>
+      <div class="card-body">22~25세 소프트웨어 개발자 고용이 2024년 이후 약 20% 감소. <strong>AI에 귀인 가능한 화이트칼라 직종 최초 측정 감소.</strong> AI 노출 직군의 엔트리레벨 직책 집중 타격.</div>
+    </div>
+    <div class="card orange">
+      <div class="card-icon">📈</div>
+      <div class="card-title">AI 스킬 채용 요구 +297%</div>
+      <div class="card-body">AI 관련 스킬이 미국 전체 채용 공고의 2.5%에 명시 요구 — 지난 10년 대비 297% 증가. AI Agents·LangGraph 등 에이전틱 AI 스킬이 2024→2025 폭발 성장.</div>
+    </div>
+    <div class="card yellow">
+      <div class="card-icon">📊</div>
+      <div class="card-title">생산성 — 미시적 Yes, 거시적 아직</div>
+      <div class="card-body">임상 문서 작성 시간 단축, 코딩 자동화 등 협의의 생산성 향상은 측정. 그러나 거시 수준(GDP, 총요소생산성)의 증거는 아직 초기·혼재. "AI 생산성 역설" 논쟁 지속.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ENVIRONMENT -->
+<div class="sec">
+  <div class="sec-label">🌍 환경 비용</div>
+  <div class="sec-h2">뉴욕주 전체 전력 — AI 데이터센터가 쓴다</div>
+
+  <div class="env-strip">
+    <div class="env-card">
+      <div class="env-num">72,816</div>
+      <div class="env-label">Grok 4 훈련 탄소 배출<br>(tCO₂eq) — 차량 1.7만 대 1년치</div>
+    </div>
+    <div class="env-card">
+      <div class="env-num">29.6 GW</div>
+      <div class="env-label">AI 데이터센터 전력 용량<br>뉴욕주 전체 피크 전력과 동급</div>
+    </div>
+    <div class="env-card">
+      <div class="env-num">↑ 급증</div>
+      <div class="env-label">전 세계 지역에서<br>국가 지원 슈퍼컴퓨팅 투자 증가</div>
+    </div>
+  </div>
+
+  <div class="sec-p">AI 인프라의 환경 비용이 2025년 처음으로 광범위하게 측정·보고됐다. AI 가속이 진행될수록 에너지 소비·탄소 배출 관리가 AI 거버넌스의 핵심 의제로 부상한다.</div>
+</div>
+
+<!-- POLICY & GOVERNANCE -->
+<div class="sec">
+  <div class="sec-label">🏛️ 정책 & 거버넌스</div>
+  <div class="sec-h2">AI 주권 경쟁 — 신흥국이 나서고 있다</div>
+
+  <div class="policy-list">
+    <div class="policy-row">
+      <div class="policy-icon">🌐</div>
+      <div class="policy-text"><strong>AI 주권(AI Sovereignty)이 국가 경쟁의 핵심 의제로 부상.</strong> 2024년 이후 채택된 국가 AI 전략의 절반 이상이 신흥 경제국에서 나왔다. AI 주권 확보를 위한 국가 지원 슈퍼컴퓨팅 투자는 모든 지역에서 증가 중.</div>
+    </div>
+    <div class="policy-row">
+      <div class="policy-icon">⚖️</div>
+      <div class="policy-text"><strong>미국 정부의 AI 규제 신뢰도 최하위 — 31%.</strong> 조사 대상국 중 자국 정부의 AI 규제 능력을 신뢰하는 비율이 미국이 가장 낮음(31%). EU가 미국·중국보다 AI 규제 기관으로 더 신뢰받는 것으로 나타남.</div>
+    </div>
+    <div class="policy-row">
+      <div class="policy-icon">🔬</div>
+      <div class="policy-text"><strong>Responsible AI 챕터 신설.</strong> AI 안전·투명성·편향성·책임성·설명가능성에 대한 측정 체계가 보고서에 독립 챕터로 포함됐다. 거버넌스 평가 프레임워크 자체가 아직 개발 중임을 시사.</div>
+    </div>
+    <div class="policy-row">
+      <div class="policy-icon">🎓</div>
+      <div class="policy-text"><strong>교육 시스템의 AI 재편 — 4 in 5 대학생이 GenAI 사용.</strong> AI가 교수법·학습·취업 준비도 전반을 재구성 중. 교육 챕터는 AI가 교육 시스템에 미치는 구조적 변화를 최초로 체계적으로 분석.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PUBLIC OPINION -->
+<div class="sec">
+  <div class="sec-label">💬 여론 — 전문가 vs 대중의 50%p 간극</div>
+  <div class="sec-h2">낙관론 증가, 긴장감도 증가 — 그리고 전문가-대중 간극</div>
+
+  <div class="opinion-grid">
+    <div class="opinion-card">
+      <div class="opinion-pct" style="color:var(--success)">59%</div>
+      <div class="opinion-label">AI 혜택 낙관 (전년 52%↑)</div>
+    </div>
+    <div class="opinion-card">
+      <div class="opinion-pct" style="color:var(--warning)">52%</div>
+      <div class="opinion-label">AI에 대한 긴장·불안 (전년 +2%)</div>
+    </div>
+    <div class="opinion-card">
+      <div class="opinion-pct" style="color:var(--red)">31%</div>
+      <div class="opinion-label">미국 내 정부 AI 규제 신뢰도 (조사국 중 최저)</div>
+    </div>
+  </div>
+
+  <div class="opinion-gap">
+    <div class="gap-title">⚠️ 전문가-대중 인식 격차 — 일자리 영향 평가</div>
+    <div class="gap-row">
+      <div class="gap-label">미국 AI 전문가</div>
+      <div class="gap-bar-outer"><div class="gap-bar-inner" style="width:73%;background:rgba(59,130,246,0.5)">73%가 "AI 일자리 영향 긍정적"</div></div>
+      <div class="gap-val" style="color:var(--accent2)">73%</div>
+    </div>
+    <div class="gap-row">
+      <div class="gap-label">일반 대중</div>
+      <div class="gap-bar-outer"><div class="gap-bar-inner" style="width:23%;background:rgba(239,68,68,0.5)">23%만 "AI 일자리 영향 긍정적"</div></div>
+      <div class="gap-val" style="color:var(--red)">23%</div>
+    </div>
+    <div style="font-size:12.5px;color:var(--muted);margin-top:10px">전문가와 대중 간 <strong style="color:var(--warning)">50%p 인식 격차</strong> — AI의 경제적 영향에 대한 전문가 낙관과 대중 불안의 구조적 분리. 이 격차 자체가 거버넌스 도전과제다.</div>
+  </div>
+</div>
+
+<!-- 9개 챕터 구조 -->
+<div class="sec">
+  <div class="sec-label">📚 보고서 구조 — 9개 챕터</div>
+  <div class="sec-h2">7번째 연례 AI Index의 범위</div>
+  <table>
+    <thead><tr><th>챕터</th><th>핵심 분야</th><th>주요 발견</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1. 연구·개발</strong></td><td>모델·오픈소스·인프라·출판·특허·투자</td><td>미국 AI 연구자 유입 감소 / 오픈소스 생태계 급성장</td></tr>
+      <tr><td><strong>2. 기술 성능</strong></td><td>이미지·영상·언어·음성·추론·로보틱스·에이전틱</td><td>인간 기준선 돌파 / SWE-bench ~100% / IMO 금메달</td></tr>
+      <tr><td><strong>3. 책임있는 AI</strong> <span style="font-size:10px;color:var(--warning)">★</span></td><td>안전·편향·투명성·책임성·설명가능성</td><td>거버넌스 평가 프레임워크 자체가 아직 형성 중</td></tr>
+      <tr><td><strong>4. 경제</strong></td><td>노동시장·생산성·투자·소비자 가치</td><td>$581.7B 투자 / 개발자 고용 -20% / 소비자 잉여 $172B</td></tr>
+      <tr><td><strong>5. 과학</strong> <span style="font-size:10px;color:var(--success)">NEW</span></td><td>생물학·화학·물리학·천문학</td><td>AI가 과학 발견 가속화 — 독립 챕터 최초 신설</td></tr>
+      <tr><td><strong>6. 의학</strong></td><td>신약개발·임상·환자 참여·윤리</td><td>임상 문서 시간 단축 / AI 진단 도구 확산</td></tr>
+      <tr><td><strong>7. 교육</strong></td><td>교수법·학습·취업 준비도</td><td>4 in 5 대학생 GenAI 사용 / 교육 시스템 재편</td></tr>
+      <tr><td><strong>8. 정책·거버넌스</strong></td><td>규제·국가 AI 전략·공공 투자·AI 주권</td><td>AI 주권 경쟁 / 미국 정부 신뢰도 31% 최저</td></tr>
+      <tr><td><strong>9. 여론</strong></td><td>신뢰·투명성·규제·고용·인간관계</td><td>낙관 59%·긴장 52% 동시 상승 / 전문가-대중 50%p 간극</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- GARAMbada INSIGHT -->
+<div class="insight-box">
+  <div class="insight-title">💡 GARAMbada 인사이트 — Company Builder 관점</div>
+  <div class="insight-list">
+    <div class="insight-item">
+      <div class="insight-num">1</div>
+      <div class="insight-text">
+        <strong>"기술-거버넌스 비대칭"이 사업 기회다.</strong> 보고서의 핵심 메타 메시지 — "할 수 있는 것"과 "관리할 수 있는 것"의 격차 — 가 바로 AI Governance Platform(린×Wise42) 같은 사업의 존재 이유다. 기술이 앞서가고 거버넌스가 뒤처질수록, 그 갭을 메우는 통합 보증자의 가치는 기하급수적으로 커진다. Stanford이 데이터로 증명한 것을 우리는 사업으로 구현하는 구조.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">2</div>
+      <div class="insight-text">
+        <strong>미-중 2.7% 격차는 "모델 공급자 리스크"다.</strong> 투자 23배 차이에도 성능 격차가 2.7%라면, 특정 LLM에 의존하는 기업은 언제든 공급자 교체 압박에 노출된다. 업스테이지 Solar LLM 같은 sovereign 모델 레이어가 "기술적 선택"이 아니라 "리스크 헤징"이 되는 논거가 여기서 나온다.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">3</div>
+      <div class="insight-text">
+        <strong>22~25세 소프트웨어 개발자 -20% — AI 네이티브 조직화의 시작이다.</strong> 첫 번째 측정 가능한 화이트칼라 충격이 엔트리레벨 개발자에서 나왔다는 것은, AI가 코딩 작업의 "하청"을 흡수하기 시작했음을 의미한다. Company Builder 관점에서는 신생팀의 HR 전략을 재설계해야 할 시그널이다 — 소프트웨어 개발자 10명을 뽑는 대신 AI를 orchestrate하는 2명을 뽑는 구조.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">4</div>
+      <div class="insight-text">
+        <strong>전문가-대중 50%p 간극 = 커뮤니케이션 위기다.</strong> AI가 일자리에 긍정적이라고 생각하는 전문가(73%)와 대중(23%)의 격차는 기술 리스크가 아니라 신뢰 리스크다. 이 간극을 방치하면 규제 백래시로 이어진다. AI를 활용하는 기업이라면 내부 구성원부터 설득하는 커뮤니케이션 전략이 필요하다 — 수치가 아니라 경험으로.
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-num">5</div>
+      <div class="insight-text">
+        <strong>생성AI $172B 소비자 잉여 — 아직 캡처되지 않은 가치다.</strong> 소비자 잉여가 $172B이라는 것은 사용자가 받는 가치 대부분이 아직 monetize되지 않았다는 뜻이다. 이 잉여를 포착하는 새로운 pricing 모델(구독·usage·outcome 기반)을 선점하는 사업자가 다음 AI 경제의 승자가 된다. SWE-bench 100% 달성이 곧 "개발자 가치의 상품화"를 의미하듯, AI가 할 수 있는 모든 것에 올바른 가격표를 붙이는 것이 지금 가장 중요한 비즈니스 설계 질문이다.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tags">
+  <span class="tag">Stanford HAI</span>
+  <span class="tag">2026 AI Index</span>
+  <span class="tag">AI 현황 보고서</span>
+  <span class="tag">AI 거버넌스</span>
+  <span class="tag">$581.7B 투자</span>
+  <span class="tag">SWE-bench</span>
+  <span class="tag">미-중 AI 경쟁</span>
+  <span class="tag">AI 노동시장</span>
+  <span class="tag">소비자 잉여</span>
+  <span class="tag">AI 주권</span>
+  <span class="tag">생성AI 보급</span>
+  <span class="tag">환경비용</span>
+  <span class="tag">여론 격차</span>
+  <span class="tag">트렌드_인텔리전스</span>
+  <span class="tag">연례보고서</span>
+</div>
+
+</main>
+
+<footer>
+  GARAMwiki · 트렌드_인텔리전스 · Stanford HAI 2026 AI Index Report · 2026.07 수집<br>
+  <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report" target="_blank" style="color:var(--dim)">↗ 원본: hai.stanford.edu/ai-index/2026-ai-index-report</a>
+</footer>
+
+</body>
+</html>
