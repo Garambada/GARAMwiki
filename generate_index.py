@@ -94,6 +94,10 @@ ARTICLE_META = {
         "title": "grill-me — AI 에이전트 정렬의 기술<br>Matt Pocock Skills 135k★ · 3문장이 바꾸는 워크플로",
         "tags":  ["grill-me", "Matt Pocock", "AI 에이전트 정렬", "Claude Code Skills", "공유 언어", "숙의 프로세스"],
     },
+    "2026-07_AI_부메랑_재고용_AI_Boomerang.html": {
+        "title": "AI 부메랑(AI Boomerang) — AI 때문에 해고했던 직원을 다시 채용하는 이유<br>고용주 55% 후회 · 32% 재고용 · 제도적 지식의 반격",
+        "tags":  ["AI 부메랑", "재고용", "Robert Half", "Forrester", "Gartner", "제도적 지식", "AI ROI", "인력 전략"],
+    },
     # 트렌드 인텔리전스
     "2026-02_HBR_Google_Cloud_Agentic_AI_Blueprint.html": {
         "title": "HBR × Google Cloud — 전사 에이전틱 AI 전환 블루프린트<br>3가지 치명적 실수와 첫 번째 행동",
