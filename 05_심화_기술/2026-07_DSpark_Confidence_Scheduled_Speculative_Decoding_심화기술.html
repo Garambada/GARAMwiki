@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSpark: Confidence-Scheduled Speculative Decoding with Semi-Autoregressive Generation — 심화 기술 분석</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --surface3: #212830;
+    --border: #30363d;
+    --accent: #2dd4bf;       /* teal — 심화_기술 */
+    --accent2: #0d9488;
+    --accent-glow: rgba(45,212,191,0.12);
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #c9d1d9;
+    --red: #f85149;
+    --green: #3fb950;
+    --orange: #f97316;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --violet: #a78bfa;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Pretendard', 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #071a18 0%, #0d1f1d 45%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 40px 44px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 55% at 55% 40%, rgba(45,212,191,0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.3);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; font-weight: 600; color: var(--accent);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hero-title {
+    font-size: clamp(20px, 3vw, 32px); font-weight: 800;
+    line-height: 1.25; margin-bottom: 10px; letter-spacing: -0.02em;
+  }
+  .hero-title .hl { color: var(--accent); }
+  .hero-sub { font-size: 14px; color: var(--text2); max-width: 820px; margin-bottom: 22px; line-height: 1.6; }
+  .hero-meta { display: flex; gap: 20px; flex-wrap: wrap; font-size: 12px; color: var(--text2); }
+  .hero-meta span { display: flex; align-items: center; gap: 5px; }
+  .hero-meta .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+
+  /* ── ABSTRACT BOX ── */
+  .abstract {
+    background: var(--accent-glow);
+    border: 1px solid rgba(45,212,191,0.25);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-bottom: 40px;
+    font-size: 14px; color: var(--text3); line-height: 1.75;
+    font-style: italic;
+  }
+  .abstract .abt-title {
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 10px; font-style: normal;
+  }
+
+  /* ── STAT STRIP ── */
+  .stat-strip {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1px; background: var(--border); border-bottom: 1px solid var(--border);
+  }
+  .stat-cell {
+    background: var(--surface); padding: 22px 20px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-cell .val { font-size: 28px; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+  .stat-cell .lbl { font-size: 11px; color: var(--text2); letter-spacing: 0.04em; }
+  .stat-cell .ctx { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .c-t { color: var(--accent); } .c-g { color: var(--green); }
+  .c-v { color: var(--violet); } .c-b { color: var(--blue); }
+  .c-o { color: var(--orange); } .c-y { color: var(--yellow); }
+  .c-r { color: var(--red); }
+
+  /* ── LAYOUT ── */
+  .body-wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .sec-title {
+    font-size: 20px; font-weight: 700; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  }
+  .sec-title .ico {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--accent-glow); border: 1px solid rgba(45,212,191,0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  p { color: var(--text3); margin-bottom: 14px; }
+
+  /* ── CARDS ── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 22px;
+  }
+  .card.t { border-top: 3px solid var(--accent); }
+  .card.v { border-top: 3px solid var(--violet); }
+  .card.g { border-top: 3px solid var(--green); }
+  .card.b { border-top: 3px solid var(--blue); }
+  .card.o { border-top: 3px solid var(--orange); }
+  .card.r { border-top: 3px solid var(--red); }
+  .card-title { font-size: 12px; font-weight: 700; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+  .card-body { color: var(--text3); font-size: 14px; }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { background: var(--surface2); }
+  th { padding: 12px 16px; text-align: left; font-size: 11.5px; font-weight: 700; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  td { padding: 12px 16px; color: var(--text3); border-bottom: 1px solid rgba(48,54,61,0.5); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  /* ── FORMULA BOX ── */
+  .formula-block {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px; padding: 18px 22px; margin: 16px 0;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 14px; color: var(--accent); overflow-x: auto;
+  }
+  .formula-block .f-label {
+    font-size: 11px; color: var(--text2); font-family: inherit;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 8px; display: block;
+  }
+  .formula-block .f-eq { font-size: 17px; color: var(--text); margin-bottom: 6px; letter-spacing: 0.03em; }
+  .formula-block .f-note { font-size: 12px; color: var(--text2); font-family: -apple-system, sans-serif; margin-top: 8px; }
+
+  /* ── ARCH DIAGRAM ── */
+  .arch-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .arch-row { display: flex; align-items: stretch; gap: 0; margin-bottom: 12px; }
+  .arch-box {
+    flex: 1; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; text-align: center;
+    font-size: 13px;
+  }
+  .arch-box .ab-tag {
+    font-size: 10px; font-weight: 700; color: var(--text2);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px;
+  }
+  .arch-box .ab-val { font-size: 14px; font-weight: 700; }
+  .arch-box.hi { border-color: rgba(45,212,191,0.4); background: rgba(45,212,191,0.06); }
+  .arch-box.hi .ab-val { color: var(--accent); }
+  .arch-box.hi2 { border-color: rgba(167,139,250,0.4); background: rgba(167,139,250,0.06); }
+  .arch-box.hi2 .ab-val { color: var(--violet); }
+  .arch-arrow { display: flex; align-items: center; padding: 0 10px; color: var(--text2); font-size: 18px; flex-shrink: 0; }
+  .arch-plus { display: flex; align-items: center; padding: 0 8px; color: var(--accent); font-size: 24px; font-weight: 300; flex-shrink: 0; }
+  .arch-label { font-size: 12px; color: var(--text2); text-align: center; margin-top: 8px; }
+
+  /* ── COMPARISON VISUAL ── */
+  .cmp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+  .cmp-col {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 16px;
+  }
+  .cmp-col.winner { border-color: rgba(45,212,191,0.5); background: rgba(45,212,191,0.04); }
+  .cmp-head { font-size: 13px; font-weight: 700; margin-bottom: 12px; text-align: center; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .cmp-col.winner .cmp-head { color: var(--accent); }
+  .cmp-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin-bottom: 8px; font-size: 13px; color: var(--text3);
+  }
+  .cmp-icon { width: 16px; flex-shrink: 0; margin-top: 2px; }
+
+  /* ── DECAY VISUAL ── */
+  .decay-chart { margin: 20px 0; }
+  .decay-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .decay-label { font-size: 12px; color: var(--text3); width: 140px; flex-shrink: 0; font-weight: 600; }
+  .decay-bars { display: flex; gap: 3px; }
+  .decay-bar { width: 28px; border-radius: 3px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px; font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.7); }
+
+  /* ── HIGHLIGHT ── */
+  .hl-box {
+    background: var(--accent-glow); border: 1px solid rgba(45,212,191,0.25);
+    border-radius: var(--radius); padding: 18px 22px; margin-bottom: 20px;
+  }
+  .hl-box.warn { background: rgba(248,81,73,0.07); border-color: rgba(248,81,73,0.25); }
+  .hl-box.info { background: rgba(88,166,255,0.07); border-color: rgba(88,166,255,0.2); }
+  .hl-box.success { background: rgba(63,185,80,0.07); border-color: rgba(63,185,80,0.25); }
+  .hl-title { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+  .hl-box.warn .hl-title { color: var(--red); }
+  .hl-box.info .hl-title { color: var(--blue); }
+  .hl-box.success .hl-title { color: var(--green); }
+
+  /* ── LIST ── */
+  ul.fancy { list-style: none; padding: 0; }
+  ul.fancy li {
+    padding: 7px 0 7px 20px; position: relative;
+    color: var(--text3); font-size: 14px;
+    border-bottom: 1px solid rgba(48,54,61,0.35);
+  }
+  ul.fancy li:last-child { border-bottom: none; }
+  ul.fancy li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 10px; }
+
+  /* ── TAGS ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 20px; }
+  .tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 11.5px; color: var(--text2); }
+  .tag.t { background: rgba(45,212,191,0.1); border-color: rgba(45,212,191,0.3); color: var(--accent); }
+
+  /* ── REF LIST ── */
+  .ref-list { margin: 0; padding: 0; list-style: none; }
+  .ref-list li {
+    padding: 10px 0; border-bottom: 1px solid rgba(48,54,61,0.4);
+    font-size: 13px; color: var(--text3);
+  }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list .ref-key { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 3px; }
+  .ref-list a { color: var(--blue); text-decoration: none; }
+  .ref-list a:hover { text-decoration: underline; }
+
+  /* ── MISC ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media(max-width: 720px) { .two-col, .cmp-grid, .three-col { grid-template-columns: 1fr; } .stat-strip { grid-template-columns: repeat(2, 1fr); } }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+  code { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 12px; color: var(--accent); font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+  strong { color: var(--text); font-weight: 700; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .pill-g { background: rgba(63,185,80,0.15); color: var(--green); }
+  .pill-t { background: rgba(45,212,191,0.12); color: var(--accent); }
+  .pill-v { background: rgba(167,139,250,0.12); color: var(--violet); }
+  .pill-r { background: rgba(248,81,73,0.12); color: var(--red); }
+  .pill-b { background: rgba(88,166,255,0.12); color: var(--blue); }
+  .sub { font-size: 12px; color: var(--text2); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+  <div class="hero-badge">
+    <span>🔩</span>
+    <span>심화 기술 — 논문 리뷰</span>
+  </div>
+  <h1 class="hero-title">
+    <span class="hl">DSpark</span>: Confidence-Scheduled Speculative Decoding<br>
+    with Semi-Autoregressive Generation
+  </h1>
+  <p class="hero-sub">
+    DeepSeek이 2026년 6월 27일 공개한 추론 가속 프레임워크. 반자기회귀(SAG) 드래프트와 신뢰도 기반 검증 길이 스케줄링으로 MTP-1 대비 V4-Flash 60~85% · V4-Pro 57~78% 속도 향상을 달성한다. MIT 라이선스 코드베이스 DeepSpec과 함께 오픈소스로 공개.
+  </p>
+  <div class="hero-meta">
+    <span><span class="dot"></span> Xin Cheng et al. · DeepSeek (2026.06.27)</span>
+    <span><span class="dot"></span> arXiv: 2026.dspark · DeepSpec GitHub (MIT)</span>
+    <span><span class="dot"></span> ICML 2026 제출</span>
+    <span><span class="dot"></span> 심화 기술 / 추론 최적화</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ STAT STRIP ═══════════════════ -->
+<div class="stat-strip">
+  <div class="stat-cell">
+    <span class="val c-t">60~85%</span>
+    <span class="lbl">V4-Flash 속도 향상</span>
+    <span class="ctx">vs MTP-1 생산 기준선</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-t">57~78%</span>
+    <span class="lbl">V4-Pro 속도 향상</span>
+    <span class="ctx">vs MTP-1 생산 기준선</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-g">+51%</span>
+    <span class="lbl">집합 처리량 향상</span>
+    <span class="ctx">80 tok/s SLA 기준</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-v">+30.9%</span>
+    <span class="lbl">EAGLE-3 대비 수락 길이</span>
+    <span class="ctx">Qwen3 14B 기준 최대</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-b">&lt;1.5%</span>
+    <span class="lbl">순차 헤드 추가 지연</span>
+    <span class="ctx">Markov Head 오버헤드</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-t">MIT</span>
+    <span class="lbl">DeepSpec 라이선스</span>
+    <span class="ctx">Qwen3 4B·8B·14B · Gemma</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ BODY ═══════════════════ -->
+<div class="body-wrap">
+
+  <!-- ABSTRACT -->
+  <div class="abstract">
+    <div class="abt-title">논문 초록 (Abstract)</div>
+    A speculative decoding framework named DSpark integrates <strong>semi-autoregressive generation</strong> with <strong>confidence-scheduled verification</strong> to enhance Large Language Model inference efficiency. It significantly improves per-user generation speeds and aggregate throughput in live production environments by dynamically optimizing draft quality and resource allocation.
+    <br><br>
+    DSpark는 두 가지 핵심 병목을 동시에 해결한다: (1) 드래프트 모델의 토큰 수락 길이를 병렬성과 순차 의존성을 모두 유지하면서 늘리고, (2) 시스템 부하에 따라 검증 길이를 동적으로 조절하여 GPU 자원을 낭비 없이 활용한다.
+  </div>
+
+  <!-- ① 배경과 문제 정의 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">📐</div>
+      배경 — Speculative Decoding과 두 가지 병목
+    </div>
+
+    <p>LLM 추론은 근본적으로 <strong>자기회귀(Autoregressive)</strong> 구조의 한계를 갖는다. 토큰 1개 생성마다 전체 모델 파라미터에 대한 전방향 패스(forward pass)가 필요하며, 이 과정에서 연산 능력의 90% 이상이 HBM I/O 대기로 낭비된다. Speculative Decoding은 이를 해결하기 위해 "소형 드래프트 모델이 후보 토큰을 미리 제안하고, 대형 타깃 모델이 병렬로 검증한다"는 구조를 도입했다. 그러나 기존 방식에는 두 가지 상충 관계가 존재한다.</p>
+
+    <div class="cmp-grid">
+      <div class="cmp-col">
+        <div class="cmp-head">🐢 순차 드래프터<br><span class="sub">(EAGLE-3 계열)</span></div>
+        <div class="cmp-item"><span class="cmp-icon c-g">✓</span>토큰 간 의존성 모델링 — 정확도 높음</div>
+        <div class="cmp-item"><span class="cmp-icon c-g">✓</span>드래프트 블록 끝까지 수락률 유지</div>
+        <div class="cmp-item"><span class="cmp-icon c-r">✗</span>드래프트 속도가 블록 크기에 비례 — O(k)</div>
+        <div class="cmp-item"><span class="cmp-icon c-r">✗</span>병렬 처리 불가 → 속도 향상 한계</div>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-head">⚡ 병렬 드래프터<br><span class="sub">(DFlash 계열)</span></div>
+        <div class="cmp-item"><span class="cmp-icon c-g">✓</span>전체 블록을 단일 패스로 생성 — O(1)</div>
+        <div class="cmp-item"><span class="cmp-icon c-g">✓</span>드래프트 시간이 블록 크기 무관</div>
+        <div class="cmp-item"><span class="cmp-icon c-r">✗</span>다중 모달 충돌(Multi-modal Collision)</div>
+        <div class="cmp-item"><span class="cmp-icon c-r">✗</span>Suffix Decay — 후반 토큰 수락률 급락</div>
+      </div>
+      <div class="cmp-col winner">
+        <div class="cmp-head">🌟 DSpark<br><span class="sub">(Semi-Autoregressive)</span></div>
+        <div class="cmp-item"><span class="cmp-icon c-t">✓</span>병렬 백본으로 O(1) 속도 유지</div>
+        <div class="cmp-item"><span class="cmp-icon c-t">✓</span>경량 순차 헤드로 의존성 복원</div>
+        <div class="cmp-item"><span class="cmp-icon c-t">✓</span>Suffix Decay 제거</div>
+        <div class="cmp-item"><span class="cmp-icon c-t">✓</span>신뢰도 기반 동적 검증 길이</div>
+      </div>
+    </div>
+
+    <div class="hl-box warn">
+      <div class="hl-title">⚠️ 다중 모달 충돌 (Multi-modal Collision) 문제</div>
+      <p style="margin:0; color:var(--text3);">
+        병렬 드래프터가 위치 2의 토큰을 위치 1의 선택 결과와 무관하게 독립적으로 예측한다. 예: 모델이 "New" 또는 "San"을 다음 단어로 예측할 때, 병렬 드래프터는 "New Francisco"처럼 내부적으로 비일관된 시퀀스를 생성할 수 있다. 이 독립성 가정이 <strong>Suffix Decay</strong>를 유발한다 — 블록 후반부로 갈수록 타깃 모델의 수락 확률이 급격히 떨어진다.
+      </p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ② SAG 아키텍처 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">⚙️</div>
+      핵심 기법 1 — 반자기회귀 생성 (Semi-Autoregressive Generation, SAG)
+    </div>
+
+    <p>SAG는 병렬 속도와 순차 정확성을 분리하는 2단계 아키텍처다. <strong>병렬 백본이 먼저 빠르게 초안 로짓(base logits)을 생성</strong>하고, <strong>경량 순차 헤드가 이전 토큰 정보를 바탕으로 편향(bias)을 더한다.</strong></p>
+
+    <!-- Architecture Visual -->
+    <div class="arch-diagram">
+      <p style="font-size:12px; color:var(--text2); text-align:center; margin-bottom:20px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;">DSpark 드래프트 생성 플로우 (Draft Block Size = k)</p>
+
+      <!-- Step 1: Anchor -->
+      <div style="display:flex; align-items:center; margin-bottom:14px;">
+        <div class="arch-box hi" style="max-width:220px;">
+          <div class="ab-tag">타깃 모델</div>
+          <div class="ab-val">앵커 토큰 x₀</div>
+          <div style="font-size:11px; color:var(--text2); margin-top:4px;">마지막으로 수락된 토큰</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box" style="flex:2;">
+          <div class="ab-tag">입력</div>
+          <div class="ab-val" style="font-size:13px; color:var(--text3);">x₀를 DSpark 드래프터에 전달</div>
+        </div>
+      </div>
+
+      <!-- Step 2: Parallel backbone -->
+      <div class="arch-row" style="margin-bottom:8px;">
+        <div class="arch-box hi2" style="flex:2;">
+          <div class="ab-tag">① 병렬 백본 (DFlash 기반)</div>
+          <div class="ab-val">U₁, U₂, …, Uₖ</div>
+          <div style="font-size:11px; color:var(--text2); margin-top:4px;">k 포지션 동시 생성 — O(1) 지연</div>
+        </div>
+        <div class="arch-plus">+</div>
+        <div class="arch-box hi" style="flex:2;">
+          <div class="ab-tag">② 순차 Markov 헤드</div>
+          <div class="ab-val">B₁, B₂, …, Bₖ</div>
+          <div style="font-size:11px; color:var(--text2); margin-top:4px;">이전 토큰 조건부 편향 — 오버헤드 &lt;1.5%</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box" style="flex:1; background:rgba(45,212,191,0.06); border-color:rgba(45,212,191,0.4);">
+          <div class="ab-tag">최종 로짓</div>
+          <div class="ab-val c-t">y₁…yₖ</div>
+          <div style="font-size:11px; color:var(--text2); margin-top:4px;">U + B</div>
+        </div>
+      </div>
+      <div class="arch-label" style="margin-bottom:16px;">⬆ 두 스테이지가 병렬과 순차의 장점을 결합</div>
+
+      <!-- Step 3: Target verify -->
+      <div style="display:flex; align-items:center;">
+        <div class="arch-box" style="flex:2;">
+          <div class="ab-tag">드래프트 토큰</div>
+          <div class="ab-val" style="font-size:13px; color:var(--text3);">x̃₁, x̃₂, …, x̃ₖ (샘플링)</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box hi" style="flex:2;">
+          <div class="ab-tag">타깃 모델 — 병렬 검증</div>
+          <div class="ab-val">수락 / 거부 판정</div>
+          <div style="font-size:11px; color:var(--text2); margin-top:4px;">수학적 무손실 (Lossless) 보장</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulas -->
+    <div class="formula-block">
+      <span class="f-label">[ 최종 로짓 계산 — y_k = U_k + B_k ]</span>
+      <div class="f-eq">y_k = U_k + B_k</div>
+      <div class="f-note">U_k : 병렬 백본(DFlash)의 로짓 | B_k : 순차 Markov 헤드의 편향</div>
+    </div>
+
+    <div class="formula-block">
+      <span class="f-label">[ Markov Head — 저랭크 인수분해 (Low-rank Factorization) ]</span>
+      <div class="f-eq">B(x_{k-1}, x_k) = (W₁[x_{k-1}]) · W₂ᵀ[x_k]</div>
+      <div class="f-note">W₁ · W₂ : rank-256 저랭크 행렬 | x_{k-1} : 이전 위치에서 샘플링된 토큰 | x_k : 현재 위치 후보 토큰</div>
+    </div>
+
+    <div class="hl-box">
+      <div class="hl-title">💡 Markov Head의 핵심 트레이드오프</div>
+      <p style="margin:0; color:var(--text3);">
+        RNN 헤드는 더 긴 범위의 의존성을 포착할 수 있지만, 샘플링 속도가 느리다. DSpark는 오직 직전 토큰(x_{k-1})만 조건화하는 <strong>1차 마르코프(first-order Markov)</strong> 헤드를 채택한다. 저랭크 인수분해로 행렬 크기를 최소화하여 추가 지연을 &lt;1.5%로 억제한다. RNN 대비 수락 길이는 거의 동일하면서 속도는 명확히 빠르다는 것이 논문의 ablation 결과다.
+      </p>
+    </div>
+
+    <!-- Suffix Decay Visual -->
+    <p>아래 그림은 세 드래프터의 위치별 조건부 수락률(conditional acceptance rate)을 비교한다. DSpark가 전체 드래프트 블록에서 높은 수락률을 유지함을 볼 수 있다.</p>
+
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin:16px 0;">
+      <p style="font-size:12px; color:var(--text2); font-weight:700; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:20px;">위치별 조건부 수락률 (Position-wise Conditional Acceptance Rate)</p>
+      <div class="decay-chart">
+        <!-- DFlash -->
+        <div class="decay-row">
+          <div class="decay-label" style="color:var(--violet);">DFlash (병렬)</div>
+          <div class="decay-bars">
+            <div class="decay-bar" style="height:70px; background:var(--violet);">p1</div>
+            <div class="decay-bar" style="height:55px; background:rgba(167,139,250,0.8);">p2</div>
+            <div class="decay-bar" style="height:40px; background:rgba(167,139,250,0.6);">p3</div>
+            <div class="decay-bar" style="height:28px; background:rgba(167,139,250,0.4);">p4</div>
+            <div class="decay-bar" style="height:18px; background:rgba(167,139,250,0.3);">p5</div>
+            <div class="decay-bar" style="height:12px; background:rgba(167,139,250,0.2);">p6</div>
+          </div>
+          <span style="font-size:12px; color:var(--text2); margin-left:12px;">Suffix Decay ↘ 급락</span>
+        </div>
+        <!-- Eagle-3 -->
+        <div class="decay-row" style="margin-top:10px;">
+          <div class="decay-label" style="color:var(--blue);">EAGLE-3 (순차)</div>
+          <div class="decay-bars">
+            <div class="decay-bar" style="height:60px; background:var(--blue);">p1</div>
+            <div class="decay-bar" style="height:60px; background:var(--blue);">p2</div>
+            <div class="decay-bar" style="height:58px; background:var(--blue);">p3</div>
+            <div class="decay-bar" style="height:57px; background:rgba(88,166,255,0.9);">p4</div>
+            <div class="decay-bar" style="height:55px; background:rgba(88,166,255,0.85);">p5</div>
+            <div class="decay-bar" style="height:53px; background:rgba(88,166,255,0.8);">p6</div>
+          </div>
+          <span style="font-size:12px; color:var(--text2); margin-left:12px;">안정적이지만 시작값이 낮음</span>
+        </div>
+        <!-- DSpark -->
+        <div class="decay-row" style="margin-top:10px;">
+          <div class="decay-label" style="color:var(--accent);">DSpark (SAG) ★</div>
+          <div class="decay-bars">
+            <div class="decay-bar" style="height:76px; background:var(--accent);">p1</div>
+            <div class="decay-bar" style="height:75px; background:var(--accent);">p2</div>
+            <div class="decay-bar" style="height:74px; background:rgba(45,212,191,0.9);">p3</div>
+            <div class="decay-bar" style="height:73px; background:rgba(45,212,191,0.88);">p4</div>
+            <div class="decay-bar" style="height:72px; background:rgba(45,212,191,0.85);">p5</div>
+            <div class="decay-bar" style="height:71px; background:rgba(45,212,191,0.83);">p6</div>
+          </div>
+          <span style="font-size:12px; color:var(--accent); margin-left:12px;">높은 시작값 + Decay 억제 ✓</span>
+        </div>
+      </div>
+      <p style="font-size:12px; color:var(--text2); margin:14px 0 0;">각 막대는 드래프트 블록 내 포지션 p1~p6의 조건부 수락률을 나타냄. 논문 Figure 2 기반 개념도.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ③ Confidence-Scheduled Verification -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">🎯</div>
+      핵심 기법 2 — 신뢰도 기반 검증 스케줄링 (Confidence-Scheduled Verification)
+    </div>
+
+    <p>드래프트 모델이 아무리 좋아도, 모든 드래프트 토큰이 동등하게 수락될 것으로 기대할 수는 없다. 특히 <strong>고부하 서버 환경</strong>에서는 낮은 신뢰도의 토큰을 검증하는 데 소비된 GPU 연산이 다른 요청의 처리 시간을 빼앗는다. DSpark는 이를 "배치 크기 함정(batch-size catch)"으로 정의하고 동적 스케줄링으로 해결한다.</p>
+
+    <div class="two-col" style="margin-bottom:20px;">
+      <div>
+        <p style="font-weight:700; color:var(--text); margin-bottom:10px;">① 신뢰도 헤드 (Confidence Head)</p>
+        <p>드래프터가 생성하는 각 위치 k에 대해 스칼라 신뢰도 점수 <code>c_k</code>를 출력한다. 이는 "이전 토큰이 모두 수락된다는 조건 하에, 위치 k의 토큰이 타깃 모델에 의해 수락될 확률"을 의미한다.</p>
+        <div class="formula-block" style="margin:0;">
+          <span class="f-label">[ 신뢰도 점수 범위 ]</span>
+          <div class="f-eq">c_k ∈ (0, 1)</div>
+          <div class="f-note">c_k → 1 : 거의 확실히 수락 | c_k → 0 : 거의 확실히 거부</div>
+        </div>
+      </div>
+      <div>
+        <p style="font-weight:700; color:var(--text); margin-bottom:10px;">② 순차 온도 조정 (Sequential Temperature Scaling, STS)</p>
+        <p>원시 신뢰도 점수는 보정 없이 사용하면 과신/과소신 경향이 있다. STS는 예측된 80% 신뢰도가 실제 실험에서 80% 수락률에 대응하도록 보정한다. 이 캘리브레이션이 없으면 스케줄러의 수학적 보장이 성립하지 않는다.</p>
+        <div class="hl-box" style="margin:0; padding:14px 18px;">
+          <div class="hl-title">캘리브레이션 없이 작동하지 않는다</div>
+          <p style="margin:0; font-size:13px; color:var(--text3);">STS는 DSpark 스케줄러가 단순 휴리스틱이 아닌 <strong>확률론적 최적화</strong>로 작동하게 하는 핵심 장치다.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-weight:700; color:var(--text); margin-bottom:10px;">③ 하드웨어 인식 프리픽스 스케줄러 (Hardware-Aware Prefix Scheduler)</p>
+    <p>스케줄러는 요청 배치 전체에 걸쳐 "어떤 요청을 몇 개 토큰까지 검증할지"를 실시간 GPU 부하를 감안해 결정한다. 목표 함수는 다음과 같다:</p>
+
+    <div class="formula-block">
+      <span class="f-label">[ 총 시스템 처리량 최대화 목표 ]</span>
+      <div class="f-eq">Θ = τ · SPS(B)</div>
+      <div class="f-note">
+        τ : 배치 내 기대 수락 토큰 수 | B : 타깃 GPU에 전달되는 총 토큰 수<br>
+        SPS(B) : GPU 처리 속도 프로파일 함수 (B에 따라 달라지는 step/sec)
+      </div>
+    </div>
+
+    <div class="formula-block">
+      <span class="f-label">[ 요청 r의 위치 j에서 프리픽스 생존 확률 (Prefix Survival Probability) ]</span>
+      <div class="f-eq">a_{r,j} = ∏_{i ≤ j} c_{r,i}</div>
+      <div class="f-note">위치 1~j의 신뢰도를 모두 곱한 값 = j번째까지 모든 토큰이 수락될 기대 확률</div>
+    </div>
+
+    <p>스케줄러는 각 요청에 대해 "다음 토큰 하나를 더 검증했을 때 기대 이득 ÷ 배치 크기 증가로 인한 GPU 비용"을 탐욕적으로 계산해 가장 가치 있는 토큰부터 검증 목록에 추가한다.</p>
+
+    <div class="hl-box success">
+      <div class="hl-title">✅ 배치 크기 함정(Batch-Size Catch) 해결 방식</div>
+      <div class="two-col">
+        <div>
+          <p style="font-weight:600; color:var(--green); margin-bottom:6px;">저부하 (Light Load)</p>
+          <p style="margin:0; font-size:13px; color:var(--text3);">여유 GPU 연산이 많음 → 신뢰도 낮은 토큰도 적극 검증 → 더 긴 드래프트 수락 → 사용자별 지연 최소화</p>
+        </div>
+        <div>
+          <p style="font-weight:600; color:var(--red); margin-bottom:6px;">고부하 (Heavy Load)</p>
+          <p style="margin:0; font-size:13px; color:var(--text3);">GPU 포화 → 낮은 신뢰도 토큰의 검증을 조기 종료 → 절약한 연산을 다른 요청에 배분 → 집합 처리량 유지</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ④ 성능 벤치마크 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">📊</div>
+      성능 평가 결과
+    </div>
+
+    <div class="hl-box warn" style="margin-bottom:20px;">
+      <div class="hl-title">⚠️ 검증 주의사항</div>
+      <p style="margin:0; color:var(--text3);">
+        아래 모든 수치는 DeepSeek 자체 벤치마킹 결과다. MTP-1 기준선은 DeepSeek 내부 시스템이며, V4-급 서빙은 외부 재현이 사실상 불가능하다. 오픈 모델(Qwen3·Gemma)에서의 수락 길이 비교는 DeepSpec으로 독립 재현 가능하다. 수치는 DeepSeek의 트래픽 믹스와 인프라 조건에서 측정된 것임을 인지하고 해석해야 한다.
+      </p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>비교 대상</th>
+            <th>모델</th>
+            <th>수락 길이 향상</th>
+            <th>지연 감소</th>
+            <th>비고</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>vs EAGLE-3</strong></td>
+            <td>Qwen3-4B</td>
+            <td><span class="pill pill-g">+26.7%</span></td>
+            <td>오프라인 벤치마크</td>
+            <td>순차 드래프터 최신 SOTA 대비</td>
+          </tr>
+          <tr>
+            <td><strong>vs EAGLE-3</strong></td>
+            <td>Qwen3-8B</td>
+            <td><span class="pill pill-g">+28.5%</span></td>
+            <td>오프라인 벤치마크</td>
+            <td>중간 규모 모델</td>
+          </tr>
+          <tr>
+            <td><strong>vs EAGLE-3</strong></td>
+            <td>Qwen3-14B</td>
+            <td><span class="pill pill-g">+30.9%</span></td>
+            <td>오프라인 벤치마크</td>
+            <td>대형 모델에서 격차 확대</td>
+          </tr>
+          <tr>
+            <td><strong>vs DFlash</strong></td>
+            <td>Qwen3-4B</td>
+            <td><span class="pill pill-t">+16.3%</span></td>
+            <td>오프라인 벤치마크</td>
+            <td>병렬 드래프터 최신 SOTA 대비</td>
+          </tr>
+          <tr>
+            <td><strong>vs DFlash</strong></td>
+            <td>Qwen3-14B</td>
+            <td><span class="pill pill-t">+18.4%</span></td>
+            <td>오프라인 벤치마크</td>
+            <td>병렬 드래프터 최신 SOTA 대비</td>
+          </tr>
+          <tr>
+            <td><strong>vs MTP-1</strong></td>
+            <td>V4-Flash</td>
+            <td>—</td>
+            <td><span class="pill pill-g">60~85% 향상</span></td>
+            <td>생산 환경 실측값</td>
+          </tr>
+          <tr>
+            <td><strong>vs MTP-1</strong></td>
+            <td>V4-Pro</td>
+            <td>—</td>
+            <td><span class="pill pill-g">57~78% 향상</span></td>
+            <td>생산 환경 실측값</td>
+          </tr>
+          <tr>
+            <td><strong>집합 처리량</strong></td>
+            <td>V4-Flash</td>
+            <td>—</td>
+            <td><span class="pill pill-g">+51%</span></td>
+            <td>80 tok/s SLA 유지 조건</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="hl-box info">
+      <div class="hl-title">📌 MTP-1 기준선의 의미</div>
+      <p style="margin:0; color:var(--text3);">
+        MTP-1(Multi-Token Prediction depth 1)은 DeepSeek-V3/V4에 내장된 추론 가속 기능으로, 이미 나이브한 자기회귀 대비 상당한 속도 향상을 달성한 <strong>기존 생산 기준선</strong>이다. "60~85% 향상"은 나이브 디코딩 대비가 아닌 이 이미 최적화된 기준선 대비다. 즉 나이브 대비 절대 속도 향상은 훨씬 크지만, 그 수치는 논문에서 공개되지 않았다.
+      </p>
+    </div>
+
+    <!-- Pareto Frontier 설명 -->
+    <div class="card-grid">
+      <div class="card t">
+        <div class="card-title">처리량-상호작용성 Pareto 프런티어</div>
+        <div class="card-body">
+          <p>논문 Figure 3은 V4-Flash의 "초당 사용자 토큰(상호작용성) vs 시스템 총 처리량"의 Pareto 곡선을 보여준다. DSpark는 MTP-1 대비 두 축 모두 개선한다 — 동일 처리량 조건에서 사용자는 더 빠른 응답을 받고, 동일 속도 조건에서 시스템은 더 많은 사용자를 처리한다.</p>
+        </div>
+      </div>
+      <div class="card t">
+        <div class="card-title">Markov vs RNN 헤드 ablation</div>
+        <div class="card-body">
+          <p>논문 ablation에서 RNN 헤드는 더 긴 범위 의존성을 포착하지만 샘플링 속도가 느려 전체 처리량 기여가 Markov와 거의 동일하다. Markov 헤드는 저랭크 행렬 2개(W₁, W₂, rank-256)만으로 구성되어 추가 지연이 &lt;1.5%에 불과하다.</p>
+        </div>
+      </div>
+      <div class="card b">
+        <div class="card-title">DeepSpec 오픈소스 평가 스위트</div>
+        <div class="card-body">
+          <p>독립 검증이 가능한 범위: GSM8K, MATH-500, AIME 2025, HumanEval, MBPP, LiveCodeBench, MT-Bench, AlpacaEval, Arena-Hard. V4 생산 속도는 재현 불가지만, Qwen3·Gemma에서의 수락 길이 비교는 누구나 실행 가능하다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ⑤ DeepSpec 생태계 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">🔩</div>
+      DeepSpec — 오픈소스 생태계 및 활용 가이드
+    </div>
+
+    <p>DeepSpec(<code>deepseek-ai/DeepSpec</code>)은 DSpark, DFlash, EAGLE-3 세 알고리즘의 구현체, 학습 파이프라인, 평가 스위트를 포함하는 MIT 라이선스 코드베이스다. 1,400+ GitHub Stars를 보유하고 있으며, 오픈소스 드래프터 연구의 사실상 기준 레포가 되고 있다.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>구성 요소</th><th>내용</th><th>지원 모델</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>드래프터 구현체</strong></td>
+            <td>DSpark · DFlash · EAGLE-3 (비교 기준)</td>
+            <td>Qwen3 4B/8B/14B · Gemma</td>
+          </tr>
+          <tr>
+            <td><strong>학습 파이프라인</strong></td>
+            <td>데이터 준비 → 드래프터 학습 → 체크포인트 출력</td>
+            <td>타깃 모델에 맞춰 커스텀 가능</td>
+          </tr>
+          <tr>
+            <td><strong>평가 스위트</strong></td>
+            <td>GSM8K · MATH-500 · AIME 2025 · HumanEval · MBPP · LiveCodeBench · MT-Bench · AlpacaEval · Arena-Hard</td>
+            <td>9개 벤치마크</td>
+          </tr>
+          <tr>
+            <td><strong>사전 학습 체크포인트</strong></td>
+            <td>DSpark/DFlash/EAGLE-3 드래프터 가중치</td>
+            <td>Qwen3 4B/8B/14B · Gemma</td>
+          </tr>
+          <tr>
+            <td><strong>라이선스</strong></td>
+            <td>MIT (상업적 사용 포함 자유 활용)</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="hl-box">
+        <div class="hl-title">V4 서버 운영자 (DeepSeek 사용)</div>
+        <p style="margin:0; color:var(--text3);">
+          DSpark 체크포인트를 기존 MTP 드래프터 대신 사용하면 무손실(lossless)로 속도 향상을 얻을 수 있다. 확인해야 할 지표: <strong>자신의 트래픽 믹스에서 측정한 평균 수락 길이(Average Acceptance Length)</strong> — DeepSeek의 수치가 아니라 자체 서빙 로그가 기준이다.
+        </p>
+      </div>
+      <div class="hl-box">
+        <div class="hl-title">타 모델(Qwen3 / Gemma) 운영자</div>
+        <p style="margin:0; color:var(--text3);">
+          DeepSpec으로 자체 타깃 모델에 맞는 DSpark 스타일 드래프터를 학습하고 EAGLE-3와 정면 비교할 수 있다. 중요: 수락 길이 향상은 <strong>자신의 eval 셋</strong>에서 측정해야 한다. DeepSeek의 +26~30% 수치는 DeepSeek 데이터 분포에서 나온 것이다.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ⑥ 선행 연구 맥락 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">📚</div>
+      선행 연구 맥락과 DSpark의 위치
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>논문/기법</th>
+            <th>핵심 기여</th>
+            <th>DSpark와의 관계</th>
+            <th>arXiv</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Speculative Sampling (Chen et al., 2023)</strong></td>
+            <td>현대 Speculative Decoding의 수학적 기초. 드래프트-검증 루프와 거부 샘플링으로 무손실 보장 확립.</td>
+            <td>DSpark가 구축되는 근본 프레임워크</td>
+            <td>arXiv:2302.01318</td>
+          </tr>
+          <tr>
+            <td><strong>Non-Autoregressive NMT (Gu et al., 2018)</strong></td>
+            <td>병렬 생성의 선구. "다중 모달 충돌" 문제를 처음 정식 정의.</td>
+            <td>DSpark가 SAG로 해결하려는 근본 문제의 출처</td>
+            <td>ICLR 2018</td>
+          </tr>
+          <tr>
+            <td><strong>DFlash (Chen et al., 2026)</strong></td>
+            <td>블록 확산 기반 병렬 드래프터. O(1) 드래프트 지연 달성.</td>
+            <td>DSpark 병렬 백본의 기반 아키텍처 + 주요 비교 기준선</td>
+            <td>arXiv:2602.06036</td>
+          </tr>
+          <tr>
+            <td><strong>EAGLE-3 (Li et al., 2026)</strong></td>
+            <td>학습 시 테스트 기법으로 순차 드래프터 스케일업. NeurIPS 2026.</td>
+            <td>DSpark의 주요 순차 드래프터 비교 기준선</td>
+            <td>arXiv:2503.01840</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ⑦ 핵심 요약 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">✅</div>
+      핵심 요약 — 8가지 테이크어웨이
+    </div>
+
+    <div class="card-grid">
+      <div class="card t">
+        <div class="card-title">① DSpark는 드래프터, 모델이 아니다</div>
+        <div class="card-body">V4 가중치를 재사용하며 소형 드래프트 모듈을 부착. 출력 분포는 V4 원본과 수학적으로 동일 (Lossless). 속도 향상은 순수 서빙 효율에서 온다.</div>
+      </div>
+      <div class="card t">
+        <div class="card-title">② 기준선은 나이브 디코딩이 아니다</div>
+        <div class="card-body">MTP-1은 이미 가속된 DeepSeek 내부 생산 기준선. 60~85%는 이 기준 대비 향상이므로, 나이브 대비 절대 배수는 더 크다. 그러나 정확한 수치는 공개되지 않음.</div>
+      </div>
+      <div class="card t">
+        <div class="card-title">③ SAG의 두 단계를 분리해 이해하라</div>
+        <div class="card-body">병렬 백본: 속도(O(1) 드래프트). Markov 헤드: 의존성 복원(Suffix Decay 억제). 두 단계는 독립적으로 기여하며 조합이 핵심이다.</div>
+      </div>
+      <div class="card v">
+        <div class="card-title">④ 신뢰도 스케줄링이 배치 함정을 해결</div>
+        <div class="card-body">기존 드래프터들이 고부하에서 성능 절벽을 맞는 문제를 동적 검증 길이 조절로 완화. "절벽"을 "완만한 곡선"으로 변환. 완전 해결이 아님을 주의.</div>
+      </div>
+      <div class="card b">
+        <div class="card-title">⑤ 수락 길이가 핵심 지표</div>
+        <div class="card-body">EAGLE-3 대비 +26.7~30.9%, DFlash 대비 +16.3~18.4% (Qwen3 4B/8B/14B). 수락 길이는 추론 가속의 직접 동인이며 자신의 워크로드에서 측정해야 한다.</div>
+      </div>
+      <div class="card b">
+        <div class="card-title">⑥ 모든 수치가 벤더 제공, 미검증</div>
+        <div class="card-body">V4 생산 수치는 DeepSeek 인프라 외부 재현 불가. 오픈 모델 수락 길이는 DeepSpec으로 독립 검증 가능. 정확히 구분해야 한다.</div>
+      </div>
+      <div class="card g">
+        <div class="card-title">⑦ DeepSpec MIT 라이선스 — 자체 학습 가능</div>
+        <div class="card-body">Qwen3·Gemma 드래프터를 자체 데이터로 학습하고 DSpark vs EAGLE-3를 자신의 eval 셋에서 비교할 수 있다. 오픈소스 생태계의 실질적 가치.</div>
+      </div>
+      <div class="card g">
+        <div class="card-title">⑧ 자신의 동시접속 수에서 측정하라</div>
+        <div class="card-body">V4 운영자: DSpark 켜고 서빙 로그의 수락 길이 확인. 타 모델: DeepSpec으로 자체 DSpark 드래프터 학습 후 워크로드별 비교. DeepSeek 수치는 가설로 취급하라.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag t">DSpark</span>
+    <span class="tag t">Speculative Decoding</span>
+    <span class="tag">Semi-Autoregressive Generation</span>
+    <span class="tag">Confidence Scheduling</span>
+    <span class="tag">Markov Head</span>
+    <span class="tag">DFlash</span>
+    <span class="tag">EAGLE-3</span>
+    <span class="tag">DeepSpec</span>
+    <span class="tag">LLM 추론 최적화</span>
+    <span class="tag">Hardware-Aware Scheduler</span>
+    <span class="tag">DeepSeek V4</span>
+    <span class="tag">HBM 병목</span>
+    <span class="tag t">MIT 라이선스</span>
+    <span class="tag">Qwen3</span>
+    <span class="tag">ICML 2026</span>
+  </div>
+
+</div>
+</body>
+</html>

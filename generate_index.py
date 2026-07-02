@@ -274,6 +274,10 @@ ARTICLE_META = {
         "title": "온톨로지 기반 AI vs 생성형 LLM<br>— 판단하는 AI의 아키텍처 해부",
         "tags":  ["Ontology", "Knowledge Graph", "Neuro-Symbolic", "Palantir-class", "Sovereign AI"],
     },
+    "2026-07_DSpark_Confidence_Scheduled_Speculative_Decoding_심화기술.html": {
+        "title": "DSpark: Confidence-Scheduled Speculative Decoding with Semi-Autoregressive Generation<br>반자기회귀 드래프트 · 신뢰도 스케줄링 · V4-Flash 60~85% 가속 · DeepSpec MIT 오픈소스",
+        "tags":  ["DSpark", "Speculative Decoding", "Semi-Autoregressive Generation", "Confidence Scheduling", "Markov Head", "DFlash", "EAGLE-3", "DeepSpec", "LLM 추론 최적화", "Hardware-Aware Scheduler", "DeepSeek V4", "HBM 병목", "ICML 2026"],
+    },
 }
 
 # ───────────────────────────────────────────────
