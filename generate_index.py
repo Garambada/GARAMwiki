@@ -240,6 +240,10 @@ ARTICLE_META = {
         "title": "GPT-5.6 Sol · Terra · Luna — OpenAI 차세대 모델 패밀리 전격 해부<br>ultra 멀티에이전트 모드 · 정부 검열 · 3-티어 가격 전략 · Cerebras 750tok/s",
         "tags":  ["GPT-5.6", "Sol", "Terra", "Luna", "OpenAI", "멀티에이전트", "ultra mode", "사이버보안 AI", "Cerebras"],
     },
+    "2026-07_DeepSeek_DSpark_중국AI미래지도_HBM해자_메모리반도체.html": {
+        "title": "DSpark × YMTC × CXMT — 중국AI미래지도: HBM 해자를 뚫는 소프트웨어 기병<br>DSpark 661% 처리량 · YMTC NAND 4위 · CXMT DRAM 4위 · 한국 1000조 투자 리스크 · GLM-5.2 1/8 비용",
+        "tags":  ["DeepSeek DSpark", "Speculative Decoding", "YMTC", "CXMT", "HBM", "중국 메모리반도체", "GLM-5.2", "한국 메모리", "골드만삭스 리스크", "Apple CXMT", "DeepSpec", "Lineshine HPC", "중국AI미래지도", "화웨이 Ascend"],
+    },
     # 담론 등등
     "2025-06_이병한_뉴노멀탐문_3부작_피터틸_기술공화국.html": {
         "title": "이병한 뉴노멀탐문 3부작 — 피터 틸·기술공화국·퍼스트코리아<br>아메리카·테크노차이나·대한민국 문명 탐문",

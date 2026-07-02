@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSpark × YMTC × CXMT — 중국AI미래지도: HBM 해자를 뚫는 소프트웨어 기병</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --accent: #a78bfa;
+    --accent2: #7c3aed;
+    --accent-glow: rgba(167,139,250,0.15);
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #c9d1d9;
+    --red: #f85149;
+    --green: #3fb950;
+    --orange: #f97316;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --teal: #2dd4bf;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Pretendard', 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  /* ── HEADER ── */
+  .hero {
+    background: linear-gradient(135deg, #1a0a2e 0%, #16213e 40%, #0f1b2e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 40px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(124,58,237,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(167,139,250,0.12);
+    border: 1px solid rgba(167,139,250,0.35);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px; font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-size: clamp(22px, 3.2vw, 34px);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+  .hero-title .hl { color: var(--accent); }
+  .hero-sub {
+    font-size: 15px; color: var(--text2);
+    max-width: 780px;
+    margin-bottom: 22px;
+    line-height: 1.6;
+  }
+  .hero-meta {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    font-size: 12px; color: var(--text2);
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 5px; }
+  .hero-meta .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+
+  /* ── STAT STRIP ── */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-cell {
+    background: var(--surface);
+    padding: 22px 20px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-cell .val {
+    font-size: 28px; font-weight: 800;
+    line-height: 1.1; letter-spacing: -0.02em;
+  }
+  .stat-cell .lbl { font-size: 11px; color: var(--text2); letter-spacing: 0.04em; }
+  .stat-cell .ctx { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .c-v { color: var(--accent); }
+  .c-r { color: var(--red); }
+  .c-g { color: var(--green); }
+  .c-o { color: var(--orange); }
+  .c-b { color: var(--blue); }
+  .c-t { color: var(--teal); }
+  .c-y { color: var(--yellow); }
+
+  /* ── LAYOUT ── */
+  .body-wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 52px; }
+  .sec-title {
+    font-size: 20px; font-weight: 700;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sec-title .ico {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(167,139,250,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+  p { color: var(--text3); margin-bottom: 12px; }
+
+  /* ── CARD GRID ── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+  }
+  .card.accent-v { border-top: 3px solid var(--accent); }
+  .card.accent-r { border-top: 3px solid var(--red); }
+  .card.accent-g { border-top: 3px solid var(--green); }
+  .card.accent-o { border-top: 3px solid var(--orange); }
+  .card.accent-b { border-top: 3px solid var(--blue); }
+  .card.accent-t { border-top: 3px solid var(--teal); }
+  .card.accent-y { border-top: 3px solid var(--yellow); }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+  .card-body { color: var(--text3); font-size: 14px; }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { background: var(--surface2); }
+  th { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  td { padding: 12px 16px; color: var(--text3); border-bottom: 1px solid rgba(48,54,61,0.5); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-row {
+    display: flex; align-items: stretch; gap: 0;
+    margin-bottom: 12px;
+  }
+  .flow-box {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 13.5px;
+    color: var(--text3);
+  }
+  .flow-box .ft { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .flow-arrow { display: flex; align-items: center; padding: 0 10px; color: var(--text2); font-size: 18px; flex-shrink: 0; }
+  .flow-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .flow-4col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight {
+    background: var(--accent-glow);
+    border: 1px solid rgba(167,139,250,0.3);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .highlight.warn {
+    background: rgba(248,81,73,0.08);
+    border-color: rgba(248,81,73,0.3);
+  }
+  .highlight.info {
+    background: rgba(88,166,255,0.08);
+    border-color: rgba(88,166,255,0.25);
+  }
+  .highlight.success {
+    background: rgba(63,185,80,0.08);
+    border-color: rgba(63,185,80,0.3);
+  }
+  .highlight.orange {
+    background: rgba(249,115,22,0.08);
+    border-color: rgba(249,115,22,0.3);
+  }
+  .highlight-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 8px; letter-spacing: 0.04em; }
+  .highlight.warn .highlight-title { color: var(--red); }
+  .highlight.info .highlight-title { color: var(--blue); }
+  .highlight.success .highlight-title { color: var(--green); }
+  .highlight.orange .highlight-title { color: var(--orange); }
+
+  /* ── BAR CHART ── */
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .bar-label { font-size: 13px; color: var(--text3); width: 180px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 22px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; transition: width 0.4s; }
+  .bar-val { font-size: 13px; font-weight: 700; width: 60px; text-align: right; }
+
+  /* ── MATRIX ── */
+  .matrix { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .mx-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-size: 13.5px;
+  }
+  .mx-cell .mx-h { font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+  .mx-cell.high { border-color: rgba(248,81,73,0.4); background: rgba(248,81,73,0.05); }
+  .mx-cell.high .mx-h { color: var(--red); }
+  .mx-cell.med { border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.05); }
+  .mx-cell.med .mx-h { color: var(--orange); }
+  .mx-cell.low { border-color: rgba(63,185,80,0.4); background: rgba(63,185,80,0.05); }
+  .mx-cell.low .mx-h { color: var(--green); }
+  .mx-cell.watch { border-color: rgba(88,166,255,0.4); background: rgba(88,166,255,0.05); }
+  .mx-cell.watch .mx-h { color: var(--blue); }
+
+  /* ── LIST ── */
+  ul.fancy { list-style: none; padding: 0; }
+  ul.fancy li {
+    padding: 8px 0 8px 20px;
+    position: relative;
+    color: var(--text3);
+    font-size: 14px;
+    border-bottom: 1px solid rgba(48,54,61,0.4);
+  }
+  ul.fancy li:last-child { border-bottom: none; }
+  ul.fancy li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-size: 11px; top: 10px;
+  }
+
+  /* ── INSIGHT BOX ── */
+  .insight-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .insight-num { font-size: 11px; font-weight: 800; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 6px; }
+  .insight-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .insight-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* ── TAG ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
+  .tag {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 11.5px; color: var(--text2);
+  }
+  .tag.v { background: rgba(167,139,250,0.1); border-color: rgba(167,139,250,0.3); color: var(--accent); }
+
+  /* ── MISC ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width: 720px) { .two-col, .flow-4col, .flow-3col, .matrix { grid-template-columns: 1fr; } .stat-strip { grid-template-columns: repeat(2, 1fr); } }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .pill-r { background: rgba(248,81,73,0.15); color: var(--red); }
+  .pill-g { background: rgba(63,185,80,0.15); color: var(--green); }
+  .pill-v { background: rgba(167,139,250,0.15); color: var(--accent); }
+  .pill-o { background: rgba(249,115,22,0.15); color: var(--orange); }
+  .pill-b { background: rgba(88,166,255,0.15); color: var(--blue); }
+  code { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 12px; color: var(--accent); font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+  strong { color: var(--text); font-weight: 700; }
+  .number-big { font-size: 32px; font-weight: 800; line-height: 1; }
+  .sub-note { font-size: 12px; color: var(--text2); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-badge">
+    <span>🗺️</span>
+    <span>#중국AI미래지도 — 모델 트래커 × 전략 인텔리전스</span>
+  </div>
+  <h1 class="hero-title">
+    <span class="hl">DSpark</span> × <span class="hl">YMTC</span> × <span class="hl">CXMT</span><br>
+    HBM 해자를 뚫는 중국의 소프트웨어 기병 — 2026 AI 메모리 전략 분석
+  </h1>
+  <p class="hero-sub">
+    DeepSeek의 DSpark 추론 프레임워크는 HBM 없이도 661% 처리량을 달성한다. 동시에 YMTC·CXMT는 메모리 세계 4위로 급부상하며 물리적 포위를 완성한다. 소프트웨어 우회 + 하드웨어 추격의 2중 전략이 한국 메모리 1,000조 투자 계획에 구조적 위협을 가하고 있다.
+  </p>
+  <div class="hero-meta">
+    <span><span class="dot"></span> 2026.07 작성</span>
+    <span><span class="dot"></span> 출처: DeepSpec 논문, 한국경제·조선일보·FT 기반 분석</span>
+    <span><span class="dot"></span> 모델_트래커 / 반도체 전략</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ STAT STRIP ═══════════════════════════════════════ -->
+<div class="stat-strip">
+  <div class="stat-cell">
+    <span class="val c-v">661%</span>
+    <span class="lbl">DSpark 처리량 향상</span>
+    <span class="ctx">V4-Flash · 120 tok/s SLA 기준</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-v">5.48 GB</span>
+    <span class="lbl">DeepSeek V4 HBM 점유</span>
+    <span class="ctx">1.6조 파라미터, 90%+ 압축</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-o">13~16%</span>
+    <span class="lbl">YMTC NAND 글로벌 점유율</span>
+    <span class="ctx">2026.Q1 기준 세계 4위</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-o">7.7%</span>
+    <span class="lbl">CXMT DRAM 글로벌 점유율</span>
+    <span class="ctx">2026.Q1 기준 세계 4위</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-r">~3년</span>
+    <span class="lbl">HBM 기술 격차 축소</span>
+    <span class="ctx">Lineshine HPC · TOP500 1위</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-g">1/8</span>
+    <span class="lbl">GLM-5.2 vs Claude Opus 비용</span>
+    <span class="ctx">$4.4/M vs GPT-5.5 $15/M</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-r">1,000조</span>
+    <span class="lbl">한국 메모리 투자 계획</span>
+    <span class="ctx">삼성·SK하이닉스 2030 목표</span>
+  </div>
+  <div class="stat-cell">
+    <span class="val c-b">45%+</span>
+    <span class="lbl">OpenRouter 중국 모델 점유</span>
+    <span class="ctx">미국 모델 72% → 33%로 하락</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ BODY ═══════════════════════════════════════ -->
+<div class="body-wrap">
+
+  <!-- ① 전략 핵심 요약 -->
+  <div class="section">
+    <div class="highlight">
+      <div class="highlight-title">🎯 전략 핵심 — 2중 해자 우회 전략</div>
+      <p style="margin:0; color:var(--text3);">
+        중국은 동시에 두 방향에서 움직인다. <strong>소프트웨어 전선:</strong> DeepSeek DSpark가 HBM 없이 추론 효율 661%를 달성하며 미국의 엔비디아 H100/HBM 수출 통제를 무력화한다. <strong>하드웨어 전선:</strong> YMTC(NAND)·CXMT(DRAM)가 각각 세계 4위로 올라서며 한국이 독점하던 메모리 시장을 정면으로 잠식한다. 이 2중 전략이 수렴하는 지점에서 한국 반도체 산업의 구조적 위협이 시작된다.
+      </p>
+    </div>
+  </div>
+
+  <!-- ② DSpark 기술 심층 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">⚡</div>
+      DSpark — HBM 병목을 소프트웨어로 돌파하는 추론 프레임워크
+    </div>
+
+    <p><strong>DSpark (DeepSeek Speculative ARK)</strong>는 2026년 6월 DeepSeek이 공개한 추론 최적화 프레임워크다. 핵심 논문은 GitHub 저장소 <code>deepseek-ai/DeepSpec</code>에 공개됐으며 1,400+ GitHub Stars를 기록 중이다. DSpark는 LLM 추론의 근본 병목인 <strong>자기회귀(Auto-regressive) 토큰 직렬 생성</strong>을 반자기회귀(Semi-autoregressive) 구조로 해체한다.</p>
+
+    <div class="highlight info">
+      <div class="highlight-title">📐 왜 HBM이 병목인가?</div>
+      <p style="margin:0; color:var(--text3);">
+        LLM 추론은 토큰 1개 생성마다 수십~수백 GB의 모델 가중치를 HBM에서 읽어야 한다. 연산량 대비 메모리 대역폭 소모가 압도적으로 크기 때문에 GPU의 계산 능력 90% 이상이 HBM I/O 대기로 낭비된다. HBM 대역폭을 늘리려면 SK하이닉스·삼성의 HBM 칩이 필요하다 — DSpark는 이 의존성 자체를 소프트웨어로 우회한다.
+      </p>
+    </div>
+
+    <div class="flow-3col" style="margin-bottom:20px;">
+      <div class="flow-box">
+        <div class="ft">병렬 백본 (Draft)</div>
+        경량 드래프트 모델이 여러 후보 토큰을 병렬로 동시 생성. HBM 접근 횟수 대폭 감소.
+      </div>
+      <div class="flow-box" style="border-color:rgba(167,139,250,0.4);">
+        <div class="ft" style="color:var(--accent);">신뢰도 스케줄링</div>
+        Confidence Scheduling — 드래프트 토큰 신뢰도를 실시간으로 평가해 검증 우선순위 동적 결정. CPU 없이 GPU 내 처리.
+      </div>
+      <div class="flow-box">
+        <div class="ft">경량 직렬 검증 (Verify)</div>
+        대형 검증 모델이 수용/거부 결정. 거부된 토큰만 재생성 — 수학적으로 원본 분포와 동일(Lossless).
+      </div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-bottom:20px;">
+      <table>
+        <thead>
+          <tr>
+            <th>모델</th>
+            <th>SLA 기준</th>
+            <th>처리량 향상</th>
+            <th>단일 사용자 속도</th>
+            <th>HBM 압축</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DeepSeek V4-Flash</strong></td>
+            <td>120 tok/s</td>
+            <td><span class="pill pill-g">+661%</span></td>
+            <td>60~85% 향상</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong>DeepSeek V4-Pro</strong></td>
+            <td>50 tok/s</td>
+            <td><span class="pill pill-g">+406%</span></td>
+            <td>60~85% 향상</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong>DeepSeek V4 (전체)</strong></td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="pill pill-v">5.48GB · 90%+ 감축</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-grid">
+      <div class="card accent-v">
+        <div class="card-title">수학적 무손실 (Lossless)</div>
+        <div class="card-body">드래프트-검증 구조는 원본 LLM의 출력 분포를 100% 보존한다. 속도를 높이면서 품질 저하가 없음. 이는 Speculative Decoding의 이론적 보장이다.</div>
+      </div>
+      <div class="card accent-v">
+        <div class="card-title">GPU-only 스케줄링</div>
+        <div class="card-body">기존 구현은 CPU 조율이 필요해 지연이 발생했다. DSpark는 신뢰도 스케줄링을 GPU 내부에서 완결함으로써 CPU 왕복 지연을 제거했다.</div>
+      </div>
+      <div class="card accent-v">
+        <div class="card-title">DeepSpec 오픈소스</div>
+        <div class="card-body">DSpark의 구현체 <code>deepseek-ai/DeepSpec</code>은 공개 라이선스. 1,400+ GitHub Stars. 중국의 "무기 공개 배포" 전략 — 글로벌 AI 인프라가 DSpark를 채택하면 DeepSeek 에코시스템이 된다.</div>
+      </div>
+      <div class="card accent-b">
+        <div class="card-title">글로벌 채택 현황</div>
+        <div class="card-body">Coinbase: GLM-5.2 채택 후 AI 비용 50% 절감. Airbnb: GPT에서 Qwen으로 전환. 미국 AI 스타트업 80%가 중국 오픈소스 사용. OpenRouter 중국 모델 점유율 45%+.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ③ YMTC -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">💾</div>
+      YMTC (양쯔메모리, 长江存储) — NAND 세계 4위 · STAR Market IPO 임박
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="highlight orange" style="margin-bottom:16px;">
+          <div class="highlight-title">📈 2026 Q1 핵심 지표</div>
+          <ul class="fancy" style="margin:0;">
+            <li>NAND 글로벌 시장 점유율 <strong class="c-o">13~16%</strong> (세계 4위)</li>
+            <li>2026 Q1 매출 <strong class="c-o">200억 위안 이상</strong></li>
+            <li>STAR Market IPO: 예상 밸류에이션 <strong class="c-o">~3,000억 위안</strong></li>
+            <li>IPO 시점: 2026 Q4 ~ 2027 H1 예상</li>
+            <li>2025년부터 애플 iPhone 17 Pro NAND 납품 개시</li>
+          </ul>
+        </div>
+
+        <div class="card accent-o">
+          <div class="card-title">성장 궤적</div>
+          <div class="card-body">
+            <div class="bar-row" style="margin-bottom:8px;">
+              <div class="bar-label" style="font-size:12px;">2022 Q1 점유율</div>
+              <div class="bar-track"><div class="bar-fill" style="width:5%; background:var(--text2);">~4%</div></div>
+            </div>
+            <div class="bar-row" style="margin-bottom:8px;">
+              <div class="bar-label" style="font-size:12px;">2025 Q1 점유율</div>
+              <div class="bar-track"><div class="bar-fill" style="width:45%; background:var(--yellow);">8~10%</div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label" style="font-size:12px;">2026 Q1 점유율</div>
+              <div class="bar-track"><div class="bar-fill" style="width:70%; background:var(--orange);">13~16%</div></div>
+            </div>
+            <p style="font-size:12px; margin-top:8px; margin-bottom:0; color:var(--text2);">4년 만에 세계 4위 달성. Samsung·Kioxia·Western Digital에 이어 SK Hynix 위협 수준.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card accent-o" style="margin-bottom:16px;">
+          <div class="card-title">Xtacking 기술 전략</div>
+          <div class="card-body">
+            <p>YMTC의 핵심 기술 <strong>Xtacking</strong>은 로직 칩과 스토리지 어레이를 웨이퍼 본딩으로 결합한다. 삼성·SK하이닉스의 V-NAND와 다른 접근법으로, I/O 속도를 2~3배 높인다.</p>
+            <p style="margin-bottom:0;">미국 수출 통제(BIS Entity List)로 EUV 장비를 구하지 못하지만, DUV 다중 패터닝으로 232단 3D NAND 양산을 시작했다. 2026년 중 300단 이상 전환 목표.</p>
+          </div>
+        </div>
+        <div class="card accent-y">
+          <div class="card-title">IPO 전략적 의미</div>
+          <div class="card-body">
+            <p>STAR Market(科创板) 상장은 단순 자금 조달이 아니다. 중국 반도체 굴기의 국가 서사를 자본시장으로 이어가는 정치경제적 이벤트다.</p>
+            <p style="margin-bottom:0;">홍콩 우회 IPO 가능성도 언급됨. 글로벌 투자자 유치 통로 확보가 최우선 목표.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ④ CXMT -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">🔮</div>
+      CXMT (창신메모리, 长鑫存储) — DRAM 세계 4위 · HBM 추격 가속
+    </div>
+
+    <div class="highlight warn" style="margin-bottom:20px;">
+      <div class="highlight-title">⚠️ HBM 기술 격차 3년으로 좁혀짐 — Lineshine HPC, ISC2026 TOP500 세계 1위</div>
+      <p style="margin:0; color:var(--text3);">
+        중국 링성(灵犀, Lineshine) HPC 시스템이 ISC2026 독일에서 <strong>2.19 EFlops</strong>로 TOP500 세계 1위를 기록했다. 이 시스템은 CXMT 개발 HBM을 탑재한 것으로 분석된다. HBM2E 수준에서 한국·미국 대비 3년 격차로 좁혀졌다는 평가가 나온다.
+      </p>
+    </div>
+
+    <div class="card-grid" style="margin-bottom:20px;">
+      <div class="card accent-r">
+        <div class="card-title">DRAM 시장 현황 (2026 Q1)</div>
+        <div class="card-body">
+          <div class="bar-row" style="margin-bottom:6px;">
+            <div class="bar-label" style="font-size:12px; width:140px;">삼성 (1위)</div>
+            <div class="bar-track"><div class="bar-fill" style="width:38%; background:#3b82f6;">38%</div></div>
+          </div>
+          <div class="bar-row" style="margin-bottom:6px;">
+            <div class="bar-label" style="font-size:12px; width:140px;">SK하이닉스 (2위)</div>
+            <div class="bar-track"><div class="bar-fill" style="width:34%; background:#06b6d4;">34%</div></div>
+          </div>
+          <div class="bar-row" style="margin-bottom:6px;">
+            <div class="bar-label" style="font-size:12px; width:140px;">Micron (3위)</div>
+            <div class="bar-track"><div class="bar-fill" style="width:22%; background:#8b5cf6;">22%</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label" style="font-size:12px; width:140px;">CXMT (4위)</div>
+            <div class="bar-track"><div class="bar-fill" style="width:9%; background:var(--red);">7.7%</div></div>
+          </div>
+          <p style="font-size:12px; margin-top:8px; margin-bottom:0; color:var(--text2);">2년 전 1~2%에서 7.7%로 급성장. 연간 2~3%p 상승 중.</p>
+        </div>
+      </div>
+
+      <div class="card accent-r">
+        <div class="card-title">핵심 사업 지표</div>
+        <div class="card-body">
+          <ul class="fancy">
+            <li>IPO 조달 목표: <strong>~295억 위안</strong></li>
+            <li>텐센트 5년 계약: <strong>4.5조원</strong> 규모</li>
+            <li>HBM 생산 목표: 2026말 <strong>30~35만 웨이퍼/월</strong></li>
+            <li>DRAM 가격 기여: 93~98% 급등, 2Q 추가 58~63% 인상 압박</li>
+            <li>Apple 로비: CXMT 칩을 Mac에 사용 허가 요청 (FT 보도)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent-y">
+        <div class="card-title">Apple의 CXMT 로비 — 전략적 의미</div>
+        <div class="card-body">
+          <p>FT(파이낸셜타임스)가 보도한 Apple의 미 상무부 로비는 단순 원가 절감 요청이 아니다. Apple이 CXMT를 공식 공급망에 편입하려 한다는 것은, <strong>중국 메모리의 품질이 이미 PC급 상용 제품 요건을 충족했다</strong>는 사실을 시장에 신호한다.</p>
+          <p style="margin-bottom:0;">한국 메모리 업계에 대한 단가 협상력(Pricing Power) 약화로 이어질 수 있다.</p>
+        </div>
+      </div>
+
+      <div class="card accent-b">
+        <div class="card-title">수출통제 우회 방법론</div>
+        <div class="card-body">
+          <p>미국 BIS는 CXMT를 Entity List에 등재했지만, CXMT는 다음 경로를 활용한다:</p>
+          <ul class="fancy">
+            <li>제3국 경유 장비 조달 (말레이시아·태국 등)</li>
+            <li>중국산 KrF/ArF DUV 장비로 EUV 대체 (SMEE)</li>
+            <li>국산화된 CMP·증착·식각 장비 생태계 구축 중</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ⑤ GLM-5.2 vs 글로벌 프런티어 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">🤖</div>
+      GLM-5.2 — 1/8 비용으로 프런티어를 흔드는 화웨이 기반 모델
+    </div>
+
+    <div class="tbl-wrap" style="margin-bottom:20px;">
+      <table>
+        <thead>
+          <tr>
+            <th>모델</th>
+            <th>가격 (입력/M tok)</th>
+            <th>상대 비용</th>
+            <th>훈련 인프라</th>
+            <th>채택 사례</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>GLM-5.2</strong></td>
+            <td><span class="c-g">$4.4</span></td>
+            <td><span class="pill pill-g">기준</span></td>
+            <td>화웨이 Ascend 910C × 100,000</td>
+            <td>Coinbase, 중국 기업 다수</td>
+          </tr>
+          <tr>
+            <td><strong>GPT-5.5</strong></td>
+            <td><span class="c-r">$15</span></td>
+            <td><span class="pill pill-r">3.4배</span></td>
+            <td>NVIDIA H100/H200 클러스터</td>
+            <td>Airbnb에서 Qwen으로 이탈 중</td>
+          </tr>
+          <tr>
+            <td><strong>Claude Opus 4.8</strong></td>
+            <td><span class="c-r">~$35</span></td>
+            <td><span class="pill pill-r">~8배</span></td>
+            <td>NVIDIA H100 클러스터</td>
+            <td>엔터프라이즈 고급 태스크</td>
+          </tr>
+          <tr>
+            <td><strong>Qwen-3-72B</strong></td>
+            <td><span class="c-y">~$2</span></td>
+            <td><span class="pill pill-v">저가 경쟁</span></td>
+            <td>화웨이 + NVIDIA 혼합</td>
+            <td>Airbnb 전환 목적지</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="highlight success">
+        <div class="highlight-title">📊 시장 점유율 이동 현황</div>
+        <ul class="fancy" style="margin:0;">
+          <li>OpenRouter 중국 모델 점유율: <strong class="c-g">45%+</strong></li>
+          <li>미국 모델 점유율: <strong>72% → 33%</strong> (급락)</li>
+          <li>미국 AI 스타트업 80% 중국 오픈소스 사용</li>
+          <li>Coinbase: GLM-5.2 도입으로 AI 비용 <strong class="c-g">50% 절감</strong></li>
+          <li>Airbnb: GPT → Qwen 전환 완료</li>
+        </ul>
+      </div>
+      <div class="highlight warn">
+        <div class="highlight-title">⚠️ 화웨이 독자 인프라 사이클 완결</div>
+        <p style="margin:0; color:var(--text3);">
+          GLM-5.2는 화웨이 Ascend 910C 100,000개로 훈련됐다. 즉 NVIDIA 칩 없이 프런티어급 모델을 생산하는 것이 가능해졌다는 사실의 증거다. 수출 통제가 "느리게 하는 도구"에서 "거의 효과 없는 도구"로 격하되는 분기점이다.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ⑥ 한국 1000조 투자의 역설 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">🇰🇷</div>
+      한국 메모리 1,000조 투자의 역설 — 양면 포위와 수요 함정
+    </div>
+
+    <div class="highlight warn" style="margin-bottom:20px;">
+      <div class="highlight-title">⚠️ 골드만삭스(Goldman Sachs) 3대 다운사이드 리스크</div>
+      <div class="flow-3col">
+        <div class="flow-box" style="background:rgba(248,81,73,0.05); border-color:rgba(248,81,73,0.3);">
+          <div class="ft" style="color:var(--red);">① HBM 가격 모멘텀 둔화</div>
+          DSpark·MLA 등 소프트웨어 최적화로 AI 서버당 HBM 탑재량 증가 속도 둔화. 가격 프리미엄 유지 불확실.
+        </div>
+        <div class="flow-box" style="background:rgba(248,81,73,0.05); border-color:rgba(248,81,73,0.3);">
+          <div class="ft" style="color:var(--red);">② CXMT DRAM 점유율 상승</div>
+          중저가 DRAM에서 CXMT가 삼성·SK하이닉스를 대체. 단가 하락 압력 구조적으로 심화.
+        </div>
+        <div class="flow-box" style="background:rgba(248,81,73,0.05); border-color:rgba(248,81,73,0.3);">
+          <div class="ft" style="color:var(--red);">③ AI 서버 CAPEX 둔화</div>
+          GLM-5.2·DSpark로 추론 효율이 오르면, 동일 서비스에 필요한 GPU·HBM 서버 수가 줄어든다. 빅테크 AI 인프라 투자 증가 속도가 꺾일 수 있다.
+        </div>
+      </div>
+    </div>
+
+    <div class="matrix">
+      <div class="mx-cell high">
+        <div class="mx-h">🔴 공급 과잉 함정 (HIGH)</div>
+        <p style="font-size:13px; margin:0; color:var(--text3);">삼성·SK하이닉스가 1,000조를 투자해 2028~2030년 HBM 생산능력을 확대하는 시기에, CXMT가 중저가 DRAM 시장을 잠식하고 DSpark가 HBM 수요 증가를 억제하면, 한국은 넘쳐나는 HBM을 팔 곳을 잃는다.</p>
+      </div>
+      <div class="mx-cell high">
+        <div class="mx-h">🔴 기술 격차 소멸 (HIGH)</div>
+        <p style="font-size:13px; margin:0; color:var(--text3);">현재 HBM3E에서 한국 vs 중국 기술 격차는 ~3년. 중국 투자 속도(CXMT · SMIC · 국가 보조금)를 감안하면 2028년경 HBM 수준 평준화가 현실적 시나리오.</p>
+      </div>
+      <div class="mx-cell med">
+        <div class="mx-h">🟠 고객 이탈 (MED-HIGH)</div>
+        <p style="font-size:13px; margin:0; color:var(--text3);">Apple이 CXMT 사용 허가를 받을 경우, 삼성의 스마트폰 DRAM 최대 고객인 Apple에서 일부 DRAM 점유율이 이탈. 단가 협상력 약화.</p>
+      </div>
+      <div class="mx-cell med">
+        <div class="mx-h">🟠 미중 규제 교차화 (MED)</div>
+        <p style="font-size:13px; margin:0; color:var(--text3);">미국이 한국에 대중 메모리 수출 규제 동참을 압박하는 동시에, 중국은 희토류·소재 공급을 무기화. 한국이 both를 잃는 최악 시나리오도 배제 불가.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ⑦ 글로벌 파워 구도 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">🌏</div>
+      글로벌 South — 중국 AI 통합 스택의 새 전장
+    </div>
+
+    <p>DSpark·GLM-5.2·YMTC·CXMT가 통합되면 중국은 "AI 칩 → 메모리 → 추론 프레임워크 → 오픈소스 모델 → 애플리케이션"까지 하나의 수직 통합 스택을 글로벌 South에 수출할 수 있다. 이는 미국의 단속 밖에 있는 아프리카·동남아·중동·라틴아메리카 시장을 대상으로 한다.</p>
+
+    <div class="card-grid">
+      <div class="card accent-t">
+        <div class="card-title">중국 AI 통합 스택 (수출 패키지)</div>
+        <div class="card-body">
+          <div class="flow-4col" style="gap:8px; margin-bottom:8px;">
+            <div style="background:var(--surface2); border-radius:6px; padding:10px; text-align:center; font-size:12px; border: 1px solid var(--border);">🔧 화웨이 Ascend GPU</div>
+            <div style="background:var(--surface2); border-radius:6px; padding:10px; text-align:center; font-size:12px; border: 1px solid var(--border);">💾 YMTC NAND + CXMT DRAM</div>
+            <div style="background:rgba(167,139,250,0.1); border-radius:6px; padding:10px; text-align:center; font-size:12px; border: 1px solid rgba(167,139,250,0.3); color:var(--accent);">⚡ DSpark 추론 프레임워크</div>
+            <div style="background:var(--surface2); border-radius:6px; padding:10px; text-align:center; font-size:12px; border: 1px solid var(--border);">🤖 Qwen / GLM-5.2 오픈소스</div>
+          </div>
+          <p style="font-size:12px; margin:0; color:var(--text2);">각 레이어가 서로 최적화됨. 단일 공급사로부터 AI 인프라 전체를 구매할 수 있다는 것이 글로벌 South에 강력한 메시지.</p>
+        </div>
+      </div>
+      <div class="card accent-t">
+        <div class="card-title">미국 통제 효과 한계</div>
+        <div class="card-body">
+          <ul class="fancy">
+            <li>수출 통제는 중국 내수 시장에는 무효 — 국내 AI 스케일링 계속</li>
+            <li>DSpark로 NVIDIA H100 성능 대부분을 소프트웨어로 대체</li>
+            <li>Huawei Ascend 910C: NVIDIA A100 대비 성능 70~80% 도달</li>
+            <li>글로벌 South 수출: 규제 대상 외 (미국 동맹국 아님)</li>
+            <li>"규제 → 혁신 촉진" 아이러니 반복 중</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ⑧ GARAMbada 인사이트 -->
+  <div class="section">
+    <div class="sec-title">
+      <div class="ico">💡</div>
+      GARAMbada 인사이트 — Company Builder 관점
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-num">INSIGHT 01</div>
+        <div class="insight-title">DSpark는 "소프트웨어로 하드웨어 해자를 우회"하는 범형(範型)이다</div>
+        <div class="insight-body">
+          반도체 수출 통제를 전제로 설계된 AI 아키텍처가 결국 더 효율적인 모델을 낳는 아이러니. DSpark의 661% 처리량은 단순 최적화가 아니라 "하드웨어 부족 → 소프트웨어 혁신 강제 → 경쟁 우위"의 전환 사례다. 한국 AI 스타트업도 인프라 격차를 소프트웨어 최적화로 돌파하는 전략이 유효하다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">INSIGHT 02</div>
+        <div class="insight-title">한국 메모리 1,000조 투자 전략의 전제가 흔들리고 있다</div>
+        <div class="insight-body">
+          삼성·SK하이닉스의 1,000조 투자는 "AI 서버 수요 지속 증가 + HBM 단가 프리미엄 유지"를 전제로 한다. DSpark가 HBM 수요 증가를 억제하고, CXMT가 DRAM 단가를 누르고, GLM-5.2가 AI 서버 CAPEX를 줄인다면, 이 3중 압박이 한국 반도체 투자 수익성을 동시에 훼손한다. C레벨에서 시나리오 플래닝 재검토가 필요한 시점이다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">INSIGHT 03</div>
+        <div class="insight-title">오픈소스 확산은 "모델 가격의 레이스 투 제로"를 가속한다</div>
+        <div class="insight-body">
+          Coinbase·Airbnb의 이탈은 단순 비용 절감이 아니다. 미국 AI 스타트업 80%가 중국 오픈소스를 쓴다는 것은 AI 모델이 이미 상품화(commoditization) 단계에 진입했음을 의미한다. "모델 그 자체"가 아닌 "모델 위에 올라가는 데이터·워크플로우·도메인 특화"가 지속 가능 경쟁 우위의 원천이 된다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">INSIGHT 04</div>
+        <div class="insight-title">Apple CXMT 로비는 밸류체인 재편의 전조다</div>
+        <div class="insight-body">
+          Apple이 CXMT 허가 로비를 한다는 것은, 중국 메모리 품질이 이미 "Apple 서플라이 체인 기준"을 통과했다는 신호다. 이것이 허가되면 퀄컴·인텔·AMD 등 다른 미국 팹리스도 도미노처럼 CXMT를 검토할 것이다. 한국 메모리 업체들의 가장 큰 고객이 중국 메모리 허가를 요청하고 있다는 아이러니를 직시해야 한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">INSIGHT 05</div>
+        <div class="insight-title">글로벌 South 진출 기회: 중국 스택과 경쟁하는 한국 모델 필요</div>
+        <div class="insight-body">
+          중국이 글로벌 South에 AI 수직통합 스택을 수출하는 시장에서, 한국은 역설적으로 "서방 AI + 한국 반도체"의 신뢰 가능한 중간 공급자로 포지셔닝할 기회가 있다. 삼성·SK하이닉스는 미국 동맹 체계 안에서 CXMT를 넘을 수 없지만, 프리미엄 HBM과 신뢰 기반 공급망으로 차별화할 수 있다. 이 논리를 정책·비즈니스 레벨에서 구체화해야 한다.
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">INSIGHT 06</div>
+        <div class="insight-title">DeepSpec 오픈소스 전략 — "기술 공개 = 생태계 장악"</div>
+        <div class="insight-body">
+          DeepSeek이 DSpark를 오픈소스로 배포하는 것은 기술 자선이 아니다. 전 세계 인퍼런스 인프라가 DeepSpec 스택을 채택하면, DeepSeek의 아키텍처 선택이 업계 표준이 된다. OpenAI가 API를 통해 모델 사용을 잠근 것과 반대 방향에서, DeepSeek은 오픈소스를 통해 "DeepSeek 호환"을 생태계 규범으로 만든다. 안드로이드가 스마트폰 OS를 장악한 방식과 구조적으로 동일하다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag v">DeepSeek DSpark</span>
+    <span class="tag v">Speculative Decoding</span>
+    <span class="tag">YMTC</span>
+    <span class="tag">CXMT</span>
+    <span class="tag">HBM</span>
+    <span class="tag">중국 메모리반도체</span>
+    <span class="tag">GLM-5.2</span>
+    <span class="tag">한국 메모리 1000조</span>
+    <span class="tag">골드만삭스 리스크</span>
+    <span class="tag">Apple CXMT</span>
+    <span class="tag">DeepSpec</span>
+    <span class="tag">Lineshine HPC</span>
+    <span class="tag">중국AI미래지도</span>
+    <span class="tag">글로벌 South</span>
+    <span class="tag">화웨이 Ascend</span>
+    <span class="tag">오픈소스 AI</span>
+  </div>
+
+</div>
+</body>
+</html>
