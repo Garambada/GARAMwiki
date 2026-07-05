@@ -111,6 +111,10 @@ ARTICLE_META = {
         "title": "Stanford HAI 2026 AI Index Report<br>— $581.7B 투자·SWE-bench 100%·개발자 -20%·미중 2.7% 격차 · 기술-거버넌스 비대칭 심화",
         "tags":  ["Stanford HAI", "AI Index 2026", "AI 현황 보고서", "AI 투자", "미중 AI 경쟁", "AI 노동시장", "SWE-bench", "AI 거버넌스", "생성AI 보급", "환경비용"],
     },
+    "트렌드_레이더_2026-05.html": {
+        "title": "GARAMwiki AI 트렌드 레이더 2026<br>🔴 16 긴급 주목 · 🟡 13 주목 관찰 · DSpark×YMTC·Stanford HAI·패트릭 드닌 수록 · 2026-07-05 업데이트",
+        "tags":  ["트렌드 레이더", "AI 시장 동향", "C레벨 인텔리전스", "AI 전략", "즉각 행동", "DSpark", "YMTC", "CXMT", "Stanford HAI", "패트릭 드닌", "수출통제", "Enterprise Agentic"],
+    },
     "2026-05_KPMG_Venture_Pulse_Q1_2026_Global.html": {
         "title": "KPMG Venture Pulse Q1 2026<br>— 글로벌 VC 투자 역대 최고 $3,309억, AI 메가딜 집중",
         "tags":  ["KPMG Venture Pulse", "글로벌 VC", "OpenAI $122B", "AI 메가딜", "방산 테크"],
