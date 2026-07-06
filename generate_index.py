@@ -61,6 +61,10 @@ ARTICLE_META = {
         "title": "MIT Technology Review Korea Vol.27 — AI 에이전트 The Next Worker<br>챗봇 이후의 AI · 피지컬 AI · 멀티에이전트 위험 · 10대 키워드 (2026 7·8월호)",
         "tags":  ["MIT TR Korea", "AI 에이전트", "The Next Worker", "피지컬 AI", "멀티에이전트", "AI 거버넌스"],
     },
+    "2026-07_AI_Frontier_EP102_샌프란시스코교훈_사람들이다미쳐요.html": {
+        "title": "AI Frontier EP102 — 샌프란시스코의 교훈: \"사람들이 다 미쳐요\"<br>노정석 현장 르포 · HumanX $3,995 · AX 조건 · VIZCOM \"Mission Is the Moat\" · McKinsey 6% 성과율",
+        "tags":  ["AI Frontier", "노정석", "Chester Roh", "샌프란시스코", "실리콘밸리", "AI 과열", "VIZCOM", "Mission Is the Moat", "AX 조건", "McKinsey", "Snowflake Summit", "한국 창업자", "AI Psychosis", "HumanX", "GTC 2026"],
+    },
     # 나의 인사이트
     "2026-05_AI_Native_vs_Agent_Native_전략_분석.html": {
         "title": "AI-Native vs Agent-Native — 개념 정의·전략·실행 플랜<br>Garambada 심층 분석 보고서",

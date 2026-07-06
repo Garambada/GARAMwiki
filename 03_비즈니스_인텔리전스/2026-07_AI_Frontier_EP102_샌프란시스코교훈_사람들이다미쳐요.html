@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GARAMwiki — AI Frontier EP102 샌프란시스코의 교훈</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #3b82f6;
+    --accent-soft: rgba(59,130,246,0.12);
+    --accent-border: rgba(59,130,246,0.35);
+    --red: #f97316;
+    --red-soft: rgba(249,115,22,0.12);
+    --green: #10b981;
+    --green-soft: rgba(16,185,129,0.12);
+    --yellow: #f0a500;
+    --yellow-soft: rgba(240,165,0,0.12);
+    --purple: #a78bfa;
+    --purple-soft: rgba(167,139,250,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #1a2535 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 48px 28px;
+  }
+
+  .cat-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  header h1 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: -0.4px;
+    margin-bottom: 6px;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  .header-sub {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+
+  .header-meta span {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+
+  /* ── STAT STRIP ── */
+  .stat-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat-item {
+    flex: 1;
+    min-width: 130px;
+    padding: 16px 22px;
+    border-right: 1px solid var(--border);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .stat-num.orange { color: var(--red); }
+  .stat-num.green  { color: var(--green); }
+  .stat-num.yellow { color: var(--yellow); }
+  .stat-num.purple { color: var(--purple); }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* ── MAIN ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 48px; }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent);
+    border-left: 3px solid var(--accent);
+    padding-left: 14px;
+    margin-bottom: 20px;
+    letter-spacing: -0.2px;
+  }
+
+  .section-title.orange { color: var(--red);    border-color: var(--red); }
+  .section-title.green  { color: var(--green);  border-color: var(--green); }
+  .section-title.yellow { color: var(--yellow); border-color: var(--yellow); }
+  .section-title.purple { color: var(--purple); border-color: var(--purple); }
+
+  /* ── CARDS ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+
+  .card:hover { transform: translateY(-2px); border-color: #444c56; }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 10px 0 0 10px;
+  }
+
+  .card.blue::before   { background: var(--accent); }
+  .card.orange::before { background: var(--red); }
+  .card.green::before  { background: var(--green); }
+  .card.yellow::before { background: var(--yellow); }
+  .card.purple::before { background: var(--purple); }
+
+  .card-emoji {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .card-body {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .card-num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+    display: block;
+    color: var(--accent);
+  }
+
+  .card-num.orange { color: var(--red); }
+  .card-num.green  { color: var(--green); }
+  .card-num.yellow { color: var(--yellow); }
+  .card-num.purple { color: var(--purple); }
+
+  /* ── PROSE BLOCK ── */
+  .prose {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    font-size: 0.88rem;
+    color: #cdd9e5;
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  .prose strong { color: var(--text); font-weight: 700; }
+  .prose em { color: var(--accent); font-style: normal; }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    font-size: 0.88rem;
+    color: #cdd9e5;
+    line-height: 1.7;
+  }
+
+  .highlight.orange { background: var(--red-soft); border-color: rgba(249,115,22,0.35); }
+  .highlight.green  { background: var(--green-soft); border-color: rgba(16,185,129,0.35); }
+  .highlight.yellow { background: var(--yellow-soft); border-color: rgba(240,165,0,0.35); }
+  .highlight.purple { background: var(--purple-soft); border-color: rgba(167,139,250,0.35); }
+
+  .highlight-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .highlight-label.orange { color: var(--red); }
+  .highlight-label.green  { color: var(--green); }
+  .highlight-label.yellow { color: var(--yellow); }
+  .highlight-label.purple { color: var(--purple); }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+    margin-bottom: 14px;
+  }
+
+  thead th {
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td { padding: 11px 14px; vertical-align: top; line-height: 1.5; color: #cdd9e5; }
+  tbody td:first-child { color: var(--muted); font-size: 0.8rem; min-width: 110px; }
+
+  .chip {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  .chip-blue   { background: var(--accent-soft); border: 1px solid var(--accent-border); color: var(--accent); }
+  .chip-orange { background: var(--red-soft); border: 1px solid rgba(249,115,22,0.4); color: var(--red); }
+  .chip-green  { background: var(--green-soft); border: 1px solid rgba(16,185,129,0.4); color: var(--green); }
+  .chip-yellow { background: var(--yellow-soft); border: 1px solid rgba(240,165,0,0.4); color: var(--yellow); }
+  .chip-purple { background: var(--purple-soft); border: 1px solid rgba(167,139,250,0.4); color: var(--purple); }
+
+  /* ── QUOTE ── */
+  .quote-block {
+    border-left: 4px solid var(--accent);
+    padding: 14px 20px;
+    margin: 14px 0;
+    background: var(--surface2);
+    border-radius: 0 8px 8px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.55;
+    font-style: italic;
+  }
+
+  .quote-block .quote-src {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: normal;
+    font-weight: 400;
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* ── INSIGHT CARDS ── */
+  .insight-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 14px;
+  }
+
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    border-top: 2px solid var(--accent);
+  }
+
+  .insight-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .insight-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .insight-body {
+    font-size: 0.81rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── FLOW ── */
+  .flow {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .flow-step {
+    flex: 1;
+    min-width: 180px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+  }
+
+  .flow-arrow {
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--muted);
+    flex-shrink: 0;
+    padding-top: 24px;
+  }
+
+  .flow-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .flow-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .flow-body {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px 40px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  @media (max-width: 700px) {
+    header, main { padding-left: 20px; padding-right: 20px; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); width: auto; padding: 6px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="cat-badge">📊 비즈니스 인텔리전스</div>
+  <h1>샌프란시스코의 교훈: <span>"사람들이 다 미쳐요"</span></h1>
+  <p class="header-sub">AI Frontier Korea EP102 — 노정석(Chester Roh) · 현장 르포 + 비즈니스 인사이트</p>
+  <div class="header-meta">
+    <span>📅 2026-07</span>
+    <span>🎙 AI Frontier Korea (노정석)</span>
+    <span>📍 샌프란시스코 → 귀환 리플렉션</span>
+    <span>⏱ EP102</span>
+    <span>🔗 youtube.com/watch?v=SSIGI9mm0DU</span>
+  </div>
+</header>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-item">
+    <span class="stat-num orange">$3,995</span>
+    <span class="stat-label">HumanX AI 행사 입장료<br>약 540만원 (SF Moscone)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num orange">10배+</span>
+    <span class="stat-label">GTC 2026 기간<br>SF 호텔 가격 폭등</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">2~3건</span>
+    <span class="stat-label">SF Moscone Center<br>월간 AI 행사 수</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num green">88%</span>
+    <span class="stat-label">기업 AI 도입률<br>(McKinsey)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num orange">6%</span>
+    <span class="stat-label">대규모 성과 달성<br>기업 비율 (McKinsey)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num yellow">$50M</span>
+    <span class="stat-label">VIZCOM 누적 투자<br>AI 산업 디자인 스타트업</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- ── 0. 에피소드 개요 ── -->
+  <div class="section">
+    <div class="section-title">🛰 에피소드 개요 — 왜 "다 미쳐요"인가</div>
+
+    <div class="prose">
+      AI Frontier Korea의 노정석(Chester Roh)이 샌프란시스코 현지 방문(EP101 VIZCOM 인터뷰 포함)을 마치고 돌아와 전하는 리플렉션 에피소드. 제목 <strong>"사람들이 다 미쳐요"</strong>는 수사가 아니라 현장 체감이다.
+      <br><br>
+      HumanX 한 행사에만 <em>160개 AI 기업</em>이 부스를 운영하고, 입장권 한 장에 $3,995(약 540만원)를 받는다. 샌프란시스코 Moscone Center는 <em>매달 2~3건</em>이 전부 AI 행사다. GTC 2026 기간 인근 2성급 호텔이 $2,000/박으로 10배 폭등했다. 젠슨 황은 레노버·씨스코·모건스탠리 행사를 돌며 '품앗이'를 한다. 행사장엔 무료 음식과 굿즈를 노리는 '굿즈 헌터'도 출몰한다.
+      <br><br>
+      그러나 에피소드는 단순한 흥분 보고서가 아니다. 노정석이 이 과열 현장에서 추출한 <strong>세 가지 비즈니스 교훈</strong>이 핵심: ① VIZCOM의 "Mission Is the Moat", ② AX 성패를 가르는 기본기, ③ 실리콘밸리 낙관주의 vs 한국 창업자의 과도한 조심성.
+    </div>
+
+    <div class="quote-block">
+      "사람들이 다 미쳐요. 그런데 이게 가짜 거품이 아니에요. 실제로 시장이 만들어지고 있고, 실제로 돈이 움직이고, 실제로 제품이 나오고 있어요."
+      <span class="quote-src">— 노정석(Chester Roh), AI Frontier EP102</span>
+    </div>
+  </div>
+
+  <!-- ── 1. SF AI 과열 현장 ── -->
+  <div class="section">
+    <div class="section-title orange">🔥 샌프란시스코 AI 과열 현장 — 숫자로 보는 광기</div>
+
+    <div class="cards">
+      <div class="card orange">
+        <span class="card-num orange">$3,995</span>
+        <div class="card-title">HumanX — AI 행사 신경제</div>
+        <div class="card-body">Moscone Center에서 열린 HumanX 행사 입장료 $3,995 (약 540만원). 160여 AI 기업 부스, 스타트업 피칭, "기업용 AI 에이전트가 나아가야 할 길" 강연. 헬스케어 콘퍼런스 주관사가 2025년 처음 개최한 2회차 행사. AI 산업형 이벤트가 빠르게 제도화되는 중.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-num orange">10배↑</span>
+        <div class="card-title">GTC 2026 숙박 대란</div>
+        <div class="card-body">GTC 2026 기간 인근 2성급 호텔이 $2,000/박을 넘어섬 (평상시 대비 10배 이상). 대부분 만석. Moscone Center는 수개월~1년 전부터 예약 마감. "Silicon Valley로 오려면 1년 전에 예약하라"가 신상식이 됨.</div>
+      </div>
+      <div class="card blue">
+        <span class="card-num">2~3건/월</span>
+        <div class="card-title">Moscone Center AI 행사 밀도</div>
+        <div class="card-body">SF Moscone Center에서 매달 2~3건의 행사가 열리며, 대부분이 AI 행사. YC AI Startup School(SF 첫 개최), AI Agent Conference, Stanford Agent4Science 등 신규 행사도 속속 생성. AI 행사가 새로운 산업 인프라가 됨.</div>
+      </div>
+      <div class="card yellow">
+        <span class="card-num yellow">품앗이</span>
+        <div class="card-title">AI 생태계 Executive 네트워크</div>
+        <div class="card-body">젠슨 황 NVIDIA CEO가 레노버 CES 2026, 씨스코 AI Summit, 모건스탠리 TMT 행사를 모두 참석. 서로가 협력사인 AI 생태계의 결속력 과시 문화. "행사 품앗이"가 실리콘밸리 AI 생태계 운영 원리. 한국도 이 네트워크의 결절(node)이 될 전략 필요.</div>
+      </div>
+      <div class="card blue">
+        <span class="card-num">AI 워싱</span>
+        <div class="card-title">모든 행사가 'AI'를 달다</div>
+        <div class="card-body">GDC 2026: "AI 에이전트와 게임 개발 워크플로"가 최대 화두. RSA 2026: 핵심 주제가 "AI 시대 보안 트렌드". 보안·게임·물류·바이오 행사까지 AI 세션을 덧붙이는 'AI 워싱' 중. 단, 진짜 수요와 가짜 유행이 뒤섞인 시장 상태.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-num orange">굿즈헌터</span>
+        <div class="card-title">과열의 부작용 — 거품 신호</div>
+        <div class="card-body">AI 행사장의 무료 음식과 굿즈를 목적으로 입장하는 "굿즈 헌터"가 출몰. 진지한 비즈니스 참여자와 기회주의자가 혼재. "미쳐요"의 이면엔 진짜 시장과 거품이 공존. C-레벨은 신호(signal)와 소음(noise)을 가릴 식별력이 필요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. VIZCOM 교훈 ── -->
+  <div class="section">
+    <div class="section-title">"Mission Is the Moat" — VIZCOM이 가르친 것</div>
+
+    <div class="prose">
+      EP101에서 노정석이 인터뷰한 VIZCOM 창업자 Jordan Taylor의 사례는 EP102의 핵심 교훈이 된다. VIZCOM은 AI로 스케치를 즉시 고품질 렌더링으로 변환하는 산업 디자인 툴이다. Jordan Taylor는 Hongik University·Honda·NVIDIA를 거쳐, Reddit 반응 하나에 회사를 만들었다. 누적 투자 <strong>$50M</strong>을 유치했고, "$50M AI Design Startup"으로 불린다.
+    </div>
+
+    <div class="highlight orange">
+      <div class="highlight-label orange">VIZCOM 핵심 공식</div>
+      <strong>기술 우위 ≠ 해자(Moat)</strong><br>
+      미션(Mission)이 해자다. AI 기술은 빠르게 복제된다. 그러나 "AI로 산업 디자인을 혁신해 물리 프로토타입을 당일 만든다"는 미션은 복제하기 어렵다. Jordan Taylor가 Reddit 반응 하나를 보고 창업을 결심할 수 있었던 건 미션이 명확했기 때문이다.
+    </div>
+
+    <div class="cards">
+      <div class="card blue">
+        <span class="card-emoji">🎯</span>
+        <div class="card-title">미션의 명확성 = 자본 유치력</div>
+        <div class="card-body">실리콘밸리 투자자는 "왜 당신이어야 하는가"를 30초 안에 판단한다. VIZCOM은 "산업 디자이너가 AI로 당일 물리 프로토타입을 만들 수 있다"는 명제 하나로 $50M을 모았다. 미션이 불명확한 팀은 기술이 좋아도 투자 대화가 지지부진하다.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-emoji">🇰🇷</span>
+        <div class="card-title">한국 창업자의 과도한 조심성</div>
+        <div class="card-body">노정석 관찰: 한국 창업자들은 "준비가 더 필요해", "시장이 작아", "아직 때가 아니야"를 반복한다. 실리콘밸리는 지나칠 정도의 낙관주의로 엄청난 밸류에이션을 만든다. 과도한 낙관주의가 생태계 전체의 에너지를 끌어올린다는 역설적 교훈.</div>
+      </div>
+      <div class="card green">
+        <span class="card-emoji">💡</span>
+        <div class="card-title">Reddit 반응 → 창업: 최소 검증 시그널</div>
+        <div class="card-body">Jordan Taylor는 Reddit에 스케치→렌더링 결과를 올렸고 반응을 보고 창업을 결심했다. 이 "최소 시장 검증(Lean Signal)"의 실행력이 핵심이다. 한국에선 시장조사·IR 준비·조직 구성을 먼저 하려다 타이밍을 놓친다.</div>
+      </div>
+      <div class="card blue">
+        <span class="card-emoji">🛡</span>
+        <div class="card-title">도메인 깊이 + AI = 진짜 해자</div>
+        <div class="card-body">VIZCOM의 Jordan Taylor는 Hongik→Honda→NVIDIA를 거친 산업 디자인 전문가다. AI만 잘하는 팀이 아니라 도메인을 깊이 아는 팀이 AI를 붙였을 때 진짜 차별성이 생긴다. AI 도입 전략에서 "어떤 도메인 깊이를 보유하고 있는가"를 먼저 묻는 것이 맞다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. AX의 조건 ── -->
+  <div class="section">
+    <div class="section-title green">📋 AX(AI 전환)의 조건 — Snowflake Summit 2026이 가르친 것</div>
+
+    <div class="prose">
+      노정석이 SF 현장에서 주목한 두 번째 교훈은 <strong>Snowflake Summit 2026</strong>(SF Moscone, 2026-06-02~05)에서 반복된 메시지다: "기업 AI의 성패는 모델 자체가 아니라 데이터·권한·업무 맥락·거버넌스에 달려 있다." 가장 많이 언급된 단어가 'AI'였지만, 핵심은 모델이 아니었다는 역설.
+    </div>
+
+    <div class="highlight green">
+      <div class="highlight-label green">McKinsey 충격 데이터</div>
+      <strong>기업 AI 도입률 88% → 대규모 성과 달성 6%</strong><br>
+      대부분의 기업이 AI를 "도입"했지만 실제 생산성·의사결정 개선으로 이어진 경우는 극소수. 사내 챗봇·문서 검색·회의록 요약을 넘어 실질적 AX가 된 기업은 <strong>6%</strong>에 불과.
+    </div>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-label">Why AI Fails</div>
+        <div class="flow-title">Cracked Foundation</div>
+        <div class="flow-body">데이터 기반 부재. 조직마다 핵심 데이터 정의가 다름. AI가 접근할 수 있는 데이터 범위 미정의.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-label">Why AI Fails</div>
+        <div class="flow-title">Permission Gap</div>
+        <div class="flow-body">AI가 내린 판단과 실행에 대한 책임자·추적 체계 부재. 누가 승인하고 누가 책임지는가?</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-label">Why AI Fails</div>
+        <div class="flow-title">Automating the Past</div>
+        <div class="flow-body">기존 업무 프로세스 그대로 두고 AI만 얹음. 일하는 방식 자체가 바뀌지 않으면 AI 효과 제한적.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-label">AX 실패</div>
+        <div class="flow-title">6%만 성공</div>
+        <div class="flow-body">88% 도입했지만 6%만 대규모 실질 성과. 나머지는 AI 채택 비용만 쓰고 ROI 미달.</div>
+      </div>
+    </div>
+
+    <div class="section-title green" style="margin-top:24px;">✅ AX가 성공하려면 먼저 답해야 할 3가지 질문</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>질문</th>
+          <th>핵심 이슈</th>
+          <th>실패 패턴</th>
+          <th>올바른 접근</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>① 데이터 범위</td>
+          <td>AI가 접근할 수 있는 데이터는 어디까지인가?</td>
+          <td>데이터 정의 없이 AI 에이전트 배포 → 오작동·보안 사고</td>
+          <td>데이터 거버넌스 먼저 — 접근 가능 데이터 명세서 작성</td>
+        </tr>
+        <tr>
+          <td>② 책임 구조</td>
+          <td>AI의 판단과 실행을 누가 책임지고 어떻게 추적하는가?</td>
+          <td>AI 결과물에 대한 책임 소재 불명확 → 내부 갈등·감사 문제</td>
+          <td>AI 결정 로그 + 인간-루프(Human-in-Loop) 체계 설계</td>
+        </tr>
+        <tr>
+          <td>③ 프로세스 재설계</td>
+          <td>AI가 일할 수 있도록 기업의 일하는 방식을 바꿨는가?</td>
+          <td>기존 업무에 AI를 얹기만 함 → 중복 작업·혼선</td>
+          <td>AX = 기업 운영 체계 개편. 기술 프로젝트가 아닌 조직 변혁</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight">
+      <div class="highlight-label">AX 핵심 전환</div>
+      <strong>"어떤 AI를 도입했는가" → "AI가 일할 수 있도록 기업을 바꿨는가"</strong><br>
+      Snowflake Summit 2026의 핵심 메시지: AX는 기술 도입 프로젝트가 아니라 기업 운영 체계 개편이다. 전자신문(강성전, 2026-06-09)이 현장에서 전한 메시지와 정확히 일치.
+    </div>
+  </div>
+
+  <!-- ── 4. EP97 연결 — AI 사이코시스 ── -->
+  <div class="section">
+    <div class="section-title purple">🧠 AI Psychosis — EP97과의 연결: 개인도 조직도 "미쳐가는" 이유</div>
+
+    <div class="prose">
+      EP102의 "사람들이 다 미쳐요"는 EP97 "People in the Age of AI Psychosis"와 짝을 이룬다. EP97에서 노정석과 최승준은 Claude Code가 슈퍼앱으로 진화하고, T_brain·번아웃·AI 사이코시스가 실리콘밸리 개발자들 사이에서 나타나는 것을 분석했다.
+    </div>
+
+    <div class="cards">
+      <div class="card purple">
+        <span class="card-emoji">🌀</span>
+        <div class="card-title">T_Brain — AI 과의존 증후군</div>
+        <div class="card-body">Claude Code·Cursor 등 AI 코딩 도구를 24시간 사용하면서 스스로 생각하는 능력이 퇴화하는 현상. "AI가 더 잘하니까"라는 합리화가 인간 고유의 판단력을 위축시킴. EP97에서 처음 언급, EP102 SF 현장에서도 동일 현상 목격.</div>
+      </div>
+      <div class="card purple">
+        <span class="card-emoji">💥</span>
+        <div class="card-title">번아웃의 역설</div>
+        <div class="card-body">AI로 생산성이 높아지는데 오히려 번아웃이 증가. AI가 할 수 있는 범위가 넓어질수록 "내가 어디서 기여해야 하는가"에 대한 실존적 불안이 커짐. SF의 창업자·개발자들도 동일한 심리적 패턴을 경험하는 중.</div>
+      </div>
+      <div class="card blue">
+        <span class="card-emoji">🔋</span>
+        <div class="card-title">인간 주의력 = 새로운 희귀 자원</div>
+        <div class="card-body">Greg Brockman(OpenAI)이 "인간 주의력이 병목"이라 했고, EP97·EP102 모두 같은 결론에 도달: AI 시대에 인간이 집중해야 할 일을 구별하는 능력 자체가 경쟁력. "무엇을 AI에게 맡기지 말아야 하는가"가 핵심 질문.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-emoji">⚡</span>
+        <div class="card-title">과열과 실존 사이</div>
+        <div class="card-body">SF의 "AI 광기"는 외부에서 보면 흥미롭고 두렵다. 그러나 내부자들은 FOMO·번아웃·실존적 불안을 동시에 경험한다. 노정석은 이 양면을 현장에서 목격하고 귀환했다. 과열의 에너지를 활용하되 그 함정을 피하는 것이 이 에피소드의 주제.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. 한국에 대한 시사점 ── -->
+  <div class="section">
+    <div class="section-title orange">🇰🇷 한국 창업자·C-레벨을 위한 교훈 — "우리도 미쳐야 하는가"</div>
+
+    <div class="highlight orange">
+      <div class="highlight-label orange">노정석의 핵심 질문</div>
+      <strong>실리콘밸리의 낙관주의가 과도하다는 걸 알면서도, 한국 창업자의 '적당한 조심성'이 더 큰 문제는 아닐까?</strong>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th>실리콘밸리 패턴</th>
+          <th>한국 창업자 패턴</th>
+          <th>시사점</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>창업 결심</td>
+          <td>Reddit 반응 하나로 결심 (VIZCOM)</td>
+          <td>"시장조사 더 해야 해", "타이밍이 아직"</td>
+          <td>최소 시장 신호(Lean Signal)에 행동하는 속도가 핵심</td>
+        </tr>
+        <tr>
+          <td>밸류에이션</td>
+          <td>지나친 낙관으로 엄청난 밸류에이션 형성</td>
+          <td>"우리가 과대평가받고 있는 건 아닐까"</td>
+          <td>생태계 에너지 형성에 낙관주의 자체가 기여함</td>
+        </tr>
+        <tr>
+          <td>네트워크</td>
+          <td>Executive 품앗이 — 생태계 전체가 연결</td>
+          <td>개별 회사 단위 행동, 생태계 연결 약함</td>
+          <td>AI 생태계의 한국 결절(node) 역할 수행 필요</td>
+        </tr>
+        <tr>
+          <td>실행 속도</td>
+          <td>"일단 만들고 보자" — 빠른 시장 검증</td>
+          <td>"완성도를 높인 다음 출시"</td>
+          <td>AI 시대엔 완성도보다 반복 속도가 우선</td>
+        </tr>
+        <tr>
+          <td>도메인 결합</td>
+          <td>산업 전문가 + AI = $50M VIZCOM</td>
+          <td>AI 기술력에만 집중, 도메인 결합 약함</td>
+          <td>한국의 제조·바이오·뷰티 도메인 깊이 + AI = 진짜 해자</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 6. B Factory 연결 ── -->
+  <div class="section">
+    <div class="section-title">" 비팩토리"의 렌즈 — AI 코스메틱 창업가가 SF에서 본 것</div>
+
+    <div class="prose">
+      노정석은 AI 기반 화장품 회사 B Factory(브랜드: KEEP·AMELIE)의 대표다. Tatter&Company(구글 인수 2008) → FiveRocks → Reality Reflection → B Factory로 이어지는 연쇄 창업자의 관점에서 SF를 봤다는 점이 중요하다. 그는 "기술 오타쿠"가 아니라 <strong>"연쇄 창업자가 AI 시대에 무엇을 해야 하는가"</strong>를 탐구하는 중이다.
+    </div>
+
+    <div class="cards">
+      <div class="card blue">
+        <span class="card-emoji">💄</span>
+        <div class="card-title">뷰티 × AI — 한국의 실제 해자</div>
+        <div class="card-body">한국이 글로벌 경쟁력을 가진 뷰티·K-콘텐츠·제조 도메인에 AI를 결합하면 VIZCOM 같은 "Mission Is the Moat" 스토리가 가능하다. 노정석 본인이 B Factory로 그 실험 중. SF에서 확인한 것: 도메인 깊이를 가진 사람이 AI를 붙여야 진짜 차별성.</div>
+      </div>
+      <div class="card green">
+        <span class="card-emoji">🔄</span>
+        <div class="card-title">연쇄 창업자의 패턴 인식</div>
+        <div class="card-body">1차: Blog → Google 인수. 2차: 앱 데이터 분석. 3차: VR 스캔. 4차: AI 코스메틱. 각 전환점에서 노정석은 "플랫폼 교체기"를 읽었다. SF 방문은 "지금이 AI 플랫폼 교체기의 클라이맥스"를 현장에서 확인하는 과정. 다음 플랫폼 전환이 무엇인지 탐색 중.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── GARAMbada 인사이트 ── -->
+  <div class="section">
+    <div class="section-title purple">💡 GARAMbada 인사이트 — EP102에서 추출한 실전 판단</div>
+
+    <div class="insight-cards">
+      <div class="insight-card">
+        <div class="insight-num">Insight 01</div>
+        <div class="insight-title">"AI 행사 붐" 자체를 인텔리전스 소스로 활용하라</div>
+        <div class="insight-body">SF Moscone 월 2~3건 AI 행사, HumanX $3,995 입장료는 시장 열기의 지표다. 참가 여부를 떠나, 어떤 행사에 누가 모이고 무엇이 논의되는지를 체계적으로 추적하는 것이 C-레벨 인텔리전스의 기본이 돼야 한다. AI Frontier 같은 현장 르포 팟캐스트가 그 대안.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">Insight 02</div>
+        <div class="insight-title">AX 진단: "도입률"이 아닌 "성과 달성률"로 측정하라</div>
+        <div class="insight-body">McKinsey 88% 도입 / 6% 성과 데이터는 내부 AX 진단에 그대로 적용 가능. 우리 조직의 AI 도입률이 높아도 "6% 카테고리에 들어가 있는가"를 따로 물어야 한다. 지표: 실제 P&L 단위 ROI, 인간 의사결정 시간 절감, 반복 업무 자동화율.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">Insight 03</div>
+        <div class="insight-title">"Mission Is the Moat" — 우리의 미션을 30초로 설명할 수 있는가</div>
+        <div class="insight-body">VIZCOM의 교훈을 자사에 적용: 우리가 AI를 붙여서 해결하는 문제의 미션을 30초 안에 설명할 수 있는가? AI 기술 스택이 아니라 "왜 우리여야 하는가"의 미션이 해자가 된다. C-레벨은 분기마다 이 문장을 재작성하고 검증해야 한다.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">Insight 04</div>
+        <div class="insight-title">한국 AI 생태계의 결절(node)이 되는 전략을 수립하라</div>
+        <div class="insight-body">젠슨 황의 "Executive 품앗이"처럼, AI 생태계는 결절(node)이 많을수록 가치가 커진다. 한국에서 AI 행사·포럼·커뮤니티에 적극적으로 참여하고 결절 역할을 하는 것이 비즈니스 자산이다. AI Frontier 같은 채널이 그 결절 역할을 하고 있음.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">Insight 05</div>
+        <div class="insight-title">AX 3문답을 분기마다 조직 내 점검 루틴으로 만들어라</div>
+        <div class="insight-body">① AI가 접근할 수 있는 데이터 범위가 명확한가? ② AI 판단·실행의 책임 구조가 있는가? ③ AI가 일할 수 있도록 업무 프로세스가 바뀌었는가? 이 세 질문의 답이 "아니오"인 항목부터 선투자하는 것이 AX 속도를 높이는 최단 경로.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">Insight 06</div>
+        <div class="insight-title">"적당한 조심성" 자체를 경쟁 리스크로 인식하라</div>
+        <div class="insight-body">노정석의 핵심 도발: 한국 창업자·리더의 "합리적 보수성"이 SF 속도와 대비될 때 실질적 경쟁 열위가 된다. 과열에 뛰어들 필요는 없지만, 최소 시장 신호에 빠르게 반응하는 의사결정 체계는 갖춰야 한다. "준비가 다 되면 실행한다"는 전략은 AI 시대에 통하지 않는다.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  GARAMwiki · 비즈니스 인텔리전스 · AI Frontier EP102 · 2026-07 · Claude Cowork와 함께 성장합니다
+</footer>
+
+</body>
+</html>
