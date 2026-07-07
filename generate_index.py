@@ -65,6 +65,10 @@ ARTICLE_META = {
         "title": "AI Frontier EP102 — 샌프란시스코의 교훈: \"사람들이 다 미쳐요\"<br>노정석 현장 르포 · HumanX $3,995 · AX 조건 · VIZCOM \"Mission Is the Moat\" · McKinsey 6% 성과율",
         "tags":  ["AI Frontier", "노정석", "Chester Roh", "샌프란시스코", "실리콘밸리", "AI 과열", "VIZCOM", "Mission Is the Moat", "AX 조건", "McKinsey", "Snowflake Summit", "한국 창업자", "AI Psychosis", "HumanX", "GTC 2026"],
     },
+    "2026-06_a16z_Cycles_Different_But_Same_Bits_to_Atoms.html": {
+        "title": "a16z Charts of the Week — 사이클은 같고 다르다: Bits → Atoms 대순환<br>Moses Sternstein · 로보틱스 $16B 역대 최고 · AI 네이티브 매핑 문제 · Accenture 30×→6× · 솔로프레너 2× (2026-06-26)",
+        "tags":  ["Moses Sternstein", "a16z", "Bits to Atoms", "로보틱스 Physical AI", "AI 네이티브", "Accenture FCF", "솔로프레너", "그로서리 생산성 역설", "YC 배치", "Stripe Economics", "섹터 순환", "사이클 분석"],
+    },
     # 나의 인사이트
     "2026-05_AI_Native_vs_Agent_Native_전략_분석.html": {
         "title": "AI-Native vs Agent-Native — 개념 정의·전략·실행 플랜<br>Garambada 심층 분석 보고서",
