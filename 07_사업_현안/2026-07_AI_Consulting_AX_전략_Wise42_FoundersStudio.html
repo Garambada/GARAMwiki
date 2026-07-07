@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GARAMwiki — AI 컨설팅/AX 전략 Wise42 × Founders Studio</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #f97316;        /* orange — 사업현안 */
+    --accent-soft: rgba(249,115,22,0.12);
+    --accent-border: rgba(249,115,22,0.35);
+    --blue: #3b82f6;
+    --blue-soft: rgba(59,130,246,0.12);
+    --blue-border: rgba(59,130,246,0.35);
+    --green: #10b981;
+    --green-soft: rgba(16,185,129,0.12);
+    --green-border: rgba(16,185,129,0.35);
+    --red: #ef4444;
+    --red-soft: rgba(239,68,68,0.12);
+    --red-border: rgba(239,68,68,0.35);
+    --yellow: #f0a500;
+    --yellow-soft: rgba(240,165,0,0.12);
+    --yellow-border: rgba(240,165,0,0.35);
+    --purple: #a78bfa;
+    --purple-soft: rgba(167,139,250,0.12);
+    --purple-border: rgba(167,139,250,0.35);
+    --teal: #2dd4bf;
+    --teal-soft: rgba(45,212,191,0.12);
+    --teal-border: rgba(45,212,191,0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a1206 60%, #1a1612 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 48px 28px;
+  }
+
+  .cat-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  header h1 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  header h1 span { color: var(--accent); }
+
+  .header-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 14px; }
+
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 14px;
+  }
+  .header-meta span {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+
+  /* STAT STRIP */
+  .stat-strip {
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-item {
+    flex: 1; min-width: 130px;
+    padding: 16px 22px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-size: 1.45rem;
+    font-weight: 800;
+    line-height: 1;
+    display: block;
+    margin-bottom: 3px;
+    color: var(--accent);
+  }
+  .stat-num.red    { color: var(--red); }
+  .stat-num.green  { color: var(--green); }
+  .stat-num.blue   { color: var(--blue); }
+  .stat-num.yellow { color: var(--yellow); }
+  .stat-num.purple { color: var(--purple); }
+  .stat-num.teal   { color: var(--teal); }
+  .stat-label { font-size: 0.71rem; color: var(--muted); line-height: 1.3; }
+
+  /* NAV */
+  .toc {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 0.78rem;
+  }
+  .toc-label { color: var(--muted); margin-right: 4px; align-self: center; }
+  .toc a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    transition: all 0.15s;
+  }
+  .toc a:hover { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 48px; }
+
+  /* SECTION */
+  .section { margin-bottom: 52px; }
+  .section-title {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: var(--accent);
+    border-left: 3px solid var(--accent);
+    padding-left: 14px;
+    margin-bottom: 20px;
+    letter-spacing: -0.2px;
+    scroll-margin-top: 20px;
+  }
+  .section-title.blue   { color: var(--blue);   border-color: var(--blue); }
+  .section-title.green  { color: var(--green);  border-color: var(--green); }
+  .section-title.red    { color: var(--red);    border-color: var(--red); }
+  .section-title.yellow { color: var(--yellow); border-color: var(--yellow); }
+  .section-title.purple { color: var(--purple); border-color: var(--purple); }
+  .section-title.teal   { color: var(--teal);   border-color: var(--teal); }
+
+  /* CARDS */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; margin-bottom: 14px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .card:hover { transform: translateY(-2px); border-color: #444c56; }
+  .card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 10px 0 0 10px; }
+  .card.orange::before { background: var(--accent); }
+  .card.blue::before   { background: var(--blue); }
+  .card.green::before  { background: var(--green); }
+  .card.red::before    { background: var(--red); }
+  .card.yellow::before { background: var(--yellow); }
+  .card.purple::before { background: var(--purple); }
+  .card.teal::before   { background: var(--teal); }
+
+  .card-emoji { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+  .card-num {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+    display: block;
+    color: var(--accent);
+  }
+  .card-num.red    { color: var(--red); }
+  .card-num.green  { color: var(--green); }
+  .card-num.blue   { color: var(--blue); }
+  .card-num.yellow { color: var(--yellow); }
+  .card-num.purple { color: var(--purple); }
+  .card-num.teal   { color: var(--teal); }
+
+  .card-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .card-body  { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* PROSE */
+  .prose {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 28px;
+    font-size: 0.88rem;
+    color: #cdd9e5;
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+  .prose strong { color: var(--text); font-weight: 700; }
+  .prose em         { color: var(--accent); font-style: normal; }
+  .prose em.blue    { color: var(--blue); }
+  .prose em.green   { color: var(--green); }
+  .prose em.red     { color: var(--red); }
+  .prose em.yellow  { color: var(--yellow); }
+  .prose em.purple  { color: var(--purple); }
+
+  /* HIGHLIGHT */
+  .highlight {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    font-size: 0.88rem;
+    color: #cdd9e5;
+    line-height: 1.7;
+  }
+  .highlight.blue   { background: var(--blue-soft);   border-color: var(--blue-border); }
+  .highlight.green  { background: var(--green-soft);  border-color: var(--green-border); }
+  .highlight.red    { background: var(--red-soft);    border-color: var(--red-border); }
+  .highlight.yellow { background: var(--yellow-soft); border-color: var(--yellow-border); }
+  .highlight.purple { background: var(--purple-soft); border-color: var(--purple-border); }
+  .highlight.teal   { background: var(--teal-soft);   border-color: var(--teal-border); }
+
+  .highlight-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .highlight-label.blue   { color: var(--blue); }
+  .highlight-label.green  { color: var(--green); }
+  .highlight-label.red    { color: var(--red); }
+  .highlight-label.yellow { color: var(--yellow); }
+  .highlight-label.purple { color: var(--purple); }
+  .highlight-label.teal   { color: var(--teal); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin-bottom: 14px; }
+  thead th {
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td { padding: 11px 14px; vertical-align: top; line-height: 1.5; color: #cdd9e5; }
+  tbody td:first-child { color: var(--muted); font-size: 0.8rem; min-width: 110px; }
+
+  .chip {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+  .chip-orange { background: var(--accent-soft); border: 1px solid var(--accent-border); color: var(--accent); }
+  .chip-blue   { background: var(--blue-soft);   border: 1px solid var(--blue-border);   color: var(--blue); }
+  .chip-green  { background: var(--green-soft);  border: 1px solid var(--green-border);  color: var(--green); }
+  .chip-red    { background: var(--red-soft);    border: 1px solid var(--red-border);    color: var(--red); }
+  .chip-yellow { background: var(--yellow-soft); border: 1px solid var(--yellow-border); color: var(--yellow); }
+  .chip-purple { background: var(--purple-soft); border: 1px solid var(--purple-border); color: var(--purple); }
+
+  /* ROADMAP */
+  .roadmap { display: flex; flex-direction: column; gap: 0; margin-bottom: 14px; }
+  .roadmap-item {
+    display: grid;
+    grid-template-columns: 120px auto 1fr;
+    gap: 0 20px;
+    position: relative;
+  }
+  .roadmap-item::before {
+    content: '';
+    position: absolute;
+    left: 56px;
+    top: 28px;
+    bottom: -20px;
+    width: 2px;
+    background: var(--border);
+  }
+  .roadmap-item:last-child::before { display: none; }
+
+  .roadmap-phase {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    padding-top: 14px;
+    text-align: right;
+  }
+  .roadmap-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--bg);
+    flex-shrink: 0;
+    margin-top: 18px;
+    position: relative;
+    z-index: 1;
+  }
+  .roadmap-dot.blue   { border-color: var(--blue); }
+  .roadmap-dot.green  { border-color: var(--green); }
+  .roadmap-dot.purple { border-color: var(--purple); }
+  .roadmap-dot.teal   { border-color: var(--teal); }
+  .roadmap-dot.active { background: var(--accent); }
+
+  .roadmap-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .roadmap-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .roadmap-body  { font-size: 0.81rem; color: var(--muted); line-height: 1.6; }
+
+  /* MATRIX */
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .matrix-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .matrix-cell-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .matrix-cell ul { list-style: none; }
+  .matrix-cell li {
+    font-size: 0.82rem;
+    color: var(--muted);
+    padding: 5px 0;
+    border-bottom: 1px solid #21262d;
+    line-height: 1.5;
+  }
+  .matrix-cell li:last-child { border-bottom: none; }
+  .matrix-cell li::before { content: '→ '; color: var(--accent); }
+  .matrix-cell.blue   li::before { color: var(--blue); }
+  .matrix-cell.green  li::before { color: var(--green); }
+  .matrix-cell.red    li::before { color: var(--red); }
+  .matrix-cell.purple li::before { color: var(--purple); }
+
+  /* LAYER */
+  .service-layer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .layer-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    transition: border-color 0.15s;
+  }
+  .layer-item:hover { border-color: #444c56; }
+  .layer-num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    text-align: center;
+  }
+  .layer-num.blue   { color: var(--blue); }
+  .layer-num.green  { color: var(--green); }
+  .layer-num.purple { color: var(--purple); }
+  .layer-content-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+  .layer-content-body  { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+  .layer-price {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    text-align: right;
+  }
+  .layer-price span { font-size: 0.72rem; font-weight: 400; color: var(--muted); display: block; }
+
+  /* COMPETITOR */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .comp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .comp-name { font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+  .comp-type { font-size: 0.7rem; color: var(--muted); margin-bottom: 12px; }
+  .comp-row { display: flex; justify-content: space-between; font-size: 0.78rem; padding: 5px 0; border-bottom: 1px solid #21262d; }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-key   { color: var(--muted); }
+  .comp-val   { color: var(--text); font-weight: 600; }
+  .comp-val.good { color: var(--green); }
+  .comp-val.bad  { color: var(--red); }
+
+  /* QUOTE */
+  .quote-block {
+    border-left: 4px solid var(--accent);
+    padding: 14px 20px;
+    margin: 16px 0;
+    background: var(--surface2);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.92rem;
+    font-style: italic;
+    color: #cdd9e5;
+    line-height: 1.6;
+  }
+  .quote-src { font-size: 0.73rem; color: var(--muted); font-style: normal; margin-top: 6px; display: block; }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
+
+  footer {
+    text-align: center;
+    padding: 24px 40px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  @media (max-width: 720px) {
+    header, main, .toc { padding-left: 20px; padding-right: 20px; }
+    .matrix-grid, .comp-grid { grid-template-columns: 1fr; }
+    .layer-item { grid-template-columns: 60px 1fr; }
+    .layer-price { display: none; }
+    .roadmap-item { grid-template-columns: 80px auto 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="cat-badge">🏢 사업 현안</div>
+  <h1>AI 컨설팅은 왜 실패하는가 —<br><span>Wise42 × Founders Studio의 제대로 된 AX 전략</span></h1>
+  <p class="header-sub">글로벌 AI 컨설팅 시장 현황 분석 + 한국 시장 실패 패턴 진단 + Winning 서비스 모델 설계</p>
+  <div class="header-meta">
+    <span>📅 2026-07-07</span>
+    <span>✍ GARAMbada 전략 분석</span>
+    <span>📌 Wise42 × Founders Studio</span>
+    <span>🎯 사업 현안 — 실행 전략</span>
+  </div>
+</header>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-item">
+    <span class="stat-num blue">$14.1B</span>
+    <span class="stat-label">글로벌 AI 컨설팅 시장 (2026)<br>→ $116.8B (2035) CAGR 26%</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num red">80%</span>
+    <span class="stat-label">AI 도입 기업 중<br>Bottom-line 영향 없음 (McKinsey)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num red">56%</span>
+    <span class="stat-label">CEO가 비용절감 & 매출증가<br>둘 다 없다고 응답 (PwC 2026)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num green">70%</span>
+    <span class="stat-label">AI 가치의 70%는<br>AI 자체가 아닌 프로세스 재설계 (BCG)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num green">10.3×</span>
+    <span class="stat-label">강력한 데이터 연동 시<br>ROI (vs 약한 데이터 연동 3.7×)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">$1B</span>
+    <span class="stat-label">AWS FDE 파트너 투자<br>+ Accenture × MS FDE 론칭 (2026)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num green">640%</span>
+    <span class="stat-label">Palantir 3년 수익률<br>FDE 모델 검증 수치</span>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <span class="toc-label">목차 →</span>
+  <a href="#sec-market">시장 현황</a>
+  <a href="#sec-failure">실패 원인</a>
+  <a href="#sec-fde">FDE 모델 부상</a>
+  <a href="#sec-korea">한국 시장</a>
+  <a href="#sec-positioning">포지셔닝</a>
+  <a href="#sec-service">서비스 모델</a>
+  <a href="#sec-gtm">GTM 전략</a>
+  <a href="#sec-roadmap">실행 로드맵</a>
+</div>
+
+<main>
+
+  <!-- ── 1. 시장 현황 ── -->
+  <div class="section" id="sec-market">
+    <div class="section-title blue">📊 1. 글로벌 AI 컨설팅 시장 현황 — 폭발적 성장 속 실패의 역설</div>
+
+    <div class="prose">
+      글로벌 AI 컨설팅 시장은 <strong>2026년 $14.1B → 2035년 $116.8B</strong>, CAGR 26.49%로 고성장 중이다. 겉보기엔 황금 시장이다. 그러나 내부를 보면 심각한 역설이 있다: 돈은 엄청나게 쏟아붓고 있지만 실제 성과는 나오지 않고 있다.
+      <br><br>
+      Accenture는 FY2025에 AI 수주 <strong>$3.6B(전년 대비 120%↑)</strong>를 기록했다. 그런데 그 직후 주가는 FCF 멀티플 기준으로 <strong>30×에서 6×로 폭락</strong>했다. 시장이 "AI 컨설팅 모델이 작동하지 않는다"는 판정을 내린 것이다.
+      <br><br>
+      McKinsey의 2026 보고서: <em class="red">기업의 80%가 AI 투자에서 Bottom-line 영향을 보지 못한다.</em> PwC의 2026 글로벌 CEO 서베이: <em class="red">비용 절감 AND 매출 증가를 동시에 달성한 CEO는 12%뿐, 56%는 둘 다 없다고 응답.</em> Gartner: <em class="red">2027년까지 에이전틱 AI 프로젝트의 40%가 비용 문제로 취소될 것.</em>
+    </div>
+
+    <div class="cards">
+      <div class="card blue">
+        <span class="card-num blue">$3.6B</span>
+        <div class="card-title">Accenture AI 수주 FY2025</div>
+        <div class="card-body">120% YoY 성장. 하지만 시장은 FCF 멀티플을 30×에서 6×(장기 평균의 1/3)로 재평가. "돈은 들어오지만 가치를 만들지 못한다"는 시장 판정.</div>
+      </div>
+      <div class="card red">
+        <span class="card-num red">80%</span>
+        <div class="card-title">AI 투자 → Bottom-line 영향 없음</div>
+        <div class="card-body">McKinsey 2026 보고서. AI 투자 의사결정을 한 기업의 80%가 재무적 영향을 아직 보지 못했다. "기술이 아닌 아키텍처(조직 구조)가 문제"라는 진단.</div>
+      </div>
+      <div class="card blue">
+        <span class="card-num blue">26%</span>
+        <div class="card-title">시장 CAGR — 실패해도 시장은 성장</div>
+        <div class="card-body">$14.1B(2026) → $116.8B(2035). ROI가 나오지 않아도 예산은 계속 집행된다. 즉, AI 컨설팅 시장의 성장은 "성공의 확산"이 아닌 "절박한 수요"에 의한 것.</div>
+      </div>
+    </div>
+
+    <div class="highlight red">
+      <div class="highlight-label red">핵심 역설</div>
+      <strong>AI 컨설팅 시장의 성장과 고객의 ROI는 서로 다른 방향을 가리키고 있다.</strong> 시장이 성장하는 이유는 성공 때문이 아니라 경쟁사 대비 뒤처진다는 공포(FOMO)와 규제 압박 때문이다. 이 구조에서 진짜 ROI를 만드는 플레이어는 전체의 20% 미만이며, 이들이 시장을 주도하게 된다.
+    </div>
+  </div>
+
+  <!-- ── 2. 실패 원인 ── -->
+  <div class="section" id="sec-failure">
+    <div class="section-title red">💀 2. AI 컨설팅이 실패하는 진짜 이유 — 5가지 구조적 원인</div>
+
+    <div class="prose">
+      "AI 기술이 부족해서"가 아니다. 실패의 원인은 조직적·구조적이다. RAND 연구소, McKinsey, Gartner 등이 공통적으로 지목하는 5가지 원인을 정리하면 다음과 같다.
+    </div>
+
+    <div class="cards">
+      <div class="card red">
+        <span class="card-emoji">🔍</span>
+        <div class="card-title">① Discovery Bottleneck — "어디에 어떻게 쓸지"를 모른다</div>
+        <div class="card-body">AI를 어디에 어떻게 배포할지 발견(Discovery)하는 것이 핵심 병목이다. 기술 능력이 아니라 발견 역량이 없다. 대부분의 AI 컨설팅은 이 단계를 건너뛰고 "AI 도입 로드맵"을 팔았다.</div>
+      </div>
+      <div class="card red">
+        <span class="card-emoji">🏭</span>
+        <div class="card-title">② Process Replication — 기존 프로세스에 AI를 덮어씌운다</div>
+        <div class="card-body">전기 공장이 처음에 증기 엔진을 대형 전동기로 교체만 한 것처럼, 기존 업무 단계 그대로 AI로 대체한다. 프로세스 재설계(Process Redesign)를 하지 않는다. BCG: AI 가치의 70%는 기술이 아닌 프로세스 재설계에서 나온다.</div>
+      </div>
+      <div class="card red">
+        <span class="card-emoji">🕳</span>
+        <div class="card-title">③ Strategy-Implementation Gap — 전략과 실행이 분리된다</div>
+        <div class="card-body">"The Consulting Dependency Trap" — 전략은 컨설팅 회사가 수립하고 구현은 IT 파트너가 하는 구조. 능력이 계약 종료와 함께 빠져나간다. 조직에 AI 역량이 내재화되지 않는다.</div>
+      </div>
+      <div class="card red">
+        <span class="card-emoji">📊</span>
+        <div class="card-title">④ Data Infrastructure 부재</div>
+        <div class="card-body">강력한 데이터 연동: ROI 10.3× vs 약한 데이터 연동: ROI 3.7×. AI를 도입하기 전에 데이터 파이프라인과 거버넌스가 준비되어야 하는데, 이 "지루한 기초 공사"를 건너뛴다.</div>
+      </div>
+      <div class="card red">
+        <span class="card-emoji">👥</span>
+        <div class="card-title">⑤ Human-in-the-Loop 병목</div>
+        <div class="card-body">AI가 도움을 주더라도 모든 결정에 사람이 개입하면 AI의 스케일 이점이 사람의 처리 속도에 종속된다. 자율 실행(Autonomous Execution) 설계 없이는 효과가 선형(Linear)에 머문다.</div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      "기업들이 AI를 통해 ROI를 달성한 경우, 도구를 선택하기 전에 워크플로우를 먼저 재설계했을 가능성이 2배 높다."
+      <span class="quote-src">— Research 2026, bosio.digital</span>
+    </div>
+
+    <div class="highlight red">
+      <div class="highlight-label red">한국 시장 특유의 3대 실패 패턴</div>
+      <strong>① 대기업 복사:</strong> 대기업 AI 도입 사례를 SME에 그대로 적용. 규모와 데이터 구조가 전혀 달라 실패.<br>
+      <strong>② PoC 수집가:</strong> 파일럿(PoC)만 반복하고 프로덕션(Production) 진입을 못 함. "Pilot Purgatory".<br>
+      <strong>③ 벤더 전면 위탁:</strong> AI 구현을 외부에 전면 위탁, 내부 역량 미확보. 계약 종료 = 능력 소멸.
+    </div>
+  </div>
+
+  <!-- ── 3. FDE 모델 ── -->
+  <div class="section" id="sec-fde">
+    <div class="section-title green">🚀 3. 승리하는 모델 — FDE(Forward Deployed Engineering)의 부상</div>
+
+    <div class="prose">
+      2026년 AI 컨설팅 시장에서 가장 주목받는 패러다임 전환: <strong>FDE(Forward Deployed Engineering)</strong>. Palantir가 검증하고, AWS·Accenture·IBM·EY·OpenAI가 모두 채택한 모델이다.
+      <br><br>
+      FDE의 핵심: <em class="green">전략을 짜고 나오는 것이 아니라, 클라이언트 조직 내부에 임베드되어 실제 프로덕션 코드를 작성하는 엔지니어.</em> 클라이언트의 도메인 전문가 옆에서, 클라이언트의 워크플로우 안에서, 클라이언트의 프로덕션 시스템에 실제로 돌아가는 코드를 만든다.
+    </div>
+
+    <div class="cards">
+      <div class="card green">
+        <span class="card-num green">640%</span>
+        <div class="card-title">Palantir — FDE 모델 검증</div>
+        <div class="card-body">FDE 모델로 3년간 주주 수익률 640% 달성. Palantir의 원조 FDE 개념이 현재 AI 컨설팅 업계 표준 모델로 확산 중.</div>
+      </div>
+      <div class="card green">
+        <span class="card-num green">$1B</span>
+        <div class="card-title">AWS — 파트너 FDE 프로그램</div>
+        <div class="card-body">2026년 AWS가 $1B를 투자해 전략 파트너사에 FDE 역량을 내재화. AWS 자격증 엔지니어 팀을 파트너사 내부에 구축. "프로덕션 아젠틱 시스템을 수개월이 아닌 며칠 만에."</div>
+      </div>
+      <div class="card green">
+        <span class="card-emoji">🤝</span>
+        <div class="card-title">Accenture × Microsoft FDE 론칭</div>
+        <div class="card-body">2026년 Accenture가 Microsoft와 FDE 프랙티스 공식 론칭. 수천 명의 AI 엔지니어를 클라이언트에 직접 배치하는 구조로 전환.</div>
+      </div>
+      <div class="card blue">
+        <span class="card-emoji">⚙️</span>
+        <div class="card-title">IBM — Forward Deployed Units(FDU)</div>
+        <div class="card-body">IBM Consulting이 개인 FDE를 넘어 "FDU 팟(Pod)" 개념 도입. 중앙에 AI 에이전트 디지털 워크포스, 가장자리에 인간. Nestlé·Heineken·Pearson에서 작동 중.</div>
+      </div>
+      <div class="card blue">
+        <span class="card-emoji">🔥</span>
+        <div class="card-title">OpenAI — "The Deployment Company" $4B</div>
+        <div class="card-body">2026년 5월 OpenAI가 FDE 방식 스케일화를 위한 조인트벤처 "The Deployment Company" 설립. TPG 앵커 투자, 19개 투자자, $4B+ 조성. FDE가 AI 컨설팅의 미래임을 선언.</div>
+      </div>
+      <div class="card green">
+        <span class="card-emoji">⚡</span>
+        <div class="card-title">속도 차이 — 2-12주 vs 6-18개월</div>
+        <div class="card-body">부티크 FDE 팀: 프로덕션 AI 2-12주. Big4 전통 컨설팅: 킥오프에서 프로덕션까지 6-18개월. 속도가 곧 경쟁력이 된 시장에서 결정적 우위.</div>
+      </div>
+    </div>
+
+    <div class="highlight green">
+      <div class="highlight-label green">FDE vs 전통 컨설팅 — 구조적 차이</div>
+      전통 컨설팅은 "전략(우리) + 구현(IT 파트너)" 2단계 구조. FDE는 "발견 + 전략 + 구현"을 한 팀이 클라이언트 내부에 임베드되어 수행. <strong>핵심 차이: 능력이 계약 종료 후에도 클라이언트 조직에 남는다.</strong>
+    </div>
+
+    <!-- Big4 vs Boutique 비교 -->
+    <div class="section-title green" style="margin-top:28px;">⚖️ 비용·속도·품질 비교 — Big4 vs 부티크 FDE</div>
+
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-name">Big4 / MBB</div>
+        <div class="comp-type">Accenture, Deloitte, McKinsey, BCG 등</div>
+        <div class="comp-row"><span class="comp-key">시간당 요금</span><span class="comp-val bad">$400-$1,000+</span></div>
+        <div class="comp-row"><span class="comp-key">프로덕션까지</span><span class="comp-val bad">6-18개월</span></div>
+        <div class="comp-row"><span class="comp-key">시니어 참여</span><span class="comp-val bad">파트너만 간헐적</span></div>
+        <div class="comp-row"><span class="comp-key">역량 내재화</span><span class="comp-val bad">낮음 (계약 종료 = 소멸)</span></div>
+        <div class="comp-row"><span class="comp-key">장점</span><span class="comp-val">브랜드, 조달 요건</span></div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-name">부티크 FDE</div>
+        <div class="comp-type">전문 AI 구현팀, 소규모 고집중</div>
+        <div class="comp-row"><span class="comp-key">시간당 요금</span><span class="comp-val good">$200-$500</span></div>
+        <div class="comp-row"><span class="comp-key">프로덕션까지</span><span class="comp-val good">2-12주</span></div>
+        <div class="comp-row"><span class="comp-key">시니어 참여</span><span class="comp-val good">모든 인게이지먼트</span></div>
+        <div class="comp-row"><span class="comp-key">역량 내재화</span><span class="comp-val good">높음 (함께 빌드)</span></div>
+        <div class="comp-row"><span class="comp-key">장점</span><span class="comp-val">속도, 비용, 실행력</span></div>
+      </div>
+      <div class="comp-card" style="border-color: var(--accent-border);">
+        <div class="comp-name" style="color:var(--accent);">Wise42 × Founders Studio</div>
+        <div class="comp-type">AI Company Builder + FDE 하이브리드</div>
+        <div class="comp-row"><span class="comp-key">포지션</span><span class="comp-val" style="color:var(--accent);">Discovery-First FDE</span></div>
+        <div class="comp-row"><span class="comp-key">프로덕션까지</span><span class="comp-val good">4-8주 (Discovery 포함)</span></div>
+        <div class="comp-row"><span class="comp-key">차별화</span><span class="comp-val" style="color:var(--accent);">AI Governance + Builder</span></div>
+        <div class="comp-row"><span class="comp-key">역량 내재화</span><span class="comp-val good">최고 (사업 공동 빌드)</span></div>
+        <div class="comp-row"><span class="comp-key">가격 모델</span><span class="comp-val good">Outcome-Based</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. 한국 시장 ── -->
+  <div class="section" id="sec-korea">
+    <div class="section-title yellow">🇰🇷 4. 한국 시장 특수성 — 기회와 함정</div>
+
+    <div class="prose">
+      한국 시장은 글로벌과 비슷한 구조적 문제를 가지면서도 독특한 기회 요인이 존재한다. <strong>AI 기본법(2026 시행)</strong>이 공공기관과 대기업 모두에 AI 거버넌스 의무화를 요구하며, <strong>2026 AX 원스톱 바우처</strong> (과제당 ~13억원)가 수요를 견인하고 있다.
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>구분</th><th>현황 & 특징</th><th>기회 포인트</th><th>리스크</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>공공기관</td>
+          <td>AI 기본법 적용 대상 · 데이터 산재 · 형식 비표준 · 책임 소재 불분명</td>
+          <td>AI Governance Platform 수요 급증 · 린 × Wise42 포지셔닝 기회</td>
+          <td>조달 절차 복잡 · 예산 집행 지연 · 갑을 관계</td>
+        </tr>
+        <tr>
+          <td>중견기업</td>
+          <td>도입 속도 7× vs 전사 성숙 53.9% 격차 · PoC 수집가 패턴 만연</td>
+          <td>Discovery Sprint → Production 직행 서비스 수요 · 실질 ROI 요구 높음</td>
+          <td>예산 의사결정 느림 · 내부 반발 · 기존 IT 벤더 의존</td>
+        </tr>
+        <tr>
+          <td>스타트업</td>
+          <td>AI-Native 창업 급증 · 인력 부족 · 빠른 실행 요구</td>
+          <td>AI Native Company Build 서비스 · Founders Studio 모델 직결</td>
+          <td>예산 제한 · 빠른 방향 전환 · 관계 지속성 약함</td>
+        </tr>
+        <tr>
+          <td>정부 지원</td>
+          <td>AX 바우처 13억/과제 · 복수 파운데이션 모델 필수 · 국산 AI 적용 조건</td>
+          <td>바우처 연계 서비스 패키지 · 정부 인증 레버리지</td>
+          <td>국산 AI 모델 의무화 조건 충족 필요 · 행정 부담</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cards">
+      <div class="card yellow">
+        <span class="card-emoji">⚖️</span>
+        <div class="card-title">AI 기본법 — 강제 수요 창출</div>
+        <div class="card-body">2026년 AI 기본법 시행으로 공공기관·대기업 AI 거버넌스 의무화. AI 시스템 도입 + 위험 평가 + 컴플라이언스 문서화. 린 × Wise42 AI Governance Platform이 직접 대응하는 수요.</div>
+      </div>
+      <div class="card yellow">
+        <span class="card-emoji">💰</span>
+        <div class="card-title">AX 바우처 13억 — 정부 지원 레버</div>
+        <div class="card-body">2026 AX 원스톱 바우처 지원사업: 중소·중견·대기업 참여 가능, 과제당 약 13억원. 복수 파운데이션 모델 활용 + 국산 AI 필수. 정부 지원 연계 서비스 패키지 설계 가능.</div>
+      </div>
+      <div class="card yellow">
+        <span class="card-emoji">🔴</span>
+        <div class="card-title">Pilot Purgatory — 가장 큰 기회</div>
+        <div class="card-body">한국 기업의 PoC 수집가 패턴: PoC는 수십 개인데 프로덕션 진입 0. "PoC → Production 직행" 서비스가 가장 절실하게 필요한 니즈. Discovery Sprint + FDE 실행 모델의 핵심 타깃.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. 포지셔닝 ── -->
+  <div class="section" id="sec-positioning">
+    <div class="section-title">🎯 5. Wise42 × Founders Studio — 포지셔닝 전략</div>
+
+    <div class="prose">
+      "AI 컨설팅"이라는 레드오션에서 승리하는 방법은 더 좋은 컨설팅이 아니다. <strong>완전히 다른 카테고리를 만드는 것이다.</strong> Wise42 × Founders Studio의 핵심 포지셔닝 명제:
+    </div>
+
+    <div class="highlight">
+      <div class="highlight-label">포지셔닝 명제</div>
+      <strong>"우리는 AI 컨설팅을 하지 않는다. 우리는 AI-Native 사업을 함께 빌드한다."</strong><br><br>
+      기존 컨설팅: 슬라이드 → 로드맵 → 떠남 (능력 이탈)<br>
+      우리 모델: Discovery → 프로세스 재설계 → FDE 실행 → AI-Native 조직 구축 (능력 내재화)
+    </div>
+
+    <div class="matrix-grid">
+      <div class="matrix-cell">
+        <div class="matrix-cell-title" style="color: var(--red);">🔴 우리가 아닌 것 (비교 우위가 없는 영역)</div>
+        <ul>
+          <li>대규모 IT 시스템 통합(SI) 수주</li>
+          <li>수백 명 투입하는 조직 변화 관리</li>
+          <li>AI 전략 슬라이드 판매</li>
+          <li>표준화된 AI 도구 라이선스 판매</li>
+          <li>공공조달 대기업 경쟁 프로젝트</li>
+        </ul>
+      </div>
+      <div class="matrix-cell green">
+        <div class="matrix-cell-title" style="color: var(--green);">🟢 우리인 것 (비교 우위 영역)</div>
+        <ul>
+          <li>Discovery-First: 발견 → 설계 → 실행 일체형</li>
+          <li>AI Governance + FDE 실행 결합 (린 × Wise42)</li>
+          <li>PoC에서 Production 직행 역량</li>
+          <li>Company Builder 모델로 AI-Native 사업 공동 창업</li>
+          <li>Outcome-Based 계약 (ROI 기반 수수료)</li>
+        </ul>
+      </div>
+      <div class="matrix-cell blue">
+        <div class="matrix-cell-title" style="color: var(--blue);">🔵 1차 타깃 고객</div>
+        <ul>
+          <li>AI 기본법 대응 필요한 공공기관 (린 채널)</li>
+          <li>PoC만 반복하는 중견기업 IT/전략팀</li>
+          <li>AI-Native 창업을 원하는 도메인 전문가</li>
+          <li>레거시 산업 AX를 원하는 오너 경영자</li>
+          <li>AX 바우처 활용하려는 스타트업</li>
+        </ul>
+      </div>
+      <div class="matrix-cell purple">
+        <div class="matrix-cell-title" style="color: var(--purple);">🟣 차별화 무기</div>
+        <ul>
+          <li>린 법무법인: 법·컴플라이언스 크레덴셜</li>
+          <li>Founders Studio: AI-Native 빌드 실전 역량</li>
+          <li>Discovery Sprint 방법론 (IP화)</li>
+          <li>GARAMwiki: 지식 기반 & 사고 리더십</li>
+          <li>솔로프레너 × 에이전트 린 실행 구조</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight purple">
+      <div class="highlight-label purple">차별화 핵심 명제 — "Discovery-First FDE"</div>
+      모든 AI 컨설팅 실패의 공통 원인: Discovery 없이 Implementation으로 직행. <strong>우리의 모든 인게이지먼트는 Discovery Sprint로 시작한다.</strong> Discovery Sprint는 단순한 "요구사항 분석"이 아니다 — 비즈니스 결과물로부터 역설계하여 AI 활용 지점을 발굴하는 구조화된 4주 프로세스. 이 Discovery 결과 없이는 Implementation을 시작하지 않는다. 이것이 우리의 최고 차별화 포인트다.
+    </div>
+  </div>
+
+  <!-- ── 6. 서비스 모델 ── -->
+  <div class="section" id="sec-service">
+    <div class="section-title teal">⚙️ 6. 서비스 레이어 설계 — 4개 티어 모델</div>
+
+    <div class="prose">
+      클라이언트의 성숙도와 니즈에 따라 4개 레이어로 구성된 서비스 포트폴리오. 모든 인게이지먼트는 <strong>L1 Discovery Sprint에서 시작</strong>하며, 결과에 따라 L2-L4로 확장한다.
+    </div>
+
+    <div class="service-layer">
+      <div class="layer-item">
+        <div class="layer-num">L1</div>
+        <div>
+          <div class="layer-content-title">🔍 Discovery Sprint — AI 기회 발굴 & 로드맵</div>
+          <div class="layer-content-body">4주 고정 인게이지먼트 · 비즈니스 결과물에서 역설계 · AI 유즈케이스 발굴 · 프로세스 매핑 · ROI 가설 검증 · 실행 가능한 로드맵 산출. <strong>이 단계 없이 L2 진입 불가.</strong> 정부 바우처 1단계 연계 가능.</div>
+        </div>
+        <div class="layer-price">고정가<span>₩3,000-5,000만</span></div>
+      </div>
+      <div class="layer-item" style="border-color: var(--blue-border);">
+        <div class="layer-num blue">L2</div>
+        <div>
+          <div class="layer-content-title">🏭 Process Redesign Studio — FDE 실행</div>
+          <div class="layer-content-body">L1 산출물 기반 · 클라이언트 내부 임베드 FDE 팀 · 기존 프로세스 AI 중심 재설계 · 프로덕션 시스템 직접 구현 · 4-8주 내 Production 진입. IBM FDU 방식 채택. AI 에이전트 + 인간 하이브리드 팟.</div>
+        </div>
+        <div class="layer-price">Milestone 기반<span>₩1-3억/프로젝트</span></div>
+      </div>
+      <div class="layer-item" style="border-color: var(--green-border);">
+        <div class="layer-num green">L3</div>
+        <div>
+          <div class="layer-content-title">🚀 AI-Native Company Build — 공동 창업</div>
+          <div class="layer-content-body">Founders Studio 모델 · AI-Native 사업 자체를 처음부터 함께 빌드 · 도메인 전문가 + Wise42 AI 엔지니어링 + 린 법무 · Equity 또는 Revenue Share 기반 · 소로프레너 AI 확장 전략. 핵심 차별화 서비스.</div>
+        </div>
+        <div class="layer-price">Equity/Rev Share<span>+ 린 서비스 피</span></div>
+      </div>
+      <div class="layer-item" style="border-color: var(--purple-border);">
+        <div class="layer-num purple">L4</div>
+        <div>
+          <div class="layer-content-title">🛡 AI Governance Layer — 지속적 컴플라이언스</div>
+          <div class="layer-content-body">린 × Wise42 AI Governance Platform · AI 기본법 컴플라이언스 지속 모니터링 · AI 시스템 위험 평가 · 감사 준비 · 리테이너 계약. 공공기관/대기업 전용 서비스. 린 법무법인 채널로 신규 유입.</div>
+        </div>
+        <div class="layer-price">리테이너<span>₩500-2,000만/월</span></div>
+      </div>
+    </div>
+
+    <div class="highlight teal">
+      <div class="highlight-label teal">가격 모델 원칙 — Outcome-Based Pricing</div>
+      L1은 고정가로 신뢰 구축. L2-L3는 마일스톤 기반 또는 ROI 공유 계약 우선. 시간당 과금(hourly billing) 구조는 제공하지 않는다 — Hourly 구조는 "오래 끌수록 유리"한 잘못된 인센티브를 만든다. <strong>Outcome-Based 계약이 20-40% 낮은 총비용과 신뢰를 동시에 만든다.</strong>
+    </div>
+  </div>
+
+  <!-- ── 7. GTM 전략 ── -->
+  <div class="section" id="sec-gtm">
+    <div class="section-title purple">📣 7. GTM(Go-to-Market) 전략 — 3개 채널 × 2개 진입 경로</div>
+
+    <div class="prose">
+      AI 컨설팅 시장에서 GTM의 핵심은 <strong>신뢰(Trust)와 크레덴셜(Credential)</strong>이다. 우리는 이미 두 개의 강력한 채널 자산을 보유하고 있다: 린 법무법인(공공·법무 신뢰)과 Founders Studio(실행 크레덴셜). 여기에 사고 리더십(Thought Leadership)을 더한다.
+    </div>
+
+    <div class="cards">
+      <div class="card purple">
+        <span class="card-emoji">⚖️</span>
+        <div class="card-title">채널 1 — 린 법무법인 채널 (공공/대기업)</div>
+        <div class="card-body">AI 기본법 컨설팅 고객이 자연스럽게 L4 AI Governance로, 이후 L2 FDE로 업셀. 법무·컴플라이언스 크레덴셜이 공공기관 신뢰 장벽을 해소. 채널 파트너 수수료 구조 설계.</div>
+      </div>
+      <div class="card purple">
+        <span class="card-emoji">🏗</span>
+        <div class="card-title">채널 2 — Founders Studio (스타트업/도메인 전문가)</div>
+        <div class="card-body">AI-Native 창업을 원하는 도메인 전문가를 L3 Company Build로 직접 유입. 기존 네트워크 + YC 한국 커뮤니티 + AI 창업 이벤트. L3 성공 케이스가 L1-L2 레퍼런스로 전환.</div>
+      </div>
+      <div class="card purple">
+        <span class="card-emoji">✍️</span>
+        <div class="card-title">채널 3 — 사고 리더십 (GARAMwiki + 콘텐츠)</div>
+        <div class="card-body">GARAMwiki가 AI 컨설팅 실패·성공 분석의 지식 허브로 자리잡기. LinkedIn/뉴스레터 통한 C레벨 대상 인바운드 수요 창출. "AI 컨설팅은 왜 실패하는가" 콘텐츠 시리즈.</div>
+      </div>
+    </div>
+
+    <div class="section-title purple" style="margin-top:24px;">🎣 두 가지 진입 경로 설계</div>
+
+    <table>
+      <thead>
+        <tr><th>진입 경로</th><th>타깃</th><th>첫 번째 오퍼</th><th>업셀 경로</th><th>예상 LTV</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><chip class="chip chip-blue">Top-Down</chip></td>
+          <td>C레벨 / 공공기관 임원</td>
+          <td>L4 AI Governance 리테이너</td>
+          <td>L4 → L1 Discovery → L2 FDE</td>
+          <td>₩1-3억/년</td>
+        </tr>
+        <tr>
+          <td><chip class="chip chip-green">Bottom-Up</chip></td>
+          <td>전략/IT 담당 팀장</td>
+          <td>L1 Discovery Sprint (고정가)</td>
+          <td>L1 → L2 FDE → L4 지속 거버넌스</td>
+          <td>₩5,000만-2억/프로젝트</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight purple">
+      <div class="highlight-label purple">GTM 1순위 집중 — "PoC→Production 직행" 패키지</div>
+      한국 시장의 가장 큰 페인포인트: PoC를 했는데 프로덕션 진입을 못하는 기업. 이들에게 <strong>"L1 Discovery Sprint (4주, 고정가) + L2 FDE 실행 (8주, 성과 기반)"</strong> 패키지를 첫 번째 엔트리 프로덕트로 제시. 가격 예측 가능성 + 빠른 프로덕션 + ROI 가시화가 핵심 메시지.
+    </div>
+  </div>
+
+  <!-- ── 8. 실행 로드맵 ── -->
+  <div class="section" id="sec-roadmap">
+    <div class="section-title">🗺 8. 실행 로드맵 — 12개월 빌드 플랜</div>
+
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Phase 1<br>M1-M2</div>
+        <div class="roadmap-dot active"></div>
+        <div class="roadmap-content">
+          <div class="roadmap-title">🔧 기반 구축 — Discovery Sprint 방법론 IP화 + 첫 케이스</div>
+          <div class="roadmap-body">① Discovery Sprint 프레임워크 표준화 (템플릿, 툴킷, 가이드북) · ② 첫 2-3개 파일럿 클라이언트 선정 (린 채널 + Founders Studio 네트워크) · ③ AI Governance Platform v05 기반 공공기관 첫 계약 · ④ 서비스 계약 구조 설계 (고정가 L1, 마일스톤 L2) · ⑤ 팀 구성: FDE 엔지니어 2-3명 + 린 파트너 1명 + PM 1명</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Phase 2<br>M3-M5</div>
+        <div class="roadmap-dot blue"></div>
+        <div class="roadmap-content" style="border-color: var(--blue-border);">
+          <div class="roadmap-title" style="color: var(--blue);">📈 레퍼런스 구축 — 3개 성공 케이스 + 프로덕션 증명</div>
+          <div class="roadmap-body">① L1 Discovery Sprint 3개 완료 → 최소 2개 L2 전환 · ② L2 FDE로 프로덕션 시스템 2개 이상 배포 (공개 케이스 스터디화) · ③ AX 바우처 연계 패키지 설계 + 정부 지원 채널 개설 · ④ 린 법무 AI Governance 리테이너 3개 체결 · ⑤ Founders Studio L3: 첫 AI-Native 공동창업 1건 시작</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Phase 3<br>M6-M9</div>
+        <div class="roadmap-dot green"></div>
+        <div class="roadmap-content" style="border-color: var(--green-border);">
+          <div class="roadmap-title" style="color: var(--green);">🚀 사고 리더십 + 인바운드 엔진 가동</div>
+          <div class="roadmap-body">① GARAMwiki 기반 "한국 AI 컨설팅 실패 백서" 발간 (언론 노출) · ② LinkedIn C레벨 대상 연재 시리즈 시작 · ③ 성공 케이스 기반 웨비나/세미나 개최 (린 법무 공동) · ④ 인바운드 리드 월 5건 이상 달성 목표 · ⑤ L1 Discovery Sprint 월 2건 정기 서비스화</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Phase 4<br>M10-M12</div>
+        <div class="roadmap-dot purple"></div>
+        <div class="roadmap-content" style="border-color: var(--purple-border);">
+          <div class="roadmap-title" style="color: var(--purple);">🏆 스케일 & 카테고리 선점</div>
+          <div class="roadmap-body">① 누적 인게이지먼트 10건 이상 · 성공률 80%+ 기준 스케일 결정 · ② FDE 팀 2배 확장 또는 파트너사 FDE 네트워크 구축 · ③ L3 Company Build 2-3건 진행 중 · ④ "Discovery-First FDE" 브랜드 카테고리 선점 (한국 최초) · ⑤ AWS/Anthropic 파트너사 등록 검토</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 28px;">📐 즉각 실행 TO-DO — 이번 주 안에</div>
+
+    <div class="cards">
+      <div class="card orange">
+        <span class="card-emoji">1️⃣</span>
+        <div class="card-title">Discovery Sprint 방법론 문서화</div>
+        <div class="card-body">4주 프로세스 템플릿, 인터뷰 가이드, 결과물 양식 표준화. 이것이 우리 서비스의 핵심 IP. Vinoo Ganesh FDE 가이드를 참조해 한국형 Discovery Sprint 버전 작성.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-emoji">2️⃣</span>
+        <div class="card-title">린 파트너와 채널 미팅 확정</div>
+        <div class="card-body">AI Governance L4 리테이너의 첫 3개 잠재 고객 파이프라인 확인. 공공기관 AI 기본법 대응 의뢰가 들어왔거나 들어올 곳 리스트업 + 어프로치 시나리오 설계.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-emoji">3️⃣</span>
+        <div class="card-title">L1 Discovery Sprint 첫 클라이언트 선정</div>
+        <div class="card-body">기존 네트워크에서 PoC는 했지만 프로덕션 진입 못한 기업 1-2곳 선별. 무료 또는 대폭 할인된 첫 케이스로 방법론 검증 + 케이스 스터디 확보 동시 달성.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-emoji">4️⃣</span>
+        <div class="card-title">"AI 컨설팅 실패 백서" 초안 작성</div>
+        <div class="card-body">이 리서치 내용 기반으로 한국어 1페이지 요약본 작성 → LinkedIn 게시 → C레벨 인바운드 수요 창출. 사고 리더십 첫 콘텐츠 에셋.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-emoji">5️⃣</span>
+        <div class="card-title">AWS/Anthropic 파트너 프로그램 검토</div>
+        <div class="card-body">AWS FDE 파트너 프로그램 ($1B 투자 중) + Anthropic 파트너 등록 요건 파악. 글로벌 AI 파트너 크레덴셜이 공공조달과 대기업 영업에서 신뢰 역할을 함.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-emoji">6️⃣</span>
+        <div class="card-title">Outcome-Based 계약 구조 설계</div>
+        <div class="card-body">린 법무 협력으로 "L1 고정가 + L2 마일스톤 + ROI 공유" 계약 템플릿 초안 작성. 클라이언트와 우리 모두 Win-Win이 되는 계약 구조가 차별화의 핵심.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- GARAMbada 전략 결론 -->
+  <div class="section">
+    <div class="section-title purple">💡 GARAMbada 전략 결론 — 한 줄 요약</div>
+
+    <div class="highlight" style="text-align: center; padding: 28px 32px;">
+      <div class="highlight-label">핵심 전략 명제</div>
+      <div style="font-size: 1.1rem; font-weight: 800; color: var(--text); margin-bottom: 12px; line-height: 1.5;">
+        "기존 AI 컨설팅은 전략을 팔고 떠난다.<br>우리는 Discovery를 먼저 하고, 프로덕션을 함께 만들고, 능력을 남긴다."
+      </div>
+      <div style="font-size: 0.88rem; color: #cdd9e5; line-height: 1.7;">
+        글로벌 시장의 실패 구조(Discovery Bottleneck + Strategy-Implementation Gap + Process Replication)를 정면으로 해결하는 <strong>Discovery-First FDE</strong> 모델. 한국 시장의 특수성(AI 기본법, 공공기관, PoC 수집가 패턴)에 최적화된 린 × Wise42 × Founders Studio 트라이앵글. 이것이 우리가 2026년 하반기에 카테고리를 만들어야 하는 이유다.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  GARAMwiki · 사업 현안 · Wise42 × Founders Studio AI 컨설팅 전략 · 2026-07-07 · Claude Cowork와 함께 성장합니다
+</footer>
+
+</body>
+</html>

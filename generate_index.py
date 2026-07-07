@@ -235,6 +235,10 @@ ARTICLE_META = {
         "title": "AI Governance Platform 사업 진출 전략 v03 — 법무법인 린 × Wise42<br>공공·중견기업 AX 시장 기반 신사업 · AI 기본법 · 3~5조 TAM · 공공기관 AX 심층 분석",
         "tags":  ["AI Governance", "법무법인 린", "Wise42", "AI 기본법", "공공 AX", "TrustLayer"],
     },
+    "2026-07_AI_Consulting_AX_전략_Wise42_FoundersStudio.html": {
+        "title": "AI 컨설팅은 왜 실패하는가 — Wise42 × Founders Studio의 제대로 된 AX 전략<br>Discovery-First FDE · 글로벌 실패 원인 5가지 · 한국 시장 분석 · 4-레이어 서비스 모델 · 12개월 로드맵",
+        "tags":  ["AI 컨설팅", "AX 전략", "FDE", "Wise42", "Founders Studio", "Discovery Sprint", "Outcome-Based", "Accenture FCF", "McKinsey 80%", "AI 기본법", "PoC 수집가", "Company Builder"],
+    },
     "2026-06_AI_Governance_Platform_린Wise42_사업현안_v05.html": {
         "title": "AI Governance Platform 사업 진출 전략 v05 — 법무법인 린 × Wise42<br>보안×컴플라이언스 통합 관문 · 업스테이지 Solar LLM · AIM Intelligence · AI TRiSM · TOP 7 즉각 실행",
         "tags":  ["AI Governance", "법무법인 린", "Wise42", "보안×컴플라이언스 통합 관문", "N2SF", "ISMS-P", "AI TRiSM", "업스테이지", "AIM Intelligence", "Module 6", "Module 7", "국정원 15위협", "공공 AX", "v05"],
