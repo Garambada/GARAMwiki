@@ -65,6 +65,10 @@ ARTICLE_META = {
         "title": "AI Frontier EP102 — 샌프란시스코의 교훈: \"사람들이 다 미쳐요\"<br>노정석 현장 르포 · HumanX $3,995 · AX 조건 · VIZCOM \"Mission Is the Moat\" · McKinsey 6% 성과율",
         "tags":  ["AI Frontier", "노정석", "Chester Roh", "샌프란시스코", "실리콘밸리", "AI 과열", "VIZCOM", "Mission Is the Moat", "AX 조건", "McKinsey", "Snowflake Summit", "한국 창업자", "AI Psychosis", "HumanX", "GTC 2026"],
     },
+    "2024-09_EO_Decoupling_Harvard_MBA_Teixeira.html": {
+        "title": "하버드 MBA가 가장 먼저 가르치는 전략 — 디커플링(Decoupling)으로 시장을 훔쳐라<br>Thales Teixeira · 고객 가치 사슬 3유형 · 5단계 고객 훔치기 · AI 디커플링 가속 · EO Korea (2024-09)",
+        "tags":  ["디커플링", "Thales Teixeira", "고객 가치 사슬", "Customer Value Chain", "EO Korea", "하버드 MBA", "비즈니스 모델", "디지털 파괴", "Uber", "Airbnb", "Netflix", "AI 디커플링", "스타트업 전략", "Counter-Decouple", "Unlocking the Customer Value Chain"],
+    },
     "2026-06_a16z_Cycles_Different_But_Same_Bits_to_Atoms.html": {
         "title": "a16z Charts of the Week — 사이클은 같고 다르다: Bits → Atoms 대순환<br>Moses Sternstein · 로보틱스 $16B 역대 최고 · AI 네이티브 매핑 문제 · Accenture 30×→6× · 솔로프레너 2× (2026-06-26)",
         "tags":  ["Moses Sternstein", "a16z", "Bits to Atoms", "로보틱스 Physical AI", "AI 네이티브", "Accenture FCF", "솔로프레너", "그로서리 생산성 역설", "YC 배치", "Stripe Economics", "섹터 순환", "사이클 분석"],
