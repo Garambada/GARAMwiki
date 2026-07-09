@@ -298,6 +298,10 @@ ARTICLE_META = {
         "title": "DSpark: Confidence-Scheduled Speculative Decoding with Semi-Autoregressive Generation<br>반자기회귀 드래프트 · 신뢰도 스케줄링 · V4-Flash 60~85% 가속 · DeepSpec MIT 오픈소스",
         "tags":  ["DSpark", "Speculative Decoding", "Semi-Autoregressive Generation", "Confidence Scheduling", "Markov Head", "DFlash", "EAGLE-3", "DeepSpec", "LLM 추론 최적화", "Hardware-Aware Scheduler", "DeepSeek V4", "HBM 병목", "ICML 2026"],
     },
+    "2026-07_DSPy_BitterLesson_Engineering_AI_Systems_WF26.html": {
+        "title": "DSPy &amp; The Bitter Lesson — AI 시스템을 제대로 엔지니어링하는 법<br>Omar Khattab @ WF26 · 프롬프트는 끔찍한 추상화 · 선언형 시그니처 · DSPy 컴파일러 · Machine Studying",
+        "tags":  ["DSPy", "Omar Khattab", "Bitter Lesson", "Rich Sutton", "Declarative Signatures", "Separation of Concerns", "WF26", "AI Engineer World's Fair 2026", "Databricks", "MIT EECS", "Machine Studying", "LLM 시스템 엔지니어링", "조기 최적화", "컴파일러", "관심사의 분리"],
+    },
 }
 
 # ───────────────────────────────────────────────
