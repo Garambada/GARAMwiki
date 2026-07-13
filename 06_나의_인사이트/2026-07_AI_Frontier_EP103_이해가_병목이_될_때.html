@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Frontier EP103 — 이해가 병목이 될 때 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --card2: #20232f;
+    --border: #2a2d3a; --text: #e8eaf0; --muted: #7a7f94;
+    --accent: #10b981; --accent2: #34d399;
+    --warn: #f59e0b; --danger: #ef4444;
+    --blue: #3b82f6; --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    line-height: 1.65; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 52px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo { font-weight: 800; font-size: 1rem;
+    background: linear-gradient(135deg,#10b981,#34d399);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-sep { color: var(--border); }
+  .nav-crumb { font-size: 0.82rem; color: var(--muted); }
+  .nav-crumb a { color: var(--muted); text-decoration: none; }
+  .nav-crumb a:hover { color: var(--accent); }
+  .nav-badge { margin-left: auto; font-size: 0.72rem; font-weight: 700;
+    background: rgba(16,185,129,0.12); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.3); border-radius: 20px; padding: 3px 10px; }
+
+  .hero {
+    background: linear-gradient(135deg, rgba(16,185,129,0.06) 0%, rgba(167,139,250,0.06) 100%);
+    border-bottom: 1px solid var(--border); padding: 52px 32px 44px;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .hero-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 20px;
+    background: rgba(16,185,129,0.12); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.25); }
+  .hero-tag.purple { background: rgba(167,139,250,0.12); color: var(--purple); border-color: rgba(167,139,250,0.25); }
+  .hero-tag.amber { background: rgba(245,158,11,0.12); color: var(--warn); border-color: rgba(245,158,11,0.25); }
+  .hero-tag.blue { background: rgba(59,130,246,0.12); color: var(--blue); border-color: rgba(59,130,246,0.25); }
+  .hero-date { font-size: 0.78rem; color: var(--muted); }
+  .hero h1 { font-size: clamp(1.4rem,3.5vw,2rem); font-weight: 800; line-height: 1.25;
+    letter-spacing: -0.5px; margin-bottom: 14px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 0.96rem; color: var(--muted); max-width: 700px; line-height: 1.65; margin-bottom: 32px; }
+
+  .stats-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .stat-box { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px; min-width: 110px; flex: 1; }
+  .stat-num { font-size: 1.6rem; font-weight: 800; line-height: 1; margin-bottom: 4px; color: var(--accent); }
+  .stat-num.purple { color: var(--purple); }
+  .stat-num.amber { color: var(--warn); }
+  .stat-num.blue { color: var(--blue); }
+  .stat-label { font-size: 0.72rem; color: var(--muted); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .sec-header { display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .sec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .sec-dot.purple { background: var(--purple); }
+  .sec-dot.amber { background: var(--warn); }
+  .sec-dot.blue { background: var(--blue); }
+  .sec-title { font-size: 0.95rem; font-weight: 700; }
+  .section { margin-bottom: 44px; }
+
+  .bq { border-left: 3px solid var(--accent); background: var(--card);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 14px; }
+  .bq.purple { border-left-color: var(--purple); }
+  .bq.amber { border-left-color: var(--warn); }
+  .bq.blue { border-left-color: var(--blue); }
+  .bq-text { font-size: 0.91rem; color: var(--text); line-height: 1.65; font-style: italic; }
+  .bq-attr { font-size: 0.74rem; color: var(--muted); margin-top: 6px; }
+
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; }
+  .concept-card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 22px; }
+  .concept-icon { font-size: 1.5rem; margin-bottom: 10px; }
+  .concept-name { font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; }
+  .concept-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* CHAPTER TIMELINE */
+  .chapter-grid { display: grid; gap: 8px; }
+  .chapter-row { background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 16px;
+    display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center; }
+  .chapter-time { font-size: 0.75rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .chapter-title { font-size: 0.85rem; color: var(--text); }
+  .chapter-desc { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  /* MATRIX — 2×2 비교 */
+  .matrix-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .matrix-cell { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px; }
+  .matrix-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; margin-bottom: 8px; }
+  .matrix-label.green { color: var(--accent); }
+  .matrix-label.red { color: var(--danger); }
+  .matrix-label.amber { color: var(--warn); }
+  .matrix-label.blue { color: var(--blue); }
+  .matrix-label.purple { color: var(--purple); }
+  .matrix-content { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+
+  /* UNKNOWNS 4사분면 */
+  .quad-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .quad-cell { padding: 20px 22px; }
+  .quad-cell.tl { background: rgba(16,185,129,0.08); }
+  .quad-cell.tr { background: rgba(59,130,246,0.08); }
+  .quad-cell.bl { background: rgba(245,158,11,0.08); }
+  .quad-cell.br { background: rgba(239,68,68,0.08); }
+  .quad-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .quad-label.green { color: var(--accent); }
+  .quad-label.blue { color: var(--blue); }
+  .quad-label.amber { color: var(--warn); }
+  .quad-label.red { color: var(--danger); }
+  .quad-title { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
+  .quad-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  .insight-list { display: grid; gap: 12px; }
+  .insight-item { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 22px;
+    display: flex; gap: 16px; align-items: flex-start; }
+  .insight-num { font-size: 1.2rem; font-weight: 800; color: var(--accent); min-width: 28px; line-height: 1; }
+  .insight-content { flex: 1; }
+  .insight-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+  .insight-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+
+  .pill-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+  .pill { display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 7px 14px; font-size: 0.82rem; }
+  .pill-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag { font-size: 0.7rem; padding: 3px 9px; border-radius: 6px;
+    background: rgba(16,185,129,0.08); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.2); }
+  .tag.purple { background: rgba(167,139,250,0.08); color: var(--purple); border-color: rgba(167,139,250,0.2); }
+  .tag.amber { background: rgba(245,158,11,0.08); color: var(--warn); border-color: rgba(245,158,11,0.2); }
+  .tag.blue { background: rgba(59,130,246,0.08); color: var(--blue); border-color: rgba(59,130,246,0.2); }
+  .tag.red { background: rgba(239,68,68,0.08); color: var(--danger); border-color: rgba(239,68,68,0.2); }
+
+  .eval-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .eval-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
+  .eval-name { font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
+  .eval-sub { font-size: 0.75rem; color: var(--muted); margin-bottom: 12px; }
+  .eval-row { display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
+  .eval-row:last-child { border-bottom: none; }
+  .eval-key { color: var(--muted); min-width: 90px; }
+  .eval-val { color: var(--text); text-align: right; flex: 1; }
+
+  .source-bar { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 48px; }
+  .source-label { font-size: 0.72rem; color: var(--muted); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .source-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; }
+  .source-link:hover { text-decoration: underline; }
+  .source-meta { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+
+  @media (max-width: 680px) {
+    nav, .hero, .main { padding-left: 16px; padding-right: 16px; }
+    .matrix-wrap, .eval-compare, .quad-wrap { grid-template-columns: 1fr; }
+    .stats-row { gap: 10px; }
+    .chapter-row { grid-template-columns: 60px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">GARAMwiki</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-crumb"><a href="../index.html">홈</a> › 나의 인사이트</span>
+  <span class="nav-badge">💡 인사이트</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-tag">나의 인사이트</span>
+      <span class="hero-tag purple">🎙 AI Frontier EP103</span>
+      <span class="hero-tag amber">🧠 인지 부채 경보</span>
+      <span class="hero-tag blue">+ 박종현 합류</span>
+      <span class="hero-date">2026-07-12 · 녹화 2026-07-04</span>
+    </div>
+    <h1>이해가 <em>병목</em>이 될 때 —<br>Fable 쿼터 폭발 · 서브에이전트 역할 분담 · 평가의 깃발</h1>
+    <p class="hero-sub">
+      AI Frontier 팟캐스트 EP103. 노정석·최승준·박종현 세 명이 Fable 귀환을 출발점으로
+      서브에이전트의 작업별 모델 선택 전략, Anthropic vs OpenAI의 철학 차이,
+      인지 부채와 "지도와 영토" 프레임, 보고서+퀴즈 패턴으로 이해를 수확하는 법,
+      그리고 Artificial Analysis와 LMArena 평가의 한계까지 —
+      Company Builder 관점에서 뽑아낸 핵심 인사이트 7가지.
+    </p>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">46:40</div><div class="stat-label">대화 분량</div></div>
+      <div class="stat-box"><div class="stat-num purple">23</div><div class="stat-label">챕터 수</div></div>
+      <div class="stat-box"><div class="stat-num amber">3</div><div class="stat-label">호스트 (노·최·박)</div></div>
+      <div class="stat-box"><div class="stat-num blue">EP103</div><div class="stat-label">AI Frontier 시리즈</div></div>
+      <div class="stat-box"><div class="stat-num">5h</div><div class="stat-label">Fable Ultra 쿼터 30분 소진</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SECTION 1: 핵심 명제 3가지 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">에피소드 핵심 명제 3가지</span></div>
+
+    <div class="bq">
+      <div class="bq-text">
+        "Fable의 작업 품질은 내가 미지의 것들을 얼마나 명확히 하느냐에 의해
+        병목되는 첫 번째 모델입니다. 그 이해가 새로운 병목이라는."
+      </div>
+      <div class="bq-attr">— Thariq Shihipar (Anthropic) → 최승준 인용 (AI Frontier EP103, 10:06)</div>
+    </div>
+    <div class="bq purple">
+      <div class="bq-text">
+        "Fable에게 모든 코딩 작업에 대해 적절한 저성능 모델을 스스로 판단해서 선택하고
+        그것을 서브에이전트에서 실행해 줘. 했더니 Sonnet 5로 어떤 일을 하고,
+        더 작은 일감들은 Haiku한테 줘서 그걸 잘 해냈다."
+      </div>
+      <div class="bq-attr">— 최승준 인용: Cat Wu·Thariq Shihipar fireside chat at AI Engineer (EP103, 04:16)</div>
+    </div>
+    <div class="bq amber">
+      <div class="bq-text">
+        "소셜 미디어 담론을 이끌어 가는 사람들이 거의 대부분 우리 세대들이에요.
+        그런데 20대 초반과 10대는 다를 수 있다. 걔들은 그냥 아래 레이어로 밀어 넣고
+        '해 줘, 해 줘, 해 줘.'라고 하면서 그냥 다음 레이어에서 생산성이 형성될 가능성이 높다."
+      </div>
+      <div class="bq-attr">— 노정석 (AI Frontier EP103, 23:55)</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 23개 챕터 전체 지형도 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot blue"></div><span class="sec-title">23개 챕터 — 전체 지형도</span></div>
+    <div class="chapter-grid">
+      <div class="chapter-row">
+        <div><div class="chapter-time">00:00</div></div>
+        <div><div class="chapter-title">돌아온 Fable과 첫 사용감</div><div class="chapter-desc">생물학 콘텐츠 → 가드레일로 Opus 4.8 강제전환 / Ultra 30분에 5시간 쿼터 소진</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">02:02</div></div>
+        <div><div class="chapter-title">프런티어 모델의 출시 리듬</div><div class="chapter-desc">Opus 4.5 이후 Sonnet 5 → Fable까지 릴리스 주기 / 수확 체감과 적정 모델 선택</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">03:20</div></div>
+        <div><div class="chapter-title">어려운 버그와 빠른 사용량 소진</div><div class="chapter-desc">최승준: Opus·Codex 불가 버그를 Fable이 해결 → 전체 사용량 20% 소진</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">04:16</div></div>
+        <div><div class="chapter-title">모델 선택을 맡기는 서브에이전트</div><div class="chapter-desc">Simon Willison 포스팅: Cat Wu·Thariq 발언 — Fable이 스스로 Sonnet/Haiku 선택 후 실행</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">05:50</div></div>
+        <div><div class="chapter-title">판단과 구현의 역할 분담</div><div class="chapter-desc">6~7개월 전 Opus=판단/Sonnet=코딩 패턴과 완전히 동형 / Fable 가격 곡선 전망</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">06:45</div></div>
+        <div><div class="chapter-title">Anthropic과 OpenAI의 접근 차이</div><div class="chapter-desc">Anthropic = 원샷 원킬(모델 자체 강화) vs OpenAI = test-time compute(추론 시간 확장)</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">08:49</div></div>
+        <div><div class="chapter-title">인지 부채와 새로운 병목</div><div class="chapter-desc">산출물은 나오는데 내가 어떻게 나왔는지 모른다 / 인간 인지 관련 이슈가 부상</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">09:29</div></div>
+        <div><div class="chapter-title">지도와 영토 사이의 미지</div><div class="chapter-desc">Korzybski의 "지도는 영토가 아니다" / Rumsfeld 4사분면 / Finding Your Unknowns</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">12:37</div></div>
+        <div><div class="chapter-title">구현 전후의 이해 장치</div><div class="chapter-desc">구현 전: 인터뷰·Cognitive Task Analysis / 구현 중: 노트·context 압축 / 구현 후: 설득 자료</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">14:20</div></div>
+        <div><div class="chapter-title">보고서와 퀴즈를 통한 학습</div><div class="chapter-desc">Thariq의 프롬프트: "HTML 보고서 만들고 맨 아래 퀴즈 넣어줘" → Anki식 이해 점검</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">16:45</div></div>
+        <div><div class="chapter-title">콘텐츠 압축과 놓치는 이해</div><div class="chapter-desc">YouTube Gemini 요약 → 많이 보지만 세부 이해 손실 / YouTube 퀴즈 기능 등장</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">18:00</div></div>
+        <div><div class="chapter-title">인간의 이해를 돕는 도구</div><div class="chapter-desc">Explain Diff 스킬 / 인쇄해서 들고 다니기 / Andy Matuschak·Nielsen의 니모닉 퀴즈</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">21:34</div></div>
+        <div><div class="chapter-title">반복되는 업무 프레임워크</div><div class="chapter-desc">HBR의 조직론·인재 프레임워크와 동형 / AI 담론도 언젠가 하위 레이어로</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">24:47</div></div>
+        <div><div class="chapter-title">AI가 읽는 README와 새로운 세대</div><div class="chapter-desc">박종현: "사람은 읽지 마세요" README → AI가 읽는 시대 / Cyberpunk 2077 cyberpsycho 비유</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">26:48</div></div>
+        <div><div class="chapter-title">토끼굴을 닫는 판단 기준</div><div class="chapter-desc">노정석: 인지 과부하 gate / 같은 모델에 세 번 확인 → "맞다"면 덮음 / 균형 감각</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">30:00</div></div>
+        <div><div class="chapter-title">Claude·Codex·사람의 토론</div><div class="chapter-desc">파일 polling 방식으로 병렬 토론 후 합의 / 최승준이 agenda 올리고 모델들이 주재</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">31:13</div></div>
+        <div><div class="chapter-title">Fable의 체감과 평가 지표</div><div class="chapter-desc">체감은 task마다 다름 / Artificial Analysis 소개 — benchmark 기반 수능식 평가</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">33:04</div></div>
+        <div><div class="chapter-title">LMArena의 인간 선호 평가</div><div class="chapter-desc">Elo 방식 / 상업화: 17억달러 valuation, 8개월 1억달러 매출 / 빅테크가 큰 고객</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">36:25</div></div>
+        <div><div class="chapter-title">Llama 4와 평가 최적화</div><div class="chapter-desc">Llama 4 사태: LMArena 튜닝 최적화로 1등 → 실제 사용 시 기대 이하 / policy 강화</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">37:50</div></div>
+        <div><div class="chapter-title">들쭉날쭉한 지능과 평가의 깃발</div><div class="chapter-desc">Jagged intelligence / SWE-bench식 깃발 하나씩 정복 / 소설·유머는 왜 못할까</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">41:21</div></div>
+        <div><div class="chapter-title">도메인 모델과 경계 설계</div><div class="chapter-desc">30B 이상 + 회사 logic / Engram 등장 / 경계 짓기가 새로운 engineering</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">43:36</div></div>
+        <div><div class="chapter-title">오디오·로보틱스의 평가 기회</div><div class="chapter-desc">LLM 너머 audio·VLA / data 부족·evaluation 어려움 → 사업 기회 / surrogate reward model</div></div>
+      </div>
+      <div class="chapter-row">
+        <div><div class="chapter-time">45:17</div></div>
+        <div><div class="chapter-title">이번 주의 정리와 다음 이야기</div><div class="chapter-desc">ICML 서울 개최 예고 / 기시감과 도돌이표 / 빠른 변화 속 방향성의 지속성</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: 핵심 개념 4가지 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot amber"></div><span class="sec-title">핵심 개념 — 네 가지 키 프레임</span></div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-icon">🗺️</div>
+        <div class="concept-name">인지 부채 (Cognitive Debt)</div>
+        <div class="concept-desc">
+          모델 성능이 올라가 산출물은 빠르게 나오지만, 그 과정을 이해하지 못한 채 쌓이는 "이해의 빚".
+          Mitchell Hashimoto 진영: 겉보기엔 돌아가지만 아키텍처가 조용히 깨지는 중.
+          새로운 병목은 GPU도 메모리도 아니라 인간의 이해 (T_brain).
+        </div>
+        <div class="tags"><span class="tag amber">인지 부채</span><span class="tag">T_brain</span><span class="tag amber">이해 병목</span></div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">🤖</div>
+        <div class="concept-name">서브에이전트 역할 분담 전략</div>
+        <div class="concept-desc">
+          Fable에게 "세세하게 지시하지 말라." 대신 판단·리뷰·종합은 메인 루프(Fable),
+          구현은 서브에이전트(Sonnet 5, Haiku)로 분리.
+          6~7개월 전 Opus=판단/Sonnet=코딩 패턴과 완전히 동형.
+          Fable이 이 결정을 스스로 메모리에 기록.
+        </div>
+        <div class="tags"><span class="tag purple">서브에이전트</span><span class="tag">역할 분담</span><span class="tag purple">비용 최적화</span></div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">🎯</div>
+        <div class="concept-name">평가의 깃발 (Jagged Intelligence)</div>
+        <div class="concept-desc">
+          LLM은 SWE-bench 같은 특정 깃발을 향해 발전 → 그 분포에 최적화된 지능만 생김.
+          IMO 수학 문제는 풀지만 재미있는 소설·개그는 못 쓰는 들쭉날쭉한 지능.
+          평가 자체가 benchmark이기 때문에 해킹 가능 (Llama 4 사태).
+        </div>
+        <div class="tags"><span class="tag blue">Jagged Intelligence</span><span class="tag">깃발 정복</span><span class="tag blue">평가 한계</span></div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">🧬</div>
+        <div class="concept-name">세대 단층 — AI가 읽는 README</div>
+        <div class="concept-desc">
+          20대 초반·10대는 이미 이 레이어 아래로 밀어넣고 작업.
+          박종현이 인용한 README: "사람은 읽지 마세요. AI가 읽을 것이다."
+          가정 자체가 다른 세대 → AI 담론의 주류가 교체될 수 있다.
+        </div>
+        <div class="tags"><span class="tag">세대 단층</span><span class="tag amber">AI Native 세대</span><span class="tag">레이어 전환</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Anthropic vs OpenAI 철학 비교 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot purple"></div><span class="sec-title">Anthropic vs OpenAI — 두 철학의 충돌</span></div>
+    <div class="matrix-wrap">
+      <div class="matrix-cell">
+        <div class="matrix-label green">🟢 Anthropic 방식</div>
+        <div class="matrix-content">
+          <strong>원샷 원킬 (One-shot, One-kill)</strong><br>
+          모델 자체의 능력을 극대화해 짧은 토큰으로 정확하게 결과물 생성.
+          Thinking tokens에 과도하게 의존하지 않음.
+          Fable = 이 철학의 정점 — "천재 한 명이 일필휘지로 끝내는 작업".
+          <br><br>
+          노정석 평가: 짧고 정확하지만 비싼 Fable 토큰이 부담.
+        </div>
+      </div>
+      <div class="matrix-cell">
+        <div class="matrix-label blue">🔵 OpenAI 방식</div>
+        <div class="matrix-content">
+          <strong>Test-time Compute 확장</strong><br>
+          추론 시간에 많은 연산을 투입해 성능 향상.
+          GPT-5.5, GPT-5.6에서도 작은 모델 + 긴 thinking으로 경쟁.
+          "적당한 사람 열 명이 있어야 좋은 것도 있다."
+          <br><br>
+          노정석 평가: 단위 비용당 성과 면에서 Fable과 경쟁 가능.
+        </div>
+      </div>
+      <div class="matrix-cell">
+        <div class="matrix-label amber">⚡ 실무 선택 기준</div>
+        <div class="matrix-content">
+          일의 특징에 따라 선택: 단일 창의적 판단 → Fable,
+          반복적 병렬 처리 → test-time compute.
+          "사장님이 기지를 발휘해야 하는 영역" = 모델 선택 판단 자체.
+          여기에 중국 모델이라는 선택지까지 추가되는 중.
+        </div>
+      </div>
+      <div class="matrix-cell">
+        <div class="matrix-label red">⚠️ 공통 함정</div>
+        <div class="matrix-content">
+          어느 쪽이든 더 좋은 다음 모델이 나오면 "어차피 또 바뀐다."
+          노정석: "수확 체감이 느껴지면 굳이 더 비싼 모델 쓸 필요 없다."
+          Fable에 익숙해지면 기대치도 올라가 — 잘하던 걸 조금만 못해도 짜증.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 미지의 4사분면 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">이해의 4사분면 — Rumsfeld × AI 시대</span></div>
+    <p style="font-size:0.85rem; color:var(--muted); margin-bottom:16px; line-height:1.65;">
+      Thariq Shihipar가 Alfred Korzybski("지도는 영토가 아니다")와 Donald Rumsfeld의 4사분면을 결합해
+      제시한 프레임. Fable급 모델과 일할 때 나의 미지의 것이 많을수록 AI의 결정 오류도 늘어난다.
+    </p>
+    <div class="quad-wrap">
+      <div class="quad-cell tl">
+        <div class="quad-label green">✅ Known Knowns</div>
+        <div class="quad-title">알고 있다는 걸 아는 것</div>
+        <div class="quad-desc">내가 명확히 요구사항으로 변환할 수 있는 영역. Fable이 이 범위에서 일하면 최고의 성과.</div>
+      </div>
+      <div class="quad-cell tr">
+        <div class="quad-label blue">🔵 Known Unknowns</div>
+        <div class="quad-title">모른다는 걸 아는 것</div>
+        <div class="quad-desc">내가 인터뷰·CTA(Cognitive Task Analysis)로 명확화할 수 있음. Claude에게 "나를 인터뷰해줘".</div>
+      </div>
+      <div class="quad-cell bl">
+        <div class="quad-label amber">⚠️ Unknown Knowns</div>
+        <div class="quad-title">알지만 인식 못하는 것</div>
+        <div class="quad-desc">내 암묵지·직관. Fable이 이 영역에서 틀린 추측을 하면 산출물이 미묘하게 빗나감.</div>
+      </div>
+      <div class="quad-cell br">
+        <div class="quad-label red">🔴 Unknown Unknowns</div>
+        <div class="quad-title">모른다는 것조차 모르는 것</div>
+        <div class="quad-desc">인지 부채의 핵심. 작업이 많아질수록 이 영역이 커짐 → 가장 위험한 빚. 퀴즈·보고서로만 발굴 가능.</div>
+      </div>
+    </div>
+    <div class="bq" style="margin-top:16px;">
+      <div class="bq-text">
+        "Claude가 미지의 것을 만나면 제가 무엇을 원하는지에 대한 최선의 추측을 바탕으로
+        결정을 내려야 합니다. 해야 할 일이 많아질수록 Claude가 틀릴 수 있는 미지의 것도 많아집니다."
+      </div>
+      <div class="bq-attr">— Thariq Shihipar, "Finding your unknowns" 포스트 (최승준 인용, EP103 09:29)</div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: Artificial Analysis vs LMArena 비교 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot blue"></div><span class="sec-title">AI 평가 도구 비교 — Artificial Analysis vs LMArena</span></div>
+    <div class="eval-compare">
+      <div class="eval-card">
+        <div class="eval-name" style="color:var(--accent);">Artificial Analysis</div>
+        <div class="eval-sub">Benchmark 기반 정량 평가</div>
+        <div class="eval-row"><span class="eval-key">방식</span><span class="eval-val">다양한 benchmark 자동 채점</span></div>
+        <div class="eval-row"><span class="eval-key">비유</span><span class="eval-val">수능 / 정형화된 시험</span></div>
+        <div class="eval-row"><span class="eval-key">장점</span><span class="eval-val">객관적·반복 가능·비교 용이</span></div>
+        <div class="eval-row"><span class="eval-key">한계</span><span class="eval-val">기출문제화 → 해킹 가능</span></div>
+        <div class="eval-row"><span class="eval-key">EP103 결과</span><span class="eval-val">Fable 1등, Opus 4.8 ≈ GPT-5.5</span></div>
+        <div class="eval-row"><span class="eval-key">적합 task</span><span class="eval-val">코딩·수학 등 정답 있는 영역</span></div>
+      </div>
+      <div class="eval-card">
+        <div class="eval-name" style="color:var(--purple);">LMArena</div>
+        <div class="eval-sub">인간 선호도 기반 Elo 평가</div>
+        <div class="eval-row"><span class="eval-key">방식</span><span class="eval-val">A/B 비교 후 인간이 선택</span></div>
+        <div class="eval-row"><span class="eval-key">비유</span><span class="eval-val">실제 업무 성과 평판</span></div>
+        <div class="eval-row"><span class="eval-key">장점</span><span class="eval-val">디자인·슬라이드 등 주관 영역 포착</span></div>
+        <div class="eval-row"><span class="eval-key">한계</span><span class="eval-val">Llama 4 사태 — 튜닝 최적화로 해킹</span></div>
+        <div class="eval-row"><span class="eval-key">비즈니스</span><span class="eval-val">17억달러 valuation, 8개월 1억달러</span></div>
+        <div class="eval-row"><span class="eval-key">적합 task</span><span class="eval-val">정답 없는 창의·선호도 영역</span></div>
+      </div>
+    </div>
+    <div class="bq blue" style="margin-top:16px;">
+      <div class="bq-text">
+        "LLM은 SWE-bench 같은 평가 목표라는 깃발을 꽂고 거기를 하나씩 정복해 나가는데,
+        우리가 보통 생각하는 일을 잘하는 사람과는 조금 괴리가 있는 것 같아요."
+      </div>
+      <div class="bq-attr">— 박종현 (AI Frontier EP103, 37:50)</div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: 나의 인사이트 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">나의 인사이트 — Company Builder 관점 7가지</span></div>
+    <div class="insight-list">
+      <div class="insight-item">
+        <div class="insight-num">01</div>
+        <div class="insight-content">
+          <div class="insight-title">인지 부채를 관리 지표로 만들어라 — 이해 없는 속도는 빚이다</div>
+          <div class="insight-desc">
+            Fable이 코드를 쏟아낼수록 팀의 "실제 이해도"와 산출물 사이의 갭이 벌어진다.
+            이게 쌓이면 Mitchell Hashimoto의 경고처럼 겉보기엔 돌아가는데 아키텍처는 조용히 부서지는 중.
+            처방: 주요 AI 산출물에 "이해 체크" 단계를 의무화할 것.
+            Thariq Shihipar 패턴 — "HTML 보고서 + 맨 아래 퀴즈" 프롬프트를 팀 표준 템플릿으로 도입.
+            퀴즈를 통과 못하는 팀원이 많다면 그게 바로 인지 부채 경보다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">02</div>
+        <div class="insight-content">
+          <div class="insight-title">Fable에게 "세세하게 지시하지 마라" — 서브에이전트 아키텍처로 전환</div>
+          <div class="insight-desc">
+            Cat Wu·Thariq의 발견: Fable에게 모델 선택까지 위임하면 자체적으로 Sonnet/Haiku를 배분해 비용을 최적화한다.
+            내가 줄 것은 "이런 원칙으로 해줘"가 아니라 "네가 판단해줘."
+            이 패턴은 6개월 전 Opus=판단/Sonnet=코딩 시대와 완전히 동형이다 — 주기가 반복되고 있다.
+            실무 적용: Fable 사용 시 작업 단위를 분류하지 말고 Fable이 분류하게 하라.
+            비용 추적은 Fable의 메모리·로그에서 사후 확인.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">03</div>
+        <div class="insight-content">
+          <div class="insight-title">"지도와 영토" 갭을 선제 측정하라 — 미지의 것을 AI에게 발굴시켜라</div>
+          <div class="insight-desc">
+            Korzybski의 "지도는 영토가 아니다"는 AI 시대에 직접 적용된다.
+            내 요구사항(지도)과 실제 원하는 결과물(영토) 사이의 갭이 넓을수록 Fable의 오류 가능성이 높아진다.
+            처방: 큰 작업 전 반드시 "나를 인터뷰해서 내 미지의 것을 찾아줘" 단계를 먼저 실행.
+            Unknown Unknowns 발굴 → 요구사항 구체화 → 그 다음에 구현 시작.
+            이 순서 없이 바로 구현 → 나중에 방향 전환하는 비용이 훨씬 크다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">04</div>
+        <div class="insight-content">
+          <div class="insight-title">토끼굴 gate 3단계 — 인지 과부하 시대의 판단 경제학</div>
+          <div class="insight-desc">
+            노정석의 실무 패턴: 결과를 같은 모델에 세 번 확인 → 세 번 "맞다"면 덮는다.
+            이건 "깊이 이해하지 못하면 가면 안 된다"는 기존 교육과 반대되는 경제적 판단.
+            단: 이 "덮기 판단"은 해봤기 때문에 가능한 것이다 — 도메인 경험 없이는 gate 자체를 잘못 설정.
+            Company Builder 적용: 어떤 레이어를 열고 어떤 레이어를 덮을지 결정하는 것이
+            지금 C-level의 핵심 엔지니어링 역량 중 하나다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">05</div>
+        <div class="insight-content">
+          <div class="insight-title">Claude·Codex·사람의 3인 토론 아키텍처 — 조직 설계에도 적용 가능</div>
+          <div class="insight-desc">
+            최승준의 실험: 파일 polling 방식으로 Claude Code와 Codex가 각자 문서를 소유하며 병렬 토론,
+            사람(최승준)이 끼어들며 합의를 유도.
+            이것의 조직적 함의: 큰 결정 전 여러 AI 에이전트에게 "다른 관점으로 반박해줘"를 시키면
+            blind spot을 줄일 수 있다.
+            "두 AI와 한 사람의 토론"이 단독 AI 사용보다 의사결정 품질을 높인다.
+            나의 적용: 중요한 전략 결정 전 Claude와 다른 모델(GPT-4o 등)에게 각각 반대 논거를 요청.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">06</div>
+        <div class="insight-content">
+          <div class="insight-title">평가 사업 기회 — LMArena가 8개월에 1억달러 번 이유</div>
+          <div class="insight-desc">
+            LMArena의 핵심 자산: 실제 사람들의 선호도 데이터. 빅테크는 이걸 비싸게 산다.
+            박종현의 통찰: 소설·개그·디자인처럼 "정답이 없는 task"의 평가는 아직 미개척.
+            Audio와 Robotics로 가면 evaluation이 훨씬 어렵고 data도 부족 → 사업 기회.
+            Korean language preference data, 특정 도메인(법률·의료·금융) 전문가 선호도 데이터 →
+            한국 스타트업이 글로벌 대비 우위를 점할 수 있는 niched evaluation 영역.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">07</div>
+        <div class="insight-content">
+          <div class="insight-title">도메인 모델 = 경계 설계 — 30B + 회사 logic의 방정식</div>
+          <div class="insight-desc">
+            노정석의 결론: General AGI가 목표가 아니라면 30B 이상 모델에 회사 logic만 잘 먹여도 충분.
+            전체 orchestration은 큰 모델(Fable)이, 반복 작업은 작은 모델이 담당하는 경계 설계.
+            최승준이 정의한 핵심 engineering: "어느 선에서 뭘 누가 어떻게 할 거냐 — 경계를 만드는 것."
+            이건 기술 문제가 아니라 비즈니스 문제다 — AI 전략의 핵심이 경계 설계로 이동하고 있다.
+            실무 적용: 다음 분기 AI 도입 계획에서 "무엇을 AI가 하고 무엇을 사람이 할지"보다
+            "어떤 모델이 어느 레이어를 담당하는지"가 먼저 나와야 한다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: 주목할 인용 & 레퍼런스 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot amber"></div><span class="sec-title">주목할 인용 & 레퍼런스</span></div>
+
+    <div class="bq">
+      <div class="bq-text">
+        "이것도 어떻게 보면 지금 Fable 때문에 context가 다시 맞는 거지,
+        7~8개월 전, Opus와 Sonnet 사이의 이야기로 들어가도 그때도 맞긴 하잖아요."
+      </div>
+      <div class="bq-attr">— 노정석 (EP103, 11:46) — AI 담론의 도돌이표 패턴 지적</div>
+    </div>
+    <div class="bq purple">
+      <div class="bq-text">
+        "저는 소설 읽는 걸 좋아하거든요. 그런데 소설을 쓰라고 하면 재미가 없어요.
+        개그를 쓰라고 하면 하나도 안 웃깁니다. 이런 것들이 다 결국에는 evaluation이 어려워서라고
+        저는 생각하고 있어요."
+      </div>
+      <div class="bq-attr">— 박종현 (EP103, 38:33) — Jagged intelligence의 핵심 원인</div>
+    </div>
+    <div class="bq amber">
+      <div class="bq-text">
+        "기승전 engineering이네요."
+      </div>
+      <div class="bq-attr">— 최승준 (EP103, 43:35) — 경계 설계 토론의 결론</div>
+    </div>
+    <div class="bq blue">
+      <div class="bq-text">
+        "우리가 올바른 도구를 만든다면, 우리는 그 어느 때보다 세상을 더 깊이 이해할 수 있습니다.
+        우리는 단지 루프에서 빠져나오기만 할 필요가 없습니다.
+        오히려 루프 안으로 더 깊이 들어갈 수도 있습니다. 그것은 우리에게 달려 있습니다."
+      </div>
+      <div class="bq-attr">— Notion 엔지니어 포스트 (최승준 인용, EP103 20:25) — "이해가 새로운 병목" 아티클 결론</div>
+    </div>
+
+    <div class="pill-strip" style="margin-top: 20px;">
+      <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div><span>Thariq Shihipar — "Finding your unknowns"</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--warn)"></div><span>Alfred Korzybski — "지도는 영토가 아니다"</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--purple)"></div><span>Simon Willison — Cat Wu fireside chat 포스팅</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--blue)"></div><span>LMArena — 17억달러 / 8개월 1억달러</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--danger)"></div><span>Llama 4 사태 — LMArena 평가 해킹</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div><span>ICML 2026 서울 개최 예고</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--muted)"></div><span>Dwarkesh × 3Blue1Brown — 수학·AGI 인터뷰</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--warn)"></div><span>Andy Matuschak × Nielsen — 니모닉 퀴즈</span></div>
+    </div>
+  </div>
+
+  <!-- SOURCE -->
+  <div class="source-bar">
+    <span class="source-label">출처</span>
+    <a class="source-link" href="https://www.youtube.com/watch?v=PYpRfmwo92E" target="_blank">YouTube — AI Frontier EP103: 이해가 병목이 될 때</a>
+    <span class="source-link" style="margin-left:8px;">|</span>
+    <a class="source-link" href="https://aifrontier.kr/ko/episodes/ep103" target="_blank">aifrontier.kr 전체 대본</a>
+    <span class="source-meta">노정석·최승준·박종현 · 2026.07.12 · 46:40</span>
+  </div>
+
+</div>
+</body>
+</html>
