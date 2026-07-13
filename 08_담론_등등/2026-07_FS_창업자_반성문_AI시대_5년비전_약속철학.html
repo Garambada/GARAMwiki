@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FS 창업자 반성문 — AI 시대, 5년 비전, 약속의 철학 | GARAMwiki</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a24;
+      --border: #2a2a3a;
+      --accent: #e879f9;
+      --accent-dim: rgba(232,121,249,0.15);
+      --accent-glow: rgba(232,121,249,0.06);
+      --text: #e8e8f0;
+      --text-muted: #9090b0;
+      --text-dim: #5a5a7a;
+      --amber: #fbbf24;
+      --emerald: #34d399;
+      --sky: #38bdf8;
+      --violet: #a78bfa;
+      --rose: #fb7185;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── TOP NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      display: flex; align-items: center; gap: 16px;
+      height: 52px;
+    }
+    .nav-logo { font-weight: 800; font-size: 0.95rem;
+      background: linear-gradient(135deg, #e879f9, #a78bfa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-sep { color: var(--text-dim); }
+    .nav-home { font-size: 13px; color: var(--text-muted); }
+    .nav-home a { color: var(--text-muted); }
+    .nav-cat {
+      font-size: 12px; font-weight: 600; letter-spacing: .06em;
+      padding: 3px 10px; border-radius: 20px;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(232,121,249,0.3);
+    }
+    .nav-title { font-size: 13px; color: var(--text-muted); flex: 1; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 64px 0 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,121,249,0.07) 0%, transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner { max-width: 860px; margin: 0 auto; padding: 0 28px 48px; }
+    .meta-row {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap; margin-bottom: 22px;
+    }
+    .badge {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .badge-cat { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(232,121,249,0.35); }
+    .badge-pub { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-date { background: rgba(255,255,255,0.03); color: var(--text-dim); border: 1px solid var(--border); font-weight: 400; }
+    .badge-amber { background: rgba(251,191,36,0.12); color: var(--amber); border: 1px solid rgba(251,191,36,0.3); }
+
+    .hero-title {
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-style: italic;
+      max-width: 680px;
+      line-height: 1.75;
+    }
+    .hero-byline { font-size: 13px; color: var(--text-dim); }
+    .hero-byline strong { color: var(--text-muted); }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex; gap: 2px;
+      max-width: 860px; margin: 0 auto;
+      padding: 0 28px;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1; min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+      border-radius: 0;
+    }
+    .stat-card:first-child { border-radius: 12px 0 0 12px; }
+    .stat-card:last-child  { border-radius: 0 12px 12px 0; }
+    .stat-num {
+      font-size: 1.65rem; font-weight: 800;
+      line-height: 1; margin-bottom: 4px;
+      color: var(--accent);
+    }
+    .stat-num.amber  { color: var(--amber); }
+    .stat-num.emerald { color: var(--emerald); }
+    .stat-num.sky    { color: var(--sky); }
+    .stat-num.violet { color: var(--violet); }
+    .stat-label { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; }
+
+    /* ── MAIN BODY ── */
+    .body-wrap { max-width: 860px; margin: 0 auto; padding: 48px 28px 80px; }
+
+    .section { margin-bottom: 48px; }
+    .sec-head {
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px; margin-bottom: 20px;
+    }
+    .sec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .sec-dot.amber  { background: var(--amber); }
+    .sec-dot.emerald { background: var(--emerald); }
+    .sec-dot.sky    { background: var(--sky); }
+    .sec-dot.violet { background: var(--violet); }
+    .sec-title { font-size: 0.9rem; font-weight: 700; letter-spacing: 0.02em; }
+
+    /* 원문 블록 */
+    .source-block {
+      background: linear-gradient(135deg, rgba(232,121,249,0.04) 0%, rgba(167,139,250,0.04) 100%);
+      border: 1px solid rgba(232,121,249,0.2);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 14px 14px 0;
+      padding: 24px 28px;
+      font-size: 0.93rem;
+      line-height: 1.9;
+      color: var(--text);
+      font-style: italic;
+      margin-bottom: 14px;
+    }
+    .source-block p { margin-bottom: 12px; }
+    .source-block p:last-child { margin-bottom: 0; }
+
+    /* 인용 카드 */
+    .bq {
+      border-left: 3px solid var(--accent);
+      background: var(--surface2);
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+    }
+    .bq.amber  { border-left-color: var(--amber); }
+    .bq.emerald { border-left-color: var(--emerald); }
+    .bq.sky    { border-left-color: var(--sky); }
+    .bq.violet { border-left-color: var(--violet); }
+    .bq-text { font-size: 0.9rem; color: var(--text); line-height: 1.75; font-style: italic; }
+    .bq-attr { font-size: 0.73rem; color: var(--text-dim); margin-top: 6px; }
+
+    /* 분석 그리드 */
+    .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .analysis-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 22px;
+    }
+    .analysis-card-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .analysis-card-label.accent { color: var(--accent); }
+    .analysis-card-label.amber  { color: var(--amber); }
+    .analysis-card-label.emerald { color: var(--emerald); }
+    .analysis-card-label.sky    { color: var(--sky); }
+    .analysis-card-label.rose   { color: var(--rose); }
+    .analysis-card-body { font-size: 0.83rem; color: var(--text-muted); line-height: 1.75; }
+
+    /* 타임라인 */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0;
+      position: relative;
+    }
+    .tl-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 31px; top: 42px; bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .tl-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 16px;
+      padding-bottom: 24px;
+    }
+    .tl-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: var(--bg);
+      flex-shrink: 0; z-index: 1;
+    }
+    .tl-dot.amber  { border-color: var(--amber); }
+    .tl-dot.emerald { border-color: var(--emerald); }
+    .tl-dot.sky    { border-color: var(--sky); }
+    .tl-dot.filled { background: var(--accent); }
+    .tl-right { padding: 14px 0 24px 20px; }
+    .tl-year { font-size: 0.75rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+    .tl-year.amber  { color: var(--amber); }
+    .tl-year.emerald { color: var(--emerald); }
+    .tl-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+    .tl-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* 약속 카드 */
+    .promise-grid { display: grid; gap: 10px; }
+    .promise-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .promise-num {
+      font-size: 1.15rem; font-weight: 800;
+      color: var(--accent); min-width: 28px; line-height: 1;
+    }
+    .promise-num.amber  { color: var(--amber); }
+    .promise-num.emerald { color: var(--emerald); }
+    .promise-num.sky    { color: var(--sky); }
+    .promise-content { flex: 1; }
+    .promise-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+    .promise-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* 비전 블록 */
+    .vision-block {
+      background: linear-gradient(135deg, rgba(52,211,153,0.06) 0%, rgba(56,189,248,0.06) 100%);
+      border: 1px solid rgba(52,211,153,0.25);
+      border-radius: 16px;
+      padding: 28px 30px;
+      text-align: center;
+    }
+    .vision-title { font-size: 1rem; font-weight: 700; color: var(--emerald); margin-bottom: 10px; }
+    .vision-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.85; max-width: 620px; margin: 0 auto; }
+    .vision-trio {
+      display: flex; gap: 10px; margin-top: 22px; justify-content: center; flex-wrap: wrap;
+    }
+    .trio-item {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 18px;
+      font-size: 0.83rem; min-width: 160px; text-align: left;
+    }
+    .trio-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 5px; }
+    .trio-label.accent  { color: var(--accent); }
+    .trio-label.amber   { color: var(--amber); }
+    .trio-label.emerald { color: var(--emerald); }
+    .trio-val { font-size: 0.85rem; color: var(--text); font-weight: 600; }
+
+    /* 닫는 말 */
+    .closing-block {
+      background: linear-gradient(135deg, rgba(232,121,249,0.05) 0%, rgba(167,139,250,0.05) 100%);
+      border: 1px solid rgba(232,121,249,0.2);
+      border-radius: 16px;
+      padding: 28px 30px;
+    }
+    .closing-text {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      font-style: italic;
+      text-align: center;
+    }
+    .closing-text strong { color: var(--text); font-style: normal; }
+
+    .tag-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tag {
+      font-size: 0.7rem; padding: 3px 9px; border-radius: 6px;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid rgba(232,121,249,0.2);
+    }
+    .tag.amber  { background: rgba(251,191,36,0.08); color: var(--amber); border-color: rgba(251,191,36,0.2); }
+    .tag.emerald { background: rgba(52,211,153,0.08); color: var(--emerald); border-color: rgba(52,211,153,0.2); }
+    .tag.sky    { background: rgba(56,189,248,0.08); color: var(--sky); border-color: rgba(56,189,248,0.2); }
+
+    p.prose { font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 12px; }
+
+    @media (max-width: 640px) {
+      .nav, .hero-inner, .body-wrap { padding-left: 16px; padding-right: 16px; }
+      .stat-strip { padding: 0 16px; }
+      .dual-grid { grid-template-columns: 1fr; }
+      .vision-trio { flex-direction: column; }
+      .stat-card:first-child, .stat-card:last-child { border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-logo">GARAMwiki</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-home"><a href="../index.html">홈</a></span>
+  <span class="nav-sep">/</span>
+  <span class="nav-cat">담론 · 반성문</span>
+  <span class="nav-title">FS 창업자 반성문 — AI 시대, 5년 비전, 약속의 철학</span>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="meta-row">
+      <span class="badge badge-cat">담론 · 반성문</span>
+      <span class="badge badge-pub">🏢 FS 창업자</span>
+      <span class="badge badge-amber">⏱ 5년 비전</span>
+      <span class="badge badge-date">2026-07</span>
+    </div>
+    <h1 class="hero-title">적게 약속하고,<br>더 많이 이루는 회사</h1>
+    <p class="hero-subtitle">
+      60대 중반에 FS를 시작한 이유, AI 기술이 앞당기는 사이클,
+      그리고 투자자·임직원 모두가 만족할 수 있는 지속 가능한 회사를 향한
+      창업자의 진심 어린 성찰과 다짐.
+    </p>
+    <div class="hero-byline">
+      <strong>저자</strong> · FS 창업자 &nbsp;|&nbsp;
+      <strong>성격</strong> · 창업 철학 · 반성 · 비전 선언
+    </div>
+  </div>
+</div>
+
+<!-- ── STAT STRIP ── -->
+<div class="stat-strip">
+  <div class="stat-card">
+    <div class="stat-num">60대</div>
+    <div class="stat-label">창업 나이 (중반)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num amber">5년</div>
+    <div class="stat-label">영업이익 목표 기간</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num emerald">12→5년</div>
+    <div class="stat-label">AI로 단축되는 창업 사이클</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num sky">2</div>
+    <div class="stat-label">핵심 수혜자: 투자자 + 임직원</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num violet">1</div>
+    <div class="stat-label">핵심 약속: 적게 약속, 더 많이</div>
+  </div>
+</div>
+
+<!-- ── BODY ── -->
+<div class="body-wrap">
+
+  <!-- SECTION 0: 원문 -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-dot"></div><span class="sec-title">반성문 전문</span></div>
+    <div class="source-block">
+      <p>FS는 성장 가능성을 가진 회사입니다. 저는 60대 중반의 나이로, 작지만 의미 있는 일을 해보고 싶다는 마음으로 FS를 시작하게 되었습니다.</p>
+      <p>FS는 여러모로 투자 매력이 있다고 생각합니다. 물론 아직은 자금, 인력, 기반 등 여러 부분이 부족한 것도 사실입니다. 성장주를 선호하지 않는 분들에게는 다소 매력적으로 느껴지지 않을 수도 있겠다는 생각이 듭니다.</p>
+      <p>창업부터 코스닥 상장까지 보통 오랜 시간이 걸린다는 점도 잘 알고 있습니다. 다만 최근 AI 기술의 발전으로 비즈니스 사이클이 상당히 빨라지고 있다는 점은 큰 희망으로 다가옵니다. 과거 평균 12년 정도 걸리던 기간이 점차 단축되고 있어, 잘만 노력한다면 5년 내에 의미 있는 성과를 만들어 낼 수 있지 않을까 기대하고 있습니다.</p>
+      <p>펀드 운용 기간이나 LP 분들의 관점에서도 아직 저는 초보에 가깝지만, 이러한 변화의 흐름을 잘 타고 간다면 충분히 가능성이 있다고 믿습니다.</p>
+      <p>이 모든 상황을 돌아보니, 함께 일하는 분들과 투자자들과의 관계를 소중히 지키기 위해서는 약속을 잘 지키고, 적게 약속한 뒤에 더 많이 이루는 자세가 정말 중요하다는 것을 다시 느끼게 되었습니다. 아직은 그 기준에 미치지 못하는 부분이 많지만, 앞으로는 더욱 신중하고 성실하게 노력하려 합니다.</p>
+      <p>결국 제가 진심으로 바라는 FS의 모습은 AI 시대의 빠른 변화에 잘 적응하여, 5년 내에 안정적으로 영업이익을 내는 건강한 회사가 되는 것입니다. 그렇게 되면 투자자분들에게는 배당으로 보답하고, 함께 일하는 임직원들과도 이익을 나눌 수 있는, 모두가 만족할 수 있는 지속 가능한 회사가 될 수 있을 거라 믿습니다.</p>
+      <p>이 나이에 FS를 시작한 이유도 결국 그 마음 때문이었습니다. AI가 가져다주는 빠른 사이클을 긍정적인 기회로 삼아, 천천히 그러나 꾸준하고 intelligently 나아가겠습니다.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: 창업의 맥락 -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-dot amber"></div><span class="sec-title">창업의 맥락 — 왜 지금, 왜 FS인가</span></div>
+
+    <div class="dual-grid">
+      <div class="analysis-card">
+        <div class="analysis-card-label accent">창업 동기</div>
+        <div class="analysis-card-body">
+          60대 중반이라는 나이에 FS를 시작한 것은 무모함이 아닌 <strong>의미 탐색</strong>.
+          "작지만 의미 있는 일"이라는 표현이 핵심 —
+          규모보다 의미를, 빠른 성공보다 지속 가능성을 선택한 창업 동기.
+          이 나이의 창업자가 가진 가장 강력한 자산은 <strong>경험에서 나온 균형 감각</strong>이다.
+        </div>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-card-label amber">현실 인식</div>
+        <div class="analysis-card-body">
+          자금·인력·기반 부족을 솔직하게 인정.
+          "성장주를 선호하지 않는 분들에게는 매력적이지 않을 수 있다"는 표현은
+          <strong>자기 객관화의 증거</strong>.
+          과장 없이 현재를 직시하고 투자자와 정직하게 소통하려는
+          under-promise 철학의 실천이다.
+        </div>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-card-label emerald">AI 기회</div>
+        <div class="analysis-card-body">
+          창업→코스닥 상장 평균 12년 사이클.
+          AI 기술의 발전으로 이 사이클이 <strong>5년 이하</strong>로 단축될 수 있다는 인식.
+          이것은 단순한 낙관론이 아니다 — 2026년 현재 AI가 실제로 기업 성장
+          속도를 압축하고 있다는 객관적 흐름에 근거한 판단.
+        </div>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-card-label sky">LP 관점</div>
+        <div class="analysis-card-body">
+          펀드 운용 기간과 LP의 관점을 인식하는 것은 VC 생태계에 대한 이해.
+          "초보에 가깝다"는 겸손한 자기 인식은 <strong>역설적으로 신뢰의 근거</strong>.
+          자신의 부족함을 먼저 말하는 창업자에게
+          오히려 더 큰 신뢰가 쌓인다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 핵심 철학 — Under-promise Over-deliver -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-dot"></div><span class="sec-title">핵심 다짐 — Under-promise, Over-deliver</span></div>
+
+    <div class="bq">
+      <div class="bq-text">
+        "약속을 잘 지키고, 적게 약속한 뒤에 더 많이 이루는 자세가 정말 중요하다는 것을
+        다시 느끼게 되었습니다. 아직은 그 기준에 미치지 못하는 부분이 많지만,
+        앞으로는 더욱 신중하고 성실하게 노력하려 합니다."
+      </div>
+      <div class="bq-attr">— FS 창업자 반성문 (2026-07)</div>
+    </div>
+
+    <div class="promise-grid">
+      <div class="promise-card">
+        <div class="promise-num">01</div>
+        <div class="promise-content">
+          <div class="promise-title">약속은 지킬 수 있는 것만</div>
+          <div class="promise-desc">
+            스타트업 생태계에서 창업자가 가장 쉽게 잃는 것은 신뢰다.
+            기대치를 높이는 약속은 단기 투자 유치에는 도움이 될 수 있지만
+            중장기적으로 관계를 갉아먹는다. 반성문의 핵심은
+            "지금까지 기준에 미치지 못했다"는 솔직한 고백이다.
+            고백할 수 있는 사람만이 변할 수 있다.
+          </div>
+        </div>
+      </div>
+      <div class="promise-card">
+        <div class="promise-num amber">02</div>
+        <div class="promise-content">
+          <div class="promise-title">적게 약속 → 더 많이 실행</div>
+          <div class="promise-desc">
+            Under-promise, Over-deliver.
+            투자자·임직원과의 관계에서 기대치를 낮게 잡고 실행으로 놀라게 하는 전략.
+            이것은 단순한 겸손이 아니라 <strong>신뢰 자본을 축적하는 방법론</strong>이다.
+            Bezos가 Amazon 주주 서한에서 반복한 원칙이기도 하다.
+          </div>
+        </div>
+      </div>
+      <div class="promise-card">
+        <div class="promise-num emerald">03</div>
+        <div class="promise-content">
+          <div class="promise-title">신중함과 성실함의 조합</div>
+          <div class="promise-desc">
+            "더욱 신중하고 성실하게"라는 표현은 AI 시대의 속도 게임과 역설적으로 보인다.
+            그러나 이것은 오히려 강점이다 — 60대 창업자가 가진
+            "급하지 않지만 포기하지 않는" 인내의 자세.
+            AI가 속도를 제공한다면, 창업자가 제공해야 하는 것은 방향과 신뢰다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: AI 사이클과 5년 로드맵 -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-dot sky"></div><span class="sec-title">AI 사이클과 5년 로드맵</span></div>
+
+    <p class="prose">창업→코스닥 상장 평균 12년 사이클이 AI로 인해 단축되고 있다는 인식은 현실에 근거한 관찰이다. 2026년 현재 AI는 소프트웨어 개발, 마케팅, 세일즈, 운영 전반에서 소수 인원의 스타트업이 수십 명 규모의 조직이 하던 일을 해내게 만들고 있다.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot filled"></div></div>
+        <div class="tl-right">
+          <div class="tl-year">현재 · 창업기</div>
+          <div class="tl-title">FS 설립 — 자금·인력·기반 구축 단계</div>
+          <div class="tl-desc">
+            솔직한 현실: 자금·인력·기반 부족. 투자 매력은 있지만 아직 증명이 필요한 시점.
+            이 단계의 핵심 과제는 신뢰 자본 축적 — 약속 이행의 반복.
+          </div>
+          <div class="tag-strip"><span class="tag">현재 위치</span><span class="tag amber">신뢰 구축</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot amber"></div></div>
+        <div class="tl-right">
+          <div class="tl-year amber">~2년 · 성장기</div>
+          <div class="tl-title">AI 사이클 탑승 — 생산성 도약과 시장 검증</div>
+          <div class="tl-desc">
+            AI 기술을 활용해 소수 인원으로 큰 성과를 내는 시기.
+            "천천히 그러나 꾸준하고 intelligently" — AI가 속도를 제공하고
+            창업자의 경험이 방향을 제공하는 조합.
+          </div>
+          <div class="tag-strip"><span class="tag sky">AI 레버리지</span><span class="tag amber">시장 검증</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot sky"></div></div>
+        <div class="tl-right">
+          <div class="tl-year sky">~3년 · 안정화</div>
+          <div class="tl-title">매출 구조 확립 — 반복 매출 기반 구축</div>
+          <div class="tl-desc">
+            단발 프로젝트가 아닌 반복 매출(recurring revenue) 기반 확립.
+            펀드 LP 분들에게 보여줄 수 있는 트랙 레코드가 쌓이는 시기.
+          </div>
+          <div class="tag-strip"><span class="tag sky">반복 매출</span><span class="tag">트랙 레코드</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot emerald"></div></div>
+        <div class="tl-right">
+          <div class="tl-year emerald">~5년 · 수확기</div>
+          <div class="tl-title">안정적 영업이익 달성 — 배당 + 이익 분배 실현</div>
+          <div class="tl-desc">
+            창업자의 핵심 목표. 투자자에게는 배당으로, 임직원에게는 이익 공유로.
+            코스닥 상장 여부보다 "건강한 회사"가 먼저 — 이 순서가 중요하다.
+          </div>
+          <div class="tag-strip"><span class="tag emerald">영업이익</span><span class="tag emerald">배당</span><span class="tag emerald">이익 분배</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: FS 5년 비전 -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-dot emerald"></div><span class="sec-title">FS 5년 비전 — 모두가 만족하는 지속 가능한 회사</span></div>
+
+    <div class="vision-block">
+      <div class="vision-title">🌱 FS가 되고 싶은 모습</div>
+      <div class="vision-text">
+        AI 시대의 빠른 변화에 잘 적응하여,<br>
+        <strong>5년 내에 안정적으로 영업이익을 내는 건강한 회사.</strong><br><br>
+        투자자에게는 배당으로 보답하고,<br>
+        임직원과는 이익을 함께 나누는<br>
+        모두가 만족할 수 있는 지속 가능한 회사.
+      </div>
+      <div class="vision-trio">
+        <div class="trio-item">
+          <div class="trio-label accent">회사</div>
+          <div class="trio-val">건강한 영업이익 구조</div>
+        </div>
+        <div class="trio-item">
+          <div class="trio-label amber">투자자</div>
+          <div class="trio-val">배당으로 보답</div>
+        </div>
+        <div class="trio-item">
+          <div class="trio-label emerald">임직원</div>
+          <div class="trio-val">이익 공유</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 담론 인사이트 -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-dot violet"></div><span class="sec-title">담론 인사이트 — 이 반성문이 말하는 것들</span></div>
+
+    <div class="bq violet">
+      <div class="bq-text">
+        "이 나이에 FS를 시작한 이유도 결국 그 마음 때문이었습니다.
+        AI가 가져다주는 빠른 사이클을 긍정적인 기회로 삼아,
+        천천히 그러나 꾸준하고 intelligently 나아가겠습니다."
+      </div>
+      <div class="bq-attr">— FS 창업자 반성문 (2026-07) · 마지막 문장</div>
+    </div>
+
+    <p class="prose" style="margin-top:16px;">이 반성문은 여러 층위에서 읽힌다.</p>
+
+    <div class="dual-grid">
+      <div class="analysis-card">
+        <div class="analysis-card-label accent">신뢰 선언으로서의 반성문</div>
+        <div class="analysis-card-body">
+          반성문을 쓰는 행위 자체가 신뢰 구축의 방법이다.
+          "기준에 미치지 못했다"는 고백은 약점이 아니라
+          자기 객관화의 증거다. 자신을 과장하지 않는 창업자는
+          장기적으로 더 신뢰받는다.
+          워렌 버핏이 버크셔 주주 서한에서 매년 실수를 공개하는 이유와 같다.
+        </div>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-card-label amber">AI 시대의 고령 창업자</div>
+        <div class="analysis-card-body">
+          60대 창업자의 강점은 AI 시대에 오히려 부각된다.
+          AI가 실행 속도를 제공한다면, 창업자는 방향과 판단을 제공한다.
+          수십 년간 쌓인 도메인 경험과 인간관계 자산은
+          AI가 대체할 수 없는 영역이다.
+          "천천히 그러나 꾸준하고 intelligently" — 이것은 전략이다.
+        </div>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-card-label emerald">이해관계자 자본주의의 실천</div>
+        <div class="analysis-card-body">
+          투자자(배당) + 임직원(이익 공유) + 회사(영업이익).
+          세 그룹의 이해를 동시에 만족시키는 구조는
+          지속 가능한 회사의 조건이다.
+          주주 이익 극대화만을 추구하지 않겠다는 선언이기도 하다.
+        </div>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-card-label sky">코스닥보다 건강함이 먼저</div>
+        <div class="analysis-card-body">
+          "코스닥 상장까지 보통 오랜 시간이 걸린다"고 언급하지만
+          창업자의 최종 목표는 상장이 아니라
+          "5년 내 안정적 영업이익"과 "지속 가능한 회사"다.
+          상장은 수단이지 목적이 아니라는 건강한 인식.
+          IPO를 목표로 삼는 스타트업과 본질적으로 다른 방향성이다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: 닫는 말 -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-dot"></div><span class="sec-title">GARAMbada 노트</span></div>
+    <div class="closing-block">
+      <div class="closing-text">
+        이 반성문의 힘은 <strong>완성된 언어</strong>에 있다.<br>
+        자금이 부족하다는 것도 알고, 시간이 오래 걸린다는 것도 알고,<br>
+        아직 기준에 미치지 못한다는 것도 안다.<br><br>
+        그러나 안다고 해서 멈추지 않는다.<br>
+        "천천히 그러나 꾸준하고 intelligently."<br><br>
+        <strong>이것이 60대 창업자가 AI 시대에 할 수 있는 가장 솔직하고 강한 선언이다.</strong>
+      </div>
+    </div>
+
+    <div class="tag-strip" style="margin-top: 20px; justify-content:center;">
+      <span class="tag">FS</span>
+      <span class="tag">창업 철학</span>
+      <span class="tag amber">Under-promise Over-deliver</span>
+      <span class="tag emerald">5년 영업이익</span>
+      <span class="tag sky">AI 사이클</span>
+      <span class="tag">60대 창업</span>
+      <span class="tag">지속 가능한 회사</span>
+      <span class="tag amber">배당</span>
+      <span class="tag emerald">이익 분배</span>
+      <span class="tag">코스닥</span>
+      <span class="tag">반성문</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
