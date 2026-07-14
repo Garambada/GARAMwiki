@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geoffrey Litt — 이해가 새로운 병목이다 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --card2: #20232f;
+    --border: #2a2d3a; --text: #e8eaf0; --muted: #7a7f94;
+    --accent: #10b981; --accent2: #34d399;
+    --warn: #f59e0b; --danger: #ef4444;
+    --blue: #3b82f6; --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    line-height: 1.65; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 52px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo { font-weight: 800; font-size: 1rem;
+    background: linear-gradient(135deg,#10b981,#34d399);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-sep { color: var(--border); }
+  .nav-crumb { font-size: 0.82rem; color: var(--muted); }
+  .nav-crumb a { color: var(--muted); text-decoration: none; }
+  .nav-crumb a:hover { color: var(--accent); }
+  .nav-badge { margin-left: auto; font-size: 0.72rem; font-weight: 700;
+    background: rgba(16,185,129,0.12); color: var(--accent);
+    border: 1px solid rgba(16,185,129,0.3); border-radius: 20px; padding: 3px 10px; }
+
+  .hero {
+    background: linear-gradient(135deg, rgba(16,185,129,0.06) 0%, rgba(59,130,246,0.06) 100%);
+    border-bottom: 1px solid var(--border); padding: 52px 32px 44px;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .hero-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 20px;
+    background: rgba(16,185,129,0.12); color: var(--accent); border: 1px solid rgba(16,185,129,0.25); }
+  .hero-tag.purple { background: rgba(167,139,250,0.12); color: var(--purple); border-color: rgba(167,139,250,0.25); }
+  .hero-tag.amber  { background: rgba(245,158,11,0.12);  color: var(--warn);   border-color: rgba(245,158,11,0.25); }
+  .hero-tag.blue   { background: rgba(59,130,246,0.12);  color: var(--blue);   border-color: rgba(59,130,246,0.25); }
+  .hero-date { font-size: 0.78rem; color: var(--muted); }
+  .hero h1 { font-size: clamp(1.4rem,3.5vw,2rem); font-weight: 800; line-height: 1.25;
+    letter-spacing: -0.5px; margin-bottom: 14px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 0.96rem; color: var(--muted); max-width: 700px; line-height: 1.65; margin-bottom: 32px; }
+
+  .stats-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .stat-box { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px; min-width: 110px; flex: 1; }
+  .stat-num { font-size: 1.6rem; font-weight: 800; line-height: 1; margin-bottom: 4px; color: var(--accent); }
+  .stat-num.purple { color: var(--purple); }
+  .stat-num.amber  { color: var(--warn); }
+  .stat-num.blue   { color: var(--blue); }
+  .stat-label { font-size: 0.72rem; color: var(--muted); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .sec-header { display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .sec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .sec-dot.purple { background: var(--purple); }
+  .sec-dot.amber  { background: var(--warn); }
+  .sec-dot.blue   { background: var(--blue); }
+  .sec-title { font-size: 0.95rem; font-weight: 700; }
+  .section { margin-bottom: 44px; }
+
+  .bq { border-left: 3px solid var(--accent); background: var(--card);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 14px; }
+  .bq.purple { border-left-color: var(--purple); }
+  .bq.amber  { border-left-color: var(--warn); }
+  .bq.blue   { border-left-color: var(--blue); }
+  .bq-text { font-size: 0.91rem; color: var(--text); line-height: 1.7; font-style: italic; }
+  .bq-attr { font-size: 0.74rem; color: var(--muted); margin-top: 6px; }
+
+  /* 핵심 대비 2열 */
+  .split-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 14px; }
+  .split-cell { padding: 20px 22px; background: var(--card); }
+  .split-cell.right { background: var(--card2); }
+  .split-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 8px; }
+  .split-label.red    { color: var(--danger); }
+  .split-label.green  { color: var(--accent); }
+  .split-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; }
+  .split-body  { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+
+  /* 기법 카드 */
+  .technique-grid { display: grid; gap: 14px; }
+  .tech-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .tech-header { display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .tech-num { font-size: 0.75rem; font-weight: 700; color: var(--accent);
+    background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 8px; padding: 3px 9px; }
+  .tech-num.amber  { color: var(--warn);   background: rgba(245,158,11,0.12);  border-color: rgba(245,158,11,0.25); }
+  .tech-num.blue   { color: var(--blue);   background: rgba(59,130,246,0.12);  border-color: rgba(59,130,246,0.25); }
+  .tech-num.purple { color: var(--purple); background: rgba(167,139,250,0.12); border-color: rgba(167,139,250,0.25); }
+  .tech-name { font-size: 0.95rem; font-weight: 700; }
+  .tech-sub  { font-size: 0.75rem; color: var(--muted); }
+  .tech-body { padding: 18px 20px; }
+  .tech-body p { font-size: 0.85rem; color: var(--muted); line-height: 1.75; margin-bottom: 10px; }
+  .tech-body p:last-child { margin-bottom: 0; }
+  .tech-body strong { color: var(--text); }
+
+  /* 원칙 리스트 */
+  .principle-list { display: grid; gap: 10px; margin-top: 12px; }
+  .principle-item { display: flex; gap: 12px; align-items: flex-start;
+    background: var(--card2); border-radius: 10px; padding: 13px 16px; }
+  .principle-icon { font-size: 1rem; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+  .principle-text { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+  .principle-text strong { color: var(--text); }
+
+  /* 인사이트 */
+  .insight-list { display: grid; gap: 12px; }
+  .insight-item { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 22px;
+    display: flex; gap: 16px; align-items: flex-start; }
+  .insight-num { font-size: 1.2rem; font-weight: 800; color: var(--accent); min-width: 28px; line-height: 1; }
+  .insight-content { flex: 1; }
+  .insight-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+  .insight-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+
+  /* 맥락 체인 */
+  .context-chain { display: flex; flex-direction: column; gap: 2px; }
+  .ctx-item { background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 18px;
+    display: flex; gap: 14px; align-items: center; }
+  .ctx-date { font-size: 0.72rem; font-weight: 700; color: var(--accent);
+    min-width: 80px; font-variant-numeric: tabular-nums; }
+  .ctx-content { flex: 1; }
+  .ctx-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 2px; }
+  .ctx-desc  { font-size: 0.78rem; color: var(--muted); }
+  .ctx-arrow { color: var(--border); font-size: 1.2rem; text-align: center; padding: 2px 0; }
+
+  .pill-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .pill { display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 7px 14px; font-size: 0.82rem; }
+  .pill-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag { font-size: 0.7rem; padding: 3px 9px; border-radius: 6px;
+    background: rgba(16,185,129,0.08); color: var(--accent); border: 1px solid rgba(16,185,129,0.2); }
+  .tag.blue   { background: rgba(59,130,246,0.08);  color: var(--blue);   border-color: rgba(59,130,246,0.2); }
+  .tag.amber  { background: rgba(245,158,11,0.08);  color: var(--warn);   border-color: rgba(245,158,11,0.2); }
+  .tag.purple { background: rgba(167,139,250,0.08); color: var(--purple); border-color: rgba(167,139,250,0.2); }
+
+  /* 교육자 계보 */
+  .lineage-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .lineage-card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; flex: 1; min-width: 180px; }
+  .lineage-name { font-size: 0.88rem; font-weight: 700; margin-bottom: 3px; }
+  .lineage-era  { font-size: 0.7rem; color: var(--muted); margin-bottom: 8px; }
+  .lineage-idea { font-size: 0.8rem; color: var(--muted); line-height: 1.65; }
+  .lineage-arrow { display: flex; align-items: center; padding: 0 4px; color: var(--border); font-size: 1.4rem; }
+
+  .source-bar { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 48px; }
+  .source-label { font-size: 0.72rem; color: var(--muted); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .source-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; }
+  .source-link:hover { text-decoration: underline; }
+  .source-meta { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+
+  p.prose { font-size: 0.88rem; color: var(--muted); line-height: 1.8; margin-bottom: 14px; }
+
+  @media (max-width: 680px) {
+    nav, .hero, .main { padding-left: 16px; padding-right: 16px; }
+    .split-wrap { grid-template-columns: 1fr; }
+    .stats-row { gap: 10px; }
+    .lineage-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">GARAMwiki</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-crumb"><a href="../index.html">홈</a> › 나의 인사이트</span>
+  <span class="nav-badge">💡 인사이트</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-tag">나의 인사이트</span>
+      <span class="hero-tag purple">✍️ Geoffrey Litt</span>
+      <span class="hero-tag blue">🏢 Notion · MIT CSAIL</span>
+      <span class="hero-tag amber">⚡ AI Engineer 2026</span>
+      <span class="hero-date">2026-07-02 · AI Engineer World's Fair 키노트</span>
+    </div>
+    <h1>"이해"가 <em>새로운 병목</em>이다 —<br>Verify가 아닌 Participate를 위해</h1>
+    <p class="hero-sub">
+      Geoffrey Litt(Notion 디자인 엔지니어)가 AI Engineer 2026에서 발표한 키 아이디어.
+      에이전트가 코드를 인간이 읽는 속도보다 빠르게 쏟아내는 시대,
+      이해는 검증(verify)이 아니라 <em>참여(participate)</em>를 위해 필요하다.
+      /explain-diff 스킬 · 퀴즈 속도조절기 · 마이크로 월드 · 공유 공간 —
+      Company Builder 관점에서 뽑아낸 핵심 인사이트 6가지.
+    </p>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">핵심 기법 (설명·퀴즈·마이크로 월드)</div></div>
+      <div class="stat-box"><div class="stat-num purple">50년</div><div class="stat-label">Alan Kay 비전 — 컴퓨터는 증강 매체</div></div>
+      <div class="stat-box"><div class="stat-num amber">5</div><div class="stat-label">퀴즈 문항 — 속도조절기 기준</div></div>
+      <div class="stat-box"><div class="stat-num blue">≠</div><div class="stat-label">Verify vs Participate</div></div>
+      <div class="stat-box"><div class="stat-num">∞</div><div class="stat-label">프로젝트 루프 — 이해가 다음 아이디어를 만든다</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SECTION 1: 핵심 명제 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">핵심 명제 — 왜 이해가 여전히 중요한가</span></div>
+
+    <div class="bq">
+      <div class="bq-text">
+        "Hot take: I think it's still important to understand the code that our agents write!"
+      </div>
+      <div class="bq-attr">— Geoffrey Litt, AI Engineer World's Fair 2026 (2026-07-02)</div>
+    </div>
+    <div class="bq blue">
+      <div class="bq-text">
+        "You need a rich set of concepts in your mind to think creatively and fluently about how to move
+        something forward. If you're lacking that fluency, your ability to participate in the project
+        is meaningfully limited."
+      </div>
+      <div class="bq-attr">— Geoffrey Litt, "Understanding is the new bottleneck" (2026-07-02)</div>
+    </div>
+    <div class="bq purple">
+      <div class="bq-text">
+        "Cognitive debt is like tech debt: you can get away with not understanding what's going on
+        in the short term, but it'll bite you eventually."
+      </div>
+      <div class="bq-attr">— Margaret Storey (Cognitive Debt 논문, 2026-02-09) — Geoffrey Litt 인용</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Verify vs Participate -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot amber"></div><span class="sec-title">핵심 프레임 전환 — Verify에서 Participate로</span></div>
+
+    <p class="prose">Litt의 가장 중요한 통찰은 "왜 이해해야 하는가"에 대한 재정의다. 대부분의 사람들이 이해의 이유를 <strong>검증(verify)</strong>이라고 생각한다 — "AI가 올바르게 했는지 확인하기 위해." 그러나 Litt는 이 답이 틀렸다고 말한다. 이해의 진짜 이유는 <strong>참여(participate)</strong>이다.</p>
+
+    <div class="split-wrap">
+      <div class="split-cell">
+        <div class="split-label red">❌ 구시대 프레임 — Verify</div>
+        <div class="split-title">이해 = 검증 도구</div>
+        <div class="split-body">
+          AI 결과물이 올바른지 확인하는 thumbs-up/thumbs-down 행위.
+          에이전트가 자체 검증 능력이 좋아질수록 → 인간의 검증 역할이 축소.
+          "에이전트가 알아서 검증하니까 인간은 루프 밖으로 나가도 된다."
+          → 이 논리의 결말: 인간은 점점 구경꾼이 된다.
+        </div>
+      </div>
+      <div class="split-cell right">
+        <div class="split-label green">✅ 새 프레임 — Participate</div>
+        <div class="split-title">이해 = 창의적 참여의 기반</div>
+        <div class="split-body">
+          프로젝트는 한 번의 루프가 아니라 수백 번의 반복 루프.
+          각 루프에서 "다음에 무엇을 할까?"를 결정하는 것이 인간의 역할.
+          이 판단은 시스템에 대한 <strong>직관적 이해(fluency)</strong>에서만 나온다.
+          이해가 없으면 → 다음 아이디어를 낼 능력 자체가 제한.
+        </div>
+      </div>
+    </div>
+
+    <div class="bq amber">
+      <div class="bq-text">
+        "It's never just one loop! A project is many, many loops with the agent.
+        And the understanding you have of the system is part of your ability
+        to come up with the next idea to evolve it."
+      </div>
+      <div class="bq-attr">— Geoffrey Litt (2026-07-02)</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: 인지 부채 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot blue"></div><span class="sec-title">인지 부채(Cognitive Debt) — Margaret Storey의 정의</span></div>
+
+    <p class="prose">Litt가 인용한 Margaret Storey(University of Victoria 교수)의 2026년 2월 논문에 따르면, AI 시대의 새로운 위험은 기술 부채(technical debt)가 아니라 인지 부채(cognitive debt)다.</p>
+
+    <div class="split-wrap">
+      <div class="split-cell">
+        <div class="split-label red">기술 부채 (Technical Debt)</div>
+        <div class="split-title">코드 안에 산다</div>
+        <div class="split-body">
+          설계 결정이 나중에 코드를 변경하기 어렵게 만드는 누적.
+          코드를 리팩토링하면 해결된다.
+          AI가 깨끗한 코드를 생성하면 줄어든다.
+        </div>
+      </div>
+      <div class="split-cell right">
+        <div class="split-label green">인지 부채 (Cognitive Debt)</div>
+        <div class="split-title">개발자 뇌 안에 산다</div>
+        <div class="split-body">
+          AI가 아무리 깨끗한 코드를 써도 인간이 이해하지 못하면 쌓인다.
+          팀 전체의 "시스템 이론(theory)"이 증발하는 현상.
+          Peter Naur: "프로그램은 소스코드가 아니라 개발자 마음속에 사는 이론이다."
+          → Storey: AI 시대에 기술 부채보다 훨씬 큰 위협.
+        </div>
+      </div>
+    </div>
+
+    <div class="bq blue">
+      <div class="bq-text">
+        "Even if AI agents produce code that could be easy to understand,
+        the humans involved may have simply lost the plot and may not understand
+        what the program is supposed to do, how their intentions were implemented,
+        or how to possibly change it."
+      </div>
+      <div class="bq-attr">— Margaret Storey, "How Generative and Agentic AI Shift Concern from Technical Debt to Cognitive Debt" (2026-02-09)</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: 3가지 기법 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">3가지 실전 기법 — 이해를 수확하는 방법</span></div>
+    <p class="prose">Litt는 교육학의 최고 아이디어들을 AI 코딩 현장에 이식한 3가지 구체적 기법을 제시한다.</p>
+
+    <div class="technique-grid">
+
+      <!-- 기법 1: 설명 문서 -->
+      <div class="tech-card">
+        <div class="tech-header">
+          <span class="tech-num">TECHNIQUE 01</span>
+          <div>
+            <div class="tech-name">/explain-diff — 코드 설명 문서</div>
+            <div class="tech-sub">단순 diff → 구조화된 이해 패킷으로</div>
+          </div>
+        </div>
+        <div class="tech-body">
+          <p>에이전트가 작업을 마칠 때마다 <strong>raw diff가 아닌 구조화된 설명 문서</strong>를 생성한다. Litt가 매일 사용하는 <code>/explain-diff</code> 스킬은 HTML, Markdown, Notion 문서로 출력된다.</p>
+
+          <div class="principle-list">
+            <div class="principle-item">
+              <div class="principle-icon">📚</div>
+              <div class="principle-text"><strong>원칙 1 — 배경 먼저:</strong> 변경 내용 이전에 이미 있던 것을 먼저 설명. "이 게임 엔진이 어떻게 작동하는지 먼저 알려줘."</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">🧠</div>
+              <div class="principle-text"><strong>원칙 2 — 직관이 디테일 앞에:</strong> 코드 이전에 목표와 개념 설명. "등각 투영(isometric projection)이 뭔지, 왜 필요한지 먼저 이해시켜줘."</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">🖱️</div>
+              <div class="principle-text"><strong>원칙 3 — 인터랙티브 피겨:</strong> 직접 드래그하며 좌표 변화를 눈으로 확인. 읽는 것보다 체험이 직관 형성에 훨씬 빠르다.</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">📖</div>
+              <div class="principle-text"><strong>원칙 4 — 리터럴 diff:</strong> 알파벳 순 파일 나열이 아닌 산문(prose) 형태로 변경 순서를 설명. 코드 스니펫이 맥락 속에 삽입된다.</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">☕</div>
+              <div class="principle-text"><strong>아이러니한 결론:</strong> AI가 만든 것을 이해하기 위해 인쇄해서 카페에 들고 간다. "AI가 인터랙티브 활동을 집중해서 읽을 수 있는 정적 리포트로 바꿔줬다." — AI는 결국 인간의 독서 습관을 강화했다.</div>
+            </div>
+          </div>
+
+          <div class="tags" style="margin-top:14px;">
+            <span class="tag">explain-diff</span><span class="tag blue">Notion 문서</span><span class="tag">배경→직관→코드 순서</span><span class="tag">리터럴 diff</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 기법 2: 퀴즈 -->
+      <div class="tech-card">
+        <div class="tech-header">
+          <span class="tech-num amber">TECHNIQUE 02</span>
+          <div>
+            <div class="tech-name">퀴즈 — AI 루프의 속도조절기</div>
+            <div class="tech-sub">이해했다는 착각을 막는 마찰 장치</div>
+          </div>
+        </div>
+        <div class="tech-body">
+          <p>Andy Matuschak의 "books don't work"에서 영감을 받은 기법. 읽기는 이해했다는 착각을 만들기 쉽다. 퀴즈는 그 착각을 깨뜨리는 강제 메커니즘이다.</p>
+
+          <div class="principle-list">
+            <div class="principle-item">
+              <div class="principle-icon">❓</div>
+              <div class="principle-text"><strong>설명 문서 맨 아래에 5문항 퀴즈:</strong> 변경 사항에 대한 핵심 질문 5개. 스스로 답을 작성해야 한다.</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">📏</div>
+              <div class="principle-text"><strong>퀴즈 통과 전 코드 공유 금지:</strong> Litt의 개인 원칙. 내가 퀴즈를 통과해야만 동료에게 코드를 보낸다. 리뷰할 때도 동일하게 적용.</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">🚦</div>
+              <div class="principle-text"><strong>속도조절기(Speed Regulator):</strong> AI 루프는 인간 이해 속도보다 빠르게 돌아간다. 퀴즈는 "나 진짜 이해했나?"를 기계적으로 묻는 균형추. 속도를 낮추는 게 아니라, 이해 없이 달리는 것을 막는다.</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">🧠</div>
+              <div class="principle-text"><strong>영감: Andy Matuschak × Michael Nielsen의 Quantum Country:</strong> 에세이 중간에 간격 반복 퀴즈를 삽입. 읽고 잊는 게 아니라 읽고 기억하는 포맷을 코드 리뷰에 이식.</div>
+            </div>
+          </div>
+
+          <div class="tags" style="margin-top:14px;">
+            <span class="tag amber">속도조절기</span><span class="tag">Andy Matuschak</span><span class="tag amber">Quantum Country</span><span class="tag">퀴즈 5문항</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 기법 3: 마이크로 월드 -->
+      <div class="tech-card">
+        <div class="tech-header">
+          <span class="tech-num blue">TECHNIQUE 03</span>
+          <div>
+            <div class="tech-name">마이크로 월드 — 살아보는 이해</div>
+            <div class="tech-sub">Seymour Papert의 "Mathland"를 코드에 적용</div>
+          </div>
+        </div>
+        <div class="tech-body">
+          <p>Seymour Papert의 교육 철학: 수학을 배우고 싶으면 Mathland에 살아라. 프랑스어를 배우려면 프랑스에 살아라. <strong>이해는 거주(inhabit)에서 온다.</strong> 코드도 마찬가지다.</p>
+
+          <div class="principle-list">
+            <div class="principle-item">
+              <div class="principle-icon">🔍</div>
+              <div class="principle-text"><strong>예시 1 — Prolog 인터프리터 디버거:</strong> Litt가 Prolog 인터프리터를 짜면서 내부가 어떻게 돌아가는지 직관이 없었다. 에이전트에게 "시간을 스크럽할 수 있는 디버거 UI를 만들어줘"라고 요청 → 스택, 어떤 규칙이 적용됐는지 시각화. 직접 디버깅했을 때와 비슷한 이해를 훨씬 빠르게 얻었다.</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">🎮</div>
+              <div class="principle-text"><strong>예시 2 — 웹사이트 마이그레이션 커맨드 센터:</strong> Claude가 마이그레이션 스크립트를 짰지만 새 프레임워크를 모르는 Litt는 리뷰할 수가 없었다. 해결: "내가 직접 버튼을 눌러 단계별로 마이그레이션을 수행하는 비디오 게임 UI를 만들어줘." 구 사이트와 신 사이트가 나란히 변화하는 것을 보며 직접 한 것과 같은 이해를 얻었다.</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">💡</div>
+              <div class="principle-text"><strong>핵심 통찰:</strong> <strong>에이전트가 코드를 이해하게 도와주는 코드를 쓸 수 있다!</strong> 도구를 만들어 주는 게 아니라 에이전트가 알아서 디버깅하게 두는 것과는 완전히 다르다. 내가 직접 손을 쓸 때 이해가 생긴다.</div>
+            </div>
+          </div>
+
+          <div class="tags" style="margin-top:14px;">
+            <span class="tag blue">Seymour Papert</span><span class="tag">Mathland</span><span class="tag blue">거주하는 이해</span><span class="tag">버려도 되는 미니 도구</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 기법 4: 공유 공간 -->
+      <div class="tech-card">
+        <div class="tech-header">
+          <span class="tech-num purple">TECHNIQUE 04</span>
+          <div>
+            <div class="tech-name">공유 공간 — 팀이 함께 이해하기</div>
+            <div class="tech-sub">개인 이해 → 팀 공유 멘탈 모델로</div>
+          </div>
+        </div>
+        <div class="tech-body">
+          <p>혼자 이해하는 것을 넘어, <strong>팀 전체가 같은 멘탈 모델을 공유</strong>해야 효율적으로 소통할 수 있다. 공유 어휘, 공유 맥락이 없으면 창의적 협업이 불가능하다.</p>
+
+          <div class="principle-list">
+            <div class="principle-item">
+              <div class="principle-icon">🤝</div>
+              <div class="principle-text"><strong>공유 멘탈 모델의 힘:</strong> 팀원과 같은 개념 지도를 가지면 짧은 말로 많은 뜻을 전달할 수 있다. 공유 어휘가 없으면 같은 것을 두고도 오해가 생긴다.</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">📝</div>
+              <div class="principle-text"><strong>Notion에서 Claude·Cursor 에이전트 실행:</strong> 에이전트가 기술 계획을 Notion에 작성하면 협업 페이지로 자동 공유된다. 팀이 즉시 댓글로 토론할 수 있다 — 혼자 사일로에서 생각하는 게 아니라 함께 생각.</div>
+            </div>
+            <div class="principle-item">
+              <div class="principle-icon">💬</div>
+              <div class="principle-text"><strong>/explain-diff를 팀 공유로:</strong> 설명 문서를 개인 파일로 두지 않고 팀 Notion 페이지에 올려 다 같이 읽고 퀴즈를 푼다. 새로운 코드리뷰 문화.</div>
+            </div>
+          </div>
+
+          <div class="tags" style="margin-top:14px;">
+            <span class="tag purple">공유 멘탈 모델</span><span class="tag">Notion 협업</span><span class="tag purple">팀 이해</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 5: 교육 철학 계보 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot purple"></div><span class="sec-title">Litt가 잇는 교육 철학의 계보 — 컴퓨터는 원래 증강 도구였다</span></div>
+
+    <p class="prose">Litt는 이 기법들이 새로운 발명이 아니라 50년 전 컴퓨터 선구자들의 비전으로 돌아가는 것임을 강조한다. 이 계보를 이해하면 "왜 이해가 중요한가"의 철학적 뿌리가 보인다.</p>
+
+    <div class="lineage-row">
+      <div class="lineage-card">
+        <div class="lineage-name">Seymour Papert</div>
+        <div class="lineage-era">1970s — MIT</div>
+        <div class="lineage-idea">"Mathland" — 수학을 배우려면 수학이 살아있는 환경에 살아라. 컴퓨터는 어린이가 직접 구성하며 배우는 마이크로 월드를 만들 수 있다.</div>
+      </div>
+      <div class="lineage-arrow">→</div>
+      <div class="lineage-card">
+        <div class="lineage-name">Alan Kay</div>
+        <div class="lineage-era">1970s — Xerox PARC</div>
+        <div class="lineage-idea">컴퓨터는 단순 자동화 도구가 아니라 인간의 사고를 확장하는 새로운 매체(medium). 아이들이 물리 시뮬레이션을 직접 편집하며 배울 수 있다 — 50년 전 비전.</div>
+      </div>
+      <div class="lineage-arrow">→</div>
+      <div class="lineage-card">
+        <div class="lineage-name">Andy Matuschak<br>× Michael Nielsen</div>
+        <div class="lineage-era">2019 — Quantum Country</div>
+        <div class="lineage-idea">"Books don't work" — 패시브 읽기는 이해를 만들지 않는다. 간격 반복 퀴즈를 에세이에 삽입해 읽으면서 동시에 기억한다.</div>
+      </div>
+      <div class="lineage-arrow">→</div>
+      <div class="lineage-card">
+        <div class="lineage-name">Geoffrey Litt</div>
+        <div class="lineage-era">2026 — Notion</div>
+        <div class="lineage-idea">이 세 전통을 AI 코딩 현장에 이식. /explain-diff + 퀴즈 + 마이크로 월드 = AI 시대의 "이해를 위한 설계(design for understanding)."</div>
+      </div>
+    </div>
+
+    <div class="bq" style="margin-top:16px;">
+      <div class="bq-text">
+        "The point was always to augment, not just automate.
+        It's beautiful that AI now makes creating simulations so accessible —
+        Having AI teach us is one of the greatest possibilities computing has ever opened up."
+      </div>
+      <div class="bq-attr">— Geoffrey Litt, 클로징 슬라이드 (2026-07-02)</div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: 나의 인사이트 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">나의 인사이트 — Company Builder 관점 6가지</span></div>
+    <div class="insight-list">
+      <div class="insight-item">
+        <div class="insight-num">01</div>
+        <div class="insight-content">
+          <div class="insight-title">"Verify에서 Participate로" — C-level 의사결정에 적용하라</div>
+          <div class="insight-desc">
+            Litt의 프레임 전환을 코딩 이외 영역으로 확장하면 강력하다.
+            AI가 전략 보고서, 시장 분석, 재무 모델을 생성할 때
+            대부분의 경영자는 "이게 맞나?"(verify)를 확인하는 데 그친다.
+            진짜 필요한 것은 그 내용을 충분히 이해해서 "다음 질문"을 던질 수 있는 능력(participate).
+            "AI 보고서가 합리적으로 보인다"는 verify. "이 가정이 흔들리면 어떻게 되나?"가 participate.
+            실무 적용: 중요한 AI 산출물을 받을 때마다 스스로 3개의 "다음 질문"을 만들어야 통과 기준으로 삼을 것.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">02</div>
+        <div class="insight-content">
+          <div class="insight-title">인지 부채를 전략 리스크로 분류하라</div>
+          <div class="insight-desc">
+            Margaret Storey의 정의: 인지 부채는 코드가 아니라 팀의 뇌 안에 쌓인다.
+            스타트업에서 AI로 빠르게 기능을 쌓으면서 "왜 이렇게 만들어졌는지 아는 사람이 없는" 상태가 되면 — 그것이 인지 부채다.
+            Storey의 경고: 학생 팀이 7~8주 만에 시스템 이론이 완전히 증발해 단순 변경도 불가능해진 사례.
+            처방: 모든 주요 AI-assisted 결정에 "이 결정을 설명할 수 있는 사람이 팀에 최소 2명 있는가"를 체크리스트로 추가.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">03</div>
+        <div class="insight-content">
+          <div class="insight-title">퀴즈 = 속도조절기 — 모든 중요 AI 산출물에 적용</div>
+          <div class="insight-desc">
+            Litt의 퀴즈 규칙: 퀴즈를 통과하기 전까지 코드를 공유하지 않는다.
+            이것을 코드 리뷰 이상으로 확장하면:
+            AI가 만든 제안서, 분석, 전략 문서를 팀에 배포하기 전에 "이 문서의 핵심 5가지를 내 말로 설명할 수 있나?"를 체크.
+            이것은 속도를 낮추는 것이 아니다 — 이해 없이 달리는 것을 막는 균형추다.
+            AI 시대의 새로운 게이팅 기준: 정확성(accuracy) 체크 + 이해(comprehension) 체크 = 모두 통과해야 배포.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">04</div>
+        <div class="insight-content">
+          <div class="insight-title">마이크로 월드 = 가설 검증 샌드박스 — 제품 개발에 이식</div>
+          <div class="insight-desc">
+            Litt가 Prolog 디버거와 마이그레이션 커맨드 센터를 만든 방식을 제품 개발에 적용하면:
+            새 비즈니스 모델이나 제품 기능을 AI로 설계할 때, 직접 클릭하며 결과를 볼 수 있는 "작동하는 목업"을 먼저 만들어라.
+            문서로 읽는 것과 직접 조작해보는 것은 이해의 깊이가 다르다.
+            Litt의 핵심: "에이전트가 이해를 돕는 코드를 쓸 수 있다." — 마이크로 월드 자체를 에이전트에게 만들게 하면 된다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">05</div>
+        <div class="insight-content">
+          <div class="insight-title">/explain-diff → /explain-decision으로 변환하라</div>
+          <div class="insight-desc">
+            Litt의 /explain-diff 패턴: 코드 변경을 설명하는 구조화 문서 = 배경 → 직관 → 세부.
+            이 패턴을 비즈니스 결정에 이식하면 /explain-decision:
+            ① 이 결정 전에 이미 있던 상황(배경)
+            ② 이 결정이 지향하는 직관(직관)
+            ③ 구체적 변경 내용(세부)
+            AI가 빠른 결정을 내릴 때, 이 구조로 문서화하면 나중에 왜 이 결정을 했는지 팀이 공유할 수 있다.
+            "천천히 읽을 수 있는 정적 리포트" — Litt가 카페에서 인쇄해 읽는 것처럼 AI 결정의 로그를 만들어라.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">06</div>
+        <div class="insight-content">
+          <div class="insight-title">"더 깊이 루프에 들어가라" — 루프 탈출이 목표가 아니다</div>
+          <div class="insight-desc">
+            Litt의 마지막 슬라이드: "We don't have to merely take ourselves out of the loop, we can get deeper in the loop too."
+            AI Frontier EP103에서 노정석도 같은 말을 했다: 루프 바깥에 있으면 된다는 게 아니라, 루프 안에서 더 깊이 이해하는 방법이 있다고.
+            Company Builder 관점: AI 에이전트에게 모든 것을 위임하고 루프 밖에 서 있는 사람은 결국 아이디어를 낼 능력을 잃는다.
+            올바른 방향: AI가 제공하는 이해 도구(설명 문서, 마이크로 월드, 퀴즈)를 통해 오히려 더 깊은 수준의 창의적 참여가 가능해진다.
+            이것이 Alan Kay가 50년 전 말한 컴퓨터의 진짜 목적 — Augmentation, not Automation.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: 맥락 연결 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot amber"></div><span class="sec-title">같은 주에 같은 주제 — 맥락 연결</span></div>
+    <p class="prose">2026년 7월 초, 같은 개념이 여러 채널에서 동시에 폭발했다. 우연이 아니라 Fable 출시 이후 AI 과속에 대한 반발이 집단적으로 의식화되는 흐름이었다.</p>
+
+    <div class="context-chain">
+      <div class="ctx-item">
+        <div class="ctx-date">2026-02-09</div>
+        <div class="ctx-content">
+          <div class="ctx-title">Margaret Storey — "Cognitive Debt" 논문</div>
+          <div class="ctx-desc">University of Victoria. AI 시대에 기술 부채보다 인지 부채가 더 위험하다. Peter Naur의 "프로그램은 이론이다"를 AI 시대에 재소환.</div>
+        </div>
+      </div>
+      <div class="ctx-arrow">↓</div>
+      <div class="ctx-item">
+        <div class="ctx-date">2026-07-02</div>
+        <div class="ctx-content">
+          <div class="ctx-title">Geoffrey Litt — AI Engineer World's Fair 키노트</div>
+          <div class="ctx-desc">Notion 디자인 엔지니어. "Understanding is the new bottleneck." 3가지 기법 공개: /explain-diff, 퀴즈, 마이크로 월드.</div>
+        </div>
+      </div>
+      <div class="ctx-arrow">↓</div>
+      <div class="ctx-item">
+        <div class="ctx-date">2026-07-02</div>
+        <div class="ctx-content">
+          <div class="ctx-title">Simon Willison — "Understand to participate"</div>
+          <div class="ctx-desc">Litt 발표 직후 Simon Willison이 "understand to participate" 프레임을 자신의 블로그에 즉시 정리. AI 개발자 커뮤니티로 빠르게 확산.</div>
+        </div>
+      </div>
+      <div class="ctx-arrow">↓</div>
+      <div class="ctx-item">
+        <div class="ctx-date">2026-07-04</div>
+        <div class="ctx-content">
+          <div class="ctx-title">AI Frontier EP103 — "이해가 병목이 될 때"</div>
+          <div class="ctx-desc">노정석·최승준·박종현이 Thariq Shihipar(Anthropic)의 "Finding Your Unknowns"를 소개하며 같은 결론 도달. Litt의 글과 독립적으로 같은 주제가 한국 AI 커뮤니티에도 등장.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bq" style="margin-top:16px;">
+      <div class="bq-text">
+        "Understand to participate — Geoffrey was talking about the challenge of collaborating
+        with coding agents as they construct increasingly large and sophisticated changes,
+        and the need to avoid taking on cognitive debt as your understanding drifts
+        from how the code actually works."
+      </div>
+      <div class="bq-attr">— Simon Willison, simonwillison.net (2026-07-02)</div>
+    </div>
+
+    <div class="pill-strip">
+      <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div><span>Geoffrey Litt — Notion 디자인 엔지니어</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--warn)"></div><span>Thariq Shihipar — Anthropic (Finding Your Unknowns)</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--purple)"></div><span>Margaret Storey — Cognitive Debt (2026-02-09)</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--blue)"></div><span>Simon Willison — "Understand to participate"</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div><span>Mitchell Hashimoto — 아키텍처 침식 경고</span></div>
+      <div class="pill"><div class="pill-dot" style="background:var(--warn)"></div><span>AI Frontier EP103 — 같은 주제 (2026-07-04)</span></div>
+    </div>
+  </div>
+
+  <!-- SOURCE -->
+  <div class="source-bar">
+    <span class="source-label">출처</span>
+    <a class="source-link" href="https://www.geoffreylitt.com/2026/07/02/understanding-is-the-new-bottleneck.html" target="_blank">geoffreylitt.com — Understanding is the new bottleneck</a>
+    <span class="source-link" style="margin-left:8px;">|</span>
+    <a class="source-link" href="https://simonwillison.net/2026/jul/2/understand-to-participate/" target="_blank">Simon Willison — Understand to participate</a>
+    <span class="source-link" style="margin-left:8px;">|</span>
+    <a class="source-link" href="https://margaretstorey.com/blog/2026/02/09/cognitive-debt/" target="_blank">Margaret Storey — Cognitive Debt</a>
+    <span class="source-meta">Geoffrey Litt · Notion · AI Engineer World's Fair 2026 · 2026-07-02</span>
+  </div>
+
+</div>
+</body>
+</html>

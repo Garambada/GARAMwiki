@@ -69,6 +69,10 @@ ARTICLE_META = {
         "title": "AI Frontier EP103 — 이해가 병목이 될 때<br>노정석·최승준·박종현 · Fable 쿼터 폭발 · 서브에이전트 모델 선택 · 인지 부채 · LMArena vs Artificial Analysis (2026-07-12)",
         "tags":  ["AI Frontier", "노정석", "최승준", "박종현", "Fable", "인지 부채", "Cognitive Debt", "서브에이전트", "이해 병목", "Thariq Shihipar", "지도와 영토", "Korzybski", "Artificial Analysis", "LMArena", "Jagged Intelligence", "Llama 4", "경계 설계", "퀴즈 학습", "세대 단층", "평가 깃발"],
     },
+    "2026-07_Geoffrey_Litt_이해가_병목_Understanding_Bottleneck_인사이트.html": {
+        "title": "Geoffrey Litt — 이해가 새로운 병목이다: Verify가 아닌 Participate를 위해<br>Notion 디자인 엔지니어 · /explain-diff · 퀴즈 속도조절기 · 마이크로 월드 · 인지 부채 · Alan Kay 증강 비전 (AI Engineer 2026-07-02)",
+        "tags":  ["Geoffrey Litt", "이해 병목", "Understanding Bottleneck", "Verify vs Participate", "인지 부채", "Cognitive Debt", "Margaret Storey", "explain-diff", "마이크로 월드", "Micro-world", "퀴즈 속도조절기", "Seymour Papert", "Mathland", "Alan Kay", "Andy Matuschak", "Quantum Country", "Simon Willison", "Notion", "AI Engineer", "Peter Naur", "공유 멘탈 모델", "증강 vs 자동화"],
+    },
     "2024-09_EO_Decoupling_Harvard_MBA_Teixeira.html": {
         "title": "하버드 MBA가 가장 먼저 가르치는 전략 — 디커플링(Decoupling)으로 시장을 훔쳐라<br>Thales Teixeira · 고객 가치 사슬 3유형 · 5단계 고객 훔치기 · AI 디커플링 가속 · EO Korea (2024-09)",
         "tags":  ["디커플링", "Thales Teixeira", "고객 가치 사슬", "Customer Value Chain", "EO Korea", "하버드 MBA", "비즈니스 모델", "디지털 파괴", "Uber", "Airbnb", "Netflix", "AI 디커플링", "스타트업 전략", "Counter-Decouple", "Unlocking the Customer Value Chain"],
