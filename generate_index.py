@@ -289,6 +289,10 @@ ARTICLE_META = {
         "title": "FS 창업자 반성문 — 적게 약속하고 더 많이 이루는 회사<br>60대 창업 · AI 사이클 12년→5년 · Under-promise Over-deliver · 영업이익·배당·이익분배 (2026-07)",
         "tags":  ["FS", "창업 철학", "반성문", "Under-promise Over-deliver", "60대 창업", "AI 사이클", "5년 비전", "영업이익", "배당", "이익 분배", "코스닥", "지속 가능한 회사", "이해관계자 자본주의", "LP", "펀드"],
     },
+    "2026-07_GBrain_지식대시보드_Wise42생태계_PKM.html": {
+        "title": "GBrain 지식 대시보드 — Wise42 생태계 55페이지 · 8테마 전수 스냅샷<br>AGP · KRNA 63.2% · FiPA 220억 · Inuverse 150MW · Discovery-First FDE · Upstage 수직 결합 (2026-07-15)",
+        "tags":  ["GBrain", "PKM", "Wise42", "Founders Studio", "Garambada", "AGP", "KRNA", "FiPA", "Inuverse AIDC", "Onion OT스택", "Upstage", "Solar LLM", "Discovery-First FDE", "Living System SaaS", "3-Layer 아키텍처", "공공 AX", "CEO 지식 관리", "PGLite", "대구 AIDC", "150MW", "220억"],
+    },
     "2026-05_스타벅스_탱크데이_규범윤리_정치철학_분석.html": {
         "title": "스타벅스 '탱크데이' 사건의<br>규범윤리학·정치철학적 분석",
         "tags":  ["5·18", "칸트·밀·샌델", "시장의 도덕적 한계", "상품화", "공동체주의"],
