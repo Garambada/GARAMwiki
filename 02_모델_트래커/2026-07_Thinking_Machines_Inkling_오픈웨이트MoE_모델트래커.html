@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thinking Machines — Inkling 오픈웨이트 MoE 모델 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --card2: #20232f;
+    --border: #2a2d3a; --text: #e8eaf0; --muted: #7a7f94;
+    --accent: #2dd4bf; --accent2: #5eead4;
+    --blue: #3b82f6; --amber: #f59e0b;
+    --green: #10b981; --fuchsia: #e879f9; --red: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    line-height: 1.65; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 52px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo { font-weight: 800; font-size: 1rem;
+    background: linear-gradient(135deg,#2dd4bf,#5eead4);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-sep { color: var(--border); }
+  .nav-crumb { font-size: 0.82rem; color: var(--muted); }
+  .nav-crumb a { color: var(--muted); text-decoration: none; }
+  .nav-crumb a:hover { color: var(--accent); }
+  .nav-badge { margin-left: auto; font-size: 0.72rem; font-weight: 700;
+    background: rgba(45,212,191,0.12); color: var(--accent);
+    border: 1px solid rgba(45,212,191,0.3); border-radius: 20px; padding: 3px 10px; }
+
+  .hero {
+    background: linear-gradient(135deg, rgba(45,212,191,0.06) 0%, rgba(16,185,129,0.04) 100%);
+    border-bottom: 1px solid var(--border); padding: 52px 32px 44px;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .hero-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 20px;
+    background: rgba(45,212,191,0.12); color: var(--accent); border: 1px solid rgba(45,212,191,0.25); }
+  .hero-tag.blue    { background: rgba(59,130,246,0.12);  color: var(--blue);    border-color: rgba(59,130,246,0.25); }
+  .hero-tag.amber   { background: rgba(245,158,11,0.12);  color: var(--amber);   border-color: rgba(245,158,11,0.25); }
+  .hero-tag.green   { background: rgba(16,185,129,0.12);  color: var(--green);   border-color: rgba(16,185,129,0.25); }
+  .hero-tag.fuchsia { background: rgba(232,121,249,0.12); color: var(--fuchsia); border-color: rgba(232,121,249,0.25); }
+  .hero-date { font-size: 0.78rem; color: var(--muted); }
+  .hero h1 { font-size: clamp(1.4rem,3.5vw,2rem); font-weight: 800; line-height: 1.25;
+    letter-spacing: -0.5px; margin-bottom: 14px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 0.96rem; color: var(--muted); max-width: 720px; line-height: 1.65; margin-bottom: 32px; }
+
+  .stats-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .stat-box { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px; min-width: 90px; flex: 1; }
+  .stat-num { font-size: 1.6rem; font-weight: 800; line-height: 1; margin-bottom: 4px; color: var(--accent); }
+  .stat-num.blue    { color: var(--blue); }
+  .stat-num.amber   { color: var(--amber); }
+  .stat-num.green   { color: var(--green); }
+  .stat-num.fuchsia { color: var(--fuchsia); }
+  .stat-label { font-size: 0.72rem; color: var(--muted); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .sec-header { display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .sec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .sec-dot.blue    { background: var(--blue); }
+  .sec-dot.amber   { background: var(--amber); }
+  .sec-dot.green   { background: var(--green); }
+  .sec-dot.fuchsia { background: var(--fuchsia); }
+  .sec-dot.red     { background: var(--red); }
+  .sec-title { font-size: 0.95rem; font-weight: 700; }
+  .section { margin-bottom: 44px; }
+
+  p.prose { font-size: 0.88rem; color: var(--muted); line-height: 1.8; margin-bottom: 14px; }
+
+  .bq { border-left: 3px solid var(--accent); background: var(--card);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 14px; }
+  .bq.amber   { border-left-color: var(--amber); }
+  .bq.green   { border-left-color: var(--green); }
+  .bq.fuchsia { border-left-color: var(--fuchsia); }
+  .bq.blue    { border-left-color: var(--blue); }
+  .bq-text { font-size: 0.88rem; color: var(--text); line-height: 1.75; font-style: italic; }
+  .bq-attr { font-size: 0.73rem; color: var(--muted); margin-top: 6px; }
+
+  /* 스펙 그리드 */
+  .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .spec-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; }
+  .spec-key  { font-size: 0.7rem; color: var(--muted); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+  .spec-val  { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .spec-val.accent  { color: var(--accent); }
+  .spec-val.amber   { color: var(--amber); }
+  .spec-val.green   { color: var(--green); }
+  .spec-val.blue    { color: var(--blue); }
+  .spec-sub  { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+  /* 기능 카드 */
+  .feat-grid { display: grid; gap: 12px; }
+  .feat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .feat-header { display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .feat-badge { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+    padding: 3px 9px; border-radius: 6px; flex-shrink: 0; }
+  .feat-badge.teal   { background: rgba(45,212,191,0.12);  color: var(--accent);  border: 1px solid rgba(45,212,191,0.25); }
+  .feat-badge.blue   { background: rgba(59,130,246,0.12);  color: var(--blue);    border: 1px solid rgba(59,130,246,0.25); }
+  .feat-badge.amber  { background: rgba(245,158,11,0.12);  color: var(--amber);   border: 1px solid rgba(245,158,11,0.25); }
+  .feat-badge.green  { background: rgba(16,185,129,0.12);  color: var(--green);   border: 1px solid rgba(16,185,129,0.25); }
+  .feat-badge.fuchsia{ background: rgba(232,121,249,0.12); color: var(--fuchsia); border: 1px solid rgba(232,121,249,0.25); }
+  .feat-name { font-size: 0.92rem; font-weight: 700; }
+  .feat-sub  { font-size: 0.72rem; color: var(--muted); }
+  .feat-body { padding: 16px 18px; }
+  .feat-body p { font-size: 0.84rem; color: var(--muted); line-height: 1.75; margin-bottom: 8px; }
+  .feat-body p:last-child { margin-bottom: 0; }
+  .feat-body strong { color: var(--text); }
+
+  /* 벤치마크 바 */
+  .bench-group { margin-bottom: 20px; }
+  .bench-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .bench-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .bench-name { font-size: 0.78rem; color: var(--text); min-width: 160px; }
+  .bench-name.highlight { color: var(--accent); font-weight: 700; }
+  .bench-bar-wrap { flex: 1; background: var(--card2); border-radius: 4px; height: 8px; overflow: hidden; }
+  .bench-bar { height: 100%; border-radius: 4px; background: var(--muted); transition: width 0.3s; }
+  .bench-bar.accent { background: var(--accent); }
+  .bench-bar.blue   { background: var(--blue); }
+  .bench-bar.amber  { background: var(--amber); }
+  .bench-bar.green  { background: var(--green); }
+  .bench-score { font-size: 0.75rem; font-weight: 700; min-width: 48px; text-align: right; }
+  .bench-score.accent { color: var(--accent); }
+
+  /* Design Arena 순위 */
+  .arena-list { display: grid; gap: 4px; }
+  .arena-row { display: flex; align-items: center; gap: 10px;
+    background: var(--card2); border-radius: 8px; padding: 9px 14px; }
+  .arena-rank { font-size: 0.72rem; font-weight: 800; color: var(--muted); min-width: 24px; }
+  .arena-name { font-size: 0.82rem; flex: 1; }
+  .arena-name.ours { color: var(--accent); font-weight: 700; }
+  .arena-name.open { color: var(--blue); }
+  .arena-score { font-size: 0.78rem; font-weight: 700; color: var(--text); }
+  .arena-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+  .arena-dot.closed { background: var(--muted); }
+
+  /* RL 체인 비교 */
+  .cot-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 14px; }
+  .cot-cell { padding: 18px 20px; background: var(--card); }
+  .cot-cell.right { background: var(--card2); }
+  .cot-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 8px; }
+  .cot-label.muted  { color: var(--muted); }
+  .cot-label.accent { color: var(--accent); }
+  .cot-code { font-size: 0.78rem; color: var(--muted); line-height: 1.7; font-family: monospace;
+    background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px 14px; }
+  .cot-code em { color: var(--amber); font-style: normal; }
+
+  /* 인사이트 */
+  .insight-list { display: grid; gap: 12px; }
+  .insight-item { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 22px;
+    display: flex; gap: 16px; align-items: flex-start; }
+  .insight-num { font-size: 1.2rem; font-weight: 800; color: var(--accent); min-width: 28px; line-height: 1; }
+  .insight-content { flex: 1; }
+  .insight-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+  .insight-desc  { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+
+  /* 신호 */
+  .signal-list { display: grid; gap: 10px; }
+  .signal-item { display: flex; gap: 12px; align-items: flex-start;
+    background: var(--card2); border-radius: 10px; padding: 13px 16px; }
+  .signal-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .signal-text { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+  .signal-text strong { color: var(--text); }
+
+  /* Effort 커브 */
+  .effort-strip { display: flex; gap: 3px; margin-bottom: 14px; }
+  .effort-seg { flex: 1; border-radius: 6px; padding: 12px 14px;
+    background: var(--card); border: 1px solid var(--border); text-align: center; }
+  .effort-val { font-size: 1rem; font-weight: 800; color: var(--accent); }
+  .effort-key { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+
+  /* 파트너 */
+  .partner-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+  .partner-chip { font-size: 0.77rem; padding: 5px 12px; border-radius: 20px;
+    background: var(--card); border: 1px solid var(--border); color: var(--muted); }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag { font-size: 0.7rem; padding: 3px 9px; border-radius: 6px;
+    background: rgba(45,212,191,0.08); color: var(--accent); border: 1px solid rgba(45,212,191,0.2); }
+  .tag.blue    { background: rgba(59,130,246,0.08);  color: var(--blue);    border-color: rgba(59,130,246,0.2); }
+  .tag.amber   { background: rgba(245,158,11,0.08);  color: var(--amber);   border-color: rgba(245,158,11,0.2); }
+  .tag.green   { background: rgba(16,185,129,0.08);  color: var(--green);   border-color: rgba(16,185,129,0.2); }
+  .tag.fuchsia { background: rgba(232,121,249,0.08); color: var(--fuchsia); border-color: rgba(232,121,249,0.2); }
+
+  .source-bar { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 48px; }
+  .source-label { font-size: 0.72rem; color: var(--muted); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .source-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; }
+  .source-link:hover { text-decoration: underline; }
+  .source-meta { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+
+  @media (max-width: 680px) {
+    nav, .hero, .main { padding-left: 16px; padding-right: 16px; }
+    .spec-grid { grid-template-columns: 1fr; }
+    .cot-wrap  { grid-template-columns: 1fr; }
+    .effort-strip { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">GARAMwiki</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-crumb"><a href="../index.html">홈</a> › 모델 트래커</span>
+  <span class="nav-badge">📡 모델 트래커</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-tag">모델 트래커</span>
+      <span class="hero-tag blue">🧠 Thinking Machines Lab</span>
+      <span class="hero-tag green">⚖️ 오픈웨이트</span>
+      <span class="hero-tag amber">🔀 Mixture-of-Experts</span>
+      <span class="hero-date">2026-07-15 · thinkingmachines.ai</span>
+    </div>
+    <h1>Thinking Machines — <em>Inkling</em><br>오픈웨이트 MoE · 975B / 41B active · 45T 토큰</h1>
+    <p class="hero-sub">
+      "AI를 커스터마이즈할 수 있는 오픈웨이트 기반 모델." 975B 파라미터(41B active) Mixture-of-Experts 트랜스포머.
+      텍스트·이미지·오디오·비디오 멀티모달 네이티브. Controllable thinking effort.
+      Tinker 플랫폼에서 파인튜닝 즉시 가능. Inkling-Small (12B active) 프리뷰 동시 공개.
+    </p>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">975B</div><div class="stat-label">총 파라미터 (41B active · MoE)</div></div>
+      <div class="stat-box"><div class="stat-num blue">45T</div><div class="stat-label">프리트레이닝 토큰 (텍스트·이미지·오디오·비디오)</div></div>
+      <div class="stat-box"><div class="stat-num green">1M</div><div class="stat-label">컨텍스트 윈도우 (토큰)</div></div>
+      <div class="stat-box"><div class="stat-num amber">30M+</div><div class="stat-label">RL 롤아웃 · 로그-선형 추론 향상</div></div>
+      <div class="stat-box"><div class="stat-num fuchsia">1/3</div><div class="stat-label">Nemotron 3 Ultra 대비 토큰 수로 동등 성능</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SECTION 1: 아키텍처 스펙 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot blue"></div><span class="sec-title">아키텍처 스펙 — Inkling vs Inkling-Small</span></div>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-key">모델 타입</div>
+        <div class="spec-val accent">Mixture-of-Experts Transformer</div>
+        <div class="spec-sub">DeepSeek-V3 MoE 설계 기반 + 독자적 개선</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-key">파라미터 (Inkling / Small)</div>
+        <div class="spec-val">975B / 276B total · 41B / 12B active</div>
+        <div class="spec-sub">MoE 레이어당 256 라우팅 전문가 + 2 공유 전문가, 토큰당 6개 활성</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-key">컨텍스트 윈도우</div>
+        <div class="spec-val accent">1M 토큰</div>
+        <div class="spec-sub">Tinker API: 64K / 256K 옵션 제공</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-key">어텐션</div>
+        <div class="spec-val">슬라이딩 윈도우 + 글로벌 (5:1 비율)</div>
+        <div class="spec-sub">8 KV 헤드 · Relative PE (RoPE 아님) · 숏 컨볼루션 추가</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-key">멀티모달 인코더</div>
+        <div class="spec-val">인코더-프리 아키텍처</div>
+        <div class="spec-sub">오디오: dMel 스펙트로그램 → 임베딩 · 이미지: 40×40px 패치 4-layer hMLP</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-key">학습 인프라</div>
+        <div class="spec-val">NVIDIA GB300 NVL72</div>
+        <div class="spec-sub">Muon(대형 행렬) + Adam(기타) 하이브리드 옵티마이저</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-key">프리트레이닝 토큰</div>
+        <div class="spec-val amber">45조 토큰</div>
+        <div class="spec-sub">텍스트, 이미지, 오디오, 비디오 혼합</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-key">RL 규모</div>
+        <div class="spec-val green">30M+ 롤아웃</div>
+        <div class="spec-sub">비동기 대규모 RL · 로그-선형 추론 향상 · SFT 대비 ΔReward +0.092</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 핵심 기능 4가지 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">핵심 기능 4가지</span></div>
+    <div class="feat-grid">
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <span class="feat-badge teal">Controllable Effort</span>
+          <div>
+            <div class="feat-name">조절 가능한 사고 강도 — effort 0.2 ~ 0.99</div>
+            <div class="feat-sub">비용·성능 트레이드오프를 사용자가 직접 제어 · Nemotron 3 Ultra 대비 1/3 토큰</div>
+          </div>
+        </div>
+        <div class="feat-body">
+          <p>Inkling의 가장 핵심적인 차별점. effort를 0.2에서 0.99 사이로 설정하면 모델이 소비하는 토큰 수가 달라지고, 성능과 비용이 함께 바뀐다. RL 학습 시 시스템 메시지로 effort 레벨을 지정하고 토큰당 비용을 조정해 이 능력을 학습시켰다.</p>
+          <p><strong>수치로 본 효율:</strong> Terminal Bench 2.1에서 Nemotron 3 Ultra와 동일 점수를 달성하는 데 약 <strong>1/3의 토큰</strong>만 소비한다. 에이전트 워크플로우에서 수백만 번 호출될 때 비용 차이는 결정적이다.</p>
+          <p>EP104에서 노정석이 언급한 "Codex effort 단계 세분화"와 동일한 트렌드 — 에이전트 시대의 AI는 강도를 조절할 수 있어야 한다.</p>
+
+          <div class="effort-strip" style="margin-top:14px;">
+            <div class="effort-seg">
+              <div class="effort-val">0.2</div>
+              <div class="effort-key">최소 비용<br>빠른 응답</div>
+            </div>
+            <div class="effort-seg">
+              <div class="effort-val">0.5</div>
+              <div class="effort-key">균형<br>표준 작업</div>
+            </div>
+            <div class="effort-seg">
+              <div class="effort-val">0.8</div>
+              <div class="effort-key">고성능<br>복잡 추론</div>
+            </div>
+            <div class="effort-seg" style="border-color: rgba(45,212,191,0.4);">
+              <div class="effort-val" style="color:var(--accent)">0.99</div>
+              <div class="effort-key">최대 성능<br>벤치마크 기준</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <span class="feat-badge amber">Multimodal</span>
+          <div>
+            <div class="feat-name">네이티브 멀티모달 — 텍스트 · 이미지 · 오디오 · 비디오</div>
+            <div class="feat-sub">인코더-프리 아키텍처 · Interaction Model 시스템과 연동 설계</div>
+          </div>
+        </div>
+        <div class="feat-body">
+          <p>별도 어댑터 없이 텍스트·이미지·오디오가 동일한 트랜스포머에서 처리된다. Thinking Machines의 <strong>Interaction Model</strong>(실시간 음성·비전 협업) 시스템의 백엔드 추론 모델로 사용되도록 설계됐다.</p>
+          <p><strong>오디오:</strong> dMel 스펙트로그램으로 변환 → 임베딩 레이어 → 텍스트와 함께 처리. VoiceBench 91.4%, MMAU 77.2% — 오픈웨이트 오디오 모델 중 최상위권.</p>
+          <p><strong>이미지:</strong> 40×40px 패치를 4-layer hMLP로 인코딩. Charxiv RQ(차트 추론) 78.1%, Python 도구 활용 시 82.0%. MMMU Pro 73.5%.</p>
+          <p>비전 이해 시 Python 도구를 자율적으로 사용해 이미지를 줌·크롭해가며 추론한다 — "도구를 쓸 줄 아는 비전 모델".</p>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <span class="feat-badge blue">Agentic Coding</span>
+          <div>
+            <div class="feat-name">에이전트 코딩 & 툴 유스 — 원샷 웹앱 · 40라운드 개선</div>
+            <div class="feat-sub">Design Arena Agentic Web Dev 1,257점 · OpenCode 하네스 탑재</div>
+          </div>
+        </div>
+        <div class="feat-body">
+          <p>다양한 코딩/에이전트 하네스 내에서 동작하도록 학습됐다. 학습 중 툴셋과 스키마를 무작위로 변경해 특정 하네스 의존성을 낮췄다.</p>
+          <p><strong>자기 파인튜닝 데모:</strong> Inkling이 OpenCode 안에서 자신의 파인튜닝 잡을 직접 작성 → Tinker API로 실행 → 새 가중치 로드 → 완성. 목표: "e"를 사용하지 않는 리포그램 모델. 프롬프팅만으로는 달성 불가한 행동을 파인튜닝으로 구현한 것.</p>
+          <p><strong>40라운드 개선 루프:</strong> GPT Codex를 리뷰어로 두고 멀티플레이어 스네이크 게임을 40번의 피드백 사이클로 개선 — 장기 개선 루프(long refinement loop) 능력 시연.</p>
+          <p>SWEBench Verified 77.6% · SWEBench Pro 54.3% · Terminal Bench 2.1 63.8%.</p>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <span class="feat-badge green">Epistemics</span>
+          <div>
+            <div class="feat-name">에피스테믹스 — 교정·명령이행·검열거부</div>
+            <div class="feat-sub">ForecastBench Brier 61.1 (Gemini 3.1 Pro 동등) · 검열 비준수 최상위</div>
+          </div>
+        </div>
+        <div class="feat-body">
+          <p>Thinking Machines가 별도로 정의한 모델 신뢰성 개념 "Epistemics" — 세 가지로 구성된다.</p>
+          <p><strong>① 교정(Calibration):</strong> 답을 모를 때 "모른다"거나 확률적 추정을 제공. 예측/예보 과제에서 중요. ForecastBench no-search에서 61.1 Brier Index — Gemini 3.1 Pro와 동등. RL 학습에 proper scoring rules를 사용해 달성.</p>
+          <p><strong>② 명령이행(Instruction Following):</strong> Rubric grader(체크리스트 채점) + Claims grader(사실 검증 — 웹 검색 기반)를 동시에 사용해 도움이 되면서 환각도 줄이는 두 마리 토끼를 잡았다. IFBench 79.8%.</p>
+          <p><strong>③ 검열 거부(Censorship Non-compliance):</strong> Cognition의 Propaganda & Censorship Eval에서 강한 검열 비준수 패턴 — 공식 입장이 아닌 사용자 의도에 따라 답변하는 모델.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 3: 벤치마크 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot amber"></div><span class="sec-title">벤치마크 성능 — effort=0.99 기준</span></div>
+    <p class="prose">모든 벤치마크는 effort=0.99, temperature=1.0에서 측정. 코딩 에이전트 평가는 256K 최대 토큰 제한으로 실행. 비교 대상: Nemotron 3 Ultra(오픈웨이트 최강자 중 하나), GLM 5.2, Claude Fable 5, GPT-5.6 Sol.</p>
+
+    <div class="bench-group">
+      <div class="bench-label">추론 (Reasoning)</div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (HLE w/ tools)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:46%"></div></div><span class="bench-score accent">46.0%</span></div>
+      <div class="bench-row"><span class="bench-name">Claude Fable 5 (HLE w/ tools)</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:64.5%;background:var(--fuchsia)"></div></div><span class="bench-score" style="color:var(--fuchsia)">64.5%</span></div>
+      <div class="bench-row"><span class="bench-name">Kimi K2.6 (HLE w/ tools)</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:54%;background:var(--muted)"></div></div><span class="bench-score">54.0%</span></div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (AIME 2026)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:97.1%"></div></div><span class="bench-score accent">97.1%</span></div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (GPQA Diamond)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:87.2%"></div></div><span class="bench-score accent">87.2%</span></div>
+    </div>
+
+    <div class="bench-group">
+      <div class="bench-label">에이전트 코딩 (Agentic Coding)</div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (SWEBench Verified)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:77.6%"></div></div><span class="bench-score accent">77.6%</span></div>
+      <div class="bench-row"><span class="bench-name">Claude Fable 5</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:95%;background:var(--fuchsia)"></div></div><span class="bench-score" style="color:var(--fuchsia)">95.0%</span></div>
+      <div class="bench-row"><span class="bench-name">Nemotron 3 Ultra</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:70.7%;background:var(--muted)"></div></div><span class="bench-score">70.7%</span></div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (SWEBench Pro)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:54.3%"></div></div><span class="bench-score accent">54.3%</span></div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (Terminal Bench 2.1)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:63.8%"></div></div><span class="bench-score accent">63.8%</span></div>
+    </div>
+
+    <div class="bench-group">
+      <div class="bench-label">에이전트 (일반) · 지시이행 · 사실성</div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (MCP Atlas)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:74.1%"></div></div><span class="bench-score accent">74.1%</span></div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (BrowseComp)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:77.1%"></div></div><span class="bench-score accent">77.1%</span></div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (IFBench)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:79.8%"></div></div><span class="bench-score accent">79.8%</span></div>
+      <div class="bench-row"><span class="bench-name">Nemotron 3 Ultra (IFBench)</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:81.4%;background:var(--muted)"></div></div><span class="bench-score">81.4%</span></div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (Global-MMLU-Lite)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:88.7%"></div></div><span class="bench-score accent">88.7%</span></div>
+    </div>
+
+    <div class="bench-group">
+      <div class="bench-label">안전 (Safety)</div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (FORTRESS Adversarial)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:78%"></div></div><span class="bench-score accent">78.0%</span></div>
+      <div class="bench-row"><span class="bench-name">Nemotron 3 Ultra</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:77.6%;background:var(--muted)"></div></div><span class="bench-score">77.6%</span></div>
+      <div class="bench-row"><span class="bench-name">DeepSeek V4 Pro</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:36%;background:var(--red)"></div></div><span class="bench-score" style="color:var(--red)">36.0%</span></div>
+      <div class="bench-row"><span class="bench-name highlight">Inkling (StrongREJECT)</span><div class="bench-bar-wrap"><div class="bench-bar accent" style="width:98.6%"></div></div><span class="bench-score accent">98.6%</span></div>
+    </div>
+
+    <p class="prose" style="margin-top:8px;">FORTRESS Adversarial(무기·폭력 관련 유해 요청 거부 vs 무해 유사 요청 허용의 균형) 오픈웨이트 중 1위. DeepSeek V4 Pro는 36% — 안전 설계의 격차가 확인된다.</p>
+  </div>
+
+  <!-- SECTION 4: Design Arena -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot blue"></div><span class="sec-title">Design Arena Agentic Web Dev 리더보드 — 인간 블라인드 평가</span></div>
+    <p class="prose">생성된 웹앱을 인간 평가자들이 블라인드로 대결 평가하는 리더보드. Inkling은 1,257점으로 Claude Opus 4.6과 공동 7위. 오픈웨이트(파란 점) 중 최상위권.</p>
+    <div class="arena-list">
+      <div class="arena-row"><span class="arena-rank">1</span><span class="arena-name">Claude Sonnet 5</span><span class="arena-dot closed"></span><span class="arena-score">1,333</span></div>
+      <div class="arena-row"><span class="arena-rank">2</span><span class="arena-name">Claude Fable 5</span><span class="arena-dot closed"></span><span class="arena-score">1,329</span></div>
+      <div class="arena-row"><span class="arena-rank">3</span><span class="arena-name">Claude Opus 4.8</span><span class="arena-dot closed"></span><span class="arena-score">1,285</span></div>
+      <div class="arena-row"><span class="arena-rank">4</span><span class="arena-name open">GLM 5.2</span><span class="arena-dot"></span><span class="arena-score">1,275</span></div>
+      <div class="arena-row"><span class="arena-rank">5</span><span class="arena-name">Grok 4.5</span><span class="arena-dot closed"></span><span class="arena-score">1,271</span></div>
+      <div class="arena-row"><span class="arena-rank">6</span><span class="arena-name">GPT-5.6 Sol</span><span class="arena-dot closed"></span><span class="arena-score">1,260</span></div>
+      <div class="arena-row" style="background:rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2)">
+        <span class="arena-rank">7</span><span class="arena-name ours">Inkling ★</span><span class="arena-dot"></span><span class="arena-score" style="color:var(--accent)">1,257</span>
+      </div>
+      <div class="arena-row"><span class="arena-rank">7</span><span class="arena-name">Claude Opus 4.6</span><span class="arena-dot closed"></span><span class="arena-score">1,257</span></div>
+      <div class="arena-row"><span class="arena-rank">9</span><span class="arena-name">Gemini 3.5 Flash</span><span class="arena-dot closed"></span><span class="arena-score">1,254</span></div>
+      <div class="arena-row"><span class="arena-rank">10</span><span class="arena-name open">Kimi K2.6</span><span class="arena-dot"></span><span class="arena-score">1,249</span></div>
+    </div>
+    <p class="prose" style="margin-top:10px; font-size:0.76rem;">● = 오픈웨이트 ● = 클로즈드</p>
+  </div>
+
+  <!-- SECTION 5: RL 학습 & 체인 오브 소트 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot fuchsia"></div><span class="sec-title">RL 대규모 학습 — 30M+ 롤아웃 · 사고의 압축</span></div>
+
+    <p class="prose">SFT 초기화 후 비동기 대규모 RL로 추론 성능을 로그-선형으로 향상. SFT Reward 0.264 → 출시 Reward 0.356(+0.092). 두 번의 장기 연속 런으로 안정적 학습 유지.</p>
+
+    <div class="bq fuchsia">
+      <div class="bq-text">RL이 명시적으로 목표로 하지 않았는데도, Chain of Thought가 더 간결해지는 방향으로 자연스럽게 수렴했다. 문법적 오버헤드가 사라지고 핵심 추론만 남았다 — 효율이 압축을 낳은 것이다.</div>
+      <div class="bq-attr">— Thinking Machines Lab, Inkling 릴리즈 노트 (2026-07-15)</div>
+    </div>
+
+    <div class="cot-wrap">
+      <div class="cot-cell">
+        <div class="cot-label muted">RL 초기 — 문법적·장황한 사고</div>
+        <div class="cot-code">
+          <em>We need to understand</em> the operator.<br>
+          The 5D line element is ds² = e^{2A(x)}...<br>
+          The internal coordinate is periodic.<br>
+          The background is a warped product...<br>
+          <em>Wait</em>, the ds² is e^{2A} (ds²_4d + dx²)?
+        </div>
+      </div>
+      <div class="cot-cell right">
+        <div class="cot-label accent">RL 후기 — 압축된 텔레그래픽 사고</div>
+        <div class="cot-code">
+          <em>We need determine eigenvalue problem</em><br>
+          for spin-2 fluctuations h_{μν}(x,y)...<br>
+          Internal metric is e^{2A} dx²?<br>
+          <em>Wait</em> internal metric is e^{2A} dx²;<br>
+          warp factor same for 4d and internal? <em>Yes.</em>
+        </div>
+      </div>
+    </div>
+
+    <p class="prose">"We need <em>to</em> understand" → "We need determine" — 조사·접속사가 사라지고 핵심 논리만 남는다. 동일한 답에 도달하지만 훨씬 적은 토큰. Cognition의 SWE-1.7 학습에서도 같은 패턴이 독립적으로 관찰됐다.</p>
+
+    <div class="signal-list">
+      <div class="signal-item">
+        <div class="signal-icon">🔁</div>
+        <div class="signal-text"><strong>자기 파인튜닝 루프 시연:</strong> Inkling이 OpenCode 안에서 자신의 파인튜닝 데이터·코드를 생성 → Tinker API를 통해 직접 훈련 → 새 가중치로 교체. 목표: "e"를 절대 쓰지 않는 리포그램 모델. 재귀적 자기 개선의 프로토타입.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">📈</div>
+        <div class="signal-text"><strong>SFT 부트스트랩:</strong> Kimi K2.5 등 오픈웨이트 모델로 생성한 합성 데이터로 SFT 초기화. 이후 대규모 RL이 대부분의 컴퓨트를 소비. 오픈소스 생태계를 거점으로 프론티어 모델을 목표로 하는 효율적 포스트트레이닝 전략.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: Inkling-Small -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot green"></div><span class="sec-title">Inkling-Small (Preview) — 276B / 12B active · 많은 지표에서 Inkling 초월</span></div>
+
+    <p class="prose">276B 총 파라미터, 12B 활성 파라미터의 MoE 모델. 프리트레이닝 데이터와 레시피를 개선해 더 작은 규모로 비슷하거나 더 나은 성능을 달성. Inkling과 동일한 포스트트레이닝 스택 적용. 전체 가중치는 테스트 완료 후 공개 예정.</p>
+
+    <div class="signal-list">
+      <div class="signal-item">
+        <div class="signal-icon">🏆</div>
+        <div class="signal-text"><strong>HLE with tools: 46.6% (Inkling 46.0% 초과).</strong> 더 작은 모델이 더 좋은 추론 성능 — 프리트레이닝 데이터 개선의 효과.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">⚡</div>
+        <div class="signal-text"><strong>IFBench: 83.4% (Inkling 79.8% 초과).</strong> 명령이행에서도 소형 모델이 앞선다. 효율 특화 설계가 특정 능력에서는 스케일을 뛰어넘음.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">💰</div>
+        <div class="signal-text"><strong>12B active = 저비용 고성능 에이전트 런타임.</strong> 코딩, LLM 평가(grading), 합성 데이터 생성 등 대규모 반복 작업에 최적. Thinking Machines가 명시적으로 언급한 사용 사례.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: 가용성 & 파트너 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot blue"></div><span class="sec-title">가용성 — Tinker · HuggingFace · 추론 파트너 생태계</span></div>
+
+    <p class="prose">Tinker(thinkingmachines.ai/tinker)에서 즉시 파인튜닝 가능. 64K/256K 컨텍스트 옵션. 출시 기념 50% 할인. Inkling Playground에서 웹 검색 통합 채팅 무료 체험.</p>
+
+    <div class="signal-list">
+      <div class="signal-item">
+        <div class="signal-icon">🤗</div>
+        <div class="signal-text"><strong>HuggingFace:</strong> thinkingmachines/inkling — 원본 체크포인트 + NVFP4 체크포인트(NVIDIA Blackwell 고속 추론용). transformers 라이브러리와 공식 통합.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">☁️</div>
+        <div class="signal-text"><strong>API 파트너:</strong> TogetherAI · Fireworks · Modal · Databricks · Baseten — 5개 클라우드에서 Tinker 파인튜닝 체크포인트를 직접 배포 가능.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">⚙️</div>
+        <div class="signal-text"><strong>추론 프레임워크:</strong> SGLang(RadixArk) · vLLM(Inferact) · TokenSpeed(Lightseek) · llama.cpp(Unsloth) · Miles(RadixArk). 오픈소스 추론 생태계 전방위 지원.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div class="bench-label" style="margin-bottom:10px;">파트너 & 통합 생태계</div>
+      <div class="partner-wrap">
+        <span class="partner-chip">TogetherAI</span>
+        <span class="partner-chip">Fireworks</span>
+        <span class="partner-chip">Modal</span>
+        <span class="partner-chip">Databricks</span>
+        <span class="partner-chip">Baseten</span>
+        <span class="partner-chip">RadixArk (SGLang)</span>
+        <span class="partner-chip">Inferact (vLLM)</span>
+        <span class="partner-chip">Lightseek (TokenSpeed)</span>
+        <span class="partner-chip">Unsloth (llama.cpp)</span>
+        <span class="partner-chip">HuggingFace (transformers)</span>
+        <span class="partner-chip">Tinker Cookbook</span>
+        <span class="partner-chip">tml-renderer (PyPI)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: GARAMbada 인사이트 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot green"></div><span class="sec-title">GARAMbada 인사이트 — Inkling이 WISE42 관점에서 갖는 전략적 의미</span></div>
+    <div class="insight-list">
+
+      <div class="insight-item">
+        <div class="insight-num">01</div>
+        <div class="insight-content">
+          <div class="insight-title">Controllable Effort = 에이전트 비용 최적화의 새 표준</div>
+          <div class="insight-desc">
+            GPT-5.6 Codex effort 단계(EP104), Inkling controllable effort — 같은 트렌드가 두 회사에서 독립적으로 나왔다.
+            에이전트가 수백만 번 호출되는 시대에 "강도를 조절할 수 있는 모델"은 비용 구조를 근본적으로 바꾼다.
+            WISE42 KRNA·FiPA·AGP 프로젝트에서 배치 작업(문서 분류, 데이터 추출)에는 low effort, 복잡한 도메인 추론에는 high effort로 운영하는 전략이 가능하다.
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-num">02</div>
+        <div class="insight-content">
+          <div class="insight-title">오픈웨이트 + 파인튜닝 = 도메인 모델 구축의 현실적 경로</div>
+          <div class="insight-desc">
+            ICML에서의 "스케일주의 vs 도메인주의" 논쟁에서 Inkling은 도메인주의의 인프라를 공급한다.
+            Thinking Machines가 Tinker를 파인튜닝 플랫폼으로 포지셔닝한 것 = "좋은 기반 모델 + 고객 도메인 데이터 = 특화 모델"이라는 공식.
+            KRNA(철도 도면 추출), FiPA(공공조달 법령), Onion(OT 스택 이상감지) — 세 프로젝트 모두 도메인 온톨로지 + 파인튜닝이 답인 케이스다.
+            Inkling의 오픈웨이트 + Tinker는 GPT/Claude API에 대한 프론티어 랩 종속 리스크를 분산하는 대안이다.
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-num">03</div>
+        <div class="insight-content">
+          <div class="insight-title">RL의 사고 압축 현상 — "텔레그래픽 지성"이 새 표준</div>
+          <div class="insight-desc">
+            RL 후기 Chain of Thought가 문법적 오버헤드 없이 핵심 논리만 남기는 압축 현상.
+            Cognition SWE-1.7에서도 독립적으로 관찰 — 이것은 우연이 아니라 RL의 구조적 결과다.
+            인간의 글쓰기와 AI 추론의 간극이 커진다는 의미. 인간이 "AI 출력을 이해하기 어렵다"는 새로운 형태의 인지 부채(Geoffrey Litt)가 생긴다.
+            Company Builder 관점: AI가 만드는 결과물을 검증·해석하는 인간의 역량이 다음 병목이 될 것이다.
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-num">04</div>
+        <div class="insight-content">
+          <div class="insight-title">Epistemics(교정·검열거부) = AI 신뢰성의 새 평가 축</div>
+          <div class="insight-desc">
+            "답을 모를 때 모른다고 말하는 AI"가 이제 명시적 학습 목표가 됐다.
+            공공 AX(KRNA·FiPA) 컨텍스트에서 교정된 확신(calibrated confidence)은 결정적으로 중요하다 — 틀린 답을 확신하는 모델은 행정 오류를 낳는다.
+            ForecastBench에서 GPT-5.5·Claude Opus 4.8보다 높거나 동등 — 예측·예보 특화 파인튜닝의 기반 모델로 적합.
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-num">05</div>
+        <div class="insight-content">
+          <div class="insight-title">Inkling-Small 12B active = 저비용 에이전트 런타임의 현실화</div>
+          <div class="insight-desc">
+            많은 벤치마크에서 Inkling을 초과하는 소형 모델이 등장 — 효율 설계의 시대가 왔다.
+            "그레이딩 모델", "합성 데이터 생성 모델"로 활용하면 비용이 대폭 낮아진다.
+            WISE42 운영 관점: 단순 문서 분류·추출은 Small로, 복잡 추론은 Full로 라우팅하는 Multi-tier LLM 아키텍처가 실용적이 됐다.
+            FriendliAI·VESSL AI가 ICML에서 inference 서빙 전문으로 주목받은 이유와 연결 — 모델 선택과 라우팅 자체가 엔지니어링 역량이 된다.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Thinking Machines Lab</span>
+    <span class="tag">Inkling</span>
+    <span class="tag blue">오픈웨이트</span>
+    <span class="tag">Mixture-of-Experts</span>
+    <span class="tag">975B 파라미터</span>
+    <span class="tag amber">Controllable Effort</span>
+    <span class="tag amber">멀티모달</span>
+    <span class="tag">dMel 오디오</span>
+    <span class="tag">hMLP 비전</span>
+    <span class="tag green">에이전트 코딩</span>
+    <span class="tag green">SWEBench</span>
+    <span class="tag">Design Arena</span>
+    <span class="tag fuchsia">RL at Scale</span>
+    <span class="tag fuchsia">사고 압축</span>
+    <span class="tag">Epistemics</span>
+    <span class="tag">ForecastBench</span>
+    <span class="tag">검열 거부</span>
+    <span class="tag">FORTRESS Safety</span>
+    <span class="tag blue">Inkling-Small</span>
+    <span class="tag blue">Tinker 파인튜닝</span>
+    <span class="tag">자기 파인튜닝</span>
+    <span class="tag">OpenCode</span>
+    <span class="tag">HuggingFace</span>
+    <span class="tag">GB300 NVL72</span>
+    <span class="tag">Muon 옵티마이저</span>
+    <span class="tag">Relative PE</span>
+  </div>
+
+  <div class="source-bar">
+    <span class="source-label">출처</span>
+    <a class="source-link" href="https://thinkingmachines.ai/news/introducing-inkling/" target="_blank">Thinking Machines — Introducing Inkling (2026-07-15)</a>
+    <span class="source-meta">Thinking Machines Lab · thinkingmachines.ai · 2026-07-15</span>
+  </div>
+
+</div>
+</body>
+</html>

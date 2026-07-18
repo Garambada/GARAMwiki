@@ -297,6 +297,10 @@ ARTICLE_META = {
         "title": "AI Frontier EP104 — GPT-5.6 공개부터 ICML 2026 현장까지<br>Codex effort 단계 · full duplex GPT-Live · AtCoder 인간 전원 추월 · AGI-pilled 주류화 · 한국계 인프라 · Flapping Airplanes · 프론티어 랩 종속 위험 (노정석 2026-07-18)",
         "tags":  ["AI Frontier", "노정석", "Chester Roh", "GPT-5.6", "Codex effort", "GPT-Live full duplex", "ChatGPT Work", "재귀적 자기 개선", "AtCoder", "ICML 2026", "AGI-pilled", "AI for Science", "스케일주의", "도메인주의", "VESSL AI", "FriendliAI", "네오클라우드", "inference 서빙", "Token Maxxing", "Flapping Airplanes", "virtual cell", "General Intuition", "MIRA", "Scale AI", "Handshake AI", "ElevenLabs Scribe", "METR", "중국 오픈소스 ban", "프론티어 랩 종속"],
     },
+    "2026-07_Thinking_Machines_Inkling_오픈웨이트MoE_모델트래커.html": {
+        "title": "Thinking Machines — Inkling 오픈웨이트 MoE 모델<br>975B / 41B active · Controllable Effort · 멀티모달 네이티브 · 자기 파인튜닝 · Design Arena 7위 · Tinker 배포 (2026-07-15)",
+        "tags":  ["Thinking Machines Lab", "Inkling", "오픈웨이트", "Mixture-of-Experts", "MoE", "975B", "Controllable Effort", "멀티모달", "dMel 오디오", "hMLP 비전", "에이전트 코딩", "SWEBench", "Design Arena", "RL at Scale", "사고 압축", "Epistemics", "ForecastBench", "검열 거부", "FORTRESS Safety", "Inkling-Small", "Tinker 파인튜닝", "자기 파인튜닝", "OpenCode", "HuggingFace", "GB300 NVL72", "Muon 옵티마이저", "Relative PE", "45T 토큰"],
+    },
     "2026-05_스타벅스_탱크데이_규범윤리_정치철학_분석.html": {
         "title": "스타벅스 '탱크데이' 사건의<br>규범윤리학·정치철학적 분석",
         "tags":  ["5·18", "칸트·밀·샌델", "시장의 도덕적 한계", "상품화", "공동체주의"],
