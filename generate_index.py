@@ -293,6 +293,10 @@ ARTICLE_META = {
         "title": "GBrain 지식 대시보드 — Wise42 생태계 55페이지 · 8테마 전수 스냅샷<br>AGP · KRNA 63.2% · FiPA 220억 · Inuverse 150MW · Discovery-First FDE · Upstage 수직 결합 (2026-07-15)",
         "tags":  ["GBrain", "PKM", "Wise42", "Founders Studio", "Garambada", "AGP", "KRNA", "FiPA", "Inuverse AIDC", "Onion OT스택", "Upstage", "Solar LLM", "Discovery-First FDE", "Living System SaaS", "3-Layer 아키텍처", "공공 AX", "CEO 지식 관리", "PGLite", "대구 AIDC", "150MW", "220억"],
     },
+    "2026-07_AI_Frontier_EP104_GPT56_ICML2026_모델트래커.html": {
+        "title": "AI Frontier EP104 — GPT-5.6 공개부터 ICML 2026 현장까지<br>Codex effort 단계 · full duplex GPT-Live · AtCoder 인간 전원 추월 · AGI-pilled 주류화 · 한국계 인프라 · Flapping Airplanes · 프론티어 랩 종속 위험 (노정석 2026-07-18)",
+        "tags":  ["AI Frontier", "노정석", "Chester Roh", "GPT-5.6", "Codex effort", "GPT-Live full duplex", "ChatGPT Work", "재귀적 자기 개선", "AtCoder", "ICML 2026", "AGI-pilled", "AI for Science", "스케일주의", "도메인주의", "VESSL AI", "FriendliAI", "네오클라우드", "inference 서빙", "Token Maxxing", "Flapping Airplanes", "virtual cell", "General Intuition", "MIRA", "Scale AI", "Handshake AI", "ElevenLabs Scribe", "METR", "중국 오픈소스 ban", "프론티어 랩 종속"],
+    },
     "2026-05_스타벅스_탱크데이_규범윤리_정치철학_분석.html": {
         "title": "스타벅스 '탱크데이' 사건의<br>규범윤리학·정치철학적 분석",
         "tags":  ["5·18", "칸트·밀·샌델", "시장의 도덕적 한계", "상품화", "공동체주의"],

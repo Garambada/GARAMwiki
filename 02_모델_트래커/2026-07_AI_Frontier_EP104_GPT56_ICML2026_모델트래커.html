@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Frontier EP104 — GPT-5.6 공개부터 ICML 현장까지 | GARAMwiki</title>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --card2: #20232f;
+    --border: #2a2d3a; --text: #e8eaf0; --muted: #7a7f94;
+    --accent: #2dd4bf; --accent2: #5eead4;
+    --fuchsia: #e879f9; --blue: #3b82f6;
+    --amber: #f59e0b; --green: #10b981; --red: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    line-height: 1.65; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 52px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo { font-weight: 800; font-size: 1rem;
+    background: linear-gradient(135deg,#2dd4bf,#5eead4);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-sep { color: var(--border); }
+  .nav-crumb { font-size: 0.82rem; color: var(--muted); }
+  .nav-crumb a { color: var(--muted); text-decoration: none; }
+  .nav-crumb a:hover { color: var(--accent); }
+  .nav-badge { margin-left: auto; font-size: 0.72rem; font-weight: 700;
+    background: rgba(45,212,191,0.12); color: var(--accent);
+    border: 1px solid rgba(45,212,191,0.3); border-radius: 20px; padding: 3px 10px; }
+
+  .hero {
+    background: linear-gradient(135deg, rgba(45,212,191,0.06) 0%, rgba(59,130,246,0.05) 100%);
+    border-bottom: 1px solid var(--border); padding: 52px 32px 44px;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .hero-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 20px;
+    background: rgba(45,212,191,0.12); color: var(--accent); border: 1px solid rgba(45,212,191,0.25); }
+  .hero-tag.blue    { background: rgba(59,130,246,0.12);  color: var(--blue);    border-color: rgba(59,130,246,0.25); }
+  .hero-tag.amber   { background: rgba(245,158,11,0.12);  color: var(--amber);   border-color: rgba(245,158,11,0.25); }
+  .hero-tag.fuchsia { background: rgba(232,121,249,0.12); color: var(--fuchsia); border-color: rgba(232,121,249,0.25); }
+  .hero-tag.green   { background: rgba(16,185,129,0.12);  color: var(--green);   border-color: rgba(16,185,129,0.25); }
+  .hero-date { font-size: 0.78rem; color: var(--muted); }
+  .hero h1 { font-size: clamp(1.4rem,3.5vw,2rem); font-weight: 800; line-height: 1.25;
+    letter-spacing: -0.5px; margin-bottom: 14px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 0.96rem; color: var(--muted); max-width: 700px; line-height: 1.65; margin-bottom: 32px; }
+
+  .stats-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .stat-box { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px; min-width: 100px; flex: 1; }
+  .stat-num { font-size: 1.6rem; font-weight: 800; line-height: 1; margin-bottom: 4px; color: var(--accent); }
+  .stat-num.blue    { color: var(--blue); }
+  .stat-num.amber   { color: var(--amber); }
+  .stat-num.fuchsia { color: var(--fuchsia); }
+  .stat-num.green   { color: var(--green); }
+  .stat-label { font-size: 0.72rem; color: var(--muted); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .sec-header { display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .sec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .sec-dot.blue    { background: var(--blue); }
+  .sec-dot.amber   { background: var(--amber); }
+  .sec-dot.fuchsia { background: var(--fuchsia); }
+  .sec-dot.green   { background: var(--green); }
+  .sec-dot.red     { background: var(--red); }
+  .sec-title { font-size: 0.95rem; font-weight: 700; }
+  .section { margin-bottom: 44px; }
+
+  p.prose { font-size: 0.88rem; color: var(--muted); line-height: 1.8; margin-bottom: 14px; }
+
+  .bq { border-left: 3px solid var(--accent); background: var(--card);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 14px; }
+  .bq.blue    { border-left-color: var(--blue); }
+  .bq.amber   { border-left-color: var(--amber); }
+  .bq.fuchsia { border-left-color: var(--fuchsia); }
+  .bq.green   { border-left-color: var(--green); }
+  .bq.red     { border-left-color: var(--red); }
+  .bq-text { font-size: 0.88rem; color: var(--text); line-height: 1.75; font-style: italic; }
+  .bq-attr { font-size: 0.73rem; color: var(--muted); margin-top: 6px; }
+
+  /* 챕터 타임라인 */
+  .chapter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ch-item { background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 11px 14px;
+    display: flex; align-items: flex-start; gap: 10px; }
+  .ch-time { font-size: 0.7rem; font-weight: 700; color: var(--accent);
+    min-width: 44px; font-variant-numeric: tabular-nums; flex-shrink: 0; margin-top: 2px; }
+  .ch-text { font-size: 0.79rem; color: var(--muted); line-height: 1.5; }
+  .ch-text strong { color: var(--text); }
+
+  /* 기능 카드 */
+  .feature-grid { display: grid; gap: 12px; }
+  .feat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .feat-header { display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .feat-badge { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+    padding: 3px 9px; border-radius: 6px; flex-shrink: 0; }
+  .feat-badge.teal   { background: rgba(45,212,191,0.12);  color: var(--accent);  border: 1px solid rgba(45,212,191,0.25); }
+  .feat-badge.blue   { background: rgba(59,130,246,0.12);  color: var(--blue);    border: 1px solid rgba(59,130,246,0.25); }
+  .feat-badge.amber  { background: rgba(245,158,11,0.12);  color: var(--amber);   border: 1px solid rgba(245,158,11,0.25); }
+  .feat-badge.green  { background: rgba(16,185,129,0.12);  color: var(--green);   border: 1px solid rgba(16,185,129,0.25); }
+  .feat-badge.fuchsia{ background: rgba(232,121,249,0.12); color: var(--fuchsia); border: 1px solid rgba(232,121,249,0.25); }
+  .feat-badge.red    { background: rgba(239,68,68,0.12);   color: var(--red);     border: 1px solid rgba(239,68,68,0.25); }
+  .feat-name { font-size: 0.92rem; font-weight: 700; }
+  .feat-sub  { font-size: 0.72rem; color: var(--muted); }
+  .feat-body { padding: 16px 18px; }
+  .feat-body p { font-size: 0.84rem; color: var(--muted); line-height: 1.75; margin-bottom: 8px; }
+  .feat-body p:last-child { margin-bottom: 0; }
+  .feat-body strong { color: var(--text); }
+
+  /* 성능 지표 */
+  .perf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .perf-card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px; }
+  .perf-val   { font-size: 2rem; font-weight: 800; line-height: 1; margin-bottom: 6px; color: var(--accent); }
+  .perf-label { font-size: 0.78rem; font-weight: 700; margin-bottom: 4px; }
+  .perf-desc  { font-size: 0.76rem; color: var(--muted); line-height: 1.65; }
+
+  /* Effort 단계 */
+  .effort-stack { display: flex; flex-direction: column; gap: 3px; }
+  .effort-row { display: flex; align-items: center; gap: 12px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 16px; }
+  .effort-level { font-size: 0.72rem; font-weight: 700; min-width: 52px;
+    padding: 3px 8px; border-radius: 6px; text-align: center; flex-shrink: 0; }
+  .effort-level.low    { background: rgba(16,185,129,0.12);  color: var(--green);   border: 1px solid rgba(16,185,129,0.25); }
+  .effort-level.medium { background: rgba(45,212,191,0.12);  color: var(--accent);  border: 1px solid rgba(45,212,191,0.25); }
+  .effort-level.high   { background: rgba(245,158,11,0.12);  color: var(--amber);   border: 1px solid rgba(245,158,11,0.25); }
+  .effort-level.auto   { background: rgba(232,121,249,0.12); color: var(--fuchsia); border: 1px solid rgba(232,121,249,0.25); }
+  .effort-content { flex: 1; }
+  .effort-name { font-size: 0.83rem; font-weight: 600; margin-bottom: 2px; }
+  .effort-desc { font-size: 0.76rem; color: var(--muted); }
+  .effort-cost { font-size: 0.72rem; color: var(--muted); min-width: 100px; text-align: right; }
+
+  /* ICML 플레이어 카드 */
+  .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .player-card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; }
+  .player-name { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
+  .player-cat  { font-size: 0.7rem; color: var(--accent); margin-bottom: 6px; }
+  .player-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.65; }
+
+  /* 인사이트 */
+  .insight-list { display: grid; gap: 12px; }
+  .insight-item { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 22px;
+    display: flex; gap: 16px; align-items: flex-start; }
+  .insight-num { font-size: 1.2rem; font-weight: 800; color: var(--accent); min-width: 28px; line-height: 1; }
+  .insight-content { flex: 1; }
+  .insight-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+  .insight-desc  { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+
+  /* 주요 신호 */
+  .signal-list { display: grid; gap: 10px; }
+  .signal-item { display: flex; gap: 12px; align-items: flex-start;
+    background: var(--card2); border-radius: 10px; padding: 13px 16px; }
+  .signal-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .signal-text { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+  .signal-text strong { color: var(--text); }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag { font-size: 0.7rem; padding: 3px 9px; border-radius: 6px;
+    background: rgba(45,212,191,0.08); color: var(--accent); border: 1px solid rgba(45,212,191,0.2); }
+  .tag.blue    { background: rgba(59,130,246,0.08);  color: var(--blue);    border-color: rgba(59,130,246,0.2); }
+  .tag.amber   { background: rgba(245,158,11,0.08);  color: var(--amber);   border-color: rgba(245,158,11,0.2); }
+  .tag.fuchsia { background: rgba(232,121,249,0.08); color: var(--fuchsia); border-color: rgba(232,121,249,0.2); }
+  .tag.green   { background: rgba(16,185,129,0.08);  color: var(--green);   border-color: rgba(16,185,129,0.2); }
+
+  /* 충돌 2열 */
+  .split-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 14px; }
+  .split-cell { padding: 18px 20px; background: var(--card); }
+  .split-cell.right { background: var(--card2); }
+  .split-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 8px; }
+  .split-label.teal   { color: var(--accent); }
+  .split-label.amber  { color: var(--amber); }
+  .split-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+  .split-body  { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+  .source-bar { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 48px; }
+  .source-label { font-size: 0.72rem; color: var(--muted); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .source-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; }
+  .source-link:hover { text-decoration: underline; }
+  .source-meta { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+
+  @media (max-width: 680px) {
+    nav, .hero, .main { padding-left: 16px; padding-right: 16px; }
+    .chapter-grid { grid-template-columns: 1fr; }
+    .perf-row     { grid-template-columns: 1fr; }
+    .player-grid  { grid-template-columns: 1fr; }
+    .split-wrap   { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">GARAMwiki</span>
+  <span class="nav-sep">/</span>
+  <span class="nav-crumb"><a href="../index.html">홈</a> › 모델 트래커</span>
+  <span class="nav-badge">📡 모델 트래커</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-tag">모델 트래커</span>
+      <span class="hero-tag blue">🎙 AI Frontier EP104</span>
+      <span class="hero-tag amber">🧠 GPT-5.6</span>
+      <span class="hero-tag fuchsia">🔬 ICML 2026</span>
+      <span class="hero-date">2026-07-18 · 노정석 (Chester Roh) · 1:15:34</span>
+    </div>
+    <h1>AI Frontier EP104 —<br><em>GPT-5.6</em> 공개부터 <em>ICML 2026</em> 현장까지</h1>
+    <p class="hero-sub">
+      ICML 2026 주간 현장에서 전격 발표된 GPT-5.6.
+      Codex effort 단계 세분화 · full duplex GPT-Live · ChatGPT Work 분리 · AtCoder 인간 전원 추월 · 1시간 수학 추측 증명.
+      ICML 현장 르포: AGI-pilled 주류화 · AI for Science 넥스트 트렌드 · 한국계 인프라 플레이어 · 네오클라우드 부상 · Flapping Airplanes 패러다임 베팅.
+    </p>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">1:15:34</div><div class="stat-label">총 런타임 · 31개 챕터</div></div>
+      <div class="stat-box"><div class="stat-num blue">GPT-5.6</div><div class="stat-label">새 일간 드라이버 · ICML 주간 전격 발표</div></div>
+      <div class="stat-box"><div class="stat-num amber">AtCoder</div><div class="stat-label">인간 전원 추월 · 수학 추측 1시간 증명</div></div>
+      <div class="stat-box"><div class="stat-num fuchsia">ICML</div><div class="stat-label">AGI-pilled 주류화 · AI for Science 넥스트</div></div>
+      <div class="stat-box"><div class="stat-num green">$20K</div><div class="stat-label">Token Maxxing — 하루 지출 목격담</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SECTION 1: 챕터 타임라인 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">31개 챕터 타임라인 — 전체 구조</span></div>
+    <div class="chapter-grid">
+      <div class="ch-item"><span class="ch-time">0:00</span><div class="ch-text">ICML 주간과 GPT-5.6 전격 발표 인트로</div></div>
+      <div class="ch-item"><span class="ch-time">0:31</span><div class="ch-text">GPT-5.6 출시 전후 분위기와 <strong>얼리 유저 반응</strong></div></div>
+      <div class="ch-item"><span class="ch-time">2:14</span><div class="ch-text">Codex의 <strong>세분화된 effort 단계</strong>와 비용 차감 체감</div></div>
+      <div class="ch-item"><span class="ch-time">3:17</span><div class="ch-text"><strong>full duplex</strong>로 나온 GPT-Live와 동시 통역</div></div>
+      <div class="ch-item"><span class="ch-time">4:10</span><div class="ch-text"><strong>ChatGPT Work</strong> 분리와 재귀적 자기 개선 신호</div></div>
+      <div class="ch-item"><span class="ch-time">7:04</span><div class="ch-text">GPT-5.6 <strong>가격 구조</strong>와 GPT-6 구독제 관전 포인트</div></div>
+      <div class="ch-item"><span class="ch-time">9:35</span><div class="ch-text">Codex 앱 통합과 <strong>RTS 게임 같은 에이전트 매니징</strong> 감각</div></div>
+      <div class="ch-item"><span class="ch-time">11:21</span><div class="ch-text"><strong>AtCoder 인간 전원 추월</strong>과 1시간 만의 수학 추측 증명</div></div>
+      <div class="ch-item"><span class="ch-time">14:29</span><div class="ch-text">AI 2040 번역 실험과 다음 논의 예고</div></div>
+      <div class="ch-item"><span class="ch-time">16:00</span><div class="ch-text"><strong>AGI-pilled가 주류</strong>가 된 ICML 현장 분위기</div></div>
+      <div class="ch-item"><span class="ch-time">17:03</span><div class="ch-text">AI for Science를 둘러싼 <strong>스케일주의 vs 도메인주의</strong> 충돌</div></div>
+      <div class="ch-item"><span class="ch-time">19:38</span><div class="ch-text">빅테크 부스 투어와 <strong>채용 중심의 전시장 풍경</strong></div></div>
+      <div class="ch-item"><span class="ch-time">22:27</span><div class="ch-text">중국계 기업 부스와 <strong>중국 연구자 존재감</strong></div></div>
+      <div class="ch-item"><span class="ch-time">24:07</span><div class="ch-text"><strong>네오클라우드</strong>와 inference 서빙 업체들의 부상</div></div>
+      <div class="ch-item"><span class="ch-time">24:56</span><div class="ch-text"><strong>VESSL AI · FriendliAI</strong> 등 한국계 인프라 플레이어</div></div>
+      <div class="ch-item"><span class="ch-time">28:11</span><div class="ch-text"><strong>종합 예술</strong>이 되어 가는 AI 인프라 스택</div></div>
+      <div class="ch-item"><span class="ch-time">30:45</span><div class="ch-text">전용 가속기와 <strong>하드웨어 최적화 생태계</strong> 확장</div></div>
+      <div class="ch-item"><span class="ch-time">33:28</span><div class="ch-text">Scale AI · Handshake AI로 본 <strong>전문가 데이터 시장</strong></div></div>
+      <div class="ch-item"><span class="ch-time">37:24</span><div class="ch-text">게임 데이터로 <strong>world model MIRA</strong>를 만드는 General Intuition</div></div>
+      <div class="ch-item"><span class="ch-time">41:17</span><div class="ch-text"><strong>ElevenLabs Scribe</strong>와 METR 부스 스케치</div></div>
+      <div class="ch-item"><span class="ch-time">43:00</span><div class="ch-text">사이드 이벤트와 <strong>Robotics Night</strong>의 현장 밀도</div></div>
+      <div class="ch-item"><span class="ch-time">45:02</span><div class="ch-text">하루 <strong>$2만 달러 token maxxing</strong> 목격담</div></div>
+      <div class="ch-item"><span class="ch-time">47:50</span><div class="ch-text">ICML의 진짜 메인 이벤트가 된 <strong>네트워킹과 파티</strong></div></div>
+      <div class="ch-item"><span class="ch-time">49:26</span><div class="ch-text"><strong>Flapping Airplanes</strong>와 차세대 모델 패러다임 베팅</div></div>
+      <div class="ch-item"><span class="ch-time">55:35</span><div class="ch-text">AI Industry Night와 <strong>데이터센터 밸류체인</strong> 대화</div></div>
+      <div class="ch-item"><span class="ch-time">58:01</span><div class="ch-text">바이오 AI 밋업과 <strong>virtual cell</strong> 논쟁</div></div>
+      <div class="ch-item"><span class="ch-time">1:03:07</span><div class="ch-text">AGI 확신과 <strong>넥스트 트렌드로 부상한 AI for Science</strong></div></div>
+      <div class="ch-item"><span class="ch-time">1:05:45</span><div class="ch-text">압축되는 발전 속도와 <strong>아직 시작도 안 한 에이전트 시장</strong></div></div>
+      <div class="ch-item"><span class="ch-time">1:09:02</span><div class="ch-text"><strong>인더스트리와 한 몸이 된</strong> 리서치 지형</div></div>
+      <div class="ch-item"><span class="ch-time">1:11:39</span><div class="ch-text"><strong>프론티어 랩 종속 위험</strong>과 중국 오픈소스 모델 ban 전망</div></div>
+      <div class="ch-item"><span class="ch-time">1:14:44</span><div class="ch-text">정보 과부하 시대의 정리 필요성과 마무리</div></div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: GPT-5.6 신기능 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot blue"></div><span class="sec-title">GPT-5.6 — 핵심 신기능 4가지</span></div>
+
+    <p class="prose">ICML 2026 주간에 전격 발표된 GPT-5.6. 노정석은 "새로운 데일리 드라이버"라고 정의한다. 단순 성능 업그레이드를 넘어, 에이전트 인터페이스·요금 모델·협업 방식이 동시에 바뀐다.</p>
+
+    <div class="feature-grid">
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <span class="feat-badge teal">Codex</span>
+          <div>
+            <div class="feat-name">세분화된 Effort 단계 — 비용 비례 과금</div>
+            <div class="feat-sub">저강도~고강도 작업을 사용자가 직접 선택 · 체감 비용 달라짐</div>
+          </div>
+        </div>
+        <div class="feat-body">
+          <p>Codex가 단순 on/off에서 벗어나 <strong>effort 단계를 세분화</strong>했다. 어떤 강도의 작업을 시킬지 사용자가 명시적으로 설정하고, 소비한 effort에 비례해 크레딧이 차감된다. EP103에서 다뤘던 Fable의 30분 내 5시간 쿼터 소진 문제와 같은 맥락 — 이제는 사용자가 미리 "얼마나 깊이 파낼지"를 결정할 수 있다.</p>
+
+          <div class="effort-stack" style="margin-top:12px;">
+            <div class="effort-row">
+              <span class="effort-level low">Low</span>
+              <div class="effort-content">
+                <div class="effort-name">빠른 초안 / 간단 수정</div>
+                <div class="effort-desc">최소 컨텍스트 탐색, 단일 파일 수준 변경</div>
+              </div>
+              <div class="effort-cost">비용 최소</div>
+            </div>
+            <div class="effort-row">
+              <span class="effort-level medium">Medium</span>
+              <div class="effort-content">
+                <div class="effort-name">표준 기능 구현 / 복수 파일</div>
+                <div class="effort-desc">코드베이스 탐색 + 테스트 작성 포함</div>
+              </div>
+              <div class="effort-cost">기본 요금</div>
+            </div>
+            <div class="effort-row">
+              <span class="effort-level high">High</span>
+              <div class="effort-content">
+                <div class="effort-name">심층 리팩토링 / 복잡한 버그</div>
+                <div class="effort-desc">전체 아키텍처 탐색 + 복수 라운드 수정</div>
+              </div>
+              <div class="effort-cost">고비용</div>
+            </div>
+            <div class="effort-row">
+              <span class="effort-level auto">Auto</span>
+              <div class="effort-content">
+                <div class="effort-name">Codex가 난이도를 판단</div>
+                <div class="effort-desc">작업 복잡도에 따라 자동 선택 (예측 불가)</div>
+              </div>
+              <div class="effort-cost">가변</div>
+            </div>
+          </div>
+
+          <p style="margin-top:12px;">노정석 체감: "effort 단계가 생긴 이후 비용 차감이 눈에 보이기 시작했다." Codex를 RTS 게임처럼 에이전트를 여러 개 동시에 태스크에 배치하는 방식으로 관리하는 감각이 생겼다는 표현도 나왔다.</p>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <span class="feat-badge amber">GPT-Live</span>
+          <div>
+            <div class="feat-name">Full Duplex — 말하면서 동시에 듣기</div>
+            <div class="feat-sub">단방향 턴 기반 → 양방향 동시 전이 · 실시간 통역 가능</div>
+          </div>
+        </div>
+        <div class="feat-body">
+          <p>기존 GPT Voice는 사용자가 말을 끝내야 AI가 응답하는 <strong>half duplex</strong> 방식이었다. GPT-Live는 <strong>full duplex</strong>로 전환 — AI가 말하는 중에도 사용자의 말을 실시간으로 처리할 수 있다.</p>
+          <p>직접적 적용: <strong>동시 통역</strong>이 가능해진다. 한쪽이 말하는 동안 AI가 반대쪽 언어로 동시에 번역해 전달. 기존의 "녹음→번역→재생" 지연이 사라진다.</p>
+          <p>기술적 의미: 언어 모델이 드디어 진짜 대화(conversation)에 가까워졌다. 전화 통화나 회의 실시간 통역이 실용 범위 안에 들어온 것이다.</p>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <span class="feat-badge fuchsia">ChatGPT Work</span>
+          <div>
+            <div class="feat-name">ChatGPT Work 분리 + 재귀적 자기 개선 신호</div>
+            <div class="feat-sub">개인용 ChatGPT와 직장용 분리 · 자기 개선 루프 관측</div>
+          </div>
+        </div>
+        <div class="feat-body">
+          <p>OpenAI가 <strong>ChatGPT Work</strong>를 별도 제품으로 분리했다. 개인용 ChatGPT와 구분되는 워크플레이스 전용 인터페이스 — 팀 공유, 기업 데이터 연결, 감사 로그 등 엔터프라이즈 기능에 집중.</p>
+          <p>더 흥미로운 신호: <strong>재귀적 자기 개선(recursive self-improvement)의 초기 흔적</strong>이 관찰됐다는 언급. GPT-5.6이 자신의 코드를 검토하고 수정하는 루프를 스스로 실행하는 패턴. 아직 초기 신호지만, 모델이 스스로를 개선하는 방향으로 발전하고 있다는 관점 포인트.</p>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <span class="feat-badge green">가격 구조</span>
+          <div>
+            <div class="feat-name">GPT-5.6 가격 구조와 GPT-6 구독제 관전 포인트</div>
+            <div class="feat-sub">계층화 가격 · GPT-6 구독 모델 예고</div>
+          </div>
+        </div>
+        <div class="feat-body">
+          <p>GPT-5.6은 Sol(경량) · Terra(범용) · Luna(추론 특화) 3티어로 구성 — 용도와 비용에 따라 선택 가능. Codex의 effort 단계와 연동해 총 비용이 결정된다.</p>
+          <p>관전 포인트: <strong>GPT-6 구독제</strong>. 노정석은 "다음 모델에서 어떤 구독 모델이 나올지가 진짜 경쟁 포인트"라고 강조. API 종량제 vs 구독 정액제 vs 에이전트 결과 기반 과금 — 세 가지 모델의 경쟁이 가속화된다. AI 구독 지출이 개인 단위에서도 수십만원 수준으로 올라가는 것이 표준화되는 시점.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 3: 성능 지표 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot amber"></div><span class="sec-title">GPT-5.6 성능 지표 — AtCoder · 수학 · AI 2040</span></div>
+
+    <div class="perf-row">
+      <div class="perf-card">
+        <div class="perf-val">1위</div>
+        <div class="perf-label">AtCoder 인간 전원 추월</div>
+        <div class="perf-desc">GPT-5.6이 경쟁 프로그래밍 플랫폼 AtCoder에서 인간 참가자 전원을 추월. 코딩 능력이 인간 최상위 수준을 완전히 넘어선 첫 확인 사례로 언급됨.</div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-val">1h</div>
+        <div class="perf-label">수학 추측 증명 시간</div>
+        <div class="perf-desc">미해결 수학 추측을 단 1시간 만에 증명. 기존에 수개월~수년이 걸리던 수학 연구 과정을 시간 단위로 압축. AI for Science 트렌드의 직접 증거.</div>
+      </div>
+    </div>
+
+    <div class="bq">
+      <div class="bq-text">
+        "AtCoder에서 인간 전원을 추월했다는 건 단순한 벤치마크가 아니다 — 이 시점이 되면 AI를 활용하지 않는 개발자와 활용하는 개발자의 격차는 생산성이 아니라 생존의 문제가 된다."
+      </div>
+      <div class="bq-attr">— AI Frontier EP104 (노정석, 2026-07-18)</div>
+    </div>
+
+    <p class="prose">AI 2040 번역 실험도 언급됐다. GPT-5.6에게 AI 2040 원서를 실시간으로 번역시키는 실험 — 번역 품질보다 "이 속도로 번역이 되면 출판 산업이 어떻게 바뀌는가"에 대한 논의로 이어진다. 다음 에피소드에서 심화 논의 예고.</p>
+  </div>
+
+  <!-- SECTION 4: ICML 현장 분위기 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot fuchsia"></div><span class="sec-title">ICML 2026 현장 르포 — "AGI-pilled가 주류가 됐다"</span></div>
+
+    <p class="prose">노정석이 ICML 2026 현장을 직접 르포. 학술 컨퍼런스의 분위기가 몇 년 전과 완전히 달라졌다. "AGI-pilled"(AGI가 곧 온다고 믿는 사람)가 이제 특이점주의자가 아니라 주류 의견이 됐다.</p>
+
+    <div class="split-wrap">
+      <div class="split-cell">
+        <div class="split-label teal">스케일주의 (Scaling)</div>
+        <div class="split-title">더 크게, 더 많은 데이터</div>
+        <div class="split-body">
+          파운데이션 모델을 크게 키우면 모든 도메인에서 뛰어난 AI가 나온다. 도메인 특화 데이터보다 규모와 일반성이 우선.
+          빅테크(Google, OpenAI, Anthropic, Meta)가 주도하는 방향.
+          증거: AtCoder 1위, 수학 증명 1시간 — 특화 훈련 없이 달성.
+        </div>
+      </div>
+      <div class="split-cell right">
+        <div class="split-label amber">도메인주의 (Domain)</div>
+        <div class="split-title">전문 데이터가 진짜 성능</div>
+        <div class="split-body">
+          일반 모델은 도메인 깊이가 없다. 의학·법률·과학·엔지니어링 각각의 전문가 데이터와 온톨로지가 필수.
+          스타트업과 학계 연구자 상당수가 지지.
+          증거: KRNA 도면 추출 63.2%가 85%에 못 미치는 이유 — 도메인 온톨로지 없이는 한계.
+        </div>
+      </div>
+    </div>
+
+    <p class="prose">이 충돌이 AI for Science 영역에서 가장 뜨겁다. 스케일주의자는 "foundation model이 단백질 구조도 발견한다"고 주장하고, 도메인주의자는 "AlphaFold가 작동한 건 도메인 특화 설계 때문"이라고 반박한다. ICML 2026의 핵심 논쟁 구도.</p>
+
+    <div class="signal-list">
+      <div class="signal-item">
+        <div class="signal-icon">🔬</div>
+        <div class="signal-text"><strong>AI for Science가 넥스트 트렌드:</strong> AlphaFold 이후 단백질에서 시작된 AI for Science가 물리, 화학, 천문학으로 확장. ICML 2026에서 가장 많은 논문이 몰린 트랙. 노정석은 "에이전트 이후의 다음 물결"로 규정.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">🧬</div>
+        <div class="signal-text"><strong>바이오 AI 밋업 — virtual cell 논쟁:</strong> 세포를 디지털로 시뮬레이션하는 virtual cell 모델 개념. 실제로 약물 반응을 예측할 수 있는가에 대한 열띤 논쟁. 찬성측: "데이터 있으면 된다." 반대측: "생물학적 인과관계를 통계로 대체할 수 없다."</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">🎉</div>
+        <div class="signal-text"><strong>네트워킹이 진짜 메인 이벤트:</strong> 논문 발표보다 사이드 이벤트와 파티가 실질적인 정보 교류의 장. "Robotics Night", "AI Industry Night", "바이오 AI 밋업" — 각 분야별로 별도 파티가 열린다. 컨퍼런스 논문보다 복도와 파티에서 진짜 정보가 유통된다는 평가.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">💰</div>
+        <div class="signal-text"><strong>하루 $2만 달러 Token Maxxing 목격:</strong> ICML 현장에서 하루에 $20,000 어치의 AI 토큰을 소비한 사람의 목격담. 특정 연구팀 또는 기업이 대규모 추론 작업을 동시다발로 돌리는 것. 토큰 소비가 "실험 비용"의 새 단위가 됐다는 신호.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: ICML 전시 플레이어 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot"></div><span class="sec-title">ICML 전시장 플레이어 지도 — 빅테크 · 중국 · 한국 · 네오클라우드</span></div>
+
+    <div class="player-grid">
+      <div class="player-card">
+        <div class="player-name">빅테크 부스 (Google · Meta · OpenAI · Anthropic)</div>
+        <div class="player-cat" style="color:var(--blue)">채용 중심의 전시장</div>
+        <div class="player-desc">기술 시연보다 <strong>채용 부스</strong>가 전면에. "우리가 젤 잘 나가니까 들어오세요" 전략. ICML 참가자 = 잠재 채용 후보라는 계산. 연구와 인더스트리의 경계가 사라진 시대를 상징하는 풍경.</div>
+      </div>
+      <div class="player-card">
+        <div class="player-name">중국계 기업 · 연구자</div>
+        <div class="player-cat" style="color:var(--red)">압도적 논문 수 · 강한 현장 존재감</div>
+        <div class="player-desc">논문 수 기준으로 중국 연구자의 비중이 상당. 기업 부스도 존재감. 수출통제 이후에도 학술 채널을 통한 AI 역량 축적이 계속됨. 중국 오픈소스 모델 ban 전망과 함께 논의.</div>
+      </div>
+      <div class="player-card">
+        <div class="player-name">VESSL AI · FriendliAI</div>
+        <div class="player-cat" style="color:var(--green)">한국계 인프라 플레이어</div>
+        <div class="player-desc">ICML에서 가시적 존재감을 확보한 한국 스타트업. <strong>VESSL AI</strong>(ML 파이프라인·실험 관리)와 <strong>FriendliAI</strong>(LLM inference 서빙 최적화)가 주목. 글로벌 인프라 경쟁에서 한국팀이 포지션을 잡아가는 신호.</div>
+      </div>
+      <div class="player-card">
+        <div class="player-name">네오클라우드 · Inference 서빙 업체</div>
+        <div class="player-cat" style="color:var(--amber)">새로운 인프라 레이어</div>
+        <div class="player-desc">AWS·GCP·Azure 이외의 AI 특화 클라우드(CoreWeave류)와 Inference 서빙 전문 업체들이 부스를 채웠다. 모델 학습보다 <strong>추론(inference)에서의 비용 효율</strong>이 다음 경쟁 포인트로 부상 중.</div>
+      </div>
+      <div class="player-card">
+        <div class="player-name">Scale AI · Handshake AI</div>
+        <div class="player-cat" style="color:var(--fuchsia)">전문가 데이터 시장</div>
+        <div class="player-desc">Scale AI의 전문가 데이터 레이블링 시장 존재감 지속. <strong>Handshake AI</strong>는 특정 도메인 전문가(의사, 변호사, 엔지니어)와 모델 훈련을 연결하는 신규 플레이어. 전문가 데이터 희소성이 다음 모델 차별화의 핵심이 된다는 논리.</div>
+      </div>
+      <div class="player-card">
+        <div class="player-name">General Intuition — MIRA</div>
+        <div class="player-cat" style="color:var(--accent)">게임 데이터 × World Model</div>
+        <div class="player-desc">비디오 게임 플레이 데이터로 <strong>world model MIRA</strong>를 훈련시키는 스타트업. 게임 환경의 물리 시뮬레이션이 실제 세계 이해를 가르친다는 가설. ElevenLabs Scribe(음성→텍스트 변환 고도화)와 METR(AI 안전 평가 기관)도 부스 운영.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: AI 인프라 스택 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot amber"></div><span class="sec-title">AI 인프라 스택 — "종합 예술이 됐다"</span></div>
+
+    <p class="prose">노정석이 ICML 현장에서 내린 평가: AI 인프라가 "종합 예술"이 됐다. 예전에는 GPU 있으면 됐는데, 이제는 스택 전체를 이해해야 한다.</p>
+
+    <div class="signal-list">
+      <div class="signal-item">
+        <div class="signal-icon">⚡</div>
+        <div class="signal-text"><strong>전용 가속기 생태계 확장:</strong> NVIDIA GPU 독점 체제에서 AMD, 커스텀 ASIC(TPU류), 신규 스타트업 칩으로 다변화. 하드웨어 최적화(커널 퓨전, 양자화, FlashAttention 변형)가 inference 비용의 핵심 변수.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">🏗️</div>
+        <div class="signal-text"><strong>네오클라우드 vs 하이퍼스케일러:</strong> CoreWeave, Lambda, RunPod 등 GPU 특화 클라우드가 AI 워크로드에서 AWS보다 가격 경쟁력을 확보. 하이퍼스케일러는 생태계(IAM, VPC, S3)로 방어. AI 인프라는 이 둘 중 하나를 선택하는 결정이 된다.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">🔗</div>
+        <div class="signal-text"><strong>데이터센터 밸류체인 대화:</strong> AI Industry Night에서 DC 임대, 전력 계약, 냉각 기술, 네트워킹 인프라가 세트로 논의됐다. 모델보다 인프라가 AI 경쟁의 기반이라는 인식. Inuverse 대구 AIDC(150MW)가 이 맥락에 정확히 위치.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Flapping Airplanes & 큰 그림 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot fuchsia"></div><span class="sec-title">Flapping Airplanes — 차세대 모델 패러다임 베팅</span></div>
+
+    <div class="bq fuchsia">
+      <div class="bq-text">
+        "Flapping Airplanes" — 날개를 퍼덕이는 비행기로 하늘을 나는 방식. 자연에서 힌트를 얻었지만, 진짜 비행기는 고정익으로 날았다. 지금의 Transformer + RLHF 방식도 "Flapping Airplanes"일 수 있다 — 어느 순간 완전히 다른 패러다임이 등장할 것이라는 베팅.
+      </div>
+      <div class="bq-attr">— AI Frontier EP104, 챕터 49:26 (ICML 현장 파티 대화 중)</div>
+    </div>
+
+    <p class="prose">ICML 파티에서 나온 화두. 현재 AI 모델 아키텍처(Transformer, Attention, RLHF)가 "최선의 경로인가, 아니면 나중에 웃으며 돌아볼 구식 방법인가"에 대한 논쟁. 스케일링이 계속 통할 것이라는 신뢰 vs 완전히 다른 아키텍처가 필요하다는 회의론의 충돌.</p>
+
+    <div class="signal-list">
+      <div class="signal-item">
+        <div class="signal-icon">🚦</div>
+        <div class="signal-text"><strong>프론티어 랩 종속 위험:</strong> GPT-5.6 → GPT-6 → OpenAI의 next에 모든 것을 의존하면 어떻게 되는가. 노정석은 "프론티어 랩에 종속된 AI 스타트업은 언제든 사라질 수 있다"고 경고. 자체 모델 역량이 없는 기업의 취약성.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">🇨🇳</div>
+        <div class="signal-text"><strong>중국 오픈소스 모델 ban 전망:</strong> DeepSeek R1 류의 중국 오픈소스 모델에 대한 미국 정부의 사용 제한 논의가 현실화될 것이라는 전망. 수출통제(칩) + 오픈소스 ban(모델)의 이중 압박 시나리오. 미중 AI 냉전의 다음 전선.</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon">⏩</div>
+        <div class="signal-text"><strong>압축되는 발전 속도 · 아직 시작도 안 한 에이전트 시장:</strong> 노정석 핵심 명제. "AI가 이렇게 빠른데 에이전트 시장은 아직 시작도 안 했다." 소비자용 챗봇은 보급됐지만, 실질적인 에이전트 업무 자동화는 아직 포지셔닝 단계. EP103~104가 공통으로 도달한 결론.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: GARAMbada 인사이트 -->
+  <div class="section">
+    <div class="sec-header"><div class="sec-dot green"></div><span class="sec-title">GARAMbada 인사이트 — Company Builder 관점 5가지</span></div>
+    <div class="insight-list">
+      <div class="insight-item">
+        <div class="insight-num">01</div>
+        <div class="insight-content">
+          <div class="insight-title">Codex Effort 단계 = 에이전트 자원 배분의 시대</div>
+          <div class="insight-desc">
+            Effort 단계 선택은 단순한 설정이 아니다 — "어떤 일에 AI를 얼마나 깊이 쓸 것인가"를 명시적으로 결정하는 행위다.
+            RTS 게임처럼 에이전트 여러 개를 다른 강도의 태스크에 동시에 배치하는 새로운 업무 방식.
+            Company Builder 관점: 각 프로젝트(KRNA·FiPA·AGP)마다 다른 effort 전략이 필요하다. KRNA 도면 추출은 high effort, FiPA 법령 챗봇 초안은 medium, AGP 대시보드 수정은 low.
+            핵심: 에이전트를 쓰는 것보다 에이전트 포트폴리오를 관리하는 능력이 다음 CEO의 핵심 역량이 된다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">02</div>
+        <div class="insight-content">
+          <div class="insight-title">AtCoder 1위 = 개발자 생존 방정식 재정의</div>
+          <div class="insight-desc">
+            AtCoder 인간 전원 추월은 "이제 코딩 실력으로 경쟁하는 시대는 끝났다"는 신호다.
+            GPT-5.6과 함께 개발하는 사람과 그렇지 않은 사람의 격차는 생산성이 아니라 생존의 문제.
+            WISE42의 포지셔닝 임플리케이션: 기술적 실행보다 도메인 온톨로지 + 문제 정의 능력이 차별화 포인트가 된다.
+            KRNA 프로젝트의 핵심 가치가 "AI 코딩 실력"이 아니라 "철도 도메인 온톨로지 설계 능력"이라는 것을 재확인.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">03</div>
+        <div class="insight-content">
+          <div class="insight-title">스케일주의 vs 도메인주의 = WISE42의 포지션</div>
+          <div class="insight-desc">
+            이 논쟁에서 WISE42의 답은 명확하다: 도메인주의.
+            GPT-5.6이 AtCoder를 이겼어도 KRNA 도면 추출은 63.2%다. 일반 모델의 한계가 도메인 특화 작업에서 분명히 드러난다.
+            Ontology + Extraction + Pricing 3-Layer 전략이 바로 스케일주의가 해결 못 하는 문제를 도메인 깊이로 해결하는 접근이다.
+            그러나 동시에 경쟁 자각도 필요: 파운데이션 모델의 스케일이 언제 도메인 지식도 포괄하는 수준에 도달할지 모른다. 언제까지 도메인 해자가 유효한지 계속 모니터링해야 한다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">04</div>
+        <div class="insight-content">
+          <div class="insight-title">Inuverse AIDC × 네오클라우드 트렌드 정확하게 베팅 중</div>
+          <div class="insight-desc">
+            ICML에서 네오클라우드(CoreWeave류)와 inference 서빙 전문 업체의 부상이 확인됐다.
+            Inuverse 대구 AIDC(150MW)가 이 트렌드의 한국 버전이다 — 하이퍼스케일러 대신 AI 특화 DC로 포지셔닝.
+            CoreWeave를 브릿지 파트너로, SoftBank KK + Infrinia OS를 앵커로 구조화한 Inuverse의 전략이 ICML 현장 흐름과 정확히 맞다.
+            Pre-Commitment KPI 전환(ARR이 아닌 MW/LOI) 역시 인프라 경쟁의 선점 논리와 일치한다.
+          </div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">05</div>
+        <div class="insight-content">
+          <div class="insight-title">"에이전트 시장은 아직 시작도 안 했다" — 시간창이 살아있다</div>
+          <div class="insight-desc">
+            노정석의 핵심 명제: AI 발전 속도가 압도적인데 에이전트 시장은 아직 포지셔닝 단계.
+            이것이 WISE42의 2026 포지셔닝 해 전략을 뒷받침한다. "매출 0~2억, 레퍼런스 2건"은 시장이 아직 없을 때 자리를 먼저 잡는 전략이다.
+            프론티어 랩 종속 위험 → WISE42가 Upstage(국산 Solar)를 파트너로 선택한 이유가 다시 한번 확인된다.
+            Discovery-First FDE 데드라인("2027 전") = LG CNS·팔란티어 FDE 진출 전에 앵커를 잡겠다는 것 = ICML에서 보이는 "인더스트리와 리서치 융합"으로 빅플레이어들이 내려오기 전에 공공 시장을 선점.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tags">
+    <span class="tag">AI Frontier EP104</span>
+    <span class="tag blue">GPT-5.6</span>
+    <span class="tag blue">Codex Effort 단계</span>
+    <span class="tag blue">GPT-Live full duplex</span>
+    <span class="tag blue">ChatGPT Work</span>
+    <span class="tag amber">AtCoder 인간 추월</span>
+    <span class="tag amber">수학 추측 1시간 증명</span>
+    <span class="tag fuchsia">ICML 2026</span>
+    <span class="tag fuchsia">AGI-pilled</span>
+    <span class="tag fuchsia">AI for Science</span>
+    <span class="tag fuchsia">스케일주의 vs 도메인주의</span>
+    <span class="tag green">VESSL AI</span>
+    <span class="tag green">FriendliAI</span>
+    <span class="tag">네오클라우드</span>
+    <span class="tag">inference 서빙</span>
+    <span class="tag">Token Maxxing</span>
+    <span class="tag">Flapping Airplanes</span>
+    <span class="tag amber">virtual cell</span>
+    <span class="tag">General Intuition MIRA</span>
+    <span class="tag fuchsia">중국 오픈소스 ban</span>
+    <span class="tag">ElevenLabs Scribe</span>
+    <span class="tag">METR</span>
+    <span class="tag amber">재귀적 자기 개선</span>
+    <span class="tag">노정석</span>
+  </div>
+
+  <div class="source-bar">
+    <span class="source-label">출처</span>
+    <a class="source-link" href="https://www.youtube.com/watch?v=wOOY3BjzTbQ" target="_blank">AI Frontier Korea EP104 (YouTube)</a>
+    <span class="source-meta">노정석 (Chester Roh) · AI Frontier Korea · 2026-07-18 · 1:15:34 · 31챕터</span>
+  </div>
+
+</div>
+</body>
+</html>
